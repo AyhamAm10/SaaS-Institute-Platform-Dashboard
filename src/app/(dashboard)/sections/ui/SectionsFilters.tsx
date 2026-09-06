@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import { AppSelect } from '@/src/components/ui';
+import { AppSelect } from '@/src/components/controllers';
 import { useSectionsMirror } from '../store/useSectionsMirror';
 import { defaultGradesList } from '../static-data/sections.data';
 

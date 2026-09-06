@@ -9,7 +9,7 @@ import {
   IconInfoCircle,
 } from '@tabler/icons-react';
 import { useState } from 'react';
-import { AppDrawer } from '@/src/components/ui';
+import { AppDrawer } from '@/src/components/controllers';
 import { AcademicYear } from '@/src/core/api';
 import { AcademicYearStatusBadge } from './AcademicYearStatusBadge';
 

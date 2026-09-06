@@ -5,7 +5,7 @@ import { DataModuleController } from '@/src/components/controllers/data-module';
 import { AcademicYear } from '@/src/core/api';
 import { academicYearsPageMetadata } from '../static-data/academic-years.data';
 import { AcademicYearDrawer } from './AcademicYearDrawer';
-import { SetCurrentAcademicYearDrawer } from './SetCurrentAcademicYearDrawer';
+import { SetCurrentAcademicYearModal } from './SetCurrentAcademicYearModal';
 import { AcademicYearsActions } from './AcademicYearsActions';
 import { useAcademicYearsColumns } from './AcademicYearsTable';
 import { useAcademicYearsMirror } from '../store/useAcademicYearsMirror';
@@ -44,7 +44,7 @@ export function AcademicYearsView({ onFormSubmit, onSetCurrent }: AcademicYearsV
   const closeModal = useAcademicYearsMirror('closeModal');
   const formSubmitting = useAcademicYearsMirror('formSubmitting');
 
-  // ── Set-Current Workflow Drawer state via mirror ──
+  // ── Set-Current Workflow Modal state via mirror ──
   const setCurrentDrawerOpened = useAcademicYearsMirror('setCurrentDrawerOpened');
   const selectedYearForSetCurrent = useAcademicYearsMirror('selectedYearForSetCurrent');
   const closeSetCurrentDrawer = useAcademicYearsMirror('closeSetCurrentDrawer');
@@ -54,7 +54,7 @@ export function AcademicYearsView({ onFormSubmit, onSetCurrent }: AcademicYearsV
   // ── Open edit action (passed to column definitions) ──
   const openEdit = useAcademicYearsMirror('openEdit');
 
-  // Find the currently active year for context in the workflow drawer
+  // Find the currently active year for context in the workflow modal
   const currentActiveYear = useMemo(
     () => data.find((y) => y.isCurrent) ?? null,
     [data],
@@ -110,8 +110,8 @@ export function AcademicYearsView({ onFormSubmit, onSetCurrent }: AcademicYearsV
         isLoading={formSubmitting}
       />
 
-      {/* Set-Current Workflow Drawer */}
-      <SetCurrentAcademicYearDrawer
+      {/* Set-Current Workflow Modal */}
+      <SetCurrentAcademicYearModal
         opened={setCurrentDrawerOpened}
         onClose={closeSetCurrentDrawer}
         targetYear={selectedYearForSetCurrent}

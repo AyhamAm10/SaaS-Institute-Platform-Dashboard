@@ -105,7 +105,7 @@ const activeRoute = useSidebarMirror('activeRoute');
 
 ### 5.1 Mandatory Unified Input & Select Standard (`AppInput` / `AppSelect` / `InputController`)
 
-> **CRITICAL RULE:** It is **MANDATORY** across the entire application to use `<InputController />` (aliased as `<AppInput />` and `<AppSelect />` from `@/src/components/ui` or `@/src/components/controllers/input`) for all form inputs and dropdown select fields instead of invoking raw Mantine input primitives (`TextInput`, `PasswordInput`, `NumberInput`, `Textarea`, `Select`) directly.
+> **CRITICAL RULE:** It is **MANDATORY** across the entire application to use `<InputController />` (aliased as `<AppInput />` and `<AppSelect />` from `@/src/components/controllers` or `@/src/components/controllers/input`) for all form inputs and dropdown select fields instead of invoking raw Mantine input primitives (`TextInput`, `PasswordInput`, `NumberInput`, `Textarea`, `Select`) directly.
 
 #### Why?
 1. **Design System Integrity:** Enforces the Modern Curved Organic UI standard (`radius="xl"`, subtle border, soft focus glow, unified font sizes, identical input heights) universally across all dashboard screens and modals/drawers.
@@ -115,7 +115,7 @@ const activeRoute = useSidebarMirror('activeRoute');
 5. **Smart Icons & Props Transparency:** Provides built-in contextual icons (`IconPhone`, `IconLock`, `IconSearch`, `IconMail`, etc.) while accepting all standard Mantine input props.
 
 ```tsx
-import { AppInput, AppSelect } from '@/src/components/ui';
+import { AppInput, AppSelect } from '@/src/components/controllers';
 
 // Text & Number Examples:
 <AppInput type="tel" label="رقم الجوال" required />
@@ -138,7 +138,7 @@ import { AppInput, AppSelect } from '@/src/components/ui';
 
 ### 5.2 Mandatory Unified Date Picker Standard (`AppDatePicker`)
 
-> **CRITICAL RULE:** It is **MANDATORY** across the entire application to use `<AppDatePicker />` (from `@/src/components/ui`) for all date selection fields instead of manual text inputs, raw browser date fields, or ad-hoc date pickers.
+> **CRITICAL RULE:** It is **MANDATORY** across the entire application to use `<AppDatePicker />` (from `@/src/components/controllers/date-picker`) for all date selection fields instead of manual text inputs, raw browser date fields, or ad-hoc date pickers.
 
 #### Why?
 1. **Design System & Organic UI Consistency:** Adopts the curved, modern rounded container (`radius="md"`, subtle borders, soft glow) with an interactive popover calendar styled in harmony with the Modern Curved Organic UI standard.
@@ -148,7 +148,7 @@ import { AppInput, AppSelect } from '@/src/components/ui';
 5. **Fast Shortcuts:** Quick "اليوم" (Today) and "مسح" (Clear) action buttons.
 
 ```tsx
-import { AppDatePicker } from '@/src/components/ui';
+import { AppDatePicker } from '@/src/components/controllers/date-picker';
 
 // Examples:
 <AppDatePicker label="تاريخ البداية" value={startDate} onChange={setStartDate} required />
@@ -157,7 +157,7 @@ import { AppDatePicker } from '@/src/components/ui';
 
 ### 5.3 Mandatory Unified Drawer System (`AppDrawer`) & RTL Physical Alignment
 
-> **CRITICAL RULE:** It is **MANDATORY** across the entire application to use `<AppDrawer />` (from `@/src/components/ui` or `@/src/components/controllers/drawer`) for all drawers, slide-overs, and side-sheet workflows instead of invoking raw Mantine `<Drawer />` directly.
+> **CRITICAL RULE:** It is **MANDATORY** across the entire application to use `<AppDrawer />` (from `@/src/components/controllers` or `@/src/components/controllers/drawer`) for all drawers, slide-overs, and side-sheet workflows instead of invoking raw Mantine `<Drawer />` directly.
 
 1. **DirectionProvider & Physical Right Alignment:**
    - Root layout MUST wrap the app in `<DirectionProvider initialDirection="rtl">`.
@@ -179,6 +179,36 @@ import { AppDatePicker } from '@/src/components/ui';
 
 4. **Layer Separation:**
    - `AppDrawer` is a project-owned UI primitive. It contains **ZERO feature logic**, **ZERO API calls**, and **ZERO domain Zustand state**. All forms, mutations, and domain schemas belong to the feature layer.
+
+### 5.4 Mandatory Unified Modal System (`AppModal`)
+
+> **CRITICAL RULE:** It is **MANDATORY** across the entire application to use `<AppModal />` (from `@/src/components/controllers` or `@/src/components/controllers/modal`) for all dialog windows, confirmation alerts, and compact user interactions instead of using raw Mantine `Modal` directly.
+
+#### Distinct UX Responsibility: Modal vs. Drawer
+| Component | Primary UX Responsibility | Examples |
+|---|---|---|
+| **`AppModal`** | Focused decisions, destructive confirmations, warnings, single-field or compact forms, blocking flows. | Delete confirmation, Set Active Year, Section Fee edit, Quick Action dialog. |
+| **`AppDrawer`** | Deep inspection, complex multi-step forms, large detail sheets, rich entity sidebars. | Create/Edit Academic Year, Section Details & Roster, Student Enrollment Drawer. |
+
+#### Architectural Features:
+1. **Layered Architecture & Per-Instance Store:**
+   - Follows Section 3 strictly with `init/modal.init.ts`, `state/modal.state.ts`, `store/modal.store.ts`, `store/useModalMirror.ts`, `ui/`, and `AppModal.tsx`.
+   - Each modal maintains its own isolated Zustand store via React Context (`ModalContext`).
+2. **Semantic Variants:**
+   - `default`: Primary/neutral workflows.
+   - `danger`: Destructive actions (deletions, terminations) with crimson accents, badges, and default delete icons.
+   - `warning`: Cautionary prompts and irreversible state transitions.
+   - `info`: System advisories and priority changes.
+   - `success`: Completion acknowledgments and milestones.
+3. **Compound Components & Simple Mode:**
+   - `<AppModal.Header>`: Header container with variant-aware layout.
+   - `<AppModal.Icon>`: Semantic icon container tinted to match modal variant.
+   - `<AppModal.Title>` & `<AppModal.Description>`: Standard typography.
+   - `<AppModal.Close>`: Modern rounded close button with RTL flip.
+   - `<AppModal.Content>`: Viewport with built-in `ScrollArea.Autosize` and loading overlay.
+   - `<AppModal.Footer>`, `<AppModal.FooterStart>`, `<AppModal.FooterEnd>`: Sticky bottom button surfaces.
+   - `<AppModal.Cancel>` & `<AppModal.Confirm>`: Pre-styled button primitives wired to modal variant colors.
+4. **Pre-built destructive helper:** `<DeleteConfirmationModal />` is available from `@/src/components/controllers` for zero-boilerplate deletion confirmations.
 
 ---
 

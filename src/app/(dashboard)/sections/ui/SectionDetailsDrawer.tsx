@@ -19,7 +19,7 @@ import {
   IconSchool,
   IconUsers,
 } from '@tabler/icons-react';
-import { AppDrawer } from '@/src/components/ui';
+import { AppDrawer } from '@/src/components/controllers';
 import { useSectionDetailsQuery } from '@/src/core/api';
 import { sectionFormLabels } from '../static-data/sections.data';
 

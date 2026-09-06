@@ -3,8 +3,8 @@
 import { Alert, Checkbox, Stack } from '@mantine/core';
 import { IconAlertCircle, IconCalendar, IconCalendarPlus } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
-import { AppInput } from '@/src/components/controllers/input';
-import { AppDatePicker, AppDrawer } from '@/src/components/ui';
+import { AppDrawer, AppInput } from '@/src/components/controllers';
+import { AppDatePicker } from '@/src/components/ui/date-picker';
 import { AcademicYear } from '@/src/core/api';
 import { academicYearFormLabels } from '../static-data/academic-years.data';
 

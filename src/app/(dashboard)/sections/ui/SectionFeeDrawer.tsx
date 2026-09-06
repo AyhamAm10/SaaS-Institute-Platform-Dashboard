@@ -4,11 +4,11 @@ import { Alert, Stack, Text } from '@mantine/core';
 import { IconAlertCircle, IconCoin } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { AppInput } from '@/src/components/controllers/input';
-import { AppDrawer } from '@/src/components/ui';
+import { AppModal } from '@/src/components/controllers';
 import { Section } from '@/src/core/api';
 import { sectionFormLabels } from '../static-data/sections.data';
 
-export interface SectionFeeDrawerProps {
+export interface SectionFeeModalProps {
   opened: boolean;
   onClose: () => void;
   section?: Section | null;
@@ -16,13 +16,19 @@ export interface SectionFeeDrawerProps {
   isLoading?: boolean;
 }
 
-export function SectionFeeDrawer({
+/**
+ * SectionFeeModal
+ *
+ * Single-field financial update modal built with the AppModal system.
+ * Perfect use-case for Modal (compact form, focused decision) rather than a full Drawer.
+ */
+export function SectionFeeModal({
   opened,
   onClose,
   section,
   onSubmit,
   isLoading = false,
-}: SectionFeeDrawerProps) {
+}: SectionFeeModalProps) {
   const [feeAmount, setFeeAmount] = useState<string>('0');
   const [error, setError] = useState<string | null>(null);
 
@@ -56,25 +62,23 @@ export function SectionFeeDrawer({
   };
 
   return (
-    <AppDrawer
+    <AppModal
       opened={opened}
       onClose={onClose}
+      variant="default"
       size="sm"
     >
-      <AppDrawer.Header>
-        <AppDrawer.Icon
-          icon={<IconCoin size={20} />}
-          color="teal"
-        />
-        <AppDrawer.Title>{sectionFormLabels.feeModalTitle}</AppDrawer.Title>
-        <AppDrawer.Description>
+      <AppModal.Header>
+        <AppModal.Icon icon={<IconCoin size={20} />} />
+        <AppModal.Title>{sectionFormLabels.feeModalTitle}</AppModal.Title>
+        <AppModal.Description>
           تعديل الرسوم الدراسية المعتمدة لطلاب هذه الشُعبة
-        </AppDrawer.Description>
-        <AppDrawer.Close />
-      </AppDrawer.Header>
+        </AppModal.Description>
+        <AppModal.Close />
+      </AppModal.Header>
 
-      <AppDrawer.Content>
-        <form id="section-fee-form" onSubmit={handleSubmit}>
+      <AppModal.Content>
+        <form id="section-fee-modal-form" onSubmit={handleSubmit}>
           <Stack gap="md">
             {error && (
               <Alert
@@ -87,51 +91,53 @@ export function SectionFeeDrawer({
               </Alert>
             )}
 
-            <AppDrawer.Section
-              title={section?.name}
-              description="حدد الرسوم الدراسية المعتمدة بالريال السعودي"
-            >
-              <Text size="xs" c="dimmed">
-                سيتم تطبيق هذا المبلغ على أي تسجيلات أو حسابات مستقبلية مرتبطة بهذه الشُعبة.
+            {section && (
+              <Text size="sm" fw={600} c="dimmed">
+                الشُعبة: <Text span c="dark" fw={700}>{section.name}</Text>
               </Text>
+            )}
 
-              <AppInput
-                type="number"
-                label={sectionFormLabels.feeAmount}
-                value={feeAmount}
-                min={0}
-                onChange={(e) =>
-                  setFeeAmount(
-                    typeof e === 'string'
-                      ? e
-                      : typeof e === 'number'
-                      ? String(e)
-                      : (e as any)?.target?.value ?? '0',
-                  )
-                }
-                required
-              />
-            </AppDrawer.Section>
+            <Text size="xs" c="dimmed">
+              سيتم تطبيق هذا المبلغ على أي تسجيلات أو حسابات مالية مستقبلية مرتبطة بهذه الشُعبة.
+            </Text>
+
+            <AppInput
+              type="number"
+              label={sectionFormLabels.feeAmount}
+              value={feeAmount}
+              min={0}
+              onChange={(e) =>
+                setFeeAmount(
+                  typeof e === 'string'
+                    ? e
+                    : typeof e === 'number'
+                    ? String(e)
+                    : (e as any)?.target?.value ?? '0',
+                )
+              }
+              required
+            />
           </Stack>
         </form>
-      </AppDrawer.Content>
+      </AppModal.Content>
 
-      <AppDrawer.Footer>
-        <AppDrawer.FooterEnd>
-          <AppDrawer.Cancel disabled={isLoading} />
-          <AppDrawer.Submit
-            form="section-fee-form"
+      <AppModal.Footer>
+        <AppModal.FooterEnd>
+          <AppModal.Cancel disabled={isLoading} />
+          <AppModal.Confirm
+            form="section-fee-modal-form"
+            type="submit"
             color="teal"
             loading={isLoading}
           >
             {sectionFormLabels.submitFee}
-          </AppDrawer.Submit>
-        </AppDrawer.FooterEnd>
-      </AppDrawer.Footer>
-    </AppDrawer>
+          </AppModal.Confirm>
+        </AppModal.FooterEnd>
+      </AppModal.Footer>
+    </AppModal>
   );
 }
 
-// Backward compatibility alias
-export const SectionFeeModal = SectionFeeDrawer;
-export type SectionFeeModalProps = SectionFeeDrawerProps;
+// Keep Drawer alias for backward compatibility
+export const SectionFeeDrawer = SectionFeeModal;
+export type SectionFeeDrawerProps = SectionFeeModalProps;

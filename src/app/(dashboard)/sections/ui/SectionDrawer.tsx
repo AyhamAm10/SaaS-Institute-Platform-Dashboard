@@ -3,7 +3,7 @@
 import { Alert, Stack } from '@mantine/core';
 import { IconAlertCircle, IconEdit, IconSchool } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
-import { AppDrawer, AppInput, AppSelect } from '@/src/components/ui';
+import { AppDrawer, AppInput, AppSelect } from '@/src/components/controllers';
 import { AcademicYear, Section } from '@/src/core/api';
 import { defaultGradesList, sectionFormLabels } from '../static-data/sections.data';
 
