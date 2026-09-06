@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
-import { ColorSchemeScript, MantineProvider } from '@mantine/core';
+import { ColorSchemeScript, DirectionProvider, MantineProvider } from '@mantine/core';
 import { Readex_Pro } from 'next/font/google';
 import { baseTheme } from '@/src/theme';
+import { QueryProvider } from '@/src/core/api';
 import './globals.css';
 
 const readexPro = Readex_Pro({
@@ -27,9 +28,13 @@ export default function RootLayout({
         <ColorSchemeScript defaultColorScheme="light" />
       </head>
       <body dir="rtl" className={readexPro.className}>
-        <MantineProvider theme={baseTheme} defaultColorScheme="light">
-          {children}
-        </MantineProvider>
+        <DirectionProvider initialDirection="rtl">
+          <MantineProvider theme={baseTheme} defaultColorScheme="light">
+            <QueryProvider>
+              {children}
+            </QueryProvider>
+          </MantineProvider>
+        </DirectionProvider>
       </body>
     </html>
   );

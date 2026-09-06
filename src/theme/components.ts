@@ -12,14 +12,15 @@ export const defaultComponents: MantineThemeComponents = {
 
   Button: {
     defaultProps: {
-      radius: 'xl',
-      size: 'sm',
+      radius: 'md',
+      size: 'md',
     },
     styles: {
       root: {
+        borderRadius: rem(12),
         fontWeight: 600,
-        fontSize: rem(13),
-        transition: 'transform 150ms ease, box-shadow 150ms ease',
+        fontSize: rem(13.5),
+        transition: 'transform 150ms ease, box-shadow 150ms ease, background-color 150ms ease',
         '&:hover': {
           transform: 'translateY(-1px)',
         },
@@ -78,6 +79,16 @@ export const defaultComponents: MantineThemeComponents = {
     defaultProps: {
       radius: 'lg',
       shadow: 'xl',
+      position: 'right',
+    },
+    styles: {
+      inner: {
+        direction: 'ltr',
+        justifyContent: 'flex-end',
+      },
+      content: {
+        direction: 'rtl',
+      },
     },
   },
 
@@ -104,35 +115,69 @@ export const defaultComponents: MantineThemeComponents = {
 
   TextInput: {
     defaultProps: {
-      radius: 'xl',
-      size: 'sm',
+      radius: 'md',
+      size: 'md',
     },
     styles: {
       input: {
+        borderRadius: rem(14),
         borderColor: 'var(--mantine-color-gray-2)',
-        backgroundColor: 'var(--mantine-color-body)',
+        backgroundColor: 'var(--mantine-color-gray-0)',
         fontWeight: 500,
-        fontSize: rem(13),
+        fontSize: rem(14),
+        transition: 'all 150ms ease',
+        '&:focus': {
+          backgroundColor: '#ffffff',
+          borderColor: 'var(--mantine-color-primary-4)',
+          boxShadow: '0 0 0 3.5px rgba(32, 183, 223, 0.16)',
+        },
+      },
+    },
+  },
+
+  PasswordInput: {
+    defaultProps: {
+      radius: 'md',
+      size: 'md',
+    },
+    styles: {
+      input: {
+        borderRadius: rem(14),
+        borderColor: 'var(--mantine-color-gray-2)',
+        backgroundColor: 'var(--mantine-color-gray-0)',
+        fontWeight: 500,
+        fontSize: rem(14),
+        transition: 'all 150ms ease',
+        '&:focus': {
+          backgroundColor: '#ffffff',
+          borderColor: 'var(--mantine-color-primary-4)',
+          boxShadow: '0 0 0 3.5px rgba(32, 183, 223, 0.16)',
+        },
       },
     },
   },
 
   Select: {
     defaultProps: {
-      radius: 'xl',
-      size: 'sm',
+      radius: 'md',
+      size: 'md',
+    },
+    styles: {
+      input: {
+        borderRadius: rem(14),
+      },
     },
   },
 
   ThemeIcon: {
     defaultProps: {
-      radius: 'xl',
+      radius: 'md',
     },
   },
 
   ActionIcon: {
     defaultProps: {
-      radius: 'xl',
+      radius: 'md',
     },
   },
 };

@@ -27,8 +27,10 @@ import { useEffect } from 'react';
 import { useSidebarMirror } from '../../store/useSidebarMirror';
 import { isNavItemActive } from '../../utils/nav.utils';
 import { NavSubItem } from '../../init/navigation';
+import { useAuth } from '@/src/core/auth';
 
 export function DesktopSidebar() {
+  const { user, logout, isLoggingOut } = useAuth();
   const items = useSidebarMirror('items');
   const isCollapsed = useSidebarMirror('isDesktopCollapsed');
   const toggleCollapse = useSidebarMirror('toggleDesktopCollapse');
@@ -107,10 +109,10 @@ export function DesktopSidebar() {
 
             <Stack gap={2} align="center">
               <Text fw={800} size="sm" ta="center">
-                معهد النور الأكاديمي
+                {user?.institute?.name || 'معهد النور الأكاديمي'}
               </Text>
               <Badge variant="light" color="primary" size="xs" radius="xl">
-                الفرع الرئيسي
+                {user?.role === 'SUPER_ADMIN' ? 'المدير العام' : 'الفرع الرئيسي'}
               </Badge>
             </Stack>
 
@@ -313,6 +315,9 @@ export function DesktopSidebar() {
           </Tooltip>
         ) : (
           <UnstyledButton
+            onClick={() => logout()}
+            disabled={isLoggingOut}
+            aria-label="تسجيل الخروج"
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -323,12 +328,14 @@ export function DesktopSidebar() {
               color: 'var(--mantine-color-red-6)',
               backgroundColor: 'var(--mantine-color-red-0)',
               transition: 'background-color 150ms ease',
+              opacity: isLoggingOut ? 0.6 : 1,
+              cursor: isLoggingOut ? 'not-allowed' : 'pointer',
             }}
           >
             <Group gap="xs">
               <IconLogout size={18} stroke={1.8} />
               <Text size="xs" fw={700}>
-                تسجيل الخروج
+                {isLoggingOut ? 'جاري الخروج...' : 'تسجيل الخروج'}
               </Text>
             </Group>
           </UnstyledButton>

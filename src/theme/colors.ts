@@ -1,27 +1,27 @@
 import { MantineColorsTuple } from '@mantine/core';
 
 /**
- * Default SaaS Platform Primary Color: Elegant Deep Indigo
- * 10-shade scale calibrated for high contrast and modern SaaS dashboards.
+ * Default SaaS Platform Primary Color: Vibrant Cyan-Teal
+ * Calibrated to match the login-hero illustration and modern SaaS aesthetics.
  */
 export const defaultPrimaryColor: MantineColorsTuple = [
-  '#eef2ff',
-  '#e0e7ff',
-  '#c7d2fe',
-  '#a5b4fc',
-  '#818cf8',
-  '#6366f1',
-  '#4f46e5', // Primary shade (index 6)
-  '#4338ca',
-  '#3730a3',
-  '#312e81',
+  '#e6f9fd', // 0: ultra light ice-cyan
+  '#c7effa', // 1: soft cyan badge
+  '#8fe0f5', // 2: subtle focus ring / glow
+  '#4ec7eb', // 3: vibrant cyan accent
+  '#20b7df', // 4: active cyan border
+  '#00a8cc', // 5: hero cyan accent
+  '#008fae', // 6: primary brand shade (high contrast WCAG compliant)
+  '#00748e', // 7: dark hover
+  '#055b70', // 8: deep ocean
+  '#084b5c', // 9: midnight cyan
 ];
 
 /**
- * Secondary Accent Color: Vibrant Teal
+ * Secondary Accent Color: Educational Mint-Teal (matching hero sweater and beanbag)
  */
 export const defaultSecondaryColor: MantineColorsTuple = [
-  '#f0fdfa',
+  '#e6fcfb',
   '#ccfbf1',
   '#99f6e4',
   '#5eead4',
@@ -31,6 +31,22 @@ export const defaultSecondaryColor: MantineColorsTuple = [
   '#0f766e',
   '#115e59',
   '#134e4a',
+];
+
+/**
+ * Midnight Deep Navy Scale (matching hero window frames and dark login button)
+ */
+export const deepNavyColor: MantineColorsTuple = [
+  '#f1f5f9',
+  '#e2e8f0',
+  '#cbd5e1',
+  '#94a3b8',
+  '#64748b',
+  '#334155',
+  '#1e293b',
+  '#0f172a',
+  '#0a1128', // Dark button color
+  '#050b18',
 ];
 
 /**

@@ -98,10 +98,65 @@ const activeRoute = useSidebarMirror('activeRoute');
 **Rule:** Mantine (`@mantine/core`, `@mantine/hooks`, `@tabler/icons-react`) is the exclusive UI foundation.
 
 1. **No Raw HTML Elements for UI:** Do not use `<div />`, `<span />`, `<button />`, `<input />`, `<nav />`, `<header />`, `<section />` for UI structure.
-   - Use `<Box />`, `<Group />`, `<Stack />`, `<Flex />`, `<Paper />`, `<Container />`, `<ScrollArea />`, `<AppShell />`, `<Drawer />`, `<Button />`, `<Text />`, `<Title />`, `<TextInput />`, etc.
+   - Use `<Box />`, `<Group />`, `<Stack />`, `<Flex />`, `<Paper />`, `<Container />`, `<ScrollArea />`, `<AppShell />`, `<Drawer />`, `<Button />`, `<Text />`, `<Title />`, etc.
 2. **No Secondary UI Libraries:** Do not install or use Tailwind CSS, MUI, shadcn/ui, Chakra, or Bootstrap.
 3. **Responsive by Design:** Use Mantine's responsive style props (e.g. `visibleFrom="md"`, `hiddenFrom="md"`, responsive arrays/objects `p={{ base: 'sm', md: 'xl' }}`) instead of ad-hoc media query classes.
 4. **UI Factories:** When a Controller has distinct device variants (e.g., Desktop Sidebar vs. Mobile Drawer), a dedicated `UI Factory` (e.g. `SidebarFactory.tsx`) must resolve and render the correct variant.
+
+### 5.1 Mandatory Unified Input Standard (`AppInput` / `InputController`)
+
+> **CRITICAL RULE:** It is **MANDATORY** across the entire application to use `<InputController />` (aliased as `<AppInput />` from `@/src/components/controllers/input`) for all form and data input fields instead of invoking raw Mantine input primitives (`TextInput`, `PasswordInput`, `NumberInput`, `Textarea`) directly.
+
+#### Why?
+1. **Design System Integrity:** Enforces the Modern Curved Organic UI standard (`radius="xl"`, subtle border, soft focus glow, unified font sizes) universally across all dashboard screens.
+2. **Automatic RTL/LTR Intelligence:** Automatically switches input content direction to `ltr` with left text-alignment for phone numbers (`type="tel"`), emails (`type="email"`), passwords (`type="password"`), numbers (`type="number"`), and URLs (`type="url"`), while preserving natural Arabic RTL for labels, descriptions, and error messages.
+3. **Per-Instance State Isolation:** Adheres strictly to Section 3 with an isolated Zustand store per input instance.
+4. **Smart Icons & Props Transparency:** Provides built-in contextual icons (`IconPhone`, `IconLock`, `IconSearch`, `IconMail`, etc.) while accepting all standard Mantine input props.
+
+```tsx
+import { AppInput } from '@/src/components/controllers/input';
+
+// Examples:
+<AppInput type="tel" label="رقم الجوال" required />
+<AppInput type="password" label="كلمة المرور" required />
+<AppInput type="search" placeholder="بحث في السجلات..." />
+<AppInput type="number" label="المبلغ" min={0} />
+<AppInput type="textarea" label="ملاحظات" rows={4} />
+```
+
+### 5.2 Mandatory Unified Date Picker Standard (`AppDatePicker`)
+
+> **CRITICAL RULE:** It is **MANDATORY** across the entire application to use `<AppDatePicker />` (from `@/src/components/ui`) for all date selection fields instead of manual text inputs, raw browser date fields, or ad-hoc date pickers.
+
+#### Why?
+1. **Design System & Organic UI Consistency:** Adopts the curved, modern rounded container (`radius="md"`, subtle borders, soft glow) with an interactive popover calendar styled in harmony with the Modern Curved Organic UI standard.
+2. **Native Arabic & RTL Support:** Implements native Arabic calendar navigation with Arabic month names (يناير، فبراير، ...) and Arabic day headers, flowing correctly with RTL reading order.
+3. **Instant Direct Year & Month Selection (Zero Monotonous Clicking):** Includes dedicated Year and Month dropdown selectors right in the popover header, double arrows (`«` / `»`) for jumping full years with 1 click, and a row of Quick Year Jump chips (`[2025] [2026] [2027] [2028] [2029]`) so users can jump to any upcoming or past year immediately without clicking through individual months.
+4. **Reliable Standardized ISO Output:** Automatically emits standard ISO `YYYY-MM-DD` strings on selection, preventing date parsing discrepancies and backend validation failures across all APIs.
+5. **Fast Shortcuts:** Quick "اليوم" (Today) and "مسح" (Clear) action buttons.
+
+```tsx
+import { AppDatePicker } from '@/src/components/ui';
+
+// Examples:
+<AppDatePicker label="تاريخ البداية" value={startDate} onChange={setStartDate} required />
+<AppDatePicker label="تاريخ النهاية" value={endDate} onChange={setEndDate} required />
+```
+
+### 5.3 Drawer & Direction Standards (RTL Physical Alignment)
+
+1. **DirectionProvider:** Root layout MUST wrap the app in `<DirectionProvider initialDirection="rtl">`.
+2. **Physical Right Alignment for Drawers:** All right-docked drawers MUST inherit the central theme override defined in `src/theme/components.ts`:
+   ```ts
+   Drawer: {
+     defaultProps: { position: 'right' },
+     styles: {
+       inner: { direction: 'ltr', justifyContent: 'flex-end' }, // Forces physical right edge docking
+       content: { direction: 'rtl' },                           // Formats internal content in Arabic RTL
+     },
+   }
+   ```
+   This guarantees that Drawers open and dock on the **PHYSICAL RIGHT** side of the viewport adjacent to the sidebar, avoiding Next.js Portal layout misalignments.
 
 ---
 
@@ -156,13 +211,16 @@ The route group contains `layout.tsx` which wraps all child pages inside `<Layou
 src/app/(dashboard)/[featureName]/
 ├── static-data/              # Constant arrays, mock records, select options, table headers
 │   └── feature.data.ts
-├── unControllerComponent/    # Pure, uncontrolled presentational components
-│   ├── ComponentA.tsx
-│   ├── ComponentB.tsx
+├── ui/                       # ALL presentational components (views, modals, badges, drawers, etc.)
+│   ├── FeatureView.tsx
+│   ├── FeatureTable.tsx
+│   ├── FeatureModal.tsx
 │   └── index.ts
-├── render-ui.tsx             # Client Component boundary ('use client') assembling UI
+├── state/                    # (Optional) State interfaces when page owns dedicated state
+├── store/                    # (Optional) Zustand store + mirror hooks
+├── render-ui.tsx             # Client Component boundary ('use client') — thin wrapper
 ├── page.tsx                  # Server Component entry point (Pure Server Component)
-├── state/                    # (Optional) Only when page owns dedicated state
+├── FeatureController.tsx     # (Optional) Root Controller when page has state
 ├── utils/                    # (Optional) Only when page has dedicated pure helpers
 └── api/                      # (Optional) Only when page has direct React Query hooks
 ```
@@ -174,13 +232,59 @@ src/app/(dashboard)/[featureName]/
 
 ### D. `render-ui.tsx` Responsibility
 - `render-ui.tsx` contains the `'use client'` directive.
-- It imports presentational pieces from `unControllerComponent/` and constant datasets from `static-data/`.
-- It orchestrates the visual assembly of the page without containing raw, messy inline JSX or monolithic markup.
+- It is a **thin wrapper** that renders `<FeatureController />` and nothing else.
+- It MUST contain **ZERO `useState`**, **ZERO `useEffect`**, and **ZERO business logic**.
 
-### E. `unControllerComponent/` vs `static-data/`
+### E. Unified `ui/` Directory (Strict Ban on `unControllerComponent`)
+- **ALL presentational components** live in a single `ui/` directory — views, tables, modals, drawers, badges, action buttons, filter controls.
+- **`unControllerComponent/` is STRICTLY FORBIDDEN:** Do NOT create `unControllerComponent/` anywhere. Any pure UI, modals, or presentational sub-components MUST be placed directly inside `ui/`.
 - **`static-data/`**: Stores constant schemas, metric lists, options, column definitions, and mock items outside component files.
-- **`unControllerComponent/`**: Holds independent presentational components (e.g., `WelcomeBanner.tsx`, `StatsOverview.tsx`, `RecentEnrollmentsTable.tsx`, `TermProgressCard.tsx`).
 - **No Empty Layers**: If a page does not need `state/` or `utils/` or `api/`, do NOT create empty folders for them.
+
+### F. Page-Level Controller Pattern (Mandatory)
+
+> **CRITICAL RULE:** Any page that manages **state** (pagination, filters, modals, selected items, mutations) MUST be structured as a full **Controller Component**, identical in discipline to `src/components/controllers/` modules.
+
+#### Binding Constraints:
+
+1. **`render-ui.tsx` MUST be a thin wrapper** that instantiates the page's Controller component and nothing else. It MUST contain **ZERO `useState`**, **ZERO `useEffect`**, and **ZERO business logic**. Its only job is to render `<FeatureController />`.
+
+2. **State layer (`state/`):** All state types, action signatures, and domain interfaces MUST be defined in `state/<feature>.state.ts`. This file contains NO implementation — only TypeScript interfaces.
+
+3. **Store layer (`store/`):** The Zustand store factory (`create<Feature>Store()`), React Context (`<Feature>Context`), and `use<Feature>Store()` hook MUST live in `store/<feature>.store.ts`. ALL business logic, state transitions, and mutation orchestration reside here.
+
+4. **Mirror layer (`store/`):** The type-safe `use<Feature>Mirror(key)` and `use<Feature>MirrorSelector(selector)` hooks MUST live in `store/use<Feature>Mirror.ts`. These are the ONLY way UI components may access store state.
+
+5. **UI layer (`ui/`):** Pure presentation components that read state EXCLUSIVELY through `useMirror` hooks. UI components MUST have **ZERO `useState` for domain state**, **ZERO direct API calls**, and **ZERO business logic**. They may only hold ephemeral visual state (e.g., tooltip hover) using `useState` if absolutely necessary.
+
+6. **Controller (`<Feature>Controller.tsx`):** Root entry point that:
+   - Creates the isolated Zustand store via `useState(() => createStore())`
+   - Provides the store via React Context
+   - Contains a `QuerySync` component that bridges React Query data → store
+   - Owns mutation callbacks that orchestrate store state + API mutations
+   - Renders the UI view component
+
+7. **QuerySync Pattern:** React Query hooks (`useQuery`, `useMutation`) MUST NOT appear in UI components. A dedicated `QuerySync` internal component inside the Controller bridges query results into the Zustand store via `syncQueryData()` actions.
+
+#### Standard Page Controller Directory:
+
+```text
+src/app/(dashboard)/[featureName]/
+├── state/<feature>.state.ts           # State interface & action types
+├── store/<feature>.store.ts           # Zustand store factory + Context
+├── store/use<Feature>Mirror.ts        # Type-safe mirror hooks
+├── ui/<Feature>View.tsx               # Main view composition
+├── ui/<Feature>Table.tsx              # Table columns (if applicable)
+├── ui/<Feature>Actions.tsx            # Header action buttons
+├── ui/<Feature>Filters.tsx            # Filter controls (if applicable)
+├── ui/<Feature>Modal.tsx              # Modals / Drawers (pure UI inside ui/)
+├── ui/index.ts                        # UI barrel export
+├── <Feature>Controller.tsx            # Root Controller entry
+├── static-data/                       # Constants, labels, options
+├── render-ui.tsx                      # Thin client wrapper → <Controller />
+├── page.tsx                           # Pure Server Component
+└── index.ts                           # Public API export
+```
 
 ---
 
@@ -221,3 +325,59 @@ All components, controllers, and layouts must adopt the **Modern Curved Organic 
    - Top emblem in a circular rounded container with an active status dot.
    - Active sub-navigation displayed in soft tinted background pills.
    - Logout button in a rounded red-tinted pill at the bottom.
+
+---
+
+## 12. ABSOLUTE PROHIBITIONS — Red Lines (Mandatory)
+
+> **These rules are NON-NEGOTIABLE.** Violating any of them is considered a critical architectural defect that MUST be corrected immediately. No exceptions, no shortcuts, no "just this once."
+
+### 12.1 State & Logic Separation
+
+| ❌ PROHIBITED | ✅ REQUIRED |
+|---|---|
+| Mixing `useState`/`useEffect`/business logic with JSX in the same component | State in `store/`, logic in Controller, JSX in `ui/` |
+| Having more than **2 `useState`** hooks in any single UI component | Move domain state to the Zustand store; only ephemeral visual state (tooltip, hover) may use local `useState` |
+| Defining event handlers with business logic inside UI components | Event handlers with business logic belong in the Controller or store actions |
+| Placing `useQuery` / `useMutation` hooks inside UI components | React Query hooks belong in the Controller's `QuerySync` component or in the `api/` layer |
+| Using `useEffect` in UI components for data synchronization | Data sync belongs in `QuerySync`; UI components only read via `useMirror` |
+
+### 12.2 Props & Context
+
+| ❌ PROHIBITED | ✅ REQUIRED |
+|---|---|
+| Passing callbacks through more than **1 level** of props (prop drilling) | Use Controller Context + `useMirror` hooks |
+| Creating global Zustand singletons for Controller/page state | Per-instance stores via `useState(() => createStore())` + React Context |
+| Accessing the Zustand store directly (via `store.getState()`) from UI components | UI components access state ONLY via `useMirror` hooks |
+
+### 12.3 File & Component Boundaries
+
+| ❌ PROHIBITED | ✅ REQUIRED |
+|---|---|
+| Placing `'use client'` inside `page.tsx` | `page.tsx` is always a pure Server Component; client logic lives in `render-ui.tsx` |
+| Having `render-ui.tsx` contain `useState`, `useEffect`, API hooks, or business logic | `render-ui.tsx` is a thin wrapper that renders `<FeatureController />` |
+| Cramming column definitions, event handlers, modals, mutations, and JSX into one file | Each concern goes in its proper layer: columns → `ui/Table.tsx`, state → `store/`, mutations → Controller |
+| Creating components with more than **150 lines** of mixed concerns | Split into proper layers; each file has a single responsibility |
+
+### 12.4 Design & UI
+
+| ❌ PROHIBITED | ✅ REQUIRED |
+|---|---|
+| Using raw HTML elements (`<div>`, `<span>`, `<button>`, `<input>`) for UI structure | Use Mantine components (`Box`, `Group`, `Stack`, `Button`, `Text`, etc.) |
+| Using raw Mantine input primitives (`TextInput`, `PasswordInput`, `NumberInput`) directly | Use `<AppInput />` from `@/src/components/controllers/input` |
+| Hardcoding hex/rgb colors in components | Use theme tokens (`c="primary.6"`, `bg="var(--mantine-color-body)"`) |
+| Using non-Arabic text in user-facing UI | All UI text MUST be in professional Arabic |
+
+### 12.5 Quick Self-Check Before Committing Code
+
+Before finalizing any page or component, ask yourself:
+
+1. ✅ Does `render-ui.tsx` contain ONLY `<Controller />`?
+2. ✅ Does every `useState` for domain state live in the Zustand store?
+3. ✅ Do all UI components read state via `useMirror` hooks?
+4. ✅ Are React Query hooks ONLY in the Controller/QuerySync?
+5. ✅ Are mutation callbacks orchestrated in the Controller?
+6. ✅ Is column/table definition separated from business logic?
+7. ✅ Are modals/drawers state managed in the store, not in UI components?
+
+If **ANY** answer is "No", the code violates these rules and MUST be refactored before proceeding.

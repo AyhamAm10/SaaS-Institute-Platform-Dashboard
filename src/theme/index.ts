@@ -1,5 +1,11 @@
 import { createTheme, MantineThemeOverride, rem } from '@mantine/core';
-import { defaultPrimaryColor, defaultSecondaryColor, slateNeutral, InstituteBrandConfig } from './colors';
+import {
+  defaultPrimaryColor,
+  defaultSecondaryColor,
+  slateNeutral,
+  deepNavyColor,
+  InstituteBrandConfig,
+} from './colors';
 import { defaultFontFamily, defaultFontFamilyMonospace, defaultHeadings } from './typography';
 import { defaultComponents } from './components';
 
@@ -13,6 +19,7 @@ export const baseTheme = createTheme({
     primary: defaultPrimaryColor,
     secondary: defaultSecondaryColor,
     slate: slateNeutral,
+    navy: deepNavyColor,
   },
   fontFamily: defaultFontFamily,
   fontFamilyMonospace: defaultFontFamilyMonospace,

@@ -27,8 +27,11 @@ import {
 } from '@tabler/icons-react';
 import { useSidebarMirror } from '../../sidebar/store/useSidebarMirror';
 import { useLayoutMirror } from '../store/useLayoutMirror';
+import { useAuth } from '@/src/core/auth';
 
 export function DashboardHeader() {
+  const { user, logout, isLoggingOut } = useAuth();
+
   const isMobileOpen = useSidebarMirror('isMobileOpen');
   const toggleMobile = useSidebarMirror('toggleMobile');
 
@@ -136,19 +139,19 @@ export function DashboardHeader() {
                 <Group gap="xs" wrap="nowrap">
                   <Avatar
                     src={null}
-                    alt="مدير النظام"
+                    alt={user?.fullName || 'مدير النظام'}
                     color="primary"
                     radius="xl"
                     size="sm"
                   >
-                    من
+                    {user?.fullName ? user.fullName.slice(0, 2) : 'من'}
                   </Avatar>
                   <Stack gap={0} visibleFrom="sm" pr="xs">
                     <Text size="xs" fw={700} lineClamp={1}>
-                      مدير النظام المشرف
+                      {user?.fullName || 'مدير النظام'}
                     </Text>
                     <Text size="10px" c="dimmed">
-                      الفرع الرئيسي
+                      {user?.institute?.name || 'الفرع الرئيسي'}
                     </Text>
                   </Stack>
                   <IconChevronDown size={14} color="var(--mantine-color-dimmed)" />
@@ -165,7 +168,12 @@ export function DashboardHeader() {
                 إعدادات المعهد
               </Menu.Item>
               <Menu.Divider />
-              <Menu.Item color="red" leftSection={<IconLogout size={15} />}>
+              <Menu.Item
+                color="red"
+                leftSection={<IconLogout size={15} />}
+                onClick={() => logout()}
+                disabled={isLoggingOut}
+              >
                 تسجيل الخروج
               </Menu.Item>
             </Menu.Dropdown>

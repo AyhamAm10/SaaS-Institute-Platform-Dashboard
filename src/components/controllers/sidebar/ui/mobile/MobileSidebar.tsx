@@ -21,8 +21,10 @@ import { useEffect } from 'react';
 import { useSidebarMirror } from '../../store/useSidebarMirror';
 import { isNavItemActive } from '../../utils/nav.utils';
 import { NavSubItem } from '../../init/navigation';
+import { useAuth } from '@/src/core/auth';
 
 export function MobileSidebar() {
+  const { user, logout, isLoggingOut } = useAuth();
   const items = useSidebarMirror('items');
   const isOpen = useSidebarMirror('isMobileOpen');
   const close = useSidebarMirror('closeMobile');
@@ -62,10 +64,10 @@ export function MobileSidebar() {
           </Paper>
           <Stack gap={0}>
             <Text fw={700} size="sm">
-              معهد النور الأكاديمي
+              {user?.institute?.name || 'معهد النور الأكاديمي'}
             </Text>
             <Badge variant="light" color="primary" size="xs" radius="xl">
-              الفرع الرئيسي
+              {user?.role === 'SUPER_ADMIN' ? 'المدير العام' : 'الفرع الرئيسي'}
             </Badge>
           </Stack>
         </Group>
@@ -171,6 +173,12 @@ export function MobileSidebar() {
 
       <Box pt="md" style={{ borderTop: '1px solid var(--mantine-color-gray-2)' }}>
         <UnstyledButton
+          onClick={() => {
+            close();
+            logout();
+          }}
+          disabled={isLoggingOut}
+          aria-label="تسجيل الخروج"
           style={{
             display: 'flex',
             alignItems: 'center',
@@ -180,12 +188,14 @@ export function MobileSidebar() {
             borderRadius: rem(10),
             color: 'var(--mantine-color-red-6)',
             backgroundColor: 'var(--mantine-color-red-0)',
+            opacity: isLoggingOut ? 0.6 : 1,
+            cursor: isLoggingOut ? 'not-allowed' : 'pointer',
           }}
         >
           <Group gap="xs">
             <IconLogout size={16} stroke={1.8} />
             <Text size="xs" fw={700}>
-              تسجيل الخروج
+              {isLoggingOut ? 'جاري الخروج...' : 'تسجيل الخروج'}
             </Text>
           </Group>
         </UnstyledButton>
