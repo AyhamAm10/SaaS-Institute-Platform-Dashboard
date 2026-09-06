@@ -6,6 +6,7 @@ import { TextInputVariant } from './TextInputVariant';
 import { PasswordInputVariant } from './PasswordInputVariant';
 import { NumberInputVariant } from './NumberInputVariant';
 import { TextareaVariant } from './TextareaVariant';
+import { SelectVariant } from './SelectVariant';
 
 /**
  * UI Factory dynamically resolving the proper Mantine input variant
@@ -15,6 +16,8 @@ export function InputFactory() {
   const config = useInputMirror('config');
 
   switch (config.type) {
+    case 'select':
+      return <SelectVariant />;
     case 'password':
       return <PasswordInputVariant />;
     case 'number':

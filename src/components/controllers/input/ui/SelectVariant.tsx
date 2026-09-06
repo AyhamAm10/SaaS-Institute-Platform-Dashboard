@@ -1,11 +1,11 @@
 'use client';
 
 import React from 'react';
-import { NumberInput } from '@mantine/core';
+import { Select } from '@mantine/core';
 import { useInputMirror } from '../store/useInputMirror';
 import { getUnifiedInputStyles } from './shared.styles';
 
-export function NumberInputVariant() {
+export function SelectVariant() {
   const config = useInputMirror('config');
   const value = useInputMirror('value');
   const isFocused = useInputMirror('isFocused');
@@ -28,37 +28,46 @@ export function NumberInputVariant() {
     size: _size,
     radius: _radius,
     leftSection: _ls,
-    min,
-    max,
-    step,
+    data = [],
+    searchable = false,
+    clearable = false,
+    nothingFoundMessage = 'لا توجد نتائج مطابقة',
+    checkIconPosition = 'right',
+    maxDropdownHeight = 250,
     ...mantineProps
   } = rawProps;
 
   const unifiedStyles = getUnifiedInputStyles(config, isFocused, customStyles);
 
+  // Normalize string/number/null value for Mantine Select
+  const stringValue = value !== null && value !== undefined ? String(value) : null;
+
   return (
-    <NumberInput
+    <Select
       {...mantineProps}
-      min={min}
-      max={max}
-      step={step}
+      data={data}
+      searchable={searchable}
+      clearable={clearable}
+      nothingFoundMessage={nothingFoundMessage}
+      checkIconPosition={checkIconPosition}
+      maxDropdownHeight={maxDropdownHeight}
       size={config.size}
       radius={config.radius}
-      value={value ?? ''}
+      value={stringValue}
       error={error}
       leftSection={config.defaultLeftSection}
       styles={unifiedStyles}
-      onChange={(val) => {
-        setValue(typeof val === 'number' ? val : val === '' ? '' : String(val));
+      onChange={(val, option) => {
+        setValue(val, option);
       }}
       onFocus={(e) => {
         setFocused(true);
-        rawProps.onFocus?.(e);
+        rawProps.onFocus?.(e as any);
       }}
       onBlur={(e) => {
         setFocused(false);
         setTouched(true);
-        rawProps.onBlur?.(e);
+        rawProps.onBlur?.(e as any);
       }}
     />
   );

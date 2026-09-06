@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { MantineSize, MantineRadius } from '@mantine/core';
+import { MantineSize, MantineRadius, ComboboxItem, ComboboxData } from '@mantine/core';
 import {
   IconPhone,
   IconMail,
@@ -17,10 +17,13 @@ export type InputType =
   | 'tel'
   | 'search'
   | 'url'
-  | 'textarea';
+  | 'textarea'
+  | 'select';
+
+export type SelectDataType = ComboboxData | string[];
 
 /**
- * Props accepted by the InputController.
+ * Props accepted by the InputController (AppInput / AppSelect).
  * Matches standard Mantine input options plus type-specific configurations.
  */
 export interface InputInitialProps {
@@ -31,9 +34,12 @@ export interface InputInitialProps {
   description?: ReactNode;
   error?: ReactNode;
   placeholder?: string;
-  value?: string | number;
-  defaultValue?: string | number;
-  onChange?: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | number | string) => void;
+  value?: string | number | null;
+  defaultValue?: string | number | null;
+  onChange?: (
+    event: any,
+    option?: ComboboxItem,
+  ) => void;
   onFocus?: (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   onBlur?: (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
@@ -46,6 +52,11 @@ export interface InputInitialProps {
   leftSection?: ReactNode;
   rightSection?: ReactNode;
   clearable?: boolean;
+  searchable?: boolean;
+  data?: SelectDataType;
+  checkIconPosition?: 'left' | 'right';
+  nothingFoundMessage?: ReactNode;
+  maxDropdownHeight?: number | string;
   dir?: 'rtl' | 'ltr' | 'auto';
   autoFocus?: boolean;
   autoComplete?: string;
@@ -75,7 +86,7 @@ export interface ResolvedInputConfig {
  * Pure initialization function deriving configuration from props.
  */
 export function resolveInputConfig(props: InputInitialProps): ResolvedInputConfig {
-  const type: InputType = props.type ?? 'text';
+  const type: InputType = props.type ?? (props.data ? 'select' : 'text');
 
   // Determine direction: Numbers, phones, emails, passwords, and URLs are naturally LTR
   const isLtrType =

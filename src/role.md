@@ -103,25 +103,37 @@ const activeRoute = useSidebarMirror('activeRoute');
 3. **Responsive by Design:** Use Mantine's responsive style props (e.g. `visibleFrom="md"`, `hiddenFrom="md"`, responsive arrays/objects `p={{ base: 'sm', md: 'xl' }}`) instead of ad-hoc media query classes.
 4. **UI Factories:** When a Controller has distinct device variants (e.g., Desktop Sidebar vs. Mobile Drawer), a dedicated `UI Factory` (e.g. `SidebarFactory.tsx`) must resolve and render the correct variant.
 
-### 5.1 Mandatory Unified Input Standard (`AppInput` / `InputController`)
+### 5.1 Mandatory Unified Input & Select Standard (`AppInput` / `AppSelect` / `InputController`)
 
-> **CRITICAL RULE:** It is **MANDATORY** across the entire application to use `<InputController />` (aliased as `<AppInput />` from `@/src/components/controllers/input`) for all form and data input fields instead of invoking raw Mantine input primitives (`TextInput`, `PasswordInput`, `NumberInput`, `Textarea`) directly.
+> **CRITICAL RULE:** It is **MANDATORY** across the entire application to use `<InputController />` (aliased as `<AppInput />` and `<AppSelect />` from `@/src/components/ui` or `@/src/components/controllers/input`) for all form inputs and dropdown select fields instead of invoking raw Mantine input primitives (`TextInput`, `PasswordInput`, `NumberInput`, `Textarea`, `Select`) directly.
 
 #### Why?
-1. **Design System Integrity:** Enforces the Modern Curved Organic UI standard (`radius="xl"`, subtle border, soft focus glow, unified font sizes) universally across all dashboard screens.
-2. **Automatic RTL/LTR Intelligence:** Automatically switches input content direction to `ltr` with left text-alignment for phone numbers (`type="tel"`), emails (`type="email"`), passwords (`type="password"`), numbers (`type="number"`), and URLs (`type="url"`), while preserving natural Arabic RTL for labels, descriptions, and error messages.
-3. **Per-Instance State Isolation:** Adheres strictly to Section 3 with an isolated Zustand store per input instance.
-4. **Smart Icons & Props Transparency:** Provides built-in contextual icons (`IconPhone`, `IconLock`, `IconSearch`, `IconMail`, etc.) while accepting all standard Mantine input props.
+1. **Design System Integrity:** Enforces the Modern Curved Organic UI standard (`radius="xl"`, subtle border, soft focus glow, unified font sizes, identical input heights) universally across all dashboard screens and modals/drawers.
+2. **Automatic RTL/LTR Intelligence:** Automatically switches input content direction to `ltr` with left text-alignment for phone numbers (`type="tel"`), emails (`type="email"`), passwords (`type="password"`), numbers (`type="number"`), and URLs (`type="url"`), while preserving natural Arabic RTL for labels, descriptions, select options, and error messages.
+3. **Unified Dropdown Selection (`AppSelect`):** Fully wraps Mantine's `Select` inside the isolated Controller architecture, offering searchability, clearability, customizable empty state messages ("لا توجد نتائج مطابقة"), and identical height and focus glow.
+4. **Per-Instance State Isolation:** Adheres strictly to Section 3 with an isolated Zustand store per input instance.
+5. **Smart Icons & Props Transparency:** Provides built-in contextual icons (`IconPhone`, `IconLock`, `IconSearch`, `IconMail`, etc.) while accepting all standard Mantine input props.
 
 ```tsx
-import { AppInput } from '@/src/components/controllers/input';
+import { AppInput, AppSelect } from '@/src/components/ui';
 
-// Examples:
+// Text & Number Examples:
 <AppInput type="tel" label="رقم الجوال" required />
 <AppInput type="password" label="كلمة المرور" required />
 <AppInput type="search" placeholder="بحث في السجلات..." />
 <AppInput type="number" label="المبلغ" min={0} />
 <AppInput type="textarea" label="ملاحظات" rows={4} />
+
+// Select Dropdown Examples:
+<AppSelect
+  label="المرحلة الدراسية"
+  data={gradesList}
+  value={selectedGrade}
+  onChange={setSelectedGrade}
+  searchable
+  clearable
+  required
+/>
 ```
 
 ### 5.2 Mandatory Unified Date Picker Standard (`AppDatePicker`)
@@ -143,20 +155,30 @@ import { AppDatePicker } from '@/src/components/ui';
 <AppDatePicker label="تاريخ النهاية" value={endDate} onChange={setEndDate} required />
 ```
 
-### 5.3 Drawer & Direction Standards (RTL Physical Alignment)
+### 5.3 Mandatory Unified Drawer System (`AppDrawer`) & RTL Physical Alignment
 
-1. **DirectionProvider:** Root layout MUST wrap the app in `<DirectionProvider initialDirection="rtl">`.
-2. **Physical Right Alignment for Drawers:** All right-docked drawers MUST inherit the central theme override defined in `src/theme/components.ts`:
-   ```ts
-   Drawer: {
-     defaultProps: { position: 'right' },
-     styles: {
-       inner: { direction: 'ltr', justifyContent: 'flex-end' }, // Forces physical right edge docking
-       content: { direction: 'rtl' },                           // Formats internal content in Arabic RTL
-     },
-   }
-   ```
-   This guarantees that Drawers open and dock on the **PHYSICAL RIGHT** side of the viewport adjacent to the sidebar, avoiding Next.js Portal layout misalignments.
+> **CRITICAL RULE:** It is **MANDATORY** across the entire application to use `<AppDrawer />` (from `@/src/components/ui` or `@/src/components/controllers/drawer`) for all drawers, slide-overs, and side-sheet workflows instead of invoking raw Mantine `<Drawer />` directly.
+
+1. **DirectionProvider & Physical Right Alignment:**
+   - Root layout MUST wrap the app in `<DirectionProvider initialDirection="rtl">`.
+   - All right-docked drawers MUST inherit physical right docking (`position="right"`, `inner: { direction: 'ltr', justifyContent: 'flex-end' }` and `content: { direction: 'rtl' }`).
+   - `<AppDrawer />` enforces this out-of-the-box, ensuring drawers dock against the physical right edge of the screen adjacent to the sidebar without portal alignment issues.
+
+2. **Compound Component Standard:**
+   `<AppDrawer />` provides a structured, responsive, and composable layout:
+   - `<AppDrawer.Header>`: Contains `<AppDrawer.Icon />`, `<AppDrawer.Title />`, `<AppDrawer.Description />`, `<AppDrawer.Actions />`, and `<AppDrawer.Close />`.
+   - `<AppDrawer.Toolbar>`: Optional contextual toolbar for secondary controls, filters, or tab navigation.
+   - `<AppDrawer.Content>`: The primary scrollable viewport with standardized padding, scrollbar aesthetics, and built-in `loading` state.
+   - `<AppDrawer.Section>` & `<AppDrawer.SectionHeader>`: Organic curved grouping paper for organizing complex form inputs and data visually.
+   - `<AppDrawer.Details>` & `<AppDrawer.Detail>`: Structured entity detail pairs with labels, values, icons, and loading skeleton support.
+   - `<AppDrawer.Footer>`: Fixed bottom action surface with `<AppDrawer.FooterStart>`, `<AppDrawer.FooterEnd>`, `<AppDrawer.Cancel>`, and `<AppDrawer.Submit>`.
+
+3. **Usage Modes:**
+   - **Simple Mode:** `<AppDrawer opened={opened} onClose={onClose} title="Title" loading={isLoading}><Content /></AppDrawer>`
+   - **Full Compound Mode:** Directly compose `<AppDrawer.Header>`, `<AppDrawer.Content>`, `<AppDrawer.Section>`, and `<AppDrawer.Footer>` around feature-specific forms.
+
+4. **Layer Separation:**
+   - `AppDrawer` is a project-owned UI primitive. It contains **ZERO feature logic**, **ZERO API calls**, and **ZERO domain Zustand state**. All forms, mutations, and domain schemas belong to the feature layer.
 
 ---
 

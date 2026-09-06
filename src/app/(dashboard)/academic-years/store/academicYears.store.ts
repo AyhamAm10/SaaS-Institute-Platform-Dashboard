@@ -25,11 +25,13 @@ export function createAcademicYearsStore(): AcademicYearsStore {
     isLoading: true,
     isFetching: false,
 
-    // ── Modal State ──
+    // ── Modal / Drawer State ──
     modalOpened: false,
     selectedYear: null,
 
-    // ── Set-Current Mutation Tracking ──
+    // ── Set-Current Workflow Drawer State ──
+    setCurrentDrawerOpened: false,
+    selectedYearForSetCurrent: null,
     setCurrentPending: false,
     setCurrentTargetId: null,
 
@@ -40,10 +42,16 @@ export function createAcademicYearsStore(): AcademicYearsStore {
     setPage: (page: number) => set({ page }),
     setSearch: (search: string) => set({ search, page: 1 }),
 
-    // ── Actions: Modal ──
+    // ── Actions: Create/Edit Drawer ──
     openCreate: () => set({ selectedYear: null, modalOpened: true }),
     openEdit: (year) => set({ selectedYear: year, modalOpened: true }),
     closeModal: () => set({ modalOpened: false }),
+
+    // ── Actions: Set Current Drawer ──
+    openSetCurrentDrawer: (year) =>
+      set({ selectedYearForSetCurrent: year, setCurrentDrawerOpened: true }),
+    closeSetCurrentDrawer: () =>
+      set({ selectedYearForSetCurrent: null, setCurrentDrawerOpened: false }),
 
     // ── Actions: Query Sync ──
     syncQueryData: (payload) =>

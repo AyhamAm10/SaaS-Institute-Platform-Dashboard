@@ -8,15 +8,16 @@ import { InputFactory } from './ui/InputFactory';
 export interface InputControllerProps extends InputInitialProps {}
 
 /**
- * InputController (AppInput)
+ * InputController (AppInput / AppSelect)
  *
  * Unified Custom Input Controller for the SaaS Education Platform.
  *
  * Responsibilities:
  * - Serves as the single, authoritative input component across the entire dashboard.
- * - Wraps Mantine's input primitives (TextInput, PasswordInput, NumberInput, Textarea) with identical curved aesthetic.
+ * - Wraps Mantine's input primitives (TextInput, PasswordInput, NumberInput, Textarea, Select) with identical curved aesthetic.
  * - Manages isolated per-instance state (Section 3 of role.md) via createInputStore.
  * - Automatically handles LTR/RTL intelligence for numbers, phones, passwords, emails, and Arabic text.
+ * - Supports type="select" or data={[...]} to render a unified curved Select dropdown.
  * - Provides smart default icons based on the `type` prop.
  */
 export function InputController(props: InputControllerProps) {
@@ -35,6 +36,9 @@ export function InputController(props: InputControllerProps) {
     props.description,
     props.leftSection,
     props.rightSection,
+    props.data,
+    props.searchable,
+    props.clearable,
     store,
   ]);
 
@@ -45,5 +49,8 @@ export function InputController(props: InputControllerProps) {
   );
 }
 
-// Convenient alias for ergonomic import
+// Convenient aliases for ergonomic import
 export const AppInput = InputController;
+export const AppSelect = (props: Omit<InputControllerProps, 'type'>) => (
+  <InputController type="select" {...props} />
+);

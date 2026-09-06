@@ -1,13 +1,14 @@
 'use client';
 
-import { useCallback } from 'react';
+import { useMemo } from 'react';
 import { DataModuleController } from '@/src/components/controllers/data-module';
 import { AcademicYear } from '@/src/core/api';
 import { academicYearsPageMetadata } from '../static-data/academic-years.data';
-import { AcademicYearModal } from './AcademicYearModal';
+import { AcademicYearDrawer } from './AcademicYearDrawer';
+import { SetCurrentAcademicYearDrawer } from './SetCurrentAcademicYearDrawer';
 import { AcademicYearsActions } from './AcademicYearsActions';
 import { useAcademicYearsColumns } from './AcademicYearsTable';
-import { useAcademicYearsMirror, useAcademicYearsMirrorSelector } from '../store/useAcademicYearsMirror';
+import { useAcademicYearsMirror } from '../store/useAcademicYearsMirror';
 
 interface AcademicYearsViewProps {
   onFormSubmit: (formData: {
@@ -37,25 +38,30 @@ export function AcademicYearsView({ onFormSubmit, onSetCurrent }: AcademicYearsV
   const setPage = useAcademicYearsMirror('setPage');
   const setSearch = useAcademicYearsMirror('setSearch');
 
-  // ── Modal state via mirror ──
+  // ── Create / Edit Drawer state via mirror ──
   const modalOpened = useAcademicYearsMirror('modalOpened');
   const selectedYear = useAcademicYearsMirror('selectedYear');
   const closeModal = useAcademicYearsMirror('closeModal');
   const formSubmitting = useAcademicYearsMirror('formSubmitting');
 
+  // ── Set-Current Workflow Drawer state via mirror ──
+  const setCurrentDrawerOpened = useAcademicYearsMirror('setCurrentDrawerOpened');
+  const selectedYearForSetCurrent = useAcademicYearsMirror('selectedYearForSetCurrent');
+  const closeSetCurrentDrawer = useAcademicYearsMirror('closeSetCurrentDrawer');
+  const openSetCurrentDrawer = useAcademicYearsMirror('openSetCurrentDrawer');
+  const setCurrentPending = useAcademicYearsMirror('setCurrentPending');
+
   // ── Open edit action (passed to column definitions) ──
   const openEdit = useAcademicYearsMirror('openEdit');
 
-  const handleSetCurrent = useCallback(
-    (year: AcademicYear) => {
-      if (year.isCurrent) return;
-      onSetCurrent(year);
-    },
-    [onSetCurrent],
+  // Find the currently active year for context in the workflow drawer
+  const currentActiveYear = useMemo(
+    () => data.find((y) => y.isCurrent) ?? null,
+    [data],
   );
 
   // ── Column definitions via hook ──
-  const columns = useAcademicYearsColumns(openEdit, handleSetCurrent);
+  const columns = useAcademicYearsColumns(openEdit, openSetCurrentDrawer);
 
   return (
     <>
@@ -95,12 +101,23 @@ export function AcademicYearsView({ onFormSubmit, onSetCurrent }: AcademicYearsV
         <DataModuleController.Footer />
       </DataModuleController>
 
-      <AcademicYearModal
+      {/* Create / Edit Drawer */}
+      <AcademicYearDrawer
         opened={modalOpened}
         onClose={closeModal}
         year={selectedYear}
         onSubmit={onFormSubmit}
         isLoading={formSubmitting}
+      />
+
+      {/* Set-Current Workflow Drawer */}
+      <SetCurrentAcademicYearDrawer
+        opened={setCurrentDrawerOpened}
+        onClose={closeSetCurrentDrawer}
+        targetYear={selectedYearForSetCurrent}
+        currentActiveYear={currentActiveYear}
+        onConfirm={onSetCurrent}
+        isLoading={setCurrentPending}
       />
     </>
   );

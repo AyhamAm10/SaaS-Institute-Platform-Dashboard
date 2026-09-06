@@ -40,7 +40,7 @@ export function PasswordInputVariant() {
       {...mantineProps}
       size={config.size}
       radius={config.radius}
-      value={value}
+      value={value ?? ''}
       error={error}
       leftSection={config.defaultLeftSection}
       visible={isPasswordVisible}

@@ -18,16 +18,15 @@ export function createInputStore(initialProps: InputInitialProps): InputStore {
   return createControllerStore<InputState>((set, get) => ({
     ...initial,
 
-    setValue: (value: string | number) => {
+    setValue: (value: string | number | null, option?: any) => {
       set({ value, isTouched: true });
       const rawProps = get().rawProps;
       if (rawProps.onChange) {
-        // If consumer passed raw onChange, allow standard synthetic event or raw value
-        if (typeof value === 'object') {
+        if (typeof value === 'object' && value !== null && 'target' in value) {
           rawProps.onChange(value);
         } else {
-          // Synthetic-like fallback
-          rawProps.onChange(value as any);
+          // Select or direct value change
+          rawProps.onChange(value as any, option);
         }
       }
     },

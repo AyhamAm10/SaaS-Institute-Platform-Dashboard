@@ -3,8 +3,8 @@
 import { DataModuleController } from '@/src/components/controllers/data-module';
 import { Section } from '@/src/core/api';
 import { sectionsPageMetadata } from '../static-data/sections.data';
-import { SectionModal } from './SectionModal';
-import { SectionFeeModal } from './SectionFeeModal';
+import { SectionDrawer } from './SectionDrawer';
+import { SectionFeeDrawer } from './SectionFeeDrawer';
 import { SectionDetailsDrawer } from './SectionDetailsDrawer';
 import { SectionsActions } from './SectionsActions';
 import { SectionsFilters } from './SectionsFilters';
@@ -40,20 +40,20 @@ export function SectionsView({ onFormSubmit, onFeeSubmit }: SectionsViewProps) {
   const setPage = useSectionsMirror('setPage');
   const setSearch = useSectionsMirror('setSearch');
 
-  // ── Form Modal state via mirror ──
+  // ── Form Drawer state via mirror ──
   const formModalOpened = useSectionsMirror('formModalOpened');
   const selectedSection = useSectionsMirror('selectedSection');
   const closeFormModal = useSectionsMirror('closeFormModal');
   const formSubmitting = useSectionsMirror('formSubmitting');
   const academicYears = useSectionsMirror('academicYears');
 
-  // ── Fee Modal state via mirror ──
+  // ── Fee Drawer state via mirror ──
   const feeModalOpened = useSectionsMirror('feeModalOpened');
   const feeSection = useSectionsMirror('feeSection');
   const closeFeeModal = useSectionsMirror('closeFeeModal');
   const feeSubmitting = useSectionsMirror('feeSubmitting');
 
-  // ── Drawer state via mirror ──
+  // ── Details Drawer state via mirror ──
   const drawerOpened = useSectionsMirror('drawerOpened');
   const detailSectionId = useSectionsMirror('detailSectionId');
   const closeDrawer = useSectionsMirror('closeDrawer');
@@ -107,7 +107,8 @@ export function SectionsView({ onFormSubmit, onFeeSubmit }: SectionsViewProps) {
         <DataModuleController.Footer />
       </DataModuleController>
 
-      <SectionModal
+      {/* Create / Edit Section Drawer */}
+      <SectionDrawer
         opened={formModalOpened}
         onClose={closeFormModal}
         section={selectedSection}
@@ -116,7 +117,8 @@ export function SectionsView({ onFormSubmit, onFeeSubmit }: SectionsViewProps) {
         isLoading={formSubmitting}
       />
 
-      <SectionFeeModal
+      {/* Update Section Fee Drawer */}
+      <SectionFeeDrawer
         opened={feeModalOpened}
         onClose={closeFeeModal}
         section={feeSection}
@@ -124,6 +126,7 @@ export function SectionsView({ onFormSubmit, onFeeSubmit }: SectionsViewProps) {
         isLoading={feeSubmitting}
       />
 
+      {/* View Section Details Drawer */}
       <SectionDetailsDrawer
         opened={drawerOpened}
         onClose={closeDrawer}

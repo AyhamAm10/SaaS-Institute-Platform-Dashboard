@@ -19,11 +19,13 @@ export interface AcademicYearsState {
   isLoading: boolean;
   isFetching: boolean;
 
-  // ── Modal State ──
+  // ── Modal / Drawer State ──
   modalOpened: boolean;
   selectedYear: AcademicYear | null;
 
-  // ── Set-Current Mutation Tracking ──
+  // ── Set-Current Workflow Drawer State ──
+  setCurrentDrawerOpened: boolean;
+  selectedYearForSetCurrent: AcademicYear | null;
   setCurrentPending: boolean;
   setCurrentTargetId: number | null;
 
@@ -34,10 +36,14 @@ export interface AcademicYearsState {
   setPage: (page: number) => void;
   setSearch: (search: string) => void;
 
-  // ── Actions: Modal ──
+  // ── Actions: Create/Edit Drawer ──
   openCreate: () => void;
   openEdit: (year: AcademicYear) => void;
   closeModal: () => void;
+
+  // ── Actions: Set Current Drawer ──
+  openSetCurrentDrawer: (year: AcademicYear) => void;
+  closeSetCurrentDrawer: () => void;
 
   // ── Actions: Query Sync ──
   syncQueryData: (payload: {

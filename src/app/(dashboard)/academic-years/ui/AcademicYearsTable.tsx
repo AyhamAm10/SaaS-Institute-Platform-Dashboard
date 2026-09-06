@@ -24,7 +24,7 @@ import { useAcademicYearsMirror } from '../store/useAcademicYearsMirror';
  */
 export function useAcademicYearsColumns(
   onEdit: (year: AcademicYear) => void,
-  onSetCurrent: (year: AcademicYear) => void,
+  onOpenSetCurrent: (year: AcademicYear) => void,
 ): DataModuleColumn<AcademicYear>[] {
   const setCurrentPending = useAcademicYearsMirror('setCurrentPending');
   const setCurrentTargetId = useAcademicYearsMirror('setCurrentTargetId');
@@ -78,7 +78,7 @@ export function useAcademicYearsColumns(
                   color="teal"
                   radius="xl"
                   loading={setCurrentPending && setCurrentTargetId === row.id}
-                  onClick={() => onSetCurrent(row)}
+                  onClick={() => onOpenSetCurrent(row)}
                 >
                   <IconCalendarCheck size={16} />
                 </ActionIcon>
@@ -102,7 +102,7 @@ export function useAcademicYearsColumns(
                   <Menu.Item
                     leftSection={<IconCalendarCheck size={14} />}
                     color="teal"
-                    onClick={() => onSetCurrent(row)}
+                    onClick={() => onOpenSetCurrent(row)}
                   >
                     تعيين كنشطة
                   </Menu.Item>
@@ -113,6 +113,6 @@ export function useAcademicYearsColumns(
         ),
       },
     ],
-    [setCurrentPending, setCurrentTargetId, onEdit, onSetCurrent],
+    [setCurrentPending, setCurrentTargetId, onEdit, onOpenSetCurrent],
   );
 }

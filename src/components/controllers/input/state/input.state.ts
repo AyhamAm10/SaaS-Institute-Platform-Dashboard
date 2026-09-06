@@ -7,7 +7,7 @@ import { InputInitialProps, ResolvedInputConfig, resolveInputConfig } from '../i
  */
 export interface InputState extends ControllerState {
   // Domain State
-  value: string | number;
+  value: string | number | null;
   isFocused: boolean;
   isTouched: boolean;
   isPasswordVisible: boolean;
@@ -16,7 +16,7 @@ export interface InputState extends ControllerState {
   rawProps: InputInitialProps;
 
   // Actions
-  setValue: (value: string | number) => void;
+  setValue: (value: string | number | null, option?: any) => void;
   setFocused: (isFocused: boolean) => void;
   setTouched: (isTouched: boolean) => void;
   togglePasswordVisibility: () => void;
@@ -39,7 +39,7 @@ export function createInitialInputState(props: InputInitialProps): Omit<
   const config = resolveInputConfig(props);
 
   return {
-    value: props.value ?? props.defaultValue ?? '',
+    value: props.value !== undefined ? props.value : props.defaultValue ?? '',
     isFocused: false,
     isTouched: false,
     isPasswordVisible: false,

@@ -52,7 +52,7 @@ export function TextareaVariant() {
       autosize={autosize}
       size={textareaConfig.size}
       radius={textareaConfig.radius}
-      value={value}
+      value={value ?? ''}
       error={error}
       leftSection={textareaConfig.defaultLeftSection}
       styles={unifiedStyles}

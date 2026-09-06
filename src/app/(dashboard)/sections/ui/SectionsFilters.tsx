@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import { Select } from '@mantine/core';
+import { AppSelect } from '@/src/components/ui';
 import { useSectionsMirror } from '../store/useSectionsMirror';
 import { defaultGradesList } from '../static-data/sections.data';
 
@@ -9,6 +9,7 @@ import { defaultGradesList } from '../static-data/sections.data';
  * SectionsFilters
  *
  * Filter controls for the Sections page (year + grade dropdowns).
+ * Uses AppSelect adhering to the unified input standard.
  * Pure presentation — reads state and actions from the mirror.
  */
 export function SectionsFilters() {
@@ -29,24 +30,22 @@ export function SectionsFilters() {
 
   return (
     <>
-      <Select
+      <AppSelect
         placeholder="السنة الدراسية"
         data={yearFilterOptions}
         value={selectedYearId}
-        onChange={setSelectedYearId}
+        onChange={(val: any) => setSelectedYearId(val as string | null)}
         clearable
-        radius="xl"
         size="xs"
         style={{ width: 160 }}
       />
-      <Select
+      <AppSelect
         placeholder="المرحلة الدراسية"
         data={defaultGradesList}
         value={selectedGrade}
-        onChange={setSelectedGrade}
+        onChange={(val: any) => setSelectedGrade(val as string | null)}
         clearable
         searchable
-        radius="xl"
         size="xs"
         style={{ width: 180 }}
       />
