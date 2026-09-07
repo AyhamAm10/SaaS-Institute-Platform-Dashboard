@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
 import { Center, Loader } from '@mantine/core';
@@ -33,19 +33,14 @@ export function LoginController(props: LoginControllerProps) {
   );
 
   // If already authenticated as administrator, seamlessly navigate to dashboard
-  if (!isLoading && isAuthenticated && isAdmin) {
-    if (typeof window !== 'undefined') {
+  useEffect(() => {
+    if (!isLoading && isAuthenticated && isAdmin) {
       router.replace('/');
     }
-    return (
-      <Center h="100vh" bg="var(--mantine-color-body)">
-        <Loader size="md" color="primary.6" />
-      </Center>
-    );
-  }
+  }, [isLoading, isAuthenticated, isAdmin, router]);
 
-  // While initial authentication check is active, render loading indicator
-  if (isLoading) {
+  // While initial authentication check or redirect is active, render loading indicator
+  if (isLoading || (isAuthenticated && isAdmin)) {
     return (
       <Center h="100vh" bg="var(--mantine-color-body)">
         <Loader size="md" color="primary.6" />

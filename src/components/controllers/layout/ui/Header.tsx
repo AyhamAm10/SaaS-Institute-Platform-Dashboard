@@ -28,9 +28,13 @@ import {
 import { useSidebarMirror } from '../../sidebar/store/useSidebarMirror';
 import { useLayoutMirror } from '../store/useLayoutMirror';
 import { useAuth } from '@/src/core/auth';
+import { UserRole } from '@/src/core/api';
 
 export function DashboardHeader() {
   const { user, logout, isLoggingOut } = useAuth();
+
+  const isSuperAdmin =
+    user?.role === UserRole.SUPER_ADMIN || user?.role === 'SUPER_ADMIN';
 
   const isMobileOpen = useSidebarMirror('isMobileOpen');
   const toggleMobile = useSidebarMirror('toggleMobile');
@@ -66,15 +70,17 @@ export function DashboardHeader() {
               h={28}
               style={{
                 borderRadius: rem(4),
-                backgroundColor: 'var(--mantine-color-teal-5)',
+                backgroundColor: isSuperAdmin
+                  ? 'var(--mantine-color-primary-6)'
+                  : 'var(--mantine-color-teal-5)',
               }}
             />
             <Stack gap={0}>
               <Text size="xs" c="dimmed" fw={600}>
-                إدارة المعهد
+                {isSuperAdmin ? 'إدارة المنصة المركزية' : 'إدارة المعهد'}
               </Text>
               <Text size="sm" fw={800} style={{ letterSpacing: '-0.2px' }}>
-                لوحة التحكم
+                {isSuperAdmin ? 'لوحة تحكم المشرف العام' : 'لوحة التحكم'}
               </Text>
             </Stack>
           </Group>
@@ -148,10 +154,12 @@ export function DashboardHeader() {
                   </Avatar>
                   <Stack gap={0} visibleFrom="sm" pr="xs">
                     <Text size="xs" fw={700} lineClamp={1}>
-                      {user?.fullName || 'مدير النظام'}
+                      {user?.fullName || (isSuperAdmin ? 'المشرف العام' : 'مدير النظام')}
                     </Text>
                     <Text size="10px" c="dimmed">
-                      {user?.institute?.name || 'الفرع الرئيسي'}
+                      {isSuperAdmin
+                        ? 'المشرف العام للنظام'
+                        : user?.institute?.name || 'الفرع الرئيسي'}
                     </Text>
                   </Stack>
                   <IconChevronDown size={14} color="var(--mantine-color-dimmed)" />

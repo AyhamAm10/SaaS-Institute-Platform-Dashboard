@@ -2,6 +2,7 @@ import {
   IconDashboard,
   IconCalendarEvent,
   IconLayoutGrid,
+  IconSchool,
 } from '@tabler/icons-react';
 import { ComponentType } from 'react';
 
@@ -44,4 +45,23 @@ export const defaultNavigationConfig: NavItem[] = [
     href: '/sections',
   },
 ];
+
+/**
+ * Authoritative Navigation Schema (Arabic) for Platform Super Admin
+ */
+export const superAdminNavigationConfig: NavItem[] = [
+  {
+    key: 'dashboard',
+    label: 'لوحة التحكم المركزية',
+    icon: IconDashboard,
+    href: '/',
+  },
+  {
+    key: 'institutes',
+    label: 'المعاهد التعليمية',
+    icon: IconSchool,
+    href: '/institutes',
+  },
+];
+
 

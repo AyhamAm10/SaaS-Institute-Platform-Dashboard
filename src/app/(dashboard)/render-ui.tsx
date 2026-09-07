@@ -23,15 +23,15 @@ import {
 } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useAuth } from '@/src/core/auth';
-import { useAcademicYearsQuery, useSectionsQuery } from '@/src/core/api';
+import { useAcademicYearsQuery, useSectionsQuery, UserRole } from '@/src/core/api';
+import { InstitutesController } from './institutes';
 
 /**
- * RenderUi for Dashboard Home Page
+ * InstituteAdminDashboardView
  *
- * Clean Client Component boundary presenting live overview cards for
- * Academic Years and Sections with fast navigational pathways.
+ * Dedicated overview for tenant institute administrators.
  */
-export function RenderUi() {
+function InstituteAdminDashboardView() {
   const { user } = useAuth();
 
   const { data: yearsData, isLoading: yearsLoading } = useAcademicYearsQuery({ limit: 5 });
@@ -259,3 +259,22 @@ export function RenderUi() {
     </Box>
   );
 }
+
+/**
+ * RenderUi for Dashboard Home Page
+ *
+ * Dispatches to Super Admin experience or Institute Admin experience based on role.
+ */
+export function RenderUi() {
+  const { user } = useAuth();
+
+  const isSuperAdmin =
+    user?.role === UserRole.SUPER_ADMIN || user?.role === 'SUPER_ADMIN';
+
+  if (isSuperAdmin) {
+    return <InstitutesController />;
+  }
+
+  return <InstituteAdminDashboardView />;
+}
+
