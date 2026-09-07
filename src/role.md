@@ -384,15 +384,102 @@ All components, controllers, and layouts must adopt the **Modern Curved Organic 
 
 > **These rules are NON-NEGOTIABLE.** Violating any of them is considered a critical architectural defect that MUST be corrected immediately. No exceptions, no shortcuts, no "just this once."
 
-### 12.1 State & Logic Separation
+### 12.1 State & Logic Separation (Zero useState in UI)
 
-| ❌ PROHIBITED | ✅ REQUIRED |
+> **ABSOLUTE RULE:** Presentational components inside `ui/` (views, drawers, modals, forms, tables) MUST have **ZERO `useState` for form fields, server errors, feedback messages, or domain entities**, and **ZERO `useMutation`/`useQuery` hooks**. All such state belongs strictly to the `state/` and `store/` layers and is accessed in `ui/` exclusively via `useMirror`.
+
+| ❌ STRICTLY FORBIDDEN IN `ui/` | ✅ MANDATORY ARCHITECTURE |
 |---|---|
-| Mixing `useState`/`useEffect`/business logic with JSX in the same component | State in `store/`, logic in Controller, JSX in `ui/` |
-| Having more than **2 `useState`** hooks in any single UI component | Move domain state to the Zustand store; only ephemeral visual state (tooltip, hover) may use local `useState` |
-| Defining event handlers with business logic inside UI components | Event handlers with business logic belong in the Controller or store actions |
-| Placing `useQuery` / `useMutation` hooks inside UI components | React Query hooks belong in the Controller's `QuerySync` component or in the `api/` layer |
-| Using `useEffect` in UI components for data synchronization | Data sync belongs in `QuerySync`; UI components only read via `useMirror` |
+| Declaring `useState('')` for form inputs (`name`, `code`, `description`, etc.) inside a Drawer/Modal | Put form fields in `state/<feature>.state.ts` and `store/<feature>.store.ts`; read & update via `use<Feature>Mirror` |
+| Declaring `useState<string \| null>(null)` for errors/success messages | Define `error` and `success` slots in the Zustand store; set them from the Controller's mutation callbacks |
+| Calling `useCreate...Mutation()` or `useDelete...Mutation()` directly inside UI components | Call React Query mutations ONLY inside `<Feature>Controller.tsx`; pass callbacks or call store actions |
+| Defining async mutation/network orchestration inside UI `onSubmit` | UI only dispatches `await onSubmit()` or calls a callback from props; Controller coordinates API + store |
+| Using `useEffect` inside UI to fetch or synchronize server state | Data synchronization is the sole responsibility of `QuerySync` in `<Feature>Controller.tsx` |
+
+#### Concrete Architecture Comparison Example:
+
+##### ❌ VIOLATION (Anti-Pattern — Disallowed):
+```tsx
+// ❌ DO NOT DO THIS: UI component declaring local form state, errors, and mutations directly
+export function AcademicBranchesDrawer({ opened, onClose }: Props) {
+  const createMutation = useCreateAcademicBranchMutation(); // ❌ FORBIDDEN in UI
+  const [name, setName] = useState('');                      // ❌ FORBIDDEN in UI
+  const [code, setCode] = useState('');                      // ❌ FORBIDDEN in UI
+  const [error, setError] = useState<string | null>(null);   // ❌ FORBIDDEN in UI
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await createMutation.mutateAsync({ name, code });      // ❌ Business logic in UI
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+  return <AppDrawer>...</AppDrawer>;
+}
+```
+
+##### ✅ REQUIRED ARCHITECTURE (Compliant with role.md):
+```tsx
+// 1. In state/<feature>.state.ts:
+export interface FeatureState {
+  branchForm: { name: string; code: string; description: string };
+  branchError: string | null;
+  branchSuccess: string | null;
+  branchSubmitting: boolean;
+  setBranchFormField: (field: string, value: string) => void;
+  // ...
+}
+
+// 2. In store/<feature>.store.ts:
+export function createFeatureStore() {
+  return createControllerStore<FeatureState>((set) => ({
+    branchForm: { name: '', code: '', description: '' },
+    branchError: null,
+    branchSuccess: null,
+    branchSubmitting: false,
+    setBranchFormField: (field, value) => set((s) => ({
+      branchForm: { ...s.branchForm, [field]: value }
+    })),
+    // ...
+  }));
+}
+
+// 3. In FeatureController.tsx:
+const createMutation = useCreateAcademicBranchMutation();
+const handleBranchCreate = useCallback(async () => {
+  const { branchForm } = store.getState();
+  store.getState().setBranchSubmitting(true);
+  try {
+    await createMutation.mutateAsync(branchForm);
+    store.getState().resetBranchForm();
+  } catch (err: any) {
+    store.getState().setBranchError(err.message);
+  } finally {
+    store.getState().setBranchSubmitting(false);
+  }
+}, [store, createMutation]);
+
+// 4. In ui/AcademicBranchesDrawer.tsx (Pure Presentation, ZERO useState):
+export function AcademicBranchesDrawer({ opened, onClose, onCreate }: Props) {
+  const branchForm = useSectionsMirror('branchForm');
+  const setBranchFormField = useSectionsMirror('setBranchFormField');
+  const branchError = useSectionsMirror('branchError');
+  const branchSubmitting = useSectionsMirror('branchSubmitting');
+
+  return (
+    <AppDrawer opened={opened} onClose={onClose}>
+      <form onSubmit={(e) => { e.preventDefault(); onCreate(); }}>
+        <AppInput
+          value={branchForm.name}
+          onChange={(e) => setBranchFormField('name', e.target.value)}
+        />
+        <Button loading={branchSubmitting} type="submit">إضافة</Button>
+      </form>
+    </AppDrawer>
+  );
+}
+```
 
 ### 12.2 Props & Context
 
@@ -425,10 +512,10 @@ All components, controllers, and layouts must adopt the **Modern Curved Organic 
 Before finalizing any page or component, ask yourself:
 
 1. ✅ Does `render-ui.tsx` contain ONLY `<Controller />`?
-2. ✅ Does every `useState` for domain state live in the Zustand store?
+2. ✅ Does the UI component have ZERO `useState` for form fields, server errors, or entity state?
 3. ✅ Do all UI components read state via `useMirror` hooks?
 4. ✅ Are React Query hooks ONLY in the Controller/QuerySync?
-5. ✅ Are mutation callbacks orchestrated in the Controller?
+5. ✅ Are mutation callbacks and try/catch orchestration in the Controller?
 6. ✅ Is column/table definition separated from business logic?
 7. ✅ Are modals/drawers state managed in the store, not in UI components?
 

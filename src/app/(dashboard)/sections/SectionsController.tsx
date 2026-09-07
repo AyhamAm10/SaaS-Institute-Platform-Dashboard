@@ -3,8 +3,11 @@
 import { useCallback, useEffect, useState } from 'react';
 import {
   Section,
+  useAcademicBranchesQuery,
   useAcademicYearsQuery,
+  useCreateAcademicBranchMutation,
   useCreateSectionMutation,
+  useDeleteAcademicBranchMutation,
   useSectionsQuery,
   useUpdateSectionFeeMutation,
   useUpdateSectionMutation,
@@ -25,9 +28,10 @@ function QuerySync({ store }: { store: ReturnType<typeof createSectionsStore> })
   const limit = useStore(store, (s) => s.limit);
   const search = useStore(store, (s) => s.search);
   const selectedYearId = useStore(store, (s) => s.selectedYearId);
-  const selectedGrade = useStore(store, (s) => s.selectedGrade);
+  const selectedBranchId = useStore(store, (s) => s.selectedBranchId);
   const syncQueryData = useStore(store, (s) => s.syncQueryData);
   const syncAcademicYears = useStore(store, (s) => s.syncAcademicYears);
+  const syncAcademicBranches = useStore(store, (s) => s.syncAcademicBranches);
 
   // ── Academic Years query (for filters & modal) ──
   const { data: yearsData } = useAcademicYearsQuery({ limit: 100 });
@@ -36,13 +40,20 @@ function QuerySync({ store }: { store: ReturnType<typeof createSectionsStore> })
     syncAcademicYears(yearsData?.data ?? []);
   }, [yearsData, syncAcademicYears]);
 
+  // ── Academic Branches query (for filters & modal) ──
+  const { data: branchesData } = useAcademicBranchesQuery({ limit: 100 });
+
+  useEffect(() => {
+    syncAcademicBranches(branchesData?.data ?? []);
+  }, [branchesData, syncAcademicBranches]);
+
   // ── Sections query ──
   const { data: paginatedData, isLoading, isFetching } = useSectionsQuery({
     page,
     limit,
     search: search.trim() ? search.trim() : undefined,
     academicYearId: selectedYearId ? Number(selectedYearId) : undefined,
-    grade: selectedGrade ? selectedGrade : undefined,
+    academicBranchId: selectedBranchId ? Number(selectedBranchId) : undefined,
   });
 
   useEffect(() => {
@@ -72,12 +83,14 @@ export function SectionsController() {
   const createMutation = useCreateSectionMutation();
   const updateMutation = useUpdateSectionMutation();
   const updateFeeMutation = useUpdateSectionFeeMutation();
+  const createBranchMutation = useCreateAcademicBranchMutation();
+  const deleteBranchMutation = useDeleteAcademicBranchMutation();
 
   // ── Form Submit Handler ──
   const handleFormSubmit = useCallback(
     async (formData: {
       name: string;
-      grade: string;
+      academicBranchId: number;
       branchId: number;
       academicYearId: number;
       feeAmount: number;
@@ -90,7 +103,7 @@ export function SectionsController() {
             id: selectedSection.id,
             payload: {
               name: formData.name,
-              grade: formData.grade,
+              academicBranchId: formData.academicBranchId,
               feeAmount: formData.feeAmount,
             },
           });
@@ -124,12 +137,67 @@ export function SectionsController() {
     [store, updateFeeMutation],
   );
 
+  // ── Branch Create Handler ──
+  const handleBranchCreate = useCallback(async () => {
+    const { branchForm } = store.getState();
+    store.getState().setBranchError(null);
+    store.getState().setBranchSuccess(null);
+
+    if (!branchForm.name.trim()) {
+      store.getState().setBranchError('يرجى كتابة اسم الفرع الأكاديمي');
+      return;
+    }
+
+    store.getState().setBranchSubmitting(true);
+    try {
+      await createBranchMutation.mutateAsync({
+        name: branchForm.name.trim(),
+        code: branchForm.code.trim() || undefined,
+        description: branchForm.description.trim() || undefined,
+      });
+      store.getState().resetBranchForm();
+      store.getState().setBranchSuccess('تمت إضافة الفرع الأكاديمي بنجاح');
+    } catch (err: any) {
+      const msg =
+        err?.response?.data?.message ||
+        err?.message ||
+        'حدث خطأ أثناء إنشاء الفرع الأكاديمي';
+      store.getState().setBranchError(Array.isArray(msg) ? msg.join(', ') : msg);
+    } finally {
+      store.getState().setBranchSubmitting(false);
+    }
+  }, [store, createBranchMutation]);
+
+  // ── Branch Delete Handler ──
+  const handleBranchDelete = useCallback(
+    async (branchId: number, branchName: string) => {
+      store.getState().setBranchError(null);
+      store.getState().setBranchSuccess(null);
+      store.getState().setBranchSubmitting(true);
+      try {
+        await deleteBranchMutation.mutateAsync(branchId);
+        store.getState().setBranchSuccess(`تم حذف الفرع الأكاديمي "${branchName}" بنجاح`);
+      } catch (err: any) {
+        const msg =
+          err?.response?.data?.message ||
+          err?.message ||
+          'حدث خطأ أثناء حذف الفرع الأكاديمي';
+        store.getState().setBranchError(Array.isArray(msg) ? msg.join(', ') : msg);
+      } finally {
+        store.getState().setBranchSubmitting(false);
+      }
+    },
+    [store, deleteBranchMutation],
+  );
+
   return (
     <SectionsContext.Provider value={store}>
       <QuerySync store={store} />
       <SectionsView
         onFormSubmit={handleFormSubmit}
         onFeeSubmit={handleFeeSubmit}
+        onBranchCreate={handleBranchCreate}
+        onBranchDelete={handleBranchDelete}
       />
     </SectionsContext.Provider>
   );

@@ -18,7 +18,7 @@ export function createSectionsStore(): SectionsStore {
     limit: 10,
     search: '',
     selectedYearId: null,
-    selectedGrade: null,
+    selectedBranchId: null,
 
     // ── Query-Derived Data ──
     data: [],
@@ -27,8 +27,9 @@ export function createSectionsStore(): SectionsStore {
     isLoading: true,
     isFetching: false,
 
-    // ── Academic Years ──
+    // ── Academic Years & Academic Branches ──
     academicYears: [],
+    academicBranches: [],
 
     // ── Form Modal State ──
     formModalOpened: false,
@@ -42,15 +43,26 @@ export function createSectionsStore(): SectionsStore {
     drawerOpened: false,
     detailSectionId: null,
 
+    // ── Academic Branches Management Modal State ──
+    branchesModalOpened: false,
+    branchForm: {
+      name: '',
+      code: '',
+      description: '',
+    },
+    branchError: null,
+    branchSuccess: null,
+
     // ── Mutation Loading ──
     formSubmitting: false,
     feeSubmitting: false,
+    branchSubmitting: false,
 
     // ── Actions: Pagination & Filters ──
     setPage: (page: number) => set({ page }),
     setSearch: (search: string) => set({ search, page: 1 }),
     setSelectedYearId: (yearId: string | null) => set({ selectedYearId: yearId, page: 1 }),
-    setSelectedGrade: (grade: string | null) => set({ selectedGrade: grade, page: 1 }),
+    setSelectedBranchId: (branchId: string | null) => set({ selectedBranchId: branchId, page: 1 }),
 
     // ── Actions: Form Modal ──
     openCreate: () => set({ selectedSection: null, formModalOpened: true }),
@@ -65,6 +77,32 @@ export function createSectionsStore(): SectionsStore {
     openDetails: (section) => set({ detailSectionId: section.id, drawerOpened: true }),
     closeDrawer: () => set({ drawerOpened: false }),
 
+    // ── Actions: Branches Modal ──
+    openBranchesModal: () =>
+      set({
+        branchesModalOpened: true,
+        branchError: null,
+        branchSuccess: null,
+      }),
+    closeBranchesModal: () => set({ branchesModalOpened: false }),
+    setBranchFormField: (field, value) =>
+      set((state) => ({
+        branchForm: {
+          ...state.branchForm,
+          [field]: value,
+        },
+      })),
+    resetBranchForm: () =>
+      set({
+        branchForm: {
+          name: '',
+          code: '',
+          description: '',
+        },
+      }),
+    setBranchError: (error) => set({ branchError: error }),
+    setBranchSuccess: (success) => set({ branchSuccess: success }),
+
     // ── Actions: Query Sync ──
     syncQueryData: (payload) =>
       set({
@@ -75,10 +113,12 @@ export function createSectionsStore(): SectionsStore {
         isFetching: payload.isFetching,
       }),
     syncAcademicYears: (years) => set({ academicYears: years }),
+    syncAcademicBranches: (branches) => set({ academicBranches: branches }),
 
     // ── Actions: Mutations ──
     setFormSubmitting: (submitting: boolean) => set({ formSubmitting: submitting }),
     setFeeSubmitting: (submitting: boolean) => set({ feeSubmitting: submitting }),
+    setBranchSubmitting: (submitting: boolean) => set({ branchSubmitting: submitting }),
   }));
 }
 

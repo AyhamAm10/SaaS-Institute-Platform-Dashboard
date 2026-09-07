@@ -4,17 +4,18 @@ import { Alert, Stack } from '@mantine/core';
 import { IconAlertCircle, IconEdit, IconSchool } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { AppDrawer, AppInput, AppSelect } from '@/src/components/controllers';
-import { AcademicYear, Section } from '@/src/core/api';
-import { defaultGradesList, sectionFormLabels } from '../static-data/sections.data';
+import { AcademicBranch, AcademicYear, Section } from '@/src/core/api';
+import { sectionFormLabels } from '../static-data/sections.data';
 
 export interface SectionDrawerProps {
   opened: boolean;
   onClose: () => void;
   section?: Section | null;
   academicYears?: AcademicYear[];
+  academicBranches?: AcademicBranch[];
   onSubmit: (data: {
     name: string;
-    grade: string;
+    academicBranchId: number;
     branchId: number;
     academicYearId: number;
     feeAmount: number;
@@ -27,13 +28,14 @@ export function SectionDrawer({
   onClose,
   section,
   academicYears = [],
+  academicBranches = [],
   onSubmit,
   isLoading = false,
 }: SectionDrawerProps) {
   const isEditing = Boolean(section);
 
   const [name, setName] = useState('');
-  const [grade, setGrade] = useState<string | null>(defaultGradesList[0] ?? '');
+  const [academicBranchId, setAcademicBranchId] = useState<string | null>(null);
   const [academicYearId, setAcademicYearId] = useState<string | null>(null);
   const [feeAmount, setFeeAmount] = useState<string>('0');
   const [error, setError] = useState<string | null>(null);
@@ -44,21 +46,27 @@ export function SectionDrawer({
     label: `${y.name} ${y.isCurrent ? '(الحالية)' : ''}`,
   }));
 
+  // Derive academic branch select options
+  const branchOptions = academicBranches.map((b) => ({
+    value: String(b.id),
+    label: b.name,
+  }));
+
   useEffect(() => {
     if (section) {
       setName(section.name);
-      setGrade(section.grade);
+      setAcademicBranchId(String(section.academicBranchId));
       setAcademicYearId(String(section.academicYearId));
       setFeeAmount(String(section.feeAmount));
     } else {
       setName('');
-      setGrade(defaultGradesList[0] ?? '');
+      setAcademicBranchId(academicBranches[0] ? String(academicBranches[0].id) : null);
       const currentYear = academicYears.find((y) => y.isCurrent) ?? academicYears[0];
       setAcademicYearId(currentYear ? String(currentYear.id) : null);
       setFeeAmount('0');
     }
     setError(null);
-  }, [section, opened, academicYears]);
+  }, [section, opened, academicYears, academicBranches]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -68,8 +76,8 @@ export function SectionDrawer({
       setError('يرجى إدخال اسم الشُعبة');
       return;
     }
-    if (!grade) {
-      setError('يرجى اختيار المرحلة / الصف الدراسي');
+    if (!academicBranchId) {
+      setError('يرجى اختيار الفرع الأكاديمي');
       return;
     }
     if (!academicYearId) {
@@ -85,7 +93,7 @@ export function SectionDrawer({
     try {
       await onSubmit({
         name: name.trim(),
-        grade,
+        academicBranchId: Number(academicBranchId),
         branchId: section?.branchId ?? 1, // default branch for the tenant
         academicYearId: Number(academicYearId),
         feeAmount: numFee,
@@ -153,10 +161,11 @@ export function SectionDrawer({
               />
 
               <AppSelect
-                label={sectionFormLabels.grade}
-                data={defaultGradesList}
-                value={grade}
-                onChange={(val: any) => setGrade(val as string | null)}
+                label={sectionFormLabels.academicBranchId}
+                placeholder="اختر الفرع الأكاديمي (مثال: الثانوي العام — الفرع العلمي)"
+                data={branchOptions}
+                value={academicBranchId}
+                onChange={(val: any) => setAcademicBranchId(val as string | null)}
                 searchable
                 required
               />

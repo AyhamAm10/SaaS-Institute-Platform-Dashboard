@@ -62,8 +62,8 @@ export function SectionDetailsDrawer({
                   <Text fw={700} size="md">
                     {details.name}
                   </Text>
-                  <Badge radius="xl" variant="light" color="primary">
-                    {details.grade}
+                  <Badge radius="xl" variant="light" color="teal">
+                    {details.academicBranch?.name ?? details.grade}
                   </Badge>
                 </Group>
               }
@@ -71,12 +71,17 @@ export function SectionDetailsDrawer({
             >
               <AppDrawer.Details>
                 <AppDrawer.Detail
+                  label="الفرع الأكاديمي"
+                  value={details.academicBranch?.name ?? details.grade}
+                  icon={<IconCalendar size={16} />}
+                />
+                <AppDrawer.Detail
                   label="السنة الدراسية"
                   value={details.academicYear?.name ?? '—'}
                   icon={<IconCalendar size={16} />}
                 />
                 <AppDrawer.Detail
-                  label="الفرع"
+                  label="فرع المعهد"
                   value={details.branch?.name ?? 'الفرع الرئيسي'}
                   icon={<IconMapPin size={16} />}
                 />

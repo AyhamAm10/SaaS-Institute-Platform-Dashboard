@@ -40,11 +40,11 @@ export function useSectionsColumns(
         ),
       },
       {
-        key: 'grade',
-        title: 'المرحلة / الصف',
+        key: 'academicBranch',
+        title: 'الفرع الأكاديمي',
         render: (row: Section) => (
-          <Badge variant="light" color="blue" radius="xl" size="sm">
-            {row.grade}
+          <Badge variant="light" color="teal" radius="xl" size="sm">
+            {row.academicBranch?.name ?? row.grade}
           </Badge>
         ),
       },

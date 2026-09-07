@@ -1,4 +1,4 @@
-import { AcademicYear, Section } from '@/src/core/api';
+import { AcademicBranch, AcademicYear, Section } from '@/src/core/api';
 
 /**
  * SectionsState
@@ -12,7 +12,7 @@ export interface SectionsState {
   limit: number;
   search: string;
   selectedYearId: string | null;
-  selectedGrade: string | null;
+  selectedBranchId: string | null;
 
   // ── Query-Derived Data (synced from React Query) ──
   data: Section[];
@@ -21,8 +21,9 @@ export interface SectionsState {
   isLoading: boolean;
   isFetching: boolean;
 
-  // ── Academic Years (for filter options & modal) ──
+  // ── Academic Years & Academic Branches (for filter options & modal) ──
   academicYears: AcademicYear[];
+  academicBranches: AcademicBranch[];
 
   // ── Form Modal State ──
   formModalOpened: boolean;
@@ -36,15 +37,26 @@ export interface SectionsState {
   drawerOpened: boolean;
   detailSectionId: number | null;
 
+  // ── Academic Branches Management Modal State ──
+  branchesModalOpened: boolean;
+  branchForm: {
+    name: string;
+    code: string;
+    description: string;
+  };
+  branchError: string | null;
+  branchSuccess: string | null;
+
   // ── Mutation Loading ──
   formSubmitting: boolean;
   feeSubmitting: boolean;
+  branchSubmitting: boolean;
 
   // ── Actions: Pagination & Filters ──
   setPage: (page: number) => void;
   setSearch: (search: string) => void;
   setSelectedYearId: (yearId: string | null) => void;
-  setSelectedGrade: (grade: string | null) => void;
+  setSelectedBranchId: (branchId: string | null) => void;
 
   // ── Actions: Form Modal ──
   openCreate: () => void;
@@ -59,6 +71,14 @@ export interface SectionsState {
   openDetails: (section: Section) => void;
   closeDrawer: () => void;
 
+  // ── Actions: Branches Modal ──
+  openBranchesModal: () => void;
+  closeBranchesModal: () => void;
+  setBranchFormField: (field: 'name' | 'code' | 'description', value: string) => void;
+  resetBranchForm: () => void;
+  setBranchError: (error: string | null) => void;
+  setBranchSuccess: (success: string | null) => void;
+
   // ── Actions: Query Sync ──
   syncQueryData: (payload: {
     data: Section[];
@@ -68,10 +88,12 @@ export interface SectionsState {
     isFetching: boolean;
   }) => void;
   syncAcademicYears: (years: AcademicYear[]) => void;
+  syncAcademicBranches: (branches: AcademicBranch[]) => void;
 
   // ── Actions: Mutations (orchestrated externally) ──
   setFormSubmitting: (submitting: boolean) => void;
   setFeeSubmitting: (submitting: boolean) => void;
+  setBranchSubmitting: (submitting: boolean) => void;
 }
 
 /**

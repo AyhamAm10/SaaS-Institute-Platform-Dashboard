@@ -1,7 +1,7 @@
 'use client';
 
-import { Button } from '@mantine/core';
-import { IconPlus } from '@tabler/icons-react';
+import { Button, Group } from '@mantine/core';
+import { IconGitBranch, IconPlus } from '@tabler/icons-react';
 import { useSectionsMirror } from '../store/useSectionsMirror';
 
 /**
@@ -12,15 +12,28 @@ import { useSectionsMirror } from '../store/useSectionsMirror';
  */
 export function SectionsActions() {
   const openCreate = useSectionsMirror('openCreate');
+  const openBranchesModal = useSectionsMirror('openBranchesModal');
 
   return (
-    <Button
-      color="primary"
-      radius="xl"
-      leftSection={<IconPlus size={16} />}
-      onClick={openCreate}
-    >
-      إضافة شُعبة جديدة
-    </Button>
+    <Group gap="sm">
+      <Button
+        variant="light"
+        color="teal"
+        radius="xl"
+        leftSection={<IconGitBranch size={16} />}
+        onClick={openBranchesModal}
+      >
+        إدارة الفروع الأكاديمية
+      </Button>
+
+      <Button
+        color="primary"
+        radius="xl"
+        leftSection={<IconPlus size={16} />}
+        onClick={openCreate}
+      >
+        إضافة شُعبة جديدة
+      </Button>
+    </Group>
   );
 }

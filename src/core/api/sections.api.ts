@@ -16,11 +16,18 @@ export interface SectionAcademicYearSummary {
   isCurrent?: boolean;
 }
 
+export interface SectionAcademicBranchSummary {
+  id: number;
+  name: string;
+  code?: string | null;
+}
+
 export interface Section {
   id: number;
   instituteId: number;
   branchId: number;
   academicYearId: number;
+  academicBranchId: number;
   name: string;
   grade: string;
   feeAmount: number;
@@ -28,6 +35,7 @@ export interface Section {
   updatedAt: string;
   branch?: SectionBranchSummary;
   academicYear?: SectionAcademicYearSummary;
+  academicBranch?: SectionAcademicBranchSummary;
 }
 
 export interface SectionDetailsCounts {
@@ -54,20 +62,23 @@ export interface SectionsQueryParams {
   limit?: number;
   search?: string;
   academicYearId?: number;
+  academicBranchId?: number;
   branchId?: number;
   grade?: string;
 }
 
 export interface CreateSectionPayload {
   name: string;
-  grade: string;
+  academicBranchId: number;
   branchId: number;
   academicYearId: number;
   feeAmount: number;
+  grade?: string;
 }
 
 export interface UpdateSectionPayload {
   name?: string;
+  academicBranchId?: number;
   grade?: string;
   feeAmount?: number;
 }

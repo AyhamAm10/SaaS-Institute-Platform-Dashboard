@@ -6,31 +6,16 @@ export const sectionsPageMetadata = {
   title: 'الشُعب والفصول',
   description: 'إدارة الشُعب الدراسية وتوزيع الطلاب وتحديد الرسوم الدراسية لكل شُعبة.',
   emptyMessage: 'لا توجد شُعب دراسية مسجلة',
-  emptyDescription: 'ابدأ بإضافة أول شُعبة دراسية للمعهد وربطها بالسنة الدراسية المناسبة.',
-  searchPlaceholder: 'بحث باسم الشُعبة أو المرحلة...',
+  emptyDescription: 'ابدأ بإضافة أول شُعبة دراسية للمعهد وربطها بالفرع الأكاديمي والسنة الدراسية المناسبة.',
+  searchPlaceholder: 'بحث باسم الشُعبة أو الفرع الأكاديمي...',
 };
-
-export const defaultGradesList = [
-  'الصف الأول الابتدائي',
-  'الصف الثاني الابتدائي',
-  'الصف الثالث الابتدائي',
-  'الصف الرابع الابتدائي',
-  'الصف الخامس الابتدائي',
-  'الصف السادس الابتدائي',
-  'الصف الأول المتوسط',
-  'الصف الثاني المتوسط',
-  'الصف الثالث المتوسط',
-  'الصف الأول الثانوي',
-  'الصف الثاني الثانوي',
-  'الصف الثالث الثانوي',
-];
 
 export const sectionFormLabels = {
   name: 'اسم الشُعبة',
   namePlaceholder: 'مثال: الشعبة 1-أ',
-  grade: 'المرحلة / الصف الدراسي',
+  academicBranchId: 'الفرع الأكاديمي',
   academicYearId: 'السنة الدراسية',
-  branchId: 'الفرع',
+  branchId: 'فرع المعهد',
   feeAmount: 'الرسوم الدراسية (ر.س)',
   feePlaceholder: 'مثال: 1500',
   createTitle: 'إضافة شُعبة جديدة',
@@ -41,4 +26,12 @@ export const sectionFormLabels = {
   submitEdit: 'حفظ التعديلات',
   submitFee: 'تحديث الرسوم',
   cancel: 'إلغاء',
+  branchesManagement: 'إدارة الفروع الأكاديمية',
+  branchCreateTitle: 'إضافة فرع أكاديمي جديد',
+  branchName: 'اسم الفرع الأكاديمي',
+  branchNamePlaceholder: 'مثال: الثانوي العام — الفرع العلمي',
+  branchCode: 'رمز الفرع (اختياري)',
+  branchCodePlaceholder: 'مثال: SCI-SEC',
+  branchDescription: 'الوصف (اختياري)',
+  branchDescriptionPlaceholder: 'وصف موجز للمسار الأكاديمي...',
 };
