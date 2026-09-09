@@ -3,6 +3,7 @@ import {
   IconCalendarEvent,
   IconLayoutGrid,
   IconSchool,
+  IconBook,
 } from '@tabler/icons-react';
 import { ComponentType } from 'react';
 
@@ -43,6 +44,12 @@ export const defaultNavigationConfig: NavItem[] = [
     label: 'الشُعب والفصول',
     icon: IconLayoutGrid,
     href: '/sections',
+  },
+  {
+    key: 'subjects',
+    label: 'المواد الدراسية',
+    icon: IconBook,
+    href: '/subjects',
   },
 ];
 

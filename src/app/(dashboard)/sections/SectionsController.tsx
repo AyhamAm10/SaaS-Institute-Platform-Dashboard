@@ -5,9 +5,11 @@ import {
   Section,
   useAcademicBranchesQuery,
   useAcademicYearsQuery,
+  useAssignSubjectToSectionMutation,
   useCreateAcademicBranchMutation,
   useCreateSectionMutation,
   useDeleteAcademicBranchMutation,
+  useRemoveSubjectFromSectionMutation,
   useSectionsQuery,
   useUpdateSectionFeeMutation,
   useUpdateSectionMutation,
@@ -85,6 +87,8 @@ export function SectionsController() {
   const updateFeeMutation = useUpdateSectionFeeMutation();
   const createBranchMutation = useCreateAcademicBranchMutation();
   const deleteBranchMutation = useDeleteAcademicBranchMutation();
+  const assignSubjectMutation = useAssignSubjectToSectionMutation();
+  const removeSubjectMutation = useRemoveSubjectFromSectionMutation();
 
   // ── Form Submit Handler ──
   const handleFormSubmit = useCallback(
@@ -190,6 +194,56 @@ export function SectionsController() {
     [store, deleteBranchMutation],
   );
 
+  // ── Subject Assignment Handlers ──
+  const handleAssignSubject = useCallback(
+    async (sectionId: number, subjectId: number) => {
+      store.getState().setAssignSubjectError(null);
+      store.getState().setIsAssigningSubject(true);
+      try {
+        await assignSubjectMutation.mutateAsync({
+          sectionId,
+          payload: { subjectId },
+        });
+        store.getState().setAssignSubjectId(null);
+      } catch (err: any) {
+        const msg =
+          err?.response?.data?.message ||
+          err?.message ||
+          'حدث خطأ أثناء إسناد المادة للشُعبة';
+        store
+          .getState()
+          .setAssignSubjectError(Array.isArray(msg) ? msg.join(', ') : msg);
+      } finally {
+        store.getState().setIsAssigningSubject(false);
+      }
+    },
+    [store, assignSubjectMutation],
+  );
+
+  const handleRemoveSubject = useCallback(
+    async (sectionId: number, subjectId: number) => {
+      store.getState().setAssignSubjectError(null);
+      store.getState().setIsRemovingSubjectId(subjectId);
+      try {
+        await removeSubjectMutation.mutateAsync({
+          sectionId,
+          subjectId,
+        });
+      } catch (err: any) {
+        const msg =
+          err?.response?.data?.message ||
+          err?.message ||
+          'حدث خطأ أثناء إزالة المادة من الشُعبة';
+        store
+          .getState()
+          .setAssignSubjectError(Array.isArray(msg) ? msg.join(', ') : msg);
+      } finally {
+        store.getState().setIsRemovingSubjectId(null);
+      }
+    },
+    [store, removeSubjectMutation],
+  );
+
   return (
     <SectionsContext.Provider value={store}>
       <QuerySync store={store} />
@@ -198,6 +252,8 @@ export function SectionsController() {
         onFeeSubmit={handleFeeSubmit}
         onBranchCreate={handleBranchCreate}
         onBranchDelete={handleBranchDelete}
+        onAssignSubject={handleAssignSubject}
+        onRemoveSubject={handleRemoveSubject}
       />
     </SectionsContext.Provider>
   );

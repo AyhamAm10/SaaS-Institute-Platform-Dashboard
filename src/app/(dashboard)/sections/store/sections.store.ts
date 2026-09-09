@@ -53,10 +53,22 @@ export function createSectionsStore(): SectionsStore {
     branchError: null,
     branchSuccess: null,
 
+    // ── Section Subjects Assignment State ──
+    assignSubjectId: null,
+    assignSubjectError: null,
+    isAssigningSubject: false,
+    isRemovingSubjectId: null,
+
     // ── Mutation Loading ──
     formSubmitting: false,
     feeSubmitting: false,
     branchSubmitting: false,
+
+    // ── Actions: Section Subjects ──
+    setAssignSubjectId: (id) => set({ assignSubjectId: id, assignSubjectError: null }),
+    setAssignSubjectError: (error) => set({ assignSubjectError: error }),
+    setIsAssigningSubject: (submitting) => set({ isAssigningSubject: submitting }),
+    setIsRemovingSubjectId: (id) => set({ isRemovingSubjectId: id }),
 
     // ── Actions: Pagination & Filters ──
     setPage: (page: number) => set({ page }),
@@ -74,7 +86,13 @@ export function createSectionsStore(): SectionsStore {
     closeFeeModal: () => set({ feeModalOpened: false }),
 
     // ── Actions: Details Drawer ──
-    openDetails: (section) => set({ detailSectionId: section.id, drawerOpened: true }),
+    openDetails: (section) =>
+      set({
+        detailSectionId: section.id,
+        drawerOpened: true,
+        assignSubjectId: null,
+        assignSubjectError: null,
+      }),
     closeDrawer: () => set({ drawerOpened: false }),
 
     // ── Actions: Branches Modal ──

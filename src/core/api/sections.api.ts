@@ -87,6 +87,26 @@ export interface UpdateSectionFeePayload {
   feeAmount: number;
 }
 
+export interface SectionSubjectItem {
+  id: number;
+  instituteId: number;
+  sectionId: number;
+  subjectId: number;
+  createdAt: string;
+  subject: {
+    id: number;
+    instituteId: number;
+    name: string;
+    code: string;
+    createdAt: string;
+    updatedAt: string;
+  };
+}
+
+export interface AssignSubjectPayload {
+  subjectId: number;
+}
+
 // --------------------------------------------------------------------------
 // API Functions
 // --------------------------------------------------------------------------
@@ -133,6 +153,36 @@ export async function updateSectionFee(
   return data;
 }
 
+export async function getSectionSubjects(
+  sectionId: number,
+): Promise<SectionSubjectItem[]> {
+  const { data } = await apiClient.get<SectionSubjectItem[]>(
+    `/sections/${sectionId}/subjects`,
+  );
+  return data;
+}
+
+export async function assignSubjectToSection(
+  sectionId: number,
+  payload: AssignSubjectPayload,
+): Promise<SectionSubjectItem> {
+  const { data } = await apiClient.post<SectionSubjectItem>(
+    `/sections/${sectionId}/subjects`,
+    payload,
+  );
+  return data;
+}
+
+export async function removeSubjectFromSection(
+  sectionId: number,
+  subjectId: number,
+): Promise<{ success: boolean }> {
+  const { data } = await apiClient.delete<{ success: boolean }>(
+    `/sections/${sectionId}/subjects/${subjectId}`,
+  );
+  return data;
+}
+
 // --------------------------------------------------------------------------
 // React Query Hooks
 // --------------------------------------------------------------------------
@@ -143,6 +193,8 @@ export const sectionsKeys = {
   list: (params?: SectionsQueryParams) => [...sectionsKeys.lists(), params] as const,
   details: () => [...sectionsKeys.all, 'detail'] as const,
   detail: (id: number) => [...sectionsKeys.details(), id] as const,
+  sectionSubjects: (sectionId: number) =>
+    [...sectionsKeys.detail(sectionId), 'subjects'] as const,
 };
 
 export function useSectionsQuery(params?: SectionsQueryParams) {
@@ -158,6 +210,14 @@ export function useSectionDetailsQuery(id: number) {
     queryKey: sectionsKeys.detail(id),
     queryFn: () => getSectionDetails(id),
     enabled: Boolean(id),
+  });
+}
+
+export function useSectionSubjectsQuery(sectionId: number) {
+  return useQuery({
+    queryKey: sectionsKeys.sectionSubjects(sectionId),
+    queryFn: () => getSectionSubjects(sectionId),
+    enabled: Boolean(sectionId),
   });
 }
 
@@ -189,6 +249,48 @@ export function useUpdateSectionFeeMutation() {
       updateSectionFee(id, payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: sectionsKeys.all });
+    },
+  });
+}
+
+export function useAssignSubjectToSectionMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      sectionId,
+      payload,
+    }: {
+      sectionId: number;
+      payload: AssignSubjectPayload;
+    }) => assignSubjectToSection(sectionId, payload),
+    onSuccess: (_, { sectionId }) => {
+      queryClient.invalidateQueries({
+        queryKey: sectionsKeys.sectionSubjects(sectionId),
+      });
+      queryClient.invalidateQueries({
+        queryKey: sectionsKeys.detail(sectionId),
+      });
+    },
+  });
+}
+
+export function useRemoveSubjectFromSectionMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      sectionId,
+      subjectId,
+    }: {
+      sectionId: number;
+      subjectId: number;
+    }) => removeSubjectFromSection(sectionId, subjectId),
+    onSuccess: (_, { sectionId }) => {
+      queryClient.invalidateQueries({
+        queryKey: sectionsKeys.sectionSubjects(sectionId),
+      });
+      queryClient.invalidateQueries({
+        queryKey: sectionsKeys.detail(sectionId),
+      });
     },
   });
 }

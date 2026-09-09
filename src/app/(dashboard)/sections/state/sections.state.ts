@@ -47,10 +47,22 @@ export interface SectionsState {
   branchError: string | null;
   branchSuccess: string | null;
 
+  // ── Section Subjects Assignment State ──
+  assignSubjectId: string | null;
+  assignSubjectError: string | null;
+  isAssigningSubject: boolean;
+  isRemovingSubjectId: number | null;
+
   // ── Mutation Loading ──
   formSubmitting: boolean;
   feeSubmitting: boolean;
   branchSubmitting: boolean;
+
+  // ── Actions: Section Subjects ──
+  setAssignSubjectId: (id: string | null) => void;
+  setAssignSubjectError: (error: string | null) => void;
+  setIsAssigningSubject: (submitting: boolean) => void;
+  setIsRemovingSubjectId: (id: number | null) => void;
 
   // ── Actions: Pagination & Filters ──
   setPage: (page: number) => void;

@@ -23,6 +23,8 @@ interface SectionsViewProps {
   onFeeSubmit: (feeAmount: number) => Promise<void>;
   onBranchCreate: () => Promise<void>;
   onBranchDelete: (id: number, name: string) => Promise<void>;
+  onAssignSubject: (sectionId: number, subjectId: number) => Promise<void>;
+  onRemoveSubject: (sectionId: number, subjectId: number) => Promise<void>;
 }
 
 /**
@@ -36,6 +38,8 @@ export function SectionsView({
   onFeeSubmit,
   onBranchCreate,
   onBranchDelete,
+  onAssignSubject,
+  onRemoveSubject,
 }: SectionsViewProps) {
   // ── Pagination & Query data via mirror ──
   const data = useSectionsMirror('data');
@@ -145,6 +149,8 @@ export function SectionsView({
         opened={drawerOpened}
         onClose={closeDrawer}
         sectionId={detailSectionId}
+        onAssignSubject={onAssignSubject}
+        onRemoveSubject={onRemoveSubject}
       />
 
       {/* Manage Academic Branches Drawer */}
