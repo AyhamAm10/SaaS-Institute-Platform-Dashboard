@@ -31,11 +31,12 @@ import {
   IconTrash,
   IconUsers,
 } from '@tabler/icons-react';
-import { AppDrawer, AppSelect } from '@/src/components/controllers';
+import { AppDrawer, AppInput, AppSelect } from '@/src/components/controllers';
 import {
   useSectionDetailsQuery,
   useSectionSubjectsQuery,
   useSubjectsQuery,
+  useTeachersQuery,
 } from '@/src/core/api';
 import { sectionFormLabels } from '../static-data/sections.data';
 import { useSectionsMirror } from '../store/useSectionsMirror';
@@ -44,7 +45,12 @@ export interface SectionDetailsDrawerProps {
   opened: boolean;
   onClose: () => void;
   sectionId: number | null;
-  onAssignSubject?: (sectionId: number, subjectId: number) => Promise<void>;
+  onAssignSubject?: (
+    sectionId: number,
+    subjectId: number,
+    weeklyPeriods?: number,
+    teacherId?: number | null,
+  ) => Promise<void>;
   onRemoveSubject?: (sectionId: number, subjectId: number) => Promise<void>;
 }
 
@@ -66,10 +72,15 @@ export function SectionDetailsDrawer({
   const { data: sectionSubjects, isLoading: loadingSubjects } =
     useSectionSubjectsQuery(sectionId ?? 0);
   const { data: instituteSubjects } = useSubjectsQuery({ limit: 100 });
+  const { data: teachersData } = useTeachersQuery({ limit: 100 });
 
   // ── Mirror state for assigning / removing subjects ──
   const assignSubjectId = useSectionsMirror('assignSubjectId');
+  const assignWeeklyPeriods = useSectionsMirror('assignWeeklyPeriods');
+  const assignTeacherId = useSectionsMirror('assignTeacherId');
   const setAssignSubjectId = useSectionsMirror('setAssignSubjectId');
+  const setAssignWeeklyPeriods = useSectionsMirror('setAssignWeeklyPeriods');
+  const setAssignTeacherId = useSectionsMirror('setAssignTeacherId');
   const assignSubjectError = useSectionsMirror('assignSubjectError');
   const setAssignSubjectError = useSectionsMirror('setAssignSubjectError');
   const isAssigningSubject = useSectionsMirror('isAssigningSubject');
@@ -92,9 +103,25 @@ export function SectionDetailsDrawer({
     [instituteSubjects, assignedSubjectIds],
   );
 
+  const teacherOptions = useMemo(
+    () => [
+      { value: '', label: 'بدون تحديد معلم حالياً' },
+      ...(teachersData?.data ?? []).map((t: any) => ({
+        value: String(t.id),
+        label: t.user.fullName,
+      })),
+    ],
+    [teachersData],
+  );
+
   const handleAssign = async () => {
     if (!sectionId || !assignSubjectId || !onAssignSubject) return;
-    await onAssignSubject(sectionId, Number(assignSubjectId));
+    await onAssignSubject(
+      sectionId,
+      Number(assignSubjectId),
+      assignWeeklyPeriods || 2,
+      assignTeacherId ? Number(assignTeacherId) : null,
+    );
   };
 
   const handleRemove = async (subjectId: number) => {
@@ -288,37 +315,60 @@ export function SectionDetailsDrawer({
 
                 {/* Assign Subject Controls */}
                 {onAssignSubject && (
-                  <Group align="flex-end" gap="xs">
-                    <Box style={{ flex: 1 }}>
-                      <AppSelect
-                        label="إسناد مادة دراسية جديدة"
-                        placeholder={
-                          availableSubjectOptions.length === 0
-                            ? 'جميع مواد المعهد مسندة بالفعل'
-                            : 'اختر مادة دراسية...'
-                        }
-                        data={availableSubjectOptions}
-                        value={assignSubjectId}
-                        onChange={(val: any) => setAssignSubjectId(val as string | null)}
-                        disabled={availableSubjectOptions.length === 0}
-                        clearable
-                        searchable
-                        size="xs"
-                      />
-                    </Box>
-                    <Button
-                      variant="light"
-                      color="indigo"
-                      size="xs"
-                      radius="xl"
-                      onClick={handleAssign}
-                      disabled={!assignSubjectId || isAssigningSubject}
-                      loading={isAssigningSubject}
-                      leftSection={<IconPlus size={14} />}
-                    >
-                      إسناد المادة
-                    </Button>
-                  </Group>
+                  <Paper p="xs" radius="lg" withBorder bg="var(--mantine-color-gray-0)">
+                    <Stack gap="xs">
+                      <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="xs">
+                        <AppSelect
+                          label="المادة الدراسية"
+                          placeholder={
+                            availableSubjectOptions.length === 0
+                              ? 'جميع مواد المعهد مسندة بالفعل'
+                              : 'اختر مادة دراسية...'
+                          }
+                          data={availableSubjectOptions}
+                          value={assignSubjectId}
+                          onChange={(val: any) => setAssignSubjectId(val as string | null)}
+                          disabled={availableSubjectOptions.length === 0}
+                          clearable
+                          searchable
+                          size="xs"
+                        />
+                        <AppSelect
+                          label="المعلم المكلّف (اختياري)"
+                          placeholder="اختر المعلم..."
+                          data={teacherOptions}
+                          value={assignTeacherId}
+                          onChange={(val: any) => setAssignTeacherId(val as string | null)}
+                          clearable
+                          searchable
+                          size="xs"
+                        />
+                      </SimpleGrid>
+                      <Group justify="space-between" align="flex-end">
+                        <Box style={{ width: 140 }}>
+                          <AppInput
+                            label="الحصص أسبوعياً"
+                            type="number"
+                            size="xs"
+                            value={String(assignWeeklyPeriods || 2)}
+                            onChange={(val: any) => setAssignWeeklyPeriods(Number(val) || 1)}
+                          />
+                        </Box>
+                        <Button
+                          variant="filled"
+                          color="indigo"
+                          size="xs"
+                          radius="xl"
+                          onClick={handleAssign}
+                          disabled={!assignSubjectId || isAssigningSubject}
+                          loading={isAssigningSubject}
+                          leftSection={<IconPlus size={14} />}
+                        >
+                          إسناد المادة للشعبة
+                        </Button>
+                      </Group>
+                    </Stack>
+                  </Paper>
                 )}
 
                 {/* Assigned Subjects List */}
@@ -362,20 +412,31 @@ export function SectionDetailsDrawer({
                             >
                               <IconBook size={16} />
                             </ThemeIcon>
-                            <Stack gap={0}>
+                            <Stack gap={2}>
                               <Text size="sm" fw={600}>
                                 {item.subject.name}
                               </Text>
-                              <Text size="xs" c="dimmed">
-                                رمز المادة: {item.subject.code}
-                              </Text>
+                              <Group gap={6}>
+                                <Badge size="xs" variant="light" color="indigo">
+                                  {item.subject.code}
+                                </Badge>
+                                <Badge size="xs" variant="outline" color="blue">
+                                  {item.weeklyPeriods || 1} حصص أسبوعياً
+                                </Badge>
+                                <Badge
+                                  size="xs"
+                                  variant="dot"
+                                  color={item.teacher ? 'teal' : 'gray'}
+                                >
+                                  {item.teacher?.user.fullName
+                                    ? `المعلم: ${item.teacher.user.fullName}`
+                                    : 'بدون معلم محدد'}
+                                </Badge>
+                              </Group>
                             </Stack>
                           </Group>
 
                           <Group gap="xs">
-                            <Badge size="xs" variant="light" color="indigo">
-                              {item.subject.code}
-                            </Badge>
                             {onRemoveSubject && (
                               <Tooltip
                                 label="إزالة المادة من هذه الشُعبة"

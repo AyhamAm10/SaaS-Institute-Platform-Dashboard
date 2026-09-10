@@ -4,6 +4,10 @@ import {
   IconLayoutGrid,
   IconSchool,
   IconBook,
+  IconUserCheck,
+  IconBuildingCommunity,
+  IconCalendarTime,
+  IconClock,
 } from '@tabler/icons-react';
 import { ComponentType } from 'react';
 
@@ -50,6 +54,30 @@ export const defaultNavigationConfig: NavItem[] = [
     label: 'المواد الدراسية',
     icon: IconBook,
     href: '/subjects',
+  },
+  {
+    key: 'teachers',
+    label: 'الكادر التدريسي',
+    icon: IconUserCheck,
+    href: '/teachers',
+  },
+  {
+    key: 'rooms',
+    label: 'القاعات والمختبرات',
+    icon: IconBuildingCommunity,
+    href: '/rooms',
+  },
+  {
+    key: 'timetable',
+    label: 'الجدول الأسبوعي',
+    icon: IconCalendarTime,
+    href: '/timetable',
+  },
+  {
+    key: 'schedule-settings',
+    label: 'إعدادات الدوام',
+    icon: IconClock,
+    href: '/schedule-settings',
   },
 ];
 

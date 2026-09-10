@@ -55,6 +55,8 @@ export function createSectionsStore(): SectionsStore {
 
     // ── Section Subjects Assignment State ──
     assignSubjectId: null,
+    assignWeeklyPeriods: 2,
+    assignTeacherId: null,
     assignSubjectError: null,
     isAssigningSubject: false,
     isRemovingSubjectId: null,
@@ -66,6 +68,8 @@ export function createSectionsStore(): SectionsStore {
 
     // ── Actions: Section Subjects ──
     setAssignSubjectId: (id) => set({ assignSubjectId: id, assignSubjectError: null }),
+    setAssignWeeklyPeriods: (periods) => set({ assignWeeklyPeriods: periods }),
+    setAssignTeacherId: (teacherId) => set({ assignTeacherId: teacherId }),
     setAssignSubjectError: (error) => set({ assignSubjectError: error }),
     setIsAssigningSubject: (submitting) => set({ isAssigningSubject: submitting }),
     setIsRemovingSubjectId: (id) => set({ isRemovingSubjectId: id }),

@@ -196,13 +196,22 @@ export function SectionsController() {
 
   // ── Subject Assignment Handlers ──
   const handleAssignSubject = useCallback(
-    async (sectionId: number, subjectId: number) => {
+    async (
+      sectionId: number,
+      subjectId: number,
+      weeklyPeriods?: number,
+      teacherId?: number | null,
+    ) => {
       store.getState().setAssignSubjectError(null);
       store.getState().setIsAssigningSubject(true);
       try {
         await assignSubjectMutation.mutateAsync({
           sectionId,
-          payload: { subjectId },
+          payload: {
+            subjectId,
+            weeklyPeriods: weeklyPeriods ?? 2,
+            teacherId: teacherId ?? undefined,
+          },
         });
         store.getState().setAssignSubjectId(null);
       } catch (err: any) {

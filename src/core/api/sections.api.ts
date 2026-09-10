@@ -92,6 +92,8 @@ export interface SectionSubjectItem {
   instituteId: number;
   sectionId: number;
   subjectId: number;
+  teacherId?: number | null;
+  weeklyPeriods: number;
   createdAt: string;
   subject: {
     id: number;
@@ -101,10 +103,24 @@ export interface SectionSubjectItem {
     createdAt: string;
     updatedAt: string;
   };
+  teacher?: {
+    id: number;
+    user: {
+      id: number;
+      fullName: string;
+    };
+  } | null;
 }
 
 export interface AssignSubjectPayload {
   subjectId: number;
+  weeklyPeriods?: number;
+  teacherId?: number | null;
+}
+
+export interface UpdateSectionSubjectPayload {
+  weeklyPeriods?: number;
+  teacherId?: number | null;
 }
 
 // --------------------------------------------------------------------------
@@ -179,6 +195,18 @@ export async function removeSubjectFromSection(
 ): Promise<{ success: boolean }> {
   const { data } = await apiClient.delete<{ success: boolean }>(
     `/sections/${sectionId}/subjects/${subjectId}`,
+  );
+  return data;
+}
+
+export async function updateSectionSubject(
+  sectionId: number,
+  subjectId: number,
+  payload: UpdateSectionSubjectPayload,
+): Promise<SectionSubjectItem> {
+  const { data } = await apiClient.patch<SectionSubjectItem>(
+    `/sections/${sectionId}/subjects/${subjectId}`,
+    payload,
   );
   return data;
 }
@@ -263,6 +291,29 @@ export function useAssignSubjectToSectionMutation() {
       sectionId: number;
       payload: AssignSubjectPayload;
     }) => assignSubjectToSection(sectionId, payload),
+    onSuccess: (_, { sectionId }) => {
+      queryClient.invalidateQueries({
+        queryKey: sectionsKeys.sectionSubjects(sectionId),
+      });
+      queryClient.invalidateQueries({
+        queryKey: sectionsKeys.detail(sectionId),
+      });
+    },
+  });
+}
+
+export function useUpdateSectionSubjectMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      sectionId,
+      subjectId,
+      payload,
+    }: {
+      sectionId: number;
+      subjectId: number;
+      payload: UpdateSectionSubjectPayload;
+    }) => updateSectionSubject(sectionId, subjectId, payload),
     onSuccess: (_, { sectionId }) => {
       queryClient.invalidateQueries({
         queryKey: sectionsKeys.sectionSubjects(sectionId),

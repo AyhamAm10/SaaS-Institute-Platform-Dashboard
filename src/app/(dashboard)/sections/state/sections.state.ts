@@ -49,6 +49,8 @@ export interface SectionsState {
 
   // ── Section Subjects Assignment State ──
   assignSubjectId: string | null;
+  assignWeeklyPeriods: number;
+  assignTeacherId: string | null;
   assignSubjectError: string | null;
   isAssigningSubject: boolean;
   isRemovingSubjectId: number | null;
@@ -60,6 +62,8 @@ export interface SectionsState {
 
   // ── Actions: Section Subjects ──
   setAssignSubjectId: (id: string | null) => void;
+  setAssignWeeklyPeriods: (periods: number) => void;
+  setAssignTeacherId: (teacherId: string | null) => void;
   setAssignSubjectError: (error: string | null) => void;
   setIsAssigningSubject: (submitting: boolean) => void;
   setIsRemovingSubjectId: (id: number | null) => void;
