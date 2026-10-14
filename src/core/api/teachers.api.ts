@@ -186,11 +186,15 @@ export const teachersKeys = {
   detail: (id: number) => [...teachersKeys.details(), id] as const,
 };
 
-export function useTeachersQuery(params?: TeachersQueryParams) {
+export function useTeachersQuery(
+  params?: TeachersQueryParams,
+  options?: { enabled?: boolean },
+) {
   return useQuery({
     queryKey: teachersKeys.list(params),
     queryFn: () => getTeachers(params),
     placeholderData: (prev) => prev,
+    enabled: options?.enabled ?? true,
   });
 }
 

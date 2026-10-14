@@ -2,110 +2,61 @@
 
 import { Alert, Stack } from '@mantine/core';
 import { IconAlertCircle, IconEdit, IconSchool } from '@tabler/icons-react';
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
 import { AppDrawer, AppInput, AppSelect } from '@/src/components/controllers';
-import { AcademicBranch, AcademicYear, Section } from '@/src/core/api';
 import { sectionFormLabels } from '../static-data/sections.data';
+import { useSectionsMirror } from '../store/useSectionsMirror';
 
 export interface SectionDrawerProps {
   opened: boolean;
   onClose: () => void;
-  section?: Section | null;
-  academicYears?: AcademicYear[];
-  academicBranches?: AcademicBranch[];
-  onSubmit: (data: {
-    name: string;
-    academicBranchId: number;
-    branchId: number;
-    academicYearId: number;
-    feeAmount: number;
-  }) => Promise<void>;
-  isLoading?: boolean;
+  onSubmit: () => Promise<void>;
 }
 
+/**
+ * SectionDrawer
+ *
+ * Pure presentation drawer for creating/editing a section.
+ * Strictly adheres to role.md Section 12 (ZERO useState, reads via useSectionsMirror).
+ */
 export function SectionDrawer({
   opened,
   onClose,
-  section,
-  academicYears = [],
-  academicBranches = [],
   onSubmit,
-  isLoading = false,
 }: SectionDrawerProps) {
-  const isEditing = Boolean(section);
+  const selectedSection = useSectionsMirror('selectedSection');
+  const sectionForm = useSectionsMirror('sectionForm');
+  const setSectionFormField = useSectionsMirror('setSectionFormField');
+  const sectionFormError = useSectionsMirror('sectionFormError');
+  const formSubmitting = useSectionsMirror('formSubmitting');
+  const academicYears = useSectionsMirror('academicYears');
+  const academicBranches = useSectionsMirror('academicBranches');
 
-  const [name, setName] = useState('');
-  const [academicBranchId, setAcademicBranchId] = useState<string | null>(null);
-  const [academicYearId, setAcademicYearId] = useState<string | null>(null);
-  const [feeAmount, setFeeAmount] = useState<string>('0');
-  const [error, setError] = useState<string | null>(null);
+  const isEditing = Boolean(selectedSection);
 
   // Derive academic year select options
-  const yearOptions = academicYears.map((y) => ({
-    value: String(y.id),
-    label: `${y.name} ${y.isCurrent ? '(الحالية)' : ''}`,
-  }));
+  const yearOptions = useMemo(
+    () =>
+      academicYears.map((y) => ({
+        value: String(y.id),
+        label: `${y.name} ${y.isCurrent ? '(الحالية)' : ''}`,
+      })),
+    [academicYears],
+  );
 
   // Derive academic branch select options
-  const branchOptions = academicBranches.map((b) => ({
-    value: String(b.id),
-    label: b.name,
-  }));
-
-  useEffect(() => {
-    if (section) {
-      setName(section.name);
-      setAcademicBranchId(String(section.academicBranchId));
-      setAcademicYearId(String(section.academicYearId));
-      setFeeAmount(String(section.feeAmount));
-    } else {
-      setName('');
-      setAcademicBranchId(academicBranches[0] ? String(academicBranches[0].id) : null);
-      const currentYear = academicYears.find((y) => y.isCurrent) ?? academicYears[0];
-      setAcademicYearId(currentYear ? String(currentYear.id) : null);
-      setFeeAmount('0');
-    }
-    setError(null);
-  }, [section, opened, academicYears, academicBranches]);
+  const branchOptions = useMemo(
+    () =>
+      academicBranches.map((b) => ({
+        value: String(b.id),
+        label: b.name,
+      })),
+    [academicBranches],
+  );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);
-
-    if (!name.trim()) {
-      setError('يرجى إدخال اسم الشُعبة');
-      return;
-    }
-    if (!academicBranchId) {
-      setError('يرجى اختيار الفرع الأكاديمي');
-      return;
-    }
-    if (!academicYearId) {
-      setError('يرجى اختيار السنة الدراسية');
-      return;
-    }
-    const numFee = Number(feeAmount);
-    if (isNaN(numFee) || numFee < 0) {
-      setError('يرجى إدخال مبلغ رسوم صحيح (أكبر من أو يساوي 0)');
-      return;
-    }
-
-    try {
-      await onSubmit({
-        name: name.trim(),
-        academicBranchId: Number(academicBranchId),
-        branchId: section?.branchId ?? 1, // default branch for the tenant
-        academicYearId: Number(academicYearId),
-        feeAmount: numFee,
-      });
-      onClose();
-    } catch (err: any) {
-      const msg =
-        err?.response?.data?.message ||
-        err?.message ||
-        'حدث خطأ أثناء حفظ الشُعبة';
-      setError(Array.isArray(msg) ? msg.join(', ') : msg);
-    }
+    await onSubmit();
   };
 
   return (
@@ -135,14 +86,14 @@ export function SectionDrawer({
       <AppDrawer.Content>
         <form id="section-form" onSubmit={handleSubmit}>
           <Stack gap="md">
-            {error && (
+            {sectionFormError && (
               <Alert
                 icon={<IconAlertCircle size={16} />}
                 color="red"
                 variant="light"
                 radius="md"
               >
-                {error}
+                {sectionFormError}
               </Alert>
             )}
 
@@ -155,8 +106,17 @@ export function SectionDrawer({
                 type="text"
                 label={sectionFormLabels.name}
                 placeholder={sectionFormLabels.namePlaceholder}
-                value={name}
-                onChange={(e) => setName(typeof e === 'string' ? e : (e as any)?.target?.value ?? '')}
+                value={sectionForm.name}
+                onChange={(e) =>
+                  setSectionFormField(
+                    'name',
+                    typeof e === 'string'
+                      ? e
+                      : e && typeof e === 'object' && 'target' in e
+                        ? (e.target as HTMLInputElement).value
+                        : '',
+                  )
+                }
                 required
               />
 
@@ -164,8 +124,10 @@ export function SectionDrawer({
                 label={sectionFormLabels.academicBranchId}
                 placeholder="اختر الفرع الأكاديمي (مثال: الثانوي العام — الفرع العلمي)"
                 data={branchOptions}
-                value={academicBranchId}
-                onChange={(val: any) => setAcademicBranchId(val as string | null)}
+                value={sectionForm.academicBranchId}
+                onChange={(val: string | null) =>
+                  setSectionFormField('academicBranchId', val)
+                }
                 searchable
                 required
               />
@@ -174,8 +136,10 @@ export function SectionDrawer({
                 <AppSelect
                   label={sectionFormLabels.academicYearId}
                   data={yearOptions}
-                  value={academicYearId}
-                  onChange={(val: any) => setAcademicYearId(val as string | null)}
+                  value={sectionForm.academicYearId}
+                  onChange={(val: string | null) =>
+                    setSectionFormField('academicYearId', val)
+                  }
                   required
                   placeholder="اختر السنة الدراسية"
                 />
@@ -191,9 +155,20 @@ export function SectionDrawer({
                 type="number"
                 label={sectionFormLabels.feeAmount}
                 placeholder={sectionFormLabels.feePlaceholder}
-                value={feeAmount}
+                value={sectionForm.feeAmount}
                 min={0}
-                onChange={(e) => setFeeAmount(typeof e === 'string' ? e : typeof e === 'number' ? String(e) : (e as any)?.target?.value ?? '0')}
+                onChange={(e) =>
+                  setSectionFormField(
+                    'feeAmount',
+                    typeof e === 'string'
+                      ? e
+                      : typeof e === 'number'
+                        ? String(e)
+                        : e && typeof e === 'object' && 'target' in e
+                          ? (e.target as HTMLInputElement).value
+                          : '0',
+                  )
+                }
                 required
               />
             </AppDrawer.Section>
@@ -203,10 +178,10 @@ export function SectionDrawer({
 
       <AppDrawer.Footer>
         <AppDrawer.FooterEnd>
-          <AppDrawer.Cancel disabled={isLoading} />
+          <AppDrawer.Cancel disabled={formSubmitting} />
           <AppDrawer.Submit
             form="section-form"
-            loading={isLoading}
+            loading={formSubmitting}
           >
             {isEditing ? sectionFormLabels.submitEdit : sectionFormLabels.submitCreate}
           </AppDrawer.Submit>

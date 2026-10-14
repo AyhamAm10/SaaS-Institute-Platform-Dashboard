@@ -1,10 +1,19 @@
-import { AcademicBranch, AcademicYear, Section } from '@/src/core/api';
+import {
+  AcademicBranch,
+  AcademicYear,
+  Section,
+  SectionDetails,
+  SectionSubjectItem,
+  Subject,
+  Teacher,
+} from '@/src/core/api';
 
 /**
  * SectionsState
  *
  * Domain state schema for the Sections page controller.
  * Defines all state properties, derived data slots, and action signatures.
+ * Adheres strictly to the Controller Component Pattern (role.md).
  */
 export interface SectionsState {
   // ── Pagination & Filters ──
@@ -13,6 +22,7 @@ export interface SectionsState {
   search: string;
   selectedYearId: string | null;
   selectedBranchId: string | null;
+  filterOptionsRequested: boolean;
 
   // ── Query-Derived Data (synced from React Query) ──
   data: Section[];
@@ -25,17 +35,32 @@ export interface SectionsState {
   academicYears: AcademicYear[];
   academicBranches: AcademicBranch[];
 
-  // ── Form Modal State ──
+  // ── Form Modal State (Section Create / Edit) ──
   formModalOpened: boolean;
   selectedSection: Section | null;
+  sectionForm: {
+    name: string;
+    academicBranchId: string | null;
+    academicYearId: string | null;
+    feeAmount: string;
+  };
+  sectionFormError: string | null;
 
   // ── Fee Modal State ──
   feeModalOpened: boolean;
   feeSection: Section | null;
+  feeFormAmount: string;
+  feeError: string | null;
 
   // ── Details Drawer State ──
   drawerOpened: boolean;
   detailSectionId: number | null;
+  detailsData: SectionDetails | null;
+  sectionSubjectsData: SectionSubjectItem[];
+  instituteSubjectsData: Subject[];
+  teachersData: Teacher[];
+  isLoadingDetails: boolean;
+  isLoadingSectionSubjects: boolean;
 
   // ── Academic Branches Management Modal State ──
   branchesModalOpened: boolean;
@@ -73,15 +98,24 @@ export interface SectionsState {
   setSearch: (search: string) => void;
   setSelectedYearId: (yearId: string | null) => void;
   setSelectedBranchId: (branchId: string | null) => void;
+  requestFilterOptions: () => void;
 
   // ── Actions: Form Modal ──
   openCreate: () => void;
   openEdit: (section: Section) => void;
   closeFormModal: () => void;
+  setSectionFormField: (
+    field: 'name' | 'academicBranchId' | 'academicYearId' | 'feeAmount',
+    value: string | null,
+  ) => void;
+  setSectionFormError: (error: string | null) => void;
+  resetSectionForm: () => void;
 
   // ── Actions: Fee Modal ──
   openFeeModal: (section: Section) => void;
   closeFeeModal: () => void;
+  setFeeFormAmount: (amount: string) => void;
+  setFeeError: (error: string | null) => void;
 
   // ── Actions: Details Drawer ──
   openDetails: (section: Section) => void;
@@ -105,6 +139,10 @@ export interface SectionsState {
   }) => void;
   syncAcademicYears: (years: AcademicYear[]) => void;
   syncAcademicBranches: (branches: AcademicBranch[]) => void;
+  syncSectionDetails: (details: SectionDetails | null, isLoading: boolean) => void;
+  syncSectionSubjects: (subjects: SectionSubjectItem[], isLoading: boolean) => void;
+  syncInstituteSubjects: (subjects: Subject[]) => void;
+  syncTeachers: (teachers: Teacher[]) => void;
 
   // ── Actions: Mutations (orchestrated externally) ──
   setFormSubmitting: (submitting: boolean) => void;
@@ -115,4 +153,4 @@ export interface SectionsState {
 /**
  * Initial props for the Sections controller.
  */
-export interface SectionsInitialProps {}
+export type SectionsInitialProps = Record<string, never>;

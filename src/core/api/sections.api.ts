@@ -233,19 +233,25 @@ export function useSectionsQuery(params?: SectionsQueryParams) {
   });
 }
 
-export function useSectionDetailsQuery(id: number) {
+export function useSectionDetailsQuery(
+  id: number,
+  options?: { enabled?: boolean },
+) {
   return useQuery({
     queryKey: sectionsKeys.detail(id),
     queryFn: () => getSectionDetails(id),
-    enabled: Boolean(id),
+    enabled: Boolean(id) && (options?.enabled ?? true),
   });
 }
 
-export function useSectionSubjectsQuery(sectionId: number) {
+export function useSectionSubjectsQuery(
+  sectionId: number,
+  options?: { enabled?: boolean },
+) {
   return useQuery({
     queryKey: sectionsKeys.sectionSubjects(sectionId),
     queryFn: () => getSectionSubjects(sectionId),
-    enabled: Boolean(sectionId),
+    enabled: Boolean(sectionId) && (options?.enabled ?? true),
   });
 }
 

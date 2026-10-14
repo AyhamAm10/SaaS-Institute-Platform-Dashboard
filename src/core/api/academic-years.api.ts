@@ -94,11 +94,15 @@ export const academicYearsKeys = {
   detail: (id: number) => [...academicYearsKeys.details(), id] as const,
 };
 
-export function useAcademicYearsQuery(params?: AcademicYearsQueryParams) {
+export function useAcademicYearsQuery(
+  params?: AcademicYearsQueryParams,
+  options?: { enabled?: boolean },
+) {
   return useQuery({
     queryKey: academicYearsKeys.list(params),
     queryFn: () => getAcademicYears(params),
     placeholderData: (prev) => prev,
+    enabled: options?.enabled ?? true,
   });
 }
 

@@ -32,12 +32,7 @@ import {
   IconUsers,
 } from '@tabler/icons-react';
 import { AppDrawer, AppInput, AppSelect } from '@/src/components/controllers';
-import {
-  useSectionDetailsQuery,
-  useSectionSubjectsQuery,
-  useSubjectsQuery,
-  useTeachersQuery,
-} from '@/src/core/api';
+import { Teacher } from '@/src/core/api';
 import { sectionFormLabels } from '../static-data/sections.data';
 import { useSectionsMirror } from '../store/useSectionsMirror';
 
@@ -59,7 +54,7 @@ export interface SectionDetailsDrawerProps {
  *
  * Displays full section details, counts, and allows managing assigned subjects.
  * Strictly adheres to role.md.
- * ZERO useState hooks — all states read from useSectionsMirror.
+ * ZERO React Query hooks — all data and query states read from useSectionsMirror.
  */
 export function SectionDetailsDrawer({
   opened,
@@ -68,11 +63,12 @@ export function SectionDetailsDrawer({
   onAssignSubject,
   onRemoveSubject,
 }: SectionDetailsDrawerProps) {
-  const { data: details, isLoading } = useSectionDetailsQuery(sectionId ?? 0);
-  const { data: sectionSubjects, isLoading: loadingSubjects } =
-    useSectionSubjectsQuery(sectionId ?? 0);
-  const { data: instituteSubjects } = useSubjectsQuery({ limit: 100 });
-  const { data: teachersData } = useTeachersQuery({ limit: 100 });
+  const details = useSectionsMirror('detailsData');
+  const isLoading = useSectionsMirror('isLoadingDetails');
+  const sectionSubjects = useSectionsMirror('sectionSubjectsData');
+  const loadingSubjects = useSectionsMirror('isLoadingSectionSubjects');
+  const instituteSubjects = useSectionsMirror('instituteSubjectsData');
+  const teachersData = useSectionsMirror('teachersData');
 
   // ── Mirror state for assigning / removing subjects ──
   const assignSubjectId = useSectionsMirror('assignSubjectId');
@@ -94,7 +90,7 @@ export function SectionDetailsDrawer({
 
   const availableSubjectOptions = useMemo(
     () =>
-      (instituteSubjects?.data ?? [])
+      (instituteSubjects ?? [])
         .filter((s) => !assignedSubjectIds.has(s.id))
         .map((s) => ({
           value: String(s.id),
@@ -106,9 +102,9 @@ export function SectionDetailsDrawer({
   const teacherOptions = useMemo(
     () => [
       { value: '', label: 'بدون تحديد معلم حالياً' },
-      ...(teachersData?.data ?? []).map((t: any) => ({
+      ...(teachersData ?? []).map((t: Teacher) => ({
         value: String(t.id),
-        label: t.user.fullName,
+        label: t.user?.fullName ?? '',
       })),
     ],
     [teachersData],
@@ -327,7 +323,7 @@ export function SectionDetailsDrawer({
                           }
                           data={availableSubjectOptions}
                           value={assignSubjectId}
-                          onChange={(val: any) => setAssignSubjectId(val as string | null)}
+                          onChange={(val: string | null) => setAssignSubjectId(val)}
                           disabled={availableSubjectOptions.length === 0}
                           clearable
                           searchable
@@ -338,7 +334,7 @@ export function SectionDetailsDrawer({
                           placeholder="اختر المعلم..."
                           data={teacherOptions}
                           value={assignTeacherId}
-                          onChange={(val: any) => setAssignTeacherId(val as string | null)}
+                          onChange={(val: string | null) => setAssignTeacherId(val)}
                           clearable
                           searchable
                           size="xs"
@@ -351,7 +347,7 @@ export function SectionDetailsDrawer({
                             type="number"
                             size="xs"
                             value={String(assignWeeklyPeriods || 2)}
-                            onChange={(val: any) => setAssignWeeklyPeriods(Number(val) || 1)}
+                            onChange={(val: unknown) => setAssignWeeklyPeriods(Number(val) || 1)}
                           />
                         </Box>
                         <Button

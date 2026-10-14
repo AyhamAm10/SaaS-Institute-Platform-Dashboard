@@ -1,7 +1,6 @@
 'use client';
 
 import { DataModuleController } from '@/src/components/controllers/data-module';
-import { Section } from '@/src/core/api';
 import { sectionsPageMetadata } from '../static-data/sections.data';
 import { SectionDrawer } from './SectionDrawer';
 import { SectionFeeDrawer } from './SectionFeeDrawer';
@@ -13,17 +12,16 @@ import { useSectionsColumns } from './SectionsTable';
 import { useSectionsMirror } from '../store/useSectionsMirror';
 
 interface SectionsViewProps {
-  onFormSubmit: (formData: {
-    name: string;
-    academicBranchId: number;
-    branchId: number;
-    academicYearId: number;
-    feeAmount: number;
-  }) => Promise<void>;
-  onFeeSubmit: (feeAmount: number) => Promise<void>;
+  onFormSubmit: () => Promise<void>;
+  onFeeSubmit: () => Promise<void>;
   onBranchCreate: () => Promise<void>;
   onBranchDelete: (id: number, name: string) => Promise<void>;
-  onAssignSubject: (sectionId: number, subjectId: number) => Promise<void>;
+  onAssignSubject: (
+    sectionId: number,
+    subjectId: number,
+    weeklyPeriods?: number,
+    teacherId?: number | null,
+  ) => Promise<void>;
   onRemoveSubject: (sectionId: number, subjectId: number) => Promise<void>;
 }
 
@@ -54,17 +52,11 @@ export function SectionsView({
 
   // ── Form Drawer state via mirror ──
   const formModalOpened = useSectionsMirror('formModalOpened');
-  const selectedSection = useSectionsMirror('selectedSection');
   const closeFormModal = useSectionsMirror('closeFormModal');
-  const formSubmitting = useSectionsMirror('formSubmitting');
-  const academicYears = useSectionsMirror('academicYears');
-  const academicBranches = useSectionsMirror('academicBranches');
 
   // ── Fee Drawer state via mirror ──
   const feeModalOpened = useSectionsMirror('feeModalOpened');
-  const feeSection = useSectionsMirror('feeSection');
   const closeFeeModal = useSectionsMirror('closeFeeModal');
-  const feeSubmitting = useSectionsMirror('feeSubmitting');
 
   // ── Details Drawer state via mirror ──
   const drawerOpened = useSectionsMirror('drawerOpened');
@@ -74,6 +66,7 @@ export function SectionsView({
   // ── Branches Drawer state via mirror ──
   const branchesModalOpened = useSectionsMirror('branchesModalOpened');
   const closeBranchesModal = useSectionsMirror('closeBranchesModal');
+  const academicBranches = useSectionsMirror('academicBranches');
 
   // ── Actions for table ──
   const openEdit = useSectionsMirror('openEdit');
@@ -128,20 +121,14 @@ export function SectionsView({
       <SectionDrawer
         opened={formModalOpened}
         onClose={closeFormModal}
-        section={selectedSection}
-        academicYears={academicYears}
-        academicBranches={academicBranches}
         onSubmit={onFormSubmit}
-        isLoading={formSubmitting}
       />
 
-      {/* Update Section Fee Drawer */}
+      {/* Update Section Fee Modal */}
       <SectionFeeDrawer
         opened={feeModalOpened}
         onClose={closeFeeModal}
-        section={feeSection}
         onSubmit={onFeeSubmit}
-        isLoading={feeSubmitting}
       />
 
       {/* View Section Details Drawer */}

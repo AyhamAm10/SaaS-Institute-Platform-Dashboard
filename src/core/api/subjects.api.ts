@@ -86,11 +86,15 @@ export const subjectsKeys = {
   detail: (id: number) => [...subjectsKeys.details(), id] as const,
 };
 
-export function useSubjectsQuery(params?: SubjectsQueryParams) {
+export function useSubjectsQuery(
+  params?: SubjectsQueryParams,
+  options?: { enabled?: boolean },
+) {
   return useQuery({
     queryKey: subjectsKeys.list(params),
     queryFn: () => getSubjects(params),
     placeholderData: (prev) => prev,
+    enabled: options?.enabled ?? true,
   });
 }
 

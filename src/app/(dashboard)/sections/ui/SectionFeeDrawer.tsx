@@ -2,63 +2,37 @@
 
 import { Alert, Stack, Text } from '@mantine/core';
 import { IconAlertCircle, IconCoin } from '@tabler/icons-react';
-import { useEffect, useState } from 'react';
 import { AppInput } from '@/src/components/controllers/input';
 import { AppModal } from '@/src/components/controllers';
-import { Section } from '@/src/core/api';
 import { sectionFormLabels } from '../static-data/sections.data';
+import { useSectionsMirror } from '../store/useSectionsMirror';
 
 export interface SectionFeeModalProps {
   opened: boolean;
   onClose: () => void;
-  section?: Section | null;
-  onSubmit: (feeAmount: number) => Promise<void>;
-  isLoading?: boolean;
+  onSubmit: () => Promise<void>;
 }
 
 /**
  * SectionFeeModal
  *
  * Single-field financial update modal built with the AppModal system.
- * Perfect use-case for Modal (compact form, focused decision) rather than a full Drawer.
+ * Strictly adheres to role.md Section 12 (ZERO useState, reads via useSectionsMirror).
  */
 export function SectionFeeModal({
   opened,
   onClose,
-  section,
   onSubmit,
-  isLoading = false,
 }: SectionFeeModalProps) {
-  const [feeAmount, setFeeAmount] = useState<string>('0');
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (section) {
-      setFeeAmount(String(section.feeAmount));
-    }
-    setError(null);
-  }, [section, opened]);
+  const feeSection = useSectionsMirror('feeSection');
+  const feeFormAmount = useSectionsMirror('feeFormAmount');
+  const setFeeFormAmount = useSectionsMirror('setFeeFormAmount');
+  const feeError = useSectionsMirror('feeError');
+  const feeSubmitting = useSectionsMirror('feeSubmitting');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);
-
-    const numFee = Number(feeAmount);
-    if (isNaN(numFee) || numFee < 0) {
-      setError('يرجى إدخال مبلغ رسوم صالح (أكبر من أو يساوي 0)');
-      return;
-    }
-
-    try {
-      await onSubmit(numFee);
-      onClose();
-    } catch (err: any) {
-      const msg =
-        err?.response?.data?.message ||
-        err?.message ||
-        'حدث خطأ أثناء تعديل الرسوم';
-      setError(Array.isArray(msg) ? msg.join(', ') : msg);
-    }
+    await onSubmit();
   };
 
   return (
@@ -80,39 +54,42 @@ export function SectionFeeModal({
       <AppModal.Content>
         <form id="section-fee-modal-form" onSubmit={handleSubmit}>
           <Stack gap="md">
-            {error && (
+            {feeError && (
               <Alert
                 icon={<IconAlertCircle size={16} />}
                 color="red"
                 variant="light"
                 radius="md"
               >
-                {error}
+                {feeError}
               </Alert>
             )}
 
-            {section && (
+            {feeSection && (
               <Text size="sm" fw={600} c="dimmed">
-                الشُعبة: <Text span c="dark" fw={700}>{section.name}</Text>
+                الشُعبة: <Text span c="dark" fw={700}>{feeSection.name}</Text>
               </Text>
             )}
 
             <Text size="xs" c="dimmed">
-              سيتم تطبيق هذا المبلغ على أي تسجيلات أو حسابات مالية مستقبلية مرتبطة بهذه الشُعبة.
+              الرسوم السابقة: {Number(feeSection?.feeAmount ?? 0).toLocaleString()} ر.س
             </Text>
 
             <AppInput
               type="number"
               label={sectionFormLabels.feeAmount}
-              value={feeAmount}
+              placeholder={sectionFormLabels.feePlaceholder}
+              value={feeFormAmount}
               min={0}
               onChange={(e) =>
-                setFeeAmount(
+                setFeeFormAmount(
                   typeof e === 'string'
                     ? e
                     : typeof e === 'number'
-                    ? String(e)
-                    : (e as any)?.target?.value ?? '0',
+                      ? String(e)
+                      : e && typeof e === 'object' && 'target' in e
+                        ? (e.target as HTMLInputElement).value
+                        : '0',
                 )
               }
               required
@@ -123,12 +100,11 @@ export function SectionFeeModal({
 
       <AppModal.Footer>
         <AppModal.FooterEnd>
-          <AppModal.Cancel disabled={isLoading} />
+          <AppModal.Cancel disabled={feeSubmitting} />
           <AppModal.Confirm
             form="section-fee-modal-form"
             type="submit"
-            color="teal"
-            loading={isLoading}
+            loading={feeSubmitting}
           >
             {sectionFormLabels.submitFee}
           </AppModal.Confirm>
@@ -138,6 +114,5 @@ export function SectionFeeModal({
   );
 }
 
-// Keep Drawer alias for backward compatibility
+// Backward compatibility alias
 export const SectionFeeDrawer = SectionFeeModal;
-export type SectionFeeDrawerProps = SectionFeeModalProps;

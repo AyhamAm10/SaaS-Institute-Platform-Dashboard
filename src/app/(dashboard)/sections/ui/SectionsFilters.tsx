@@ -9,6 +9,7 @@ import { useSectionsMirror } from '../store/useSectionsMirror';
  *
  * Filter controls for the Sections page (year + academic branch dropdowns).
  * Uses AppSelect adhering to the unified input standard.
+ * Lazy fetches filter options on demand when dropdowns are opened/focused.
  * Pure presentation — reads state and actions from the mirror.
  */
 export function SectionsFilters() {
@@ -18,6 +19,7 @@ export function SectionsFilters() {
   const academicBranches = useSectionsMirror('academicBranches');
   const selectedBranchId = useSectionsMirror('selectedBranchId');
   const setSelectedBranchId = useSectionsMirror('setSelectedBranchId');
+  const requestFilterOptions = useSectionsMirror('requestFilterOptions');
 
   const yearFilterOptions = useMemo(
     () =>
@@ -43,7 +45,9 @@ export function SectionsFilters() {
         placeholder="السنة الدراسية"
         data={yearFilterOptions}
         value={selectedYearId}
-        onChange={(val: any) => setSelectedYearId(val as string | null)}
+        onChange={(val: string | null) => setSelectedYearId(val)}
+        onDropdownOpen={requestFilterOptions}
+        onFocus={requestFilterOptions}
         clearable
         size="xs"
         style={{ width: 160 }}
@@ -52,7 +56,9 @@ export function SectionsFilters() {
         placeholder="الفرع الأكاديمي"
         data={branchFilterOptions}
         value={selectedBranchId}
-        onChange={(val: any) => setSelectedBranchId(val as string | null)}
+        onChange={(val: string | null) => setSelectedBranchId(val)}
+        onDropdownOpen={requestFilterOptions}
+        onFocus={requestFilterOptions}
         clearable
         searchable
         size="xs"

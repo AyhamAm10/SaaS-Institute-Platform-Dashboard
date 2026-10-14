@@ -126,7 +126,11 @@ export function AcademicBranchesDrawer({
                   onChange={(e) =>
                     setBranchFormField(
                       'name',
-                      typeof e === 'string' ? e : (e as any)?.target?.value ?? '',
+                      typeof e === 'string'
+                        ? e
+                        : e && typeof e === 'object' && 'target' in e
+                          ? (e.target as HTMLInputElement).value
+                          : '',
                     )
                   }
                   required
@@ -141,7 +145,11 @@ export function AcademicBranchesDrawer({
                     onChange={(e) =>
                       setBranchFormField(
                         'code',
-                        typeof e === 'string' ? e : (e as any)?.target?.value ?? '',
+                        typeof e === 'string'
+                          ? e
+                          : e && typeof e === 'object' && 'target' in e
+                            ? (e.target as HTMLInputElement).value
+                            : '',
                       )
                     }
                   />
@@ -153,7 +161,11 @@ export function AcademicBranchesDrawer({
                     onChange={(e) =>
                       setBranchFormField(
                         'description',
-                        typeof e === 'string' ? e : (e as any)?.target?.value ?? '',
+                        typeof e === 'string'
+                          ? e
+                          : e && typeof e === 'object' && 'target' in e
+                            ? (e.target as HTMLInputElement).value
+                            : '',
                       )
                     }
                   />

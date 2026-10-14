@@ -91,10 +91,14 @@ export const academicBranchKeys = {
   detail: (id: number) => [...academicBranchKeys.details(), id] as const,
 };
 
-export function useAcademicBranchesQuery(params?: AcademicBranchesQueryParams) {
+export function useAcademicBranchesQuery(
+  params?: AcademicBranchesQueryParams,
+  options?: { enabled?: boolean },
+) {
   return useQuery({
     queryKey: academicBranchKeys.list(params),
     queryFn: () => getAcademicBranches(params),
+    enabled: options?.enabled ?? true,
   });
 }
 
