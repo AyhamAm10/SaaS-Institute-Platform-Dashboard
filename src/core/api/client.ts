@@ -1,5 +1,6 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { tokenRefreshHandler } from './refresh';
+import { getActiveAcademicYearId, getActiveBranchId } from '../context/operational-context';
 
 export const API_BASE_URL =
   process.env['NEXT_PUBLIC_API_URL'] || 'http://localhost:3000/api';
@@ -40,6 +41,30 @@ async function performTokenRefresh(): Promise<AxiosResponse> {
     },
   );
 }
+
+// Attach request interceptor for central operational dimension injection (X-Branch-Id, X-Academic-Year-Id)
+apiClient.interceptors.request.use((config) => {
+  const branchId = getActiveBranchId();
+  const academicYearId = getActiveAcademicYearId();
+
+  if (branchId !== null && branchId !== undefined) {
+    if (typeof config.headers?.set === 'function') {
+      config.headers.set('X-Branch-Id', String(branchId));
+    } else if (config.headers) {
+      config.headers['X-Branch-Id'] = String(branchId);
+    }
+  }
+
+  if (academicYearId !== null && academicYearId !== undefined) {
+    if (typeof config.headers?.set === 'function') {
+      config.headers.set('X-Academic-Year-Id', String(academicYearId));
+    } else if (config.headers) {
+      config.headers['X-Academic-Year-Id'] = String(academicYearId);
+    }
+  }
+
+  return config;
+});
 
 // Attach response interceptor for 401 handling
 apiClient.interceptors.response.use(

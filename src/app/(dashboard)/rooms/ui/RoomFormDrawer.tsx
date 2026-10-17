@@ -14,7 +14,7 @@ import {
   IconDeviceFloppy,
 } from '@tabler/icons-react';
 import { AppInput, AppSelect } from '@/src/components/controllers';
-import { useBranchesQuery } from '@/src/core/api';
+import { useBranchesQuery, useOperationalContext } from '@/src/core/api';
 import { useRoomsMirror } from '../store/useRoomsMirror';
 
 const ROOM_TYPES = [
@@ -39,14 +39,12 @@ export function RoomFormDrawer({ onSubmit }: RoomFormDrawerProps) {
   const closeDrawer = useRoomsMirror('closeDrawer');
   const setFormField = useRoomsMirror('setFormField');
 
+  const { activeBranchId } = useOperationalContext();
   const { data: branches } = useBranchesQuery();
-  const branchOptions = [
-    { value: '', label: 'كافة الفروع (قاعة مشتركة)' },
-    ...(branches || []).map((b: any) => ({
-      value: String(b.id),
-      label: b.name,
-    })),
-  ];
+  const branchOptions = (branches || []).map((b: any) => ({
+    value: String(b.id),
+    label: b.name,
+  }));
 
   const isEdit = drawerMode === 'edit';
 
@@ -111,10 +109,12 @@ export function RoomFormDrawer({ onSubmit }: RoomFormDrawerProps) {
           label="الفرع التابع له"
           placeholder="اختر الفرع"
           data={branchOptions}
-          value={form.branchId ? String(form.branchId) : ''}
+          value={form.branchId ? String(form.branchId) : (activeBranchId ? String(activeBranchId) : '')}
           onChange={(val: any) =>
             setFormField('branchId', val ? Number(val) : null)
           }
+          error={formErrors.branchId}
+          required
         />
 
         <Group justify="flex-end" mt="xl">

@@ -19,6 +19,7 @@ import {
   createTimetableStore,
   TimetableContext,
 } from './store/timetable.store';
+import { useOperationalContext } from '@/src/core/context';
 import {
   TimetableCell,
   TimetableConflictBanner,
@@ -36,9 +37,16 @@ function QuerySync({
 }: {
   store: ReturnType<typeof createTimetableStore>;
 }) {
+  const { activeAcademicYearId } = useOperationalContext();
   const academicYearId = useStore(store, (s) => s.academicYearId);
   const sectionId = useStore(store, (s) => s.sectionId);
   const syncTimetableData = useStore(store, (s) => s.syncTimetableData);
+
+  useEffect(() => {
+    if (activeAcademicYearId && !academicYearId) {
+      store.getState().setAcademicYearId(activeAcademicYearId);
+    }
+  }, [activeAcademicYearId, academicYearId, store]);
 
   const { data: timetable, isLoading, isFetching } = useTimetableQuery(
     academicYearId ?? 0,

@@ -44,15 +44,15 @@ export interface UpdateScheduleConfigPayload {
 // --------------------------------------------------------------------------
 
 export async function getScheduleConfig(): Promise<ScheduleConfig> {
-  const { data } = await apiClient.get<ScheduleConfig>('/institute-schedule-config');
+  const { data } = await apiClient.get<ScheduleConfig>('/schedule-config');
   return data;
 }
 
 export async function updateScheduleConfig(
   payload: UpdateScheduleConfigPayload,
 ): Promise<ScheduleConfig> {
-  const { data } = await apiClient.put<ScheduleConfig>(
-    '/institute-schedule-config',
+  const { data } = await apiClient.patch<ScheduleConfig>(
+    '/schedule-config',
     payload,
   );
   return data;

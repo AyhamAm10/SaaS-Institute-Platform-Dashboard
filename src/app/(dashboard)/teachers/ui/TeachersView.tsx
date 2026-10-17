@@ -17,6 +17,7 @@ import {
 } from '@tabler/icons-react';
 import { AppInput, AppSelect } from '@/src/components/controllers';
 import { useBranchesQuery, Teacher } from '@/src/core/api';
+import { useOperationalContext } from '@/src/core/context';
 import { useTeachersMirror } from '../store/useTeachersMirror';
 import { TeachersTable } from './TeachersTable';
 import { TeacherFormDrawer } from './TeacherFormDrawer';
@@ -60,6 +61,7 @@ export function TeachersView({
   const setSearch = useTeachersMirror('setSearch');
   const setBranchId = useTeachersMirror('setBranchId');
   const openCreateDrawer = useTeachersMirror('openCreateDrawer');
+  const { activeBranchId } = useOperationalContext();
 
   const { data: branches } = useBranchesQuery();
   const branchOptions = [
@@ -108,7 +110,7 @@ export function TeachersView({
             <Button
               leftSection={<IconPlus size={18} />}
               radius="xl"
-              onClick={openCreateDrawer}
+              onClick={() => openCreateDrawer(activeBranchId ?? undefined)}
             >
               إضافة معلم
             </Button>

@@ -12,6 +12,7 @@ import {
   useSetRoomAvailabilitiesMutation,
   useUpdateRoomMutation,
   getRoomById,
+  useOperationalContext,
 } from '@/src/core/api';
 import {
   createRoomsStore,
@@ -79,6 +80,8 @@ export function RoomsController() {
     });
   }, [store, newAvailDay, newAvailStart, newAvailEnd]);
 
+  const { activeBranchId } = useOperationalContext();
+
   const handleSubmit = useCallback(async () => {
     const { form, drawerMode, selectedRoom } = store.getState();
     store.getState().setGeneralError(null);
@@ -94,6 +97,12 @@ export function RoomsController() {
       hasError = true;
     }
 
+    const targetBranchId = form.branchId ?? activeBranchId ?? undefined;
+    if (!targetBranchId) {
+      store.getState().setFieldError('branchId', 'يرجى تحديد الفرع التابع له');
+      hasError = true;
+    }
+
     if (hasError) return;
 
     store.getState().setIsSubmitting(true);
@@ -105,7 +114,7 @@ export function RoomsController() {
             name: form.name.trim(),
             type: form.type,
             capacity: Number(form.capacity),
-            branchId: form.branchId,
+            branchId: targetBranchId,
           },
         });
       } else {
@@ -113,7 +122,7 @@ export function RoomsController() {
           name: form.name.trim(),
           type: form.type,
           capacity: Number(form.capacity),
-          branchId: form.branchId,
+          branchId: targetBranchId,
         });
       }
 

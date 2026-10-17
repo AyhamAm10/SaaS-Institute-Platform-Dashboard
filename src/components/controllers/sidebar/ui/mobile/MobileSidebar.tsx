@@ -22,9 +22,18 @@ import { useSidebarMirror } from '../../store/useSidebarMirror';
 import { isNavItemActive } from '../../utils/nav.utils';
 import { NavSubItem } from '../../init/navigation';
 import { useAuth } from '@/src/core/auth';
+import { useBranchesQuery, useOperationalContext } from '@/src/core/api';
 
 export function MobileSidebar() {
   const { user, logout, isLoggingOut } = useAuth();
+  const { activeBranchId } = useOperationalContext();
+  const { data: branches } = useBranchesQuery();
+  const activeBranch = branches?.find((b) => b.id === activeBranchId);
+  const branchLabel =
+    user?.role === 'SUPER_ADMIN'
+      ? 'المدير العام'
+      : activeBranch?.name || 'الفرع الرئيسي';
+
   const items = useSidebarMirror('items');
   const isOpen = useSidebarMirror('isMobileOpen');
   const close = useSidebarMirror('closeMobile');
@@ -67,7 +76,7 @@ export function MobileSidebar() {
               {user?.institute?.name || 'معهد النور الأكاديمي'}
             </Text>
             <Badge variant="light" color="primary" size="xs" radius="xl">
-              {user?.role === 'SUPER_ADMIN' ? 'المدير العام' : 'الفرع الرئيسي'}
+              {branchLabel}
             </Badge>
           </Stack>
         </Group>

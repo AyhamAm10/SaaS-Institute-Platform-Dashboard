@@ -16,6 +16,7 @@ import {
   useTeachersQuery,
   useUpdateSectionFeeMutation,
   useUpdateSectionMutation,
+  useOperationalContext,
 } from '@/src/core/api';
 import { createSectionsStore, SectionsContext } from './store/sections.store';
 import { SectionsView } from './ui/SectionsView';
@@ -172,6 +173,7 @@ function getErrorMessage(err: unknown, fallback: string): string {
  */
 export function SectionsController() {
   const [store] = useState(() => createSectionsStore());
+  const { activeBranchId, activeAcademicYearId } = useOperationalContext();
 
   // ── Mutations ──
   const createMutation = useCreateSectionMutation();
@@ -196,7 +198,8 @@ export function SectionsController() {
       store.getState().setSectionFormError('يرجى اختيار الفرع الأكاديمي');
       return;
     }
-    if (!selectedSection && !sectionForm.academicYearId) {
+    const targetYearId = sectionForm.academicYearId || activeAcademicYearId;
+    if (!selectedSection && !targetYearId) {
       store.getState().setSectionFormError('يرجى اختيار السنة الدراسية');
       return;
     }
@@ -221,8 +224,8 @@ export function SectionsController() {
         await createMutation.mutateAsync({
           name,
           academicBranchId: Number(sectionForm.academicBranchId),
-          branchId: 1,
-          academicYearId: Number(sectionForm.academicYearId),
+          academicYearId: targetYearId ? Number(targetYearId) : undefined,
+          branchId: activeBranchId ?? undefined,
           feeAmount: numFee,
         });
       }

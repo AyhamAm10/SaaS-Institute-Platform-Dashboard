@@ -70,8 +70,8 @@ export interface SectionsQueryParams {
 export interface CreateSectionPayload {
   name: string;
   academicBranchId: number;
-  branchId: number;
-  academicYearId: number;
+  branchId?: number;
+  academicYearId?: number;
   feeAmount: number;
   grade?: string;
 }

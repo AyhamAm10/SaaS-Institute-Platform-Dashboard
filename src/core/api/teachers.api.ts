@@ -150,7 +150,7 @@ export async function assignTeacherQualification(
   payload: AssignQualificationPayload,
 ): Promise<TeacherAssignment> {
   const { data } = await apiClient.post<TeacherAssignment>(
-    `/teachers/${teacherId}/qualifications`,
+    `/teachers/${teacherId}/assignments`,
     payload,
   );
   return data;
@@ -160,16 +160,16 @@ export async function removeTeacherQualification(
   teacherId: number,
   assignmentId: number,
 ): Promise<void> {
-  await apiClient.delete(`/teachers/${teacherId}/qualifications/${assignmentId}`);
+  await apiClient.delete(`/teachers/${teacherId}/assignments/${assignmentId}`);
 }
 
 export async function setTeacherAvailabilities(
   teacherId: number,
   windows: AvailabilityWindowPayload[],
 ): Promise<TeacherAvailability[]> {
-  const { data } = await apiClient.put<TeacherAvailability[]>(
+  const { data } = await apiClient.post<TeacherAvailability[]>(
     `/teachers/${teacherId}/availability`,
-    { windows },
+    { availabilities: windows },
   );
   return data;
 }

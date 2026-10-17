@@ -23,7 +23,8 @@ import {
 } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useAuth } from '@/src/core/auth';
-import { useAcademicYearsQuery, useSectionsQuery, UserRole } from '@/src/core/api';
+import { useAcademicYearsQuery, useBranchesQuery, useSectionsQuery, UserRole } from '@/src/core/api';
+import { useOperationalContext } from '@/src/core/context';
 import { InstitutesController } from './institutes';
 
 /**
@@ -33,11 +34,14 @@ import { InstitutesController } from './institutes';
  */
 function InstituteAdminDashboardView() {
   const { user } = useAuth();
+  const { activeBranchId } = useOperationalContext();
+  const { data: branches } = useBranchesQuery();
 
   const { data: yearsData, isLoading: yearsLoading } = useAcademicYearsQuery({ limit: 5 });
   const { data: sectionsData, isLoading: sectionsLoading } = useSectionsQuery({ limit: 5 });
 
   const activeYear = yearsData?.data?.find((y) => y.isCurrent);
+  const currentBranch = branches?.find((b: any) => b.id === activeBranchId);
   const totalYears = yearsData?.total ?? 0;
   const totalSections = sectionsData?.total ?? 0;
 
@@ -64,6 +68,11 @@ function InstituteAdminDashboardView() {
                 <Badge variant="light" color="teal" radius="xl" size="sm">
                   لوحة الإدارة
                 </Badge>
+                {currentBranch && (
+                  <Badge variant="light" color="blue" radius="xl" size="sm">
+                    {currentBranch.name}
+                  </Badge>
+                )}
               </Group>
               <Text size="sm" c="dimmed">
                 متابعة وإدارة الهيكل الأكاديمي، السنوات الدراسية، والشُعب التعليمية للمعهد.

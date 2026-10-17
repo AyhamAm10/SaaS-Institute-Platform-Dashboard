@@ -4,6 +4,7 @@ import { Alert, Stack } from '@mantine/core';
 import { IconAlertCircle, IconEdit, IconSchool } from '@tabler/icons-react';
 import { useMemo } from 'react';
 import { AppDrawer, AppInput, AppSelect } from '@/src/components/controllers';
+import { useOperationalContext } from '@/src/core/api';
 import { sectionFormLabels } from '../static-data/sections.data';
 import { useSectionsMirror } from '../store/useSectionsMirror';
 
@@ -24,6 +25,7 @@ export function SectionDrawer({
   onClose,
   onSubmit,
 }: SectionDrawerProps) {
+  const { activeAcademicYearId } = useOperationalContext();
   const selectedSection = useSectionsMirror('selectedSection');
   const sectionForm = useSectionsMirror('sectionForm');
   const setSectionFormField = useSectionsMirror('setSectionFormField');
@@ -136,7 +138,10 @@ export function SectionDrawer({
                 <AppSelect
                   label={sectionFormLabels.academicYearId}
                   data={yearOptions}
-                  value={sectionForm.academicYearId}
+                  value={
+                    sectionForm.academicYearId ||
+                    (activeAcademicYearId ? String(activeAcademicYearId) : '')
+                  }
                   onChange={(val: string | null) =>
                     setSectionFormField('academicYearId', val)
                   }

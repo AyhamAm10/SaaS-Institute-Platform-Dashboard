@@ -66,7 +66,7 @@ export interface TeachersState {
   setBranchId: (branchId?: number) => void;
 
   // ── Actions: Form Drawer ──
-  openCreateDrawer: () => void;
+  openCreateDrawer: (defaultBranchId?: number) => void;
   openEditDrawer: (teacher: Teacher) => void;
   closeDrawer: () => void;
   setFormField: <K extends keyof TeacherFormState>(

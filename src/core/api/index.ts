@@ -14,4 +14,5 @@ export * from './timetables.api';
 export * from './branches.api';
 export * from './query-client';
 export * from './QueryProvider';
+export * from '../context/operational-context';
 

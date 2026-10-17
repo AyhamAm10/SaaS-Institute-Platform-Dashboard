@@ -15,8 +15,12 @@ import {
   rem,
   useMantineColorScheme,
 } from '@mantine/core';
+import { useEffect } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import {
   IconBell,
+  IconBuildingCommunity,
+  IconCalendarEvent,
   IconChevronDown,
   IconLogout,
   IconMoon,
@@ -28,10 +32,16 @@ import {
 import { useSidebarMirror } from '../../sidebar/store/useSidebarMirror';
 import { useLayoutMirror } from '../store/useLayoutMirror';
 import { useAuth } from '@/src/core/auth';
-import { UserRole } from '@/src/core/api';
+import {
+  useAcademicYearsQuery,
+  useBranchesQuery,
+  useOperationalContext,
+  UserRole,
+} from '@/src/core/api';
 
 export function DashboardHeader() {
   const { user, logout, isLoggingOut } = useAuth();
+  const queryClient = useQueryClient();
 
   const isSuperAdmin =
     user?.role === UserRole.SUPER_ADMIN || user?.role === 'SUPER_ADMIN';
@@ -45,6 +55,40 @@ export function DashboardHeader() {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const isDark = colorScheme === 'dark';
 
+  // Operational Context (Active Branch and Academic Year)
+  const {
+    activeBranchId,
+    activeAcademicYearId,
+    setActiveBranchId,
+    setActiveAcademicYearId,
+  } = useOperationalContext();
+
+  const { data: branches } = useBranchesQuery();
+  const { data: yearsData } = useAcademicYearsQuery(
+    { limit: 50 },
+    { enabled: !isSuperAdmin },
+  );
+
+  // Auto-initialize active branch if not yet set
+  useEffect(() => {
+    if (!isSuperAdmin && !activeBranchId && branches && branches.length > 0) {
+      setActiveBranchId(branches[0].id);
+    }
+  }, [isSuperAdmin, activeBranchId, branches, setActiveBranchId]);
+
+  // Auto-initialize active academic year to current year if not yet set
+  useEffect(() => {
+    if (!isSuperAdmin && !activeAcademicYearId && yearsData?.data && yearsData.data.length > 0) {
+      const currentYear = yearsData.data.find((y) => y.isCurrent) ?? yearsData.data[0];
+      setActiveAcademicYearId(currentYear.id);
+    }
+  }, [isSuperAdmin, activeAcademicYearId, yearsData, setActiveAcademicYearId]);
+
+  const activeBranchName =
+    branches?.find((b) => b.id === activeBranchId)?.name || 'اختر الفرع';
+  const activeYearName =
+    yearsData?.data?.find((y) => y.id === activeAcademicYearId)?.name || 'السنة الدراسية';
+
   return (
     <AppShell.Header
       p="xs"
@@ -54,7 +98,7 @@ export function DashboardHeader() {
       }}
     >
       <Group justify="space-between" h="100%" px="md">
-        {/* Right Section (in RTL): Section Indicator with Accent Bar */}
+        {/* Right Section (in RTL): Section Indicator with Accent Bar & Operational Selectors */}
         <Group gap="md">
           <Burger
             opened={isMobileOpen}
@@ -84,6 +128,109 @@ export function DashboardHeader() {
               </Text>
             </Stack>
           </Group>
+
+          {/* Operational Context Switchers (Branch & Academic Year) - Institute Admin ONLY */}
+          {!isSuperAdmin && (
+            <Group gap="xs" visibleFrom="xs" ml="xs">
+              {/* Branch Selector Pill */}
+              <Menu shadow="md" width={220} position="bottom-start" radius="lg">
+                <Menu.Target>
+                  <Paper
+                    px="sm"
+                    py={6}
+                    radius="xl"
+                    withBorder
+                    style={{
+                      cursor: 'pointer',
+                      backgroundColor: 'var(--mantine-color-gray-0)',
+                      borderColor: 'var(--mantine-color-gray-2)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: rem(6),
+                      transition: 'border-color 150ms ease',
+                    }}
+                  >
+                    <IconBuildingCommunity size={15} color="var(--mantine-color-teal-6)" />
+                    <Text size="xs" fw={700} lineClamp={1}>
+                      {activeBranchName}
+                    </Text>
+                    <IconChevronDown size={13} color="var(--mantine-color-dimmed)" />
+                  </Paper>
+                </Menu.Target>
+                <Menu.Dropdown p="xs">
+                  <Menu.Label>الفرع الجغرافي النشط</Menu.Label>
+                  {(branches || []).map((b) => {
+                    const isSelected = b.id === activeBranchId;
+                    return (
+                      <Menu.Item
+                        key={b.id}
+                        leftSection={<IconBuildingCommunity size={14} />}
+                        style={{ fontWeight: isSelected ? 700 : 500 }}
+                        color={isSelected ? 'teal' : undefined}
+                        onClick={() => {
+                          if (b.id !== activeBranchId) {
+                            setActiveBranchId(b.id);
+                            queryClient.invalidateQueries();
+                          }
+                        }}
+                      >
+                        {b.name}
+                      </Menu.Item>
+                    );
+                  })}
+                </Menu.Dropdown>
+              </Menu>
+
+              {/* Academic Year Selector Pill */}
+              <Menu shadow="md" width={220} position="bottom-start" radius="lg">
+                <Menu.Target>
+                  <Paper
+                    px="sm"
+                    py={6}
+                    radius="xl"
+                    withBorder
+                    style={{
+                      cursor: 'pointer',
+                      backgroundColor: 'var(--mantine-color-gray-0)',
+                      borderColor: 'var(--mantine-color-gray-2)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: rem(6),
+                      transition: 'border-color 150ms ease',
+                    }}
+                  >
+                    <IconCalendarEvent size={15} color="var(--mantine-color-primary-6)" />
+                    <Text size="xs" fw={700} lineClamp={1}>
+                      {activeYearName}
+                    </Text>
+                    <IconChevronDown size={13} color="var(--mantine-color-dimmed)" />
+                  </Paper>
+                </Menu.Target>
+                <Menu.Dropdown p="xs">
+                  <Menu.Label>الدورة الأكاديمية النشطة</Menu.Label>
+                  {(yearsData?.data || []).map((y) => {
+                    const isSelected = y.id === activeAcademicYearId;
+                    return (
+                      <Menu.Item
+                        key={y.id}
+                        leftSection={<IconCalendarEvent size={14} />}
+                        style={{ fontWeight: isSelected ? 700 : 500 }}
+                        color={isSelected ? 'primary' : undefined}
+                        onClick={() => {
+                          if (y.id !== activeAcademicYearId) {
+                            setActiveAcademicYearId(y.id);
+                            queryClient.invalidateQueries();
+                          }
+                        }}
+                      >
+                        {y.name} {y.isCurrent ? '(الحالية)' : ''}
+                      </Menu.Item>
+                    );
+                  })}
+                </Menu.Dropdown>
+              </Menu>
+            </Group>
+          )}
         </Group>
 
         {/* Center Section: Modern Curved Search Pill */}

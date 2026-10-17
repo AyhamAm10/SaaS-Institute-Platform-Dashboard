@@ -67,12 +67,15 @@ export function createTeachersStore(): TeachersStore {
     setBranchId: (branchId) => set({ branchId, page: 1 }),
 
     // Actions: Form Drawer
-    openCreateDrawer: () =>
+    openCreateDrawer: (defaultBranchId?: number) =>
       set({
         drawerOpened: true,
         drawerMode: 'create',
         selectedTeacher: null,
-        form: { ...defaultFormState },
+        form: {
+          ...defaultFormState,
+          branchIds: defaultBranchId ? [defaultBranchId] : [],
+        },
         formErrors: {},
         generalError: null,
         generalSuccess: null,
