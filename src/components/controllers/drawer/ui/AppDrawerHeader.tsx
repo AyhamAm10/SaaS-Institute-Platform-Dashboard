@@ -1,7 +1,7 @@
 'use client';
 
 import { Box, Flex, Group, Stack } from '@mantine/core';
-import { ReactNode } from 'react';
+import { Children, isValidElement, ReactNode } from 'react';
 import { AppDrawerClose } from './AppDrawerClose';
 import { AppDrawerTitle } from './AppDrawerTitle';
 import { AppDrawerDescription } from './AppDrawerDescription';
@@ -24,10 +24,19 @@ export function AppDrawerHeader({
 
   // If custom children are provided, render layout container
   if (children) {
+    // Filter out AppDrawerClose from children so close button is never duplicated
+    const filteredChildren = Children.toArray(children).filter((child) => {
+      if (!isValidElement(child)) return true;
+      return (
+        child.type !== AppDrawerClose &&
+        (child.type as any)?.displayName !== 'AppDrawerClose'
+      );
+    });
+
     return (
       <Box
-        px="lg"
-        py="md"
+        px="xl"
+        py="lg"
         className={className}
         style={{
           borderBottom: '1px solid var(--mantine-color-gray-2)',
@@ -37,7 +46,7 @@ export function AppDrawerHeader({
       >
         <Flex justify="space-between" align="center" gap="md">
           <Group gap="sm" align="center" style={{ flex: 1, minWidth: 0 }}>
-            {children}
+            {filteredChildren}
           </Group>
           {showClose && <AppDrawerClose />}
         </Flex>
@@ -48,8 +57,8 @@ export function AppDrawerHeader({
   // Default automatic layout from store
   return (
     <Box
-      px="lg"
-      py="md"
+      px="xl"
+      py="lg"
       className={className}
       style={{
         borderBottom: '1px solid var(--mantine-color-gray-2)',

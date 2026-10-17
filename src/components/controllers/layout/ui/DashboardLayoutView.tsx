@@ -21,11 +21,11 @@ export function DashboardLayoutView({ children }: DashboardLayoutViewProps) {
     <AppShell
       header={{ height: headerHeight }}
       navbar={{
-        width: isCollapsed ? rem(80) : rem(280),
+        width: isCollapsed ? rem(88) : rem(280),
         breakpoint: 'md',
         collapsed: { mobile: !isMobileOpen },
       }}
-      padding="md"
+      padding={{ base: 'md', sm: 'lg', md: 'xl' }}
     >
       <DashboardHeader />
       <SidebarFactory />

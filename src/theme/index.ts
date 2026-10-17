@@ -25,7 +25,7 @@ export const baseTheme = createTheme({
   fontFamilyMonospace: defaultFontFamilyMonospace,
   headings: defaultHeadings,
   components: defaultComponents,
-  defaultRadius: 'lg',
+  defaultRadius: 'xl',
   cursorType: 'pointer',
   spacing: {
     xs: rem(8),

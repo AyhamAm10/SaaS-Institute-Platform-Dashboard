@@ -12,13 +12,13 @@ export function getUnifiedInputStyles(config: ResolvedInputConfig, isFocused: bo
     label: {
       fontWeight: 600,
       fontSize: rem(13),
-      marginBottom: rem(4),
+      marginBottom: rem(6),
       color: 'var(--mantine-color-text)',
       ...customStyles?.label,
     },
     description: {
       fontSize: rem(12),
-      marginBottom: rem(4),
+      marginBottom: rem(6),
       color: 'var(--mantine-color-dimmed)',
       ...customStyles?.description,
     },
@@ -29,7 +29,7 @@ export function getUnifiedInputStyles(config: ResolvedInputConfig, isFocused: bo
       fontWeight: 500,
       minHeight: rem(48),
       height: rem(48),
-      borderRadius: rem(14),
+      borderRadius: rem(16),
       backgroundColor: isFocused ? '#ffffff' : 'var(--mantine-color-gray-0)',
       borderColor: isFocused
         ? 'var(--mantine-color-primary-4)'
@@ -37,8 +37,8 @@ export function getUnifiedInputStyles(config: ResolvedInputConfig, isFocused: bo
       borderWidth: rem(1.5),
       borderStyle: 'solid',
       boxShadow: isFocused
-        ? '0 0 0 3.5px rgba(32, 183, 223, 0.16)'
-        : 'none',
+        ? '0 0 0 4px rgba(32, 183, 223, 0.14)'
+        : '0 1px 2px rgba(0, 0, 0, 0.02)',
       transition: 'border-color 150ms ease, box-shadow 150ms ease, background-color 150ms ease',
       '&:hover': {
         backgroundColor: isFocused ? '#ffffff' : 'var(--mantine-color-gray-1)',

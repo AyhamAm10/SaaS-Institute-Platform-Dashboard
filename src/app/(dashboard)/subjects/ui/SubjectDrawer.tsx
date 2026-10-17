@@ -54,9 +54,10 @@ export function SubjectDrawer({ onSubmit }: SubjectDrawerProps) {
     <AppDrawer opened={opened} onClose={closeDrawer} size="md">
       <AppDrawer.Header>
         <AppDrawer.Icon icon={<IconBook size={22} />} color="primary" />
-        <AppDrawer.Title>{title}</AppDrawer.Title>
-        <AppDrawer.Description>{description}</AppDrawer.Description>
-        <AppDrawer.Close />
+        <Stack gap={2} style={{ flex: 1, minWidth: 0 }}>
+          <AppDrawer.Title>{title}</AppDrawer.Title>
+          <AppDrawer.Description>{description}</AppDrawer.Description>
+        </Stack>
       </AppDrawer.Header>
 
       <AppDrawer.Content>

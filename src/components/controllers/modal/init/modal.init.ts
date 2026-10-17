@@ -39,7 +39,7 @@ export function resolveModalConfig(props: AppModalInitialProps): ResolvedModalCo
     size: props.size ?? 'md',
     variant: props.variant ?? 'default',
     centered: props.centered ?? true,
-    radius: props.radius ?? 'lg',
+    radius: props.radius ?? 'xl',
     withCloseButton: props.withCloseButton ?? true,
     closeOnClickOutside: props.closeOnClickOutside ?? true,
     closeOnEscape: props.closeOnEscape ?? true,

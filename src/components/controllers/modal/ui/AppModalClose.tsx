@@ -27,4 +27,4 @@ export function AppModalClose({ size = 'md', className }: AppModalCloseProps) {
       </ActionIcon>
     </Tooltip>
   );
-}
+}AppModalClose.displayName = 'AppModalClose';

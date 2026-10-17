@@ -116,17 +116,18 @@ export function AcademicYearDrawer({
           icon={isEditing ? <IconCalendar size={20} /> : <IconCalendarPlus size={20} />}
           color={isEditing ? 'blue' : 'primary'}
         />
-        <AppDrawer.Title>
-          {isEditing
-            ? academicYearFormLabels.editTitle
-            : academicYearFormLabels.createTitle}
-        </AppDrawer.Title>
-        <AppDrawer.Description>
-          {isEditing
-            ? 'تحديث بيانات السنة والتواريخ المعتمدة'
-            : 'إضافة سنة دراسية جديدة للمعهد لتنظيم الفصول والطلاب'}
-        </AppDrawer.Description>
-        <AppDrawer.Close />
+        <Stack gap={2} style={{ flex: 1, minWidth: 0 }}>
+          <AppDrawer.Title>
+            {isEditing
+              ? academicYearFormLabels.editTitle
+              : academicYearFormLabels.createTitle}
+          </AppDrawer.Title>
+          <AppDrawer.Description>
+            {isEditing
+              ? 'تحديث بيانات السنة والتواريخ المعتمدة'
+              : 'إضافة سنة دراسية جديدة للمعهد لتنظيم الفصول والطلاب'}
+          </AppDrawer.Description>
+        </Stack>
       </AppDrawer.Header>
 
       <AppDrawer.Content>

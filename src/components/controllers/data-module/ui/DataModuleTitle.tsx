@@ -1,6 +1,6 @@
 'use client';
 
-import { Badge, Group, Stack, Text, Title } from '@mantine/core';
+import { Badge, Group, Stack, Text, Title, rem } from '@mantine/core';
 import { useDataModuleMirror } from '../store/useDataModuleMirror';
 
 export interface DataModuleTitleProps {
@@ -20,8 +20,8 @@ export function DataModuleTitle(props: DataModuleTitleProps) {
 
   return (
     <Stack gap={4}>
-      <Group gap="xs" align="center">
-        <Title order={2} size="h3" fw={700} style={{ letterSpacing: '-0.3px' }}>
+      <Group gap="sm" align="center">
+        <Title order={2} fz={{ base: 20, sm: 24 }} fw={800} style={{ letterSpacing: '-0.4px' }}>
           {title}
         </Title>
         {showBadge && total !== undefined && (
@@ -31,13 +31,18 @@ export function DataModuleTitle(props: DataModuleTitleProps) {
             radius="xl"
             size="md"
             fw={700}
+            style={{
+              paddingLeft: rem(12),
+              paddingRight: rem(12),
+              height: rem(26),
+            }}
           >
             {total}
           </Badge>
         )}
       </Group>
       {description && (
-        <Text size="sm" c="dimmed" fw={400}>
+        <Text size="sm" c="dimmed" fw={400} style={{ lineHeight: 1.5 }}>
           {description}
         </Text>
       )}

@@ -19,10 +19,10 @@ export function DataModuleFooter({ children, showSummary = true }: DataModuleFoo
   const end = Math.min(page * limit, total);
 
   return (
-    <Group justify="space-between" align="center" mt="md" wrap="wrap" gap="sm">
+    <Group justify="space-between" align="center" mt="lg" px="xs" wrap="wrap" gap="md">
       {showSummary && total > 0 ? (
-        <Text size="xs" c="dimmed">
-          عرض <Text span fw={600} c="var(--mantine-color-text)">{start}</Text> - <Text span fw={600} c="var(--mantine-color-text)">{end}</Text> من أصل <Text span fw={600} c="var(--mantine-color-text)">{total}</Text> سجل
+        <Text size="xs" c="dimmed" fw={500}>
+          عرض <Text span fw={700} c="var(--mantine-color-text)">{start}</Text> - <Text span fw={700} c="var(--mantine-color-text)">{end}</Text> من أصل <Text span fw={700} c="var(--mantine-color-text)">{total}</Text> سجل
         </Text>
       ) : (
         <span />

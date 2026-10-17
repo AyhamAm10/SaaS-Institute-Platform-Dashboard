@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Modal } from '@mantine/core';
+import { Box, Modal, rem } from '@mantine/core';
 import { ReactNode } from 'react';
 import { useModalMirror } from '../store/useModalMirror';
 
@@ -35,7 +35,9 @@ export function AppModalRoot({ children, zIndex = 350, className }: AppModalRoot
           maxHeight: '90vh',
           overflow: 'hidden',
           direction: 'rtl',
-          boxShadow: '0 12px 36px rgba(0, 0, 0, 0.12)',
+          borderRadius: rem(24),
+          boxShadow: '0 24px 60px -12px rgba(0, 0, 0, 0.14)',
+          border: '1px solid var(--mantine-color-gray-2)',
         },
         body: {
           display: 'flex',

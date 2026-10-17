@@ -110,7 +110,11 @@ export function MobileSidebar() {
                   variant="subtle"
                   styles={{
                     root: {
-                      borderRadius: rem(12),
+                      borderRadius: rem(14),
+                      paddingTop: rem(10),
+                      paddingBottom: rem(10),
+                      paddingLeft: rem(14),
+                      paddingRight: rem(14),
                     },
                   }}
                 >
@@ -128,8 +132,10 @@ export function MobileSidebar() {
                           color="primary"
                           styles={{
                             root: {
-                              borderRadius: rem(10),
-                              paddingRight: rem(32),
+                              borderRadius: rem(12),
+                              paddingRight: rem(36),
+                              paddingTop: rem(8),
+                              paddingBottom: rem(8),
                               backgroundColor: isSubActive
                                 ? 'var(--mantine-color-primary-0)'
                                 : 'transparent',
@@ -156,7 +162,7 @@ export function MobileSidebar() {
                 label={item.label}
                 leftSection={
                   <ThemeIcon
-                    size={30}
+                    size={32}
                     radius="md"
                     variant={isActive ? 'filled' : 'light'}
                     color={isActive ? 'primary' : 'gray'}
@@ -168,7 +174,11 @@ export function MobileSidebar() {
                 variant="light"
                 styles={{
                   root: {
-                    borderRadius: rem(12),
+                    borderRadius: rem(14),
+                    paddingTop: rem(10),
+                    paddingBottom: rem(10),
+                    paddingLeft: rem(14),
+                    paddingRight: rem(14),
                     backgroundColor: isActive ? 'var(--mantine-color-primary-0)' : undefined,
                     color: isActive ? 'var(--mantine-color-primary-7)' : undefined,
                   },

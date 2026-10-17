@@ -59,8 +59,8 @@ export function DataModuleTable<T = Record<string, unknown>>(props: DataModuleTa
   return (
     <ScrollArea type="auto">
       <Table
-        verticalSpacing="sm"
-        horizontalSpacing="md"
+        verticalSpacing="md"
+        horizontalSpacing="lg"
         highlightOnHover
         withTableBorder={false}
         withColumnBorders={false}
@@ -83,10 +83,11 @@ export function DataModuleTable<T = Record<string, unknown>>(props: DataModuleTa
                   style={{
                     width: col.width,
                     textAlign: col.align ?? 'right',
-                    fontSize: rem(13),
-                    fontWeight: 600,
-                    color: 'var(--mantine-color-gray-7)',
-                    padding: `${rem(12)} ${rem(16)}`,
+                    fontSize: rem(12.5),
+                    fontWeight: 700,
+                    color: 'var(--mantine-color-gray-6)',
+                    letterSpacing: '0.2px',
+                    padding: `${rem(14)} ${rem(20)}`,
                     whiteSpace: 'nowrap',
                   }}
                 >
@@ -139,8 +140,9 @@ export function DataModuleTable<T = Record<string, unknown>>(props: DataModuleTa
                     key={col.key}
                     style={{
                       textAlign: col.align ?? 'right',
-                      fontSize: rem(13),
-                      padding: `${rem(14)} ${rem(16)}`,
+                      fontSize: rem(13.5),
+                      fontWeight: 500,
+                      padding: `${rem(16)} ${rem(20)}`,
                     }}
                   >
                     {col.render ? col.render(row, index) : ((row as Record<string, unknown>)?.[col.key] as ReactNode ?? '—')}

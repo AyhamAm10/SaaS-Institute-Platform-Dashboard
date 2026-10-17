@@ -16,7 +16,7 @@ export function AppDrawerContent({
   children,
   loading,
   loadingText = 'جاري التحميل...',
-  padding = 'lg',
+  padding = 'xl',
   className,
 }: AppDrawerContentProps) {
   const storeLoading = useDrawerMirror('loading');

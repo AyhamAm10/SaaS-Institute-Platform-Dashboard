@@ -58,11 +58,12 @@ export function SetCurrentAcademicYearDrawer({
           icon={<IconCalendarCheck size={20} />}
           color="teal"
         />
-        <AppDrawer.Title>تعيين السنة الحالية النشطة</AppDrawer.Title>
-        <AppDrawer.Description>
-          تغيير السنة الدراسية الحالية المعتمدة لكافة عمليات المعهد
-        </AppDrawer.Description>
-        <AppDrawer.Close />
+        <Stack gap={2} style={{ flex: 1, minWidth: 0 }}>
+          <AppDrawer.Title>تعيين السنة الحالية النشطة</AppDrawer.Title>
+          <AppDrawer.Description>
+            تغيير السنة الدراسية الحالية المعتمدة لكافة عمليات المعهد
+          </AppDrawer.Description>
+        </Stack>
       </AppDrawer.Header>
 
       <AppDrawer.Content>

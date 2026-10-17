@@ -14,7 +14,7 @@ export function AppModalFooter({ children, className }: AppModalFooterProps) {
   if (children) {
     return (
       <Box
-        px="lg"
+        px="xl"
         py="md"
         className={className}
         style={{
@@ -32,7 +32,7 @@ export function AppModalFooter({ children, className }: AppModalFooterProps) {
 
   return (
     <Box
-      px="lg"
+      px="xl"
       py="md"
       className={className}
       style={{

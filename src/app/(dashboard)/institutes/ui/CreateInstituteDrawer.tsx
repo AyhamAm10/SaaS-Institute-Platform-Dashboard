@@ -55,11 +55,12 @@ export function CreateInstituteDrawer({ onSubmit }: CreateInstituteDrawerProps) 
     <AppDrawer opened={opened} onClose={closeCreateDrawer} size="xl">
       <AppDrawer.Header>
         <AppDrawer.Icon icon={<IconBuildingCommunity size={22} />} color="primary" />
-        <AppDrawer.Title>{institutesLabels.createDrawerTitle}</AppDrawer.Title>
-        <AppDrawer.Description>
-          {institutesLabels.createDrawerDescription}
-        </AppDrawer.Description>
-        <AppDrawer.Close />
+        <Stack gap={2} style={{ flex: 1, minWidth: 0 }}>
+          <AppDrawer.Title>{institutesLabels.createDrawerTitle}</AppDrawer.Title>
+          <AppDrawer.Description>
+            {institutesLabels.createDrawerDescription}
+          </AppDrawer.Description>
+        </Stack>
       </AppDrawer.Header>
 
       <AppDrawer.Content>

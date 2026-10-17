@@ -218,7 +218,7 @@ export function AppDatePicker({
         opened={opened}
         onChange={setOpened}
         position="bottom-start"
-        radius="lg"
+        radius="xl"
         shadow="md"
         withArrow
         arrowSize={12}
@@ -237,7 +237,7 @@ export function AppDatePicker({
               component="button"
               type="button"
               pointer
-              radius="md"
+              radius="xl"
               size="md"
               disabled={disabled}
               leftSection={
@@ -268,23 +268,25 @@ export function AppDatePicker({
               }
               styles={{
                 input: {
-                  borderRadius: rem(12),
+                  borderRadius: rem(16),
                   borderColor: error
                     ? 'var(--mantine-color-error)'
-                    : 'var(--mantine-color-gray-3)',
+                    : 'var(--mantine-color-gray-2)',
                   backgroundColor: 'var(--mantine-color-gray-0)',
-                  fontSize: rem(13.5),
+                  fontSize: rem(14),
                   fontWeight: selectedDate ? 500 : 400,
                   color: selectedDate
                     ? 'var(--mantine-color-text)'
                     : 'var(--mantine-color-placeholder)',
                   textAlign: 'right',
+                  height: rem(48),
+                  minHeight: rem(48),
                   paddingLeft: rem(36),
                   paddingRight: rem(36),
                   transition: 'border-color 150ms ease, box-shadow 150ms ease',
                   '&:focus': {
-                    borderColor: 'var(--mantine-color-primary-6)',
-                    boxShadow: '0 0 0 3px rgba(30, 78, 140, 0.1)',
+                    borderColor: 'var(--mantine-color-primary-4)',
+                    boxShadow: '0 0 0 4px rgba(32, 183, 223, 0.14)',
                   },
                 },
               }}
@@ -294,7 +296,16 @@ export function AppDatePicker({
           </Box>
         </Popover.Target>
 
-        <Popover.Dropdown p="xs" style={{ width: rem(330), maxWidth: '95vw' }}>
+        <Popover.Dropdown
+          p="md"
+          style={{
+            width: rem(340),
+            maxWidth: '95vw',
+            borderRadius: rem(20),
+            boxShadow: '0 12px 36px rgba(0, 0, 0, 0.08)',
+            border: '1px solid var(--mantine-color-gray-2)',
+          }}
+        >
           <Stack gap="xs">
             {/* Header: Year & Month Direct Selectors + Step Navigators */}
             <Group justify="space-between" align="center" wrap="nowrap" gap={4}>

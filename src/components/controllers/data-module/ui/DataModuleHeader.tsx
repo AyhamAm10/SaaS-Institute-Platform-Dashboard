@@ -9,7 +9,7 @@ export interface DataModuleHeaderProps {
 
 export function DataModuleHeader({ children }: DataModuleHeaderProps) {
   return (
-    <Group justify="space-between" align="center" mb="lg" wrap="wrap" gap="md">
+    <Group justify="space-between" align="center" mb="xl" wrap="wrap" gap="lg">
       {children}
     </Group>
   );

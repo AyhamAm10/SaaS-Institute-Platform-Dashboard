@@ -17,7 +17,7 @@ export function AppModalContent({
   children,
   loading,
   loadingText = 'جاري التحميل...',
-  padding = 'lg',
+  padding = 'xl',
   maxHeight = '70vh',
   className,
 }: AppModalContentProps) {

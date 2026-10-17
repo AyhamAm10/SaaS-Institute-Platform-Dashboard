@@ -27,4 +27,4 @@ export function AppDrawerClose({ size = 'md', className }: AppDrawerCloseProps) 
       </ActionIcon>
     </Tooltip>
   );
-}
+}AppDrawerClose.displayName = 'AppDrawerClose';

@@ -134,13 +134,14 @@ export function SectionDetailsDrawer({
     >
       <AppDrawer.Header>
         <AppDrawer.Icon icon={<IconInfoCircle size={20} />} color="blue" />
-        <AppDrawer.Title>{sectionFormLabels.detailsTitle}</AppDrawer.Title>
-        <AppDrawer.Description>
-          {details?.name
-            ? `بيانات وإحصائيات شُعبة ${details.name}`
-            : 'عرض تفاصيل الشُعبة والمقررات المسندة'}
-        </AppDrawer.Description>
-        <AppDrawer.Close />
+        <Stack gap={2} style={{ flex: 1, minWidth: 0 }}>
+          <AppDrawer.Title>{sectionFormLabels.detailsTitle}</AppDrawer.Title>
+          <AppDrawer.Description>
+            {details?.name
+              ? `بيانات وإحصائيات شُعبة ${details.name}`
+              : 'عرض تفاصيل الشُعبة والمقررات المسندة'}
+          </AppDrawer.Description>
+        </Stack>
       </AppDrawer.Header>
 
       <AppDrawer.Content>

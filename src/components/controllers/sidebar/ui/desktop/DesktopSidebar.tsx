@@ -150,7 +150,7 @@ export function DesktopSidebar() {
 
       {/* Navigation Scroll Area */}
       <AppShell.Section grow component={ScrollArea} scrollbars="y">
-        <Stack gap="xs">
+        <Stack gap={6}>
           {items.map((item) => {
             const isActive = isNavItemActive(item, pathname || '/');
             const IconComponent = item.icon;
@@ -219,7 +219,7 @@ export function DesktopSidebar() {
                   label={item.label}
                   leftSection={
                     <ThemeIcon
-                      size={32}
+                      size={34}
                       radius="lg"
                       variant={isActive ? 'filled' : 'light'}
                       color={isActive ? 'primary' : 'gray'}
@@ -233,7 +233,11 @@ export function DesktopSidebar() {
                   variant="subtle"
                   styles={{
                     root: {
-                      borderRadius: rem(12),
+                      borderRadius: rem(14),
+                      paddingTop: rem(10),
+                      paddingBottom: rem(10),
+                      paddingLeft: rem(14),
+                      paddingRight: rem(14),
                       backgroundColor: isActive && !isSectionOpen ? 'var(--mantine-color-primary-0)' : undefined,
                     },
                   }}
@@ -252,8 +256,10 @@ export function DesktopSidebar() {
                           color="primary"
                           styles={{
                             root: {
-                              borderRadius: rem(10),
-                              paddingRight: rem(36),
+                              borderRadius: rem(12),
+                              paddingRight: rem(38),
+                              paddingTop: rem(8),
+                              paddingBottom: rem(8),
                               backgroundColor: isSubActive
                                 ? 'var(--mantine-color-primary-0)'
                                 : 'transparent',
@@ -279,7 +285,7 @@ export function DesktopSidebar() {
                 label={item.label}
                 leftSection={
                   <ThemeIcon
-                    size={32}
+                    size={34}
                     radius="lg"
                     variant={isActive ? 'filled' : 'light'}
                     color={isActive ? 'primary' : 'gray'}
@@ -291,7 +297,11 @@ export function DesktopSidebar() {
                 variant="light"
                 styles={{
                   root: {
-                    borderRadius: rem(12),
+                    borderRadius: rem(14),
+                    paddingTop: rem(10),
+                    paddingBottom: rem(10),
+                    paddingLeft: rem(14),
+                    paddingRight: rem(14),
                     backgroundColor: isActive ? 'var(--mantine-color-primary-0)' : undefined,
                     color: isActive ? 'var(--mantine-color-primary-7)' : undefined,
                   },
@@ -314,8 +324,8 @@ export function DesktopSidebar() {
                 alignItems: 'center',
                 justifyContent: 'center',
                 width: '100%',
-                padding: rem(8),
-                borderRadius: rem(10),
+                padding: rem(10),
+                borderRadius: rem(12),
                 color: 'var(--mantine-color-dimmed)',
               }}
             >
@@ -332,8 +342,8 @@ export function DesktopSidebar() {
               alignItems: 'center',
               justifyContent: 'space-between',
               width: '100%',
-              padding: rem(10),
-              borderRadius: rem(12),
+              padding: `${rem(12)} ${rem(14)}`,
+              borderRadius: rem(14),
               color: 'var(--mantine-color-red-6)',
               backgroundColor: 'var(--mantine-color-red-0)',
               transition: 'background-color 150ms ease',

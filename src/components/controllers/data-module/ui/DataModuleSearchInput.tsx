@@ -14,7 +14,7 @@ export interface DataModuleSearchInputProps {
 
 export function DataModuleSearchInput({
   placeholder,
-  width = rem(280),
+  width = rem(320),
   debounceMs = 300,
 }: DataModuleSearchInputProps) {
   const storeSearch = useDataModuleMirror('search');

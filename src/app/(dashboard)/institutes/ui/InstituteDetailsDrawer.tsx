@@ -55,11 +55,12 @@ export function InstituteDetailsDrawer() {
     <AppDrawer opened={opened} onClose={closeDetailsDrawer} size="lg">
       <AppDrawer.Header>
         <AppDrawer.Icon icon={<IconBuildingCommunity size={22} />} color="teal" />
-        <AppDrawer.Title>{selectedInstitute.name}</AppDrawer.Title>
-        <AppDrawer.Description>
-          {institutesLabels.detailsDrawerDescription}
-        </AppDrawer.Description>
-        <AppDrawer.Close />
+        <Stack gap={2} style={{ flex: 1, minWidth: 0 }}>
+          <AppDrawer.Title>{selectedInstitute.name}</AppDrawer.Title>
+          <AppDrawer.Description>
+            {institutesLabels.detailsDrawerDescription}
+          </AppDrawer.Description>
+        </Stack>
       </AppDrawer.Header>
 
       <AppDrawer.Content>

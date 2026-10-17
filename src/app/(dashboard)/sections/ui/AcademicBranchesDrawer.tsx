@@ -76,11 +76,12 @@ export function AcademicBranchesDrawer({
     <AppDrawer opened={opened} onClose={onClose} size="lg">
       <AppDrawer.Header>
         <AppDrawer.Icon icon={<IconGitBranch size={20} />} color="teal" />
-        <AppDrawer.Title>{sectionFormLabels.branchesManagement}</AppDrawer.Title>
-        <AppDrawer.Description>
-          عرض وإدارة الفروع والمسارات الأكاديمية الخاصة بالمعهد (مثل العلمي، الأدبي، المهني)
-        </AppDrawer.Description>
-        <AppDrawer.Close />
+        <Stack gap={2} style={{ flex: 1, minWidth: 0 }}>
+          <AppDrawer.Title>{sectionFormLabels.branchesManagement}</AppDrawer.Title>
+          <AppDrawer.Description>
+            عرض وإدارة الفروع والمسارات الأكاديمية الخاصة بالمعهد (مثل العلمي، الأدبي، المهني)
+          </AppDrawer.Description>
+        </Stack>
       </AppDrawer.Header>
 
       <AppDrawer.Content>

@@ -72,17 +72,18 @@ export function SectionDrawer({
           icon={isEditing ? <IconEdit size={20} /> : <IconSchool size={20} />}
           color={isEditing ? 'blue' : 'primary'}
         />
-        <AppDrawer.Title>
-          {isEditing
-            ? sectionFormLabels.editTitle
-            : sectionFormLabels.createTitle}
-        </AppDrawer.Title>
-        <AppDrawer.Description>
-          {isEditing
-            ? 'تحديث بيانات ومرحلة الشُعبة الدراسية'
-            : 'إضافة شُعبة دراسية جديدة وتعيين الرسوم والمرحلة التعليمية'}
-        </AppDrawer.Description>
-        <AppDrawer.Close />
+        <Stack gap={2} style={{ flex: 1, minWidth: 0 }}>
+          <AppDrawer.Title>
+            {isEditing
+              ? sectionFormLabels.editTitle
+              : sectionFormLabels.createTitle}
+          </AppDrawer.Title>
+          <AppDrawer.Description>
+            {isEditing
+              ? 'تحديث بيانات ومرحلة الشُعبة الدراسية'
+              : 'إضافة شُعبة دراسية جديدة وتعيين الرسوم والمرحلة التعليمية'}
+          </AppDrawer.Description>
+        </Stack>
       </AppDrawer.Header>
 
       <AppDrawer.Content>

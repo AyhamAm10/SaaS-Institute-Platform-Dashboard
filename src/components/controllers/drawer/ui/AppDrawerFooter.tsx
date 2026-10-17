@@ -15,7 +15,7 @@ export function AppDrawerFooter({ children, className }: AppDrawerFooterProps) {
   if (children) {
     return (
       <Box
-        px="lg"
+        px="xl"
         py="md"
         className={className}
         style={{
@@ -34,7 +34,7 @@ export function AppDrawerFooter({ children, className }: AppDrawerFooterProps) {
   // Default simple cancel/save buttons
   return (
     <Box
-      px="lg"
+      px="xl"
       py="md"
       className={className}
       style={{

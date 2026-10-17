@@ -19,9 +19,9 @@ export function DataModuleEmpty(props: DataModuleEmptyProps) {
   const description = props.description ?? storeDesc;
 
   return (
-    <Box py={50} px="md">
+    <Box py={64} px="md">
       <Stack align="center" justify="center" gap="xs">
-        <ThemeIcon size={56} radius="xl" variant="light" color="gray">
+        <ThemeIcon size={64} radius="xl" variant="light" color="gray">
           {props.icon ?? <IconDatabaseOff size={28} stroke={1.5} />}
         </ThemeIcon>
         <Text fw={600} size="md" c="var(--mantine-color-text)">

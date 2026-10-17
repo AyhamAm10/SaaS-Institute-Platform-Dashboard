@@ -136,8 +136,8 @@ export function DashboardHeader() {
               <Menu shadow="md" width={220} position="bottom-start" radius="lg">
                 <Menu.Target>
                   <Paper
-                    px="sm"
-                    py={6}
+                    px="md"
+                    py={7}
                     radius="xl"
                     withBorder
                     style={{
@@ -146,11 +146,11 @@ export function DashboardHeader() {
                       borderColor: 'var(--mantine-color-gray-2)',
                       display: 'flex',
                       alignItems: 'center',
-                      gap: rem(6),
-                      transition: 'border-color 150ms ease',
+                      gap: rem(8),
+                      transition: 'all 150ms ease',
                     }}
                   >
-                    <IconBuildingCommunity size={15} color="var(--mantine-color-teal-6)" />
+                    <IconBuildingCommunity size={16} color="var(--mantine-color-teal-6)" />
                     <Text size="xs" fw={700} lineClamp={1}>
                       {activeBranchName}
                     </Text>
@@ -185,8 +185,8 @@ export function DashboardHeader() {
               <Menu shadow="md" width={220} position="bottom-start" radius="lg">
                 <Menu.Target>
                   <Paper
-                    px="sm"
-                    py={6}
+                    px="md"
+                    py={7}
                     radius="xl"
                     withBorder
                     style={{
@@ -195,11 +195,11 @@ export function DashboardHeader() {
                       borderColor: 'var(--mantine-color-gray-2)',
                       display: 'flex',
                       alignItems: 'center',
-                      gap: rem(6),
-                      transition: 'border-color 150ms ease',
+                      gap: rem(8),
+                      transition: 'all 150ms ease',
                     }}
                   >
-                    <IconCalendarEvent size={15} color="var(--mantine-color-primary-6)" />
+                    <IconCalendarEvent size={16} color="var(--mantine-color-primary-6)" />
                     <Text size="xs" fw={700} lineClamp={1}>
                       {activeYearName}
                     </Text>
@@ -239,14 +239,22 @@ export function DashboardHeader() {
             placeholder="البحث عن..."
             size="sm"
             radius="xl"
-            rightSection={<IconSearch size={16} stroke={2} color="var(--mantine-color-primary-6)" />}
+            rightSection={<IconSearch size={16} stroke={2} color="var(--mantine-color-gray-5)" />}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.currentTarget.value)}
             styles={{
               input: {
                 backgroundColor: 'var(--mantine-color-gray-0)',
                 border: '1px solid var(--mantine-color-gray-2)',
+                height: rem(42),
+                borderRadius: rem(9999),
                 paddingRight: rem(38),
+                transition: 'all 150ms ease',
+                '&:focus': {
+                  backgroundColor: '#ffffff',
+                  borderColor: 'var(--mantine-color-primary-4)',
+                  boxShadow: '0 0 0 3px rgba(32, 183, 223, 0.12)',
+                },
               },
             }}
           />
@@ -280,13 +288,16 @@ export function DashboardHeader() {
           <Menu shadow="lg" width={220} position="bottom-start" radius="lg">
             <Menu.Target>
               <Paper
-                p="xs"
+                px="sm"
+                py={5}
                 radius="xl"
                 withBorder
                 style={{
                   cursor: 'pointer',
                   borderColor: 'var(--mantine-color-gray-2)',
-                  transition: 'background-color 150ms ease',
+                  backgroundColor: 'var(--mantine-color-body)',
+                  transition: 'all 150ms ease',
+                  boxShadow: '0 1px 3px rgba(0, 0, 0, 0.02)',
                 }}
               >
                 <Group gap="xs" wrap="nowrap">

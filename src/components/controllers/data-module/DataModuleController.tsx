@@ -85,7 +85,7 @@ export function DataModuleController<T = unknown>({
 
   return (
     <DataModuleContext.Provider value={store}>
-      <Box p={{ base: 'xs', sm: 'md' }}>
+      <Box p={{ base: 'md', sm: 'lg', md: 'xl' }}>
         {children ?? defaultContent}
       </Box>
     </DataModuleContext.Provider>
