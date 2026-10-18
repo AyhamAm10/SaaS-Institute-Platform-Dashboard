@@ -4,3 +4,4 @@ export * from './modal';
 export * from './data-module';
 export * from './layout';
 export * from './sidebar';
+export * from './stepper';

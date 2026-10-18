@@ -25,7 +25,7 @@ export function DashboardLayoutView({ children }: DashboardLayoutViewProps) {
         breakpoint: 'md',
         collapsed: { mobile: !isMobileOpen },
       }}
-      padding={{ base: 'md', sm: 'lg', md: 'xl' }}
+      padding={0}
     >
       <DashboardHeader />
       <SidebarFactory />

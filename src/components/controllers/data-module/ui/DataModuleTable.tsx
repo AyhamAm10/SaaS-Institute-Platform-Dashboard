@@ -59,8 +59,8 @@ export function DataModuleTable<T = Record<string, unknown>>(props: DataModuleTa
   return (
     <ScrollArea type="auto">
       <Table
-        verticalSpacing="md"
-        horizontalSpacing="lg"
+        verticalSpacing="xs"
+        horizontalSpacing="md"
         highlightOnHover
         withTableBorder={false}
         withColumnBorders={false}
@@ -84,10 +84,10 @@ export function DataModuleTable<T = Record<string, unknown>>(props: DataModuleTa
                     width: col.width,
                     textAlign: col.align ?? 'right',
                     fontSize: rem(12.5),
-                    fontWeight: 700,
-                    color: 'var(--mantine-color-gray-6)',
-                    letterSpacing: '0.2px',
-                    padding: `${rem(14)} ${rem(20)}`,
+                    fontWeight: 600,
+                    color: 'var(--mantine-color-gray-7)',
+                    letterSpacing: '0.1px',
+                    padding: `${rem(14)} ${rem(18)}`,
                     whiteSpace: 'nowrap',
                   }}
                 >
@@ -101,7 +101,7 @@ export function DataModuleTable<T = Record<string, unknown>>(props: DataModuleTa
                         cursor: 'pointer',
                       }}
                     >
-                      <Text size="xs" fw={700}>
+                      <Text size="xs" fw={600} style={{ fontSize: rem(12.5) }}>
                         {col.title}
                       </Text>
                       <ActionIcon size="xs" variant="transparent" color="gray">
@@ -140,9 +140,9 @@ export function DataModuleTable<T = Record<string, unknown>>(props: DataModuleTa
                     key={col.key}
                     style={{
                       textAlign: col.align ?? 'right',
-                      fontSize: rem(13.5),
-                      fontWeight: 500,
-                      padding: `${rem(16)} ${rem(20)}`,
+                      fontSize: rem(13),
+                      fontWeight: 400,
+                      padding: `${rem(12)} ${rem(18)}`,
                     }}
                   >
                     {col.render ? col.render(row, index) : ((row as Record<string, unknown>)?.[col.key] as ReactNode ?? '—')}

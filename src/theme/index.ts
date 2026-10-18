@@ -10,7 +10,7 @@ import { defaultFontFamily, defaultFontFamilyMonospace, defaultHeadings } from '
 import { defaultComponents } from './components';
 
 /**
- * Base Theme for SaaS Admin Platform - Curved Organic Modern Arabic Style
+ * Base Theme for SaaS Admin Platform - Clean, Classic, Elegant Arabic Style
  */
 export const baseTheme = createTheme({
   primaryColor: 'primary',
@@ -25,14 +25,14 @@ export const baseTheme = createTheme({
   fontFamilyMonospace: defaultFontFamilyMonospace,
   headings: defaultHeadings,
   components: defaultComponents,
-  defaultRadius: 'xl',
+  defaultRadius: 'md',
   cursorType: 'pointer',
   spacing: {
-    xs: rem(8),
-    sm: rem(12),
-    md: rem(16),
-    lg: rem(24),
-    xl: rem(32),
+    xs: rem(6),
+    sm: rem(10),
+    md: rem(14),
+    lg: rem(20),
+    xl: rem(28),
   },
 });
 

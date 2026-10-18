@@ -15,7 +15,7 @@ export function MainContent({ children }: MainContentProps) {
         minHeight: '100vh',
       }}
     >
-      <Container size="xl" py="lg" px={{ base: 'xs', sm: 'md', lg: 'xl' }}>
+      <Container fluid px={{ base: 'md', sm: 'lg', md: 'xl' }} py="md">
         {children}
       </Container>
     </AppShell.Main>

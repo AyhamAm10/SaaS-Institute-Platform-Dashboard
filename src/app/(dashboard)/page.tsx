@@ -1,4 +1,10 @@
+import { Metadata } from 'next';
 import { RenderUi } from './render-ui';
+
+export const metadata: Metadata = {
+  title: 'لوحة التحكم والمتابعة | منصة إدارة المعاهد',
+  description: 'لوحة المؤشرات والتحليلات الأكاديمية والتشغيلية للمعهد',
+};
 
 /**
  * Dashboard Home Page

@@ -1,25 +1,18 @@
 'use client';
 
-import {
-  Button,
-  Group,
-  Paper,
-  SimpleGrid,
-  Stack,
-  Text,
-  Title,
-} from '@mantine/core';
+import { useMemo } from 'react';
+import { ActionIcon, Button, Tooltip } from '@mantine/core';
 import {
   IconPlus,
   IconRefresh,
-  IconSearch,
   IconUserCheck,
 } from '@tabler/icons-react';
-import { AppInput, AppSelect } from '@/src/components/controllers';
+import { DataModuleController } from '@/src/components/controllers/data-module';
+import { AppSelect } from '@/src/components/controllers/input';
 import { useBranchesQuery, Teacher } from '@/src/core/api';
 import { useOperationalContext } from '@/src/core/context';
 import { useTeachersMirror } from '../store/useTeachersMirror';
-import { TeachersTable } from './TeachersTable';
+import { getTeachersColumns } from './TeachersTable';
 import { TeacherFormDrawer } from './TeacherFormDrawer';
 import { TeacherDetailsDrawer } from './TeacherDetailsDrawer';
 import { TeacherDeleteModal } from './TeacherDeleteModal';
@@ -55,90 +48,112 @@ export function TeachersView({
   setNewAvailEnd,
   onAddAvailabilityWindow,
 }: TeachersViewProps) {
+  const data = useTeachersMirror('data');
   const search = useTeachersMirror('search');
   const branchId = useTeachersMirror('branchId');
   const isFetching = useTeachersMirror('isFetching');
+  const isLoading = useTeachersMirror('isLoading');
+  const page = useTeachersMirror('page');
+  const totalPages = useTeachersMirror('totalPages');
+  const total = useTeachersMirror('total');
+  const limit = useTeachersMirror('limit');
+  const setPage = useTeachersMirror('setPage');
   const setSearch = useTeachersMirror('setSearch');
   const setBranchId = useTeachersMirror('setBranchId');
   const openCreateDrawer = useTeachersMirror('openCreateDrawer');
+  const openEditDrawer = useTeachersMirror('openEditDrawer');
+  const openDetailsDrawer = useTeachersMirror('openDetailsDrawer');
+  const openDeleteModal = useTeachersMirror('openDeleteModal');
   const { activeBranchId } = useOperationalContext();
 
   const { data: branches } = useBranchesQuery();
-  const branchOptions = [
-    { value: '', label: 'كافة الفروع' },
-    ...(branches || []).map((b: any) => ({
-      value: String(b.id),
-      label: b.name,
-    })),
-  ];
+  const branchOptions = useMemo(
+    () => [
+      { value: 'all', label: 'كافة الفروع' },
+      ...(branches || []).map((b: any) => ({
+        value: String(b.id),
+        label: b.name,
+      })),
+    ],
+    [branches],
+  );
+
+  const columns = useMemo(
+    () => getTeachersColumns(openDetailsDrawer, openEditDrawer, openDeleteModal),
+    [openDetailsDrawer, openEditDrawer, openDeleteModal],
+  );
 
   return (
-    <Stack gap="lg">
-      {/* Header */}
-      <Paper p="lg" radius="xl" withBorder>
-        <Group justify="space-between" align="center" wrap="wrap">
-          <Group gap="sm">
-            <Paper
-              p="xs"
-              radius="xl"
-              bg="var(--mantine-color-blue-0)"
-              c="blue.7"
-            >
-              <IconUserCheck size={28} />
-            </Paper>
-            <Stack gap={2}>
-              <Title order={2} fw={800}>
-                الكادر التدريسي
-              </Title>
-              <Text c="dimmed" size="xs">
-                إدارة المعلمين، تخصصاتهم، مؤهلات الفروع والمواد، وتحديد أوقات تفرغهم الأسبوعية
-              </Text>
-            </Stack>
-          </Group>
-
-          <Group gap="sm">
+    <>
+      <DataModuleController
+        title="الكادر التدريسي"
+        description="إدارة المعلمين، تخصصاتهم، مؤهلات الفروع والمواد، وتحديد أوقات تفرغهم الأسبوعية"
+        data={data}
+        columns={columns}
+        total={total}
+        page={page}
+        limit={limit}
+        totalPages={totalPages}
+        isLoading={isLoading}
+        isFetching={isFetching}
+        emptyMessage="لا يوجد معلمون مسجلون حالياً"
+        emptyDescription="يمكنك إضافة معلم جديد بالنقر على زر إضافة معلم في الأعلى"
+        searchPlaceholder="البحث بالاسم أو رقم الهاتف..."
+        keyExtractor={(item: Teacher) => item.id}
+        onPageChange={setPage}
+        onSearchChange={setSearch}
+      >
+        <DataModuleController.Header>
+          <DataModuleController.Title
+            icon={<IconUserCheck size={18} />}
+            badgeLabel="معلم"
+          />
+          <DataModuleController.Actions>
             <Button
-              leftSection={<IconRefresh size={18} />}
-              variant="light"
-              color="gray"
-              radius="xl"
-              onClick={onRefresh}
-              loading={isFetching}
-            >
-              تحديث
-            </Button>
-            <Button
-              leftSection={<IconPlus size={18} />}
-              radius="xl"
+              leftSection={<IconPlus size={16} />}
               onClick={() => openCreateDrawer(activeBranchId ?? undefined)}
+              color="primary"
+              radius="md"
             >
               إضافة معلم
             </Button>
-          </Group>
-        </Group>
-      </Paper>
+          </DataModuleController.Actions>
+        </DataModuleController.Header>
 
-      {/* Filters Toolbar */}
-      <Paper p="md" radius="xl" withBorder>
-        <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="md">
-          <AppInput
-            placeholder="البحث بالاسم أو رقم الهاتف..."
-            value={search}
-            onChange={setSearch}
-            leftSection={<IconSearch size={16} />}
-            clearable
-          />
-          <AppSelect
-            placeholder="تصفية حسب الفرع"
-            data={branchOptions}
-            value={branchId ? String(branchId) : ''}
-            onChange={(val: any) => setBranchId(val ? Number(val) : undefined)}
-          />
-        </SimpleGrid>
-      </Paper>
+        <DataModuleController.FilterBar>
+          <DataModuleController.SearchInput placeholder="البحث بالاسم أو رقم الهاتف..." />
+          <DataModuleController.FilterSlot>
+            <AppSelect
+              placeholder="تصفية حسب الفرع"
+              data={branchOptions}
+              value={branchId ? String(branchId) : 'all'}
+              onChange={(val: any) => setBranchId(val && val !== 'all' ? Number(val) : undefined)}
+              clearable
+            />
+            {onRefresh && (
+              <Tooltip label="تحديث البيانات" withArrow position="top">
+                <ActionIcon
+                  variant="light"
+                  color="primary"
+                  size="md"
+                  radius="md"
+                  onClick={onRefresh}
+                  loading={isFetching}
+                  aria-label="تحديث البيانات"
+                >
+                  <IconRefresh size={16} />
+                </ActionIcon>
+              </Tooltip>
+            )}
+          </DataModuleController.FilterSlot>
+        </DataModuleController.FilterBar>
 
-      {/* Table */}
-      <TeachersTable />
+        <DataModuleController.Content>
+          <DataModuleController.Table />
+        </DataModuleController.Content>
+
+        <DataModuleController.Footer />
+      </DataModuleController>
 
       {/* Drawers and Modals */}
       <TeacherFormDrawer onSubmit={onSubmit} />
@@ -155,6 +170,6 @@ export function TeachersView({
         onAddAvailabilityWindow={onAddAvailabilityWindow}
       />
       <TeacherDeleteModal onConfirmDelete={onConfirmDelete} />
-    </Stack>
+    </>
   );
 }

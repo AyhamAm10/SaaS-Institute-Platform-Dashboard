@@ -10,16 +10,16 @@ export interface DataModuleFilterBarProps {
 export function DataModuleFilterBar({ children }: DataModuleFilterBarProps) {
   return (
     <Paper
-      p="sm"
+      p="md"
       px="lg"
-      radius="xl"
+      radius="md"
       withBorder
-      mb="lg"
+      mb="md"
       style={{
         backgroundColor: 'var(--mantine-color-body)',
         borderColor: 'var(--mantine-color-gray-2)',
-        borderRadius: rem(18),
-        boxShadow: '0 2px 10px rgba(0, 0, 0, 0.02)',
+        borderRadius: rem(8),
+        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.02)',
       }}
     >
       <Flex

@@ -1,12 +1,15 @@
 'use client';
 
-import { Badge, Group, Stack, Text, Title, rem } from '@mantine/core';
+import { Badge, Group, Stack, Text, ThemeIcon, Title, rem } from '@mantine/core';
+import { ReactNode } from 'react';
 import { useDataModuleMirror } from '../store/useDataModuleMirror';
 
 export interface DataModuleTitleProps {
   title?: string;
   description?: string;
   showBadge?: boolean;
+  badgeLabel?: string;
+  icon?: ReactNode;
 }
 
 export function DataModuleTitle(props: DataModuleTitleProps) {
@@ -19,30 +22,36 @@ export function DataModuleTitle(props: DataModuleTitleProps) {
   const showBadge = props.showBadge ?? true;
 
   return (
-    <Stack gap={4}>
-      <Group gap="sm" align="center">
-        <Title order={2} fz={{ base: 20, sm: 24 }} fw={800} style={{ letterSpacing: '-0.4px' }}>
+    <Stack gap={2}>
+      <Group gap="xs" align="center">
+        {props.icon && (
+          <ThemeIcon size={28} radius="md" color="primary" variant="light">
+            {props.icon}
+          </ThemeIcon>
+        )}
+        <Title order={2} fz={{ base: 17, sm: 20 }} fw={700}>
           {title}
         </Title>
         {showBadge && total !== undefined && (
           <Badge
             variant="light"
             color="primary"
-            radius="xl"
-            size="md"
-            fw={700}
+            radius="sm"
+            size="sm"
+            fw={600}
             style={{
-              paddingLeft: rem(12),
-              paddingRight: rem(12),
-              height: rem(26),
+              paddingLeft: rem(8),
+              paddingRight: rem(8),
+              height: rem(22),
+              fontSize: rem(11.5),
             }}
           >
-            {total}
+            {props.badgeLabel ? `${total} ${props.badgeLabel}` : total}
           </Badge>
         )}
       </Group>
       {description && (
-        <Text size="sm" c="dimmed" fw={400} style={{ lineHeight: 1.5 }}>
+        <Text size="xs" c="dimmed" fw={400} style={{ lineHeight: 1.4 }}>
           {description}
         </Text>
       )}

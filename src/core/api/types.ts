@@ -72,3 +72,14 @@ export interface ApiErrorResponse {
   message: string | string[];
   error?: string;
 }
+
+/**
+ * Standard Paginated Response Envelope
+ */
+export interface PaginatedResponse<T> {
+  data: T[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}

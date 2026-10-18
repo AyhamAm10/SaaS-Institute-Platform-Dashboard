@@ -210,6 +210,60 @@ import { AppDatePicker } from '@/src/components/controllers/date-picker';
    - `<AppModal.Cancel>` & `<AppModal.Confirm>`: Pre-styled button primitives wired to modal variant colors.
 4. **Pre-built destructive helper:** `<DeleteConfirmationModal />` is available from `@/src/components/controllers` for zero-boilerplate deletion confirmations.
 
+### 5.5 Mandatory Unified Data Views & Tables Standard (`DataModuleController`)
+
+> **CRITICAL ARCHITECTURAL CONSTITUTION:** It is **STRICTLY MANDATORY** across the entire platform to use `<DataModuleController />` (from `@/src/components/controllers/data-module`) for all tabular data displays, entity listings, search/filter bars, and pagination layouts.
+
+#### 1. Zero External Layout Manipulation Rule (Strictly Enforced)
+- **The Controller is the SOLE Authority and Source of Truth for Design:** All layout containers, borders, border radii, paddings, margins, table header (`Thead`) styling, column header typography, filter bar wrappers, empty states, and pagination footers are **100% owned, determined, and enforced by `DataModuleController`**.
+- **PROHIBITED:** Page views, feature components, and consumer code are **STRICTLY FORBIDDEN** from controlling or defining the layout from the outside. Creating custom outer `Card`s, outer `Paper`s, custom `Box` paddings, ad-hoc `Table.Thead` wrappers, bespoke filter cards, or manual pagination bars outside `DataModuleController` is an architectural violation.
+- **PERMITTED:** Consuming pages and features have full authority to pass data, columns, and custom functional elements via `children` slots (`<DataModuleController.Header>`, `<DataModuleController.Title>`, `<DataModuleController.Actions>`, `<DataModuleController.FilterBar>`, `<DataModuleController.SearchInput>`, `<DataModuleController.FilterSlot>`, `<DataModuleController.Content>`, `<DataModuleController.Table>`, `<DataModuleController.Footer>`). However, the enclosing layout, borders, paddings, and visual geometry remain immutable and governed solely by the controller.
+
+#### 2. Standard Compound Structure:
+```tsx
+<DataModuleController
+  title={labels.title}
+  description={labels.description}
+  data={data}
+  columns={columns}
+  total={total}
+  page={page}
+  limit={limit}
+  totalPages={totalPages}
+  isLoading={isLoading}
+  isFetching={isFetching}
+  searchPlaceholder={labels.searchPlaceholder}
+  emptyMessage={labels.emptyMessage}
+  emptyDescription={labels.emptyDescription}
+  keyExtractor={(item) => item.id}
+  onPageChange={setPage}
+  onSearchChange={setSearch}
+>
+  <DataModuleController.Header>
+    <DataModuleController.Title icon={<IconEntity size={18} />} badgeLabel="عنصر" />
+    <DataModuleController.Actions>
+      <Button leftSection={<IconPlus size={16} />} onClick={openCreate}>
+        إضافة جديد
+      </Button>
+    </DataModuleController.Actions>
+  </DataModuleController.Header>
+
+  <DataModuleController.FilterBar>
+    <DataModuleController.SearchInput placeholder={labels.searchPlaceholder} />
+    <DataModuleController.FilterSlot>
+      {/* Dropdown filters, custom selects, or refresh buttons */}
+    </DataModuleController.FilterSlot>
+    <DataModuleController.ResetButton />
+  </DataModuleController.FilterBar>
+
+  <DataModuleController.Content>
+    <DataModuleController.Table />
+  </DataModuleController.Content>
+
+  <DataModuleController.Footer />
+</DataModuleController>
+```
+
 ---
 
 ## 6. Centralized Theme & Multi-Tenant Branding
@@ -504,6 +558,8 @@ export function AcademicBranchesDrawer({ opened, onClose, onCreate }: Props) {
 |---|---|
 | Using raw HTML elements (`<div>`, `<span>`, `<button>`, `<input>`) for UI structure | Use Mantine components (`Box`, `Group`, `Stack`, `Button`, `Text`, etc.) |
 | Using raw Mantine input primitives (`TextInput`, `PasswordInput`, `NumberInput`) directly | Use `<AppInput />` from `@/src/components/controllers/input` |
+| Creating custom table wrappers, bespoke Card/Paper containers, or manual Thead styling for entity tables | Use `<DataModuleController>` compound pattern exclusively as the sole source of layout and design truth |
+| Controlling table or list layout, paddings, or borders from outside the controller component | Layout is 100% owned by the controller; page views only provide children slots and columns |
 | Hardcoding hex/rgb colors in components | Use theme tokens (`c="primary.6"`, `bg="var(--mantine-color-body)"`) |
 | Using non-Arabic text in user-facing UI | All UI text MUST be in professional Arabic |
 
@@ -518,5 +574,6 @@ Before finalizing any page or component, ask yourself:
 5. ✅ Are mutation callbacks and try/catch orchestration in the Controller?
 6. ✅ Is column/table definition separated from business logic?
 7. ✅ Are modals/drawers state managed in the store, not in UI components?
+8. ✅ Does every entity list/table view use `<DataModuleController>` without ad-hoc outer Card/Thead/Paper layout wrappers?
 
 If **ANY** answer is "No", the code violates these rules and MUST be refactored before proceeding.

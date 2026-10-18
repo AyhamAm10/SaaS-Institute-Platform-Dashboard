@@ -8,6 +8,8 @@ import {
   IconBuildingCommunity,
   IconCalendarTime,
   IconClock,
+  IconSettings,
+  IconUsers,
 } from '@tabler/icons-react';
 import { ComponentType } from 'react';
 
@@ -33,15 +35,15 @@ export interface NavItem {
 export const defaultNavigationConfig: NavItem[] = [
   {
     key: 'dashboard',
-    label: 'لوحة التحكم',
+    label: 'لوحة التحكم الإحصائية',
     icon: IconDashboard,
     href: '/',
   },
   {
-    key: 'academic-years',
-    label: 'السنوات الدراسية',
-    icon: IconCalendarEvent,
-    href: '/academic-years',
+    key: 'students',
+    label: 'الطلاب والعائلات',
+    icon: IconUsers,
+    href: '/students',
   },
   {
     key: 'sections',
@@ -74,10 +76,31 @@ export const defaultNavigationConfig: NavItem[] = [
     href: '/timetable',
   },
   {
-    key: 'schedule-settings',
-    label: 'إعدادات الدوام',
-    icon: IconClock,
-    href: '/schedule-settings',
+    key: 'settings',
+    label: 'الإعدادات والتأسيس',
+    icon: IconSettings,
+    subItems: [
+      {
+        key: 'branches',
+        label: 'الفروع الجغرافية',
+        href: '/branches',
+      },
+      {
+        key: 'academic-years',
+        label: 'السنوات الدراسية',
+        href: '/academic-years',
+      },
+      {
+        key: 'schedule-settings',
+        label: 'إعدادات الدوام',
+        href: '/schedule-settings',
+      },
+      {
+        key: 'student-fields',
+        label: 'الحقول المخصصة للطلاب',
+        href: '/settings/student-fields',
+      },
+    ],
   },
 ];
 

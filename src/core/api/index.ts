@@ -12,6 +12,7 @@ export * from './teachers.api';
 export * from './rooms.api';
 export * from './timetables.api';
 export * from './branches.api';
+export * from './students.api';
 export * from './query-client';
 export * from './QueryProvider';
 export * from '../context/operational-context';

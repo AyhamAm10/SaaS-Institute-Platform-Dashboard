@@ -9,7 +9,7 @@ export interface DataModuleFilterSlotProps {
 
 export function DataModuleFilterSlot({ children }: DataModuleFilterSlotProps) {
   return (
-    <Group gap="xs" align="center" wrap="wrap">
+    <Group gap="sm" align="center" wrap="wrap">
       {children}
     </Group>
   );
