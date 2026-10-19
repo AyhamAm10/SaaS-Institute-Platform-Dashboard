@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import { Alert, Card, Divider, SimpleGrid, Stack, Text } from '@mantine/core';
+import { Alert, Divider, SimpleGrid, Stack, Text } from '@mantine/core';
 import { IconAlertCircle } from '@tabler/icons-react';
 import { AppDatePicker, AppInput, AppSelect } from '@/src/components/controllers';
 import { useStudentRegistrationMirror } from '../store/useStudentRegistrationMirror';
@@ -46,8 +46,8 @@ export function Step2BasicInfo({ branches, sections, fields = [] }: Step2BasicIn
   );
 
   return (
-    <Stack gap="lg">
-      <Stack gap={2}>
+    <Stack gap="xl">
+      <Stack gap={3}>
         <Text size="md" fw={700}>
           الخطوة الثانية: بيانات الطالب الأساسية والإضافية
         </Text>
@@ -62,152 +62,172 @@ export function Step2BasicInfo({ branches, sections, fields = [] }: Step2BasicIn
         </Alert>
       )}
 
-      <Card radius="lg" withBorder p="md">
-        <Stack gap="md">
-          <Text size="sm" fw={600} c="primary">
-            البيانات الأساسية والتسكين الأكاديمي
-          </Text>
+      {/* Unboxed open form fields with generous spacing */}
+      <Stack gap="lg">
+        <Text size="sm" fw={700} c="primary.8">
+          البيانات الأساسية والتسكين الأكاديمي
+        </Text>
 
-          <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="md">
-            <AppInput
-              label="اسم الطالب الكامل"
-              placeholder="مثال: أحمد محمد العمر"
-              value={fullName}
-              onChange={(e) =>
-                setStudentField('fullName', typeof e === 'string' ? e : e?.target?.value ?? '')
-              }
-              required
-            />
-
-            <AppSelect
-              label="الجنس"
-              data={[
-                { value: 'MALE', label: 'ذكر' },
-                { value: 'FEMALE', label: 'أنثى' },
-              ]}
-              value={gender}
-              onChange={(val: string | null) => setStudentField('gender', val || 'MALE')}
-              required
-            />
-          </SimpleGrid>
-
-          <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="md">
-            <AppDatePicker
-              label="تاريخ الميلاد"
-              placeholder="اختر تاريخ ميلاد الطالب"
-              value={birthDate}
-              onChange={(val: string | null) => setStudentField('birthDate', val)}
-              required
-            />
-
-            <AppSelect
-              label="الفرع الجغرافي المسجل به"
-              placeholder="اختر فرع المعهد"
-              data={branchesOptions}
-              value={branchId ? String(branchId) : null}
-              onChange={(val: string | null) => {
-                setStudentField('branchId', val ? Number(val) : null);
-                setStudentField('sectionId', null);
-              }}
-              required
-              searchable
-              clearable
-            />
-          </SimpleGrid>
+        <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="lg">
+          <AppInput
+            label="اسم الطالب الكامل"
+            placeholder="مثال: أحمد محمد العمر"
+            value={fullName}
+            onChange={(e) =>
+              setStudentField('fullName', typeof e === 'string' ? e : e?.target?.value ?? '')
+            }
+            required
+          />
 
           <AppSelect
-            label="الشعبة الصفية (اختياري - للإدراج المباشر)"
-            placeholder={
-              branchId
-                ? 'اختر الشعبة الدراسية لتسكين الطالب'
-                : 'يرجى اختيار الفرع أولاً لتحديد الشُعب المتاحة'
-            }
-            data={sectionsOptions}
-            value={sectionId ? String(sectionId) : null}
-            onChange={(val: string | null) => setStudentField('sectionId', val ? Number(val) : null)}
-            disabled={!branchId}
+            label="الجنس"
+            data={[
+              { value: 'MALE', label: 'ذكر' },
+              { value: 'FEMALE', label: 'أنثى' },
+            ]}
+            value={gender}
+            onChange={(val: string | null) => setStudentField('gender', val || 'MALE')}
+            required
+          />
+        </SimpleGrid>
+
+        <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="lg">
+          <AppDatePicker
+            label="تاريخ الميلاد"
+            placeholder="اختر تاريخ ميلاد الطالب"
+            value={birthDate}
+            onChange={(val: string | null) => setStudentField('birthDate', val)}
+            required
+          />
+
+          <AppSelect
+            label="الفرع الجغرافي المسجل به"
+            placeholder="اختر فرع المعهد"
+            data={branchesOptions}
+            value={branchId ? String(branchId) : null}
+            onChange={(val: string | null) => {
+              setStudentField('branchId', val ? Number(val) : null);
+              setStudentField('sectionId', null);
+            }}
+            required
             searchable
             clearable
           />
+        </SimpleGrid>
 
-          {fields.length > 0 && (
-            <>
-              <Divider my="xs" label="الحقول والبيانات الإضافية الخاصة بالمعهد" labelPosition="center" />
-              <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="md">
-                {fields.map((field) => {
-                  const currentValue = customFields[field.name] ?? '';
+        <AppSelect
+          label="الشعبة الصفية (اختياري - للإدراج المباشر)"
+          placeholder={
+            branchId
+              ? 'اختر الشعبة الدراسية لتسكين الطالب'
+              : 'يرجى اختيار الفرع أولاً لتحديد الشُعب المتاحة'
+          }
+          data={sectionsOptions}
+          value={sectionId ? String(sectionId) : null}
+          onChange={(val: string | null) => setStudentField('sectionId', val ? Number(val) : null)}
+          disabled={!branchId}
+          searchable
+          clearable
+        />
 
-                  if (field.type === 'SELECT') {
-                    const selectOptions = (field.options || []).map((opt) => ({
-                      value: opt,
-                      label: opt,
-                    }));
-                    return (
-                      <AppSelect
-                        key={field.name}
-                        label={field.label}
-                        placeholder={`اختر ${field.label}`}
-                        data={selectOptions}
-                        value={currentValue ? String(currentValue) : null}
-                        onChange={(val: string | null) => setCustomFieldValue(field.name, val)}
-                        required={field.isRequired}
-                        clearable
-                      />
-                    );
-                  }
+        {fields.length > 0 && (
+          <Stack gap="lg" mt="xs">
+            <Divider my="md" label="الحقول والبيانات الإضافية الخاصة بالمعهد" labelPosition="center" />
+            <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="lg">
+              {fields.map((field) => {
+                const currentValue = customFields[field.name] ?? '';
 
-                  if (field.type === 'DATE') {
-                    return (
-                      <AppDatePicker
-                        key={field.name}
-                        label={field.label}
-                        placeholder={`اختر ${field.label}`}
-                        value={currentValue}
-                        onChange={(val: string | null) => setCustomFieldValue(field.name, val)}
-                        required={field.isRequired}
-                      />
-                    );
-                  }
+                if (field.type === 'SELECT') {
+                  const selectOptions = (field.options || []).map((opt) => ({
+                    value: opt,
+                    label: opt,
+                  }));
+                  return (
+                    <AppSelect
+                      key={field.name}
+                      label={field.label}
+                      placeholder={`اختر ${field.label}`}
+                      data={selectOptions}
+                      value={currentValue ? String(currentValue) : null}
+                      onChange={(val: string | null) => setCustomFieldValue(field.name, val)}
+                      required={field.isRequired}
+                      clearable
+                    />
+                  );
+                }
 
-                  if (field.type === 'BOOLEAN') {
-                    return (
-                      <AppSelect
-                        key={field.name}
-                        label={field.label}
-                        data={[
-                          { value: 'true', label: 'نعم' },
-                          { value: 'false', label: 'لا' },
-                        ]}
-                        value={currentValue !== '' ? String(currentValue) : null}
-                        onChange={(val: string | null) => setCustomFieldValue(field.name, val === 'true')}
-                        required={field.isRequired}
-                        clearable
-                      />
-                    );
-                  }
+                if (field.type === 'DATE') {
+                  return (
+                    <AppDatePicker
+                      key={field.name}
+                      label={field.label}
+                      placeholder={`اختر ${field.label}`}
+                      value={currentValue}
+                      onChange={(val: string | null) => setCustomFieldValue(field.name, val)}
+                      required={field.isRequired}
+                    />
+                  );
+                }
 
+                if (field.type === 'BOOLEAN') {
+                  return (
+                    <AppSelect
+                      key={field.name}
+                      label={field.label}
+                      data={[
+                        { value: 'true', label: 'نعم' },
+                        { value: 'false', label: 'لا' },
+                      ]}
+                      value={currentValue === true ? 'true' : currentValue === false ? 'false' : null}
+                      onChange={(val: string | null) =>
+                        setCustomFieldValue(field.name, val === 'true' ? true : val === 'false' ? false : null)
+                      }
+                      placeholder={`اختر ${field.label}`}
+                      required={field.isRequired}
+                      clearable
+                    />
+                  );
+                }
+
+                if (field.type === 'NUMBER') {
                   return (
                     <AppInput
                       key={field.name}
-                      type={field.type === 'NUMBER' ? 'number' : 'text'}
+                      type="number"
                       label={field.label}
                       placeholder={`أدخل ${field.label}`}
                       value={currentValue}
                       onChange={(e) =>
                         setCustomFieldValue(
                           field.name,
-                          typeof e === 'string' ? e : e?.target?.value ?? '',
+                          typeof e === 'string' ? (e === '' ? null : Number(e)) : e?.target?.value === '' ? null : Number(e?.target?.value),
                         )
                       }
                       required={field.isRequired}
                     />
                   );
-                })}
-              </SimpleGrid>
-            </>
-          )}
-        </Stack>
-      </Card>
+                }
+
+                return (
+                  <AppInput
+                    key={field.name}
+                    label={field.label}
+                    placeholder={`أدخل ${field.label}`}
+                    value={currentValue}
+                    onChange={(e) =>
+                      setCustomFieldValue(
+                        field.name,
+                        typeof e === 'string' ? e : e?.target?.value ?? '',
+                      )
+                    }
+                    required={field.isRequired}
+                  />
+                );
+              })}
+            </SimpleGrid>
+          </Stack>
+        )}
+      </Stack>
     </Stack>
   );
 }

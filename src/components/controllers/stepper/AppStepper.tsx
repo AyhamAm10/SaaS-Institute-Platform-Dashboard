@@ -1,148 +1,60 @@
 'use client';
 
-import React, { Children, isValidElement, ReactNode, useMemo } from 'react';
-import { Box, Group, Paper, Stack, Text, ThemeIcon, rem } from '@mantine/core';
-import { IconCheck } from '@tabler/icons-react';
-import { AppStepperContext, AppStepperStepConfig } from './AppStepperContext';
-import { AppStepperStep, AppStepperStepProps } from './AppStepperStep';
-import { AppStepperActions } from './AppStepperActions';
+import React, { useEffect, useState } from 'react';
+import { AppStepperInitialProps } from './init/stepper.init';
+import { StepperContext, createStepperStore } from './store/stepper.store';
+import {
+  AppStepperActions,
+  AppStepperRoot,
+  AppStepperSidebar,
+  AppStepperStep,
+  AppStepperStepContent,
+  AppStepperStepHeader,
+} from './ui';
 
-export interface AppStepperProps {
-  active: number;
-  onStepClick?: (step: number) => void;
-  allowStepSelect?: boolean;
-  children: ReactNode;
-}
+export interface AppStepperProps extends AppStepperInitialProps {}
 
-export function AppStepper({
-  active,
-  onStepClick,
-  allowStepSelect = false,
-  children,
-}: AppStepperProps) {
-  // Extract steps configuration from children
-  const steps = useMemo(() => {
-    const list: AppStepperStepConfig[] = [];
-    Children.forEach(children, (child) => {
-      if (isValidElement<AppStepperStepProps>(child) && child.type === AppStepperStep) {
-        list.push({
-          step: child.props.step,
-          label: child.props.label,
-          description: child.props.description,
-          icon: child.props.icon,
-        });
-      }
-    });
-    return list.sort((a, b) => a.step - b.step);
-  }, [children]);
+/**
+ * AppStepper Controller
+ *
+ * Built adhering strictly to the Controller Architecture Guide and role.md:
+ * - Isolated Zustand store per instance (src/core/mirror)
+ * - 4-layer separation (init, state, store, ui)
+ * - Compound Pattern (AppStepper.Step, AppStepper.Step.Header, AppStepper.Step.Content, AppStepper.Actions)
+ * - Accordion row items with fluid Mantine Collapse animation
+ * - Prominent, tall vertical timeline sidebar on the right
+ */
+export function AppStepper(props: AppStepperProps) {
+  const [store] = useState(() => createStepperStore(props));
 
-  const totalSteps = steps.length;
-
-  const contextValue = useMemo(
-    () => ({
-      active,
-      totalSteps,
-      steps,
-      registerStep: () => {},
-      onStepClick,
-      allowStepSelect,
-    }),
-    [active, totalSteps, steps, onStepClick, allowStepSelect],
-  );
+  // Synchronize controlled props
+  useEffect(() => {
+    store.getState().updateProps(props);
+  }, [
+    props.active,
+    props.defaultStep,
+    props.allowStepSelect,
+    props.sidebarWidth,
+    props.onStepChange,
+    props.onStepClick,
+    props.onBeforeNext,
+    props.onBeforePrev,
+    store,
+  ]);
 
   return (
-    <AppStepperContext.Provider value={contextValue}>
-      <Box w="100%">
-        {/* Header Steps Bar — Clean, Flat, Seamless */}
-        <Paper
-          p="sm"
-          px="md"
-          radius="md"
-          withBorder
-          mb="md"
-          style={{
-            backgroundColor: 'var(--mantine-color-body)',
-            borderColor: 'var(--mantine-color-gray-2)',
-            borderRadius: rem(8),
-            boxShadow: '0 1px 3px rgba(0, 0, 0, 0.02)',
-          }}
-        >
-          <Group justify="space-between" align="center" wrap="nowrap" gap="xs">
-            {steps.map((s, idx) => {
-              const isCompleted = s.step < active;
-              const isCurrent = s.step === active;
-              const isClickable = allowStepSelect && onStepClick && (isCompleted || isCurrent);
-
-              return (
-                <React.Fragment key={s.step}>
-                  <Group
-                    gap="xs"
-                    wrap="nowrap"
-                    onClick={() => isClickable && onStepClick(s.step)}
-                    style={{
-                      cursor: isClickable ? 'pointer' : 'default',
-                      opacity: isCurrent || isCompleted ? 1 : 0.65,
-                      userSelect: 'none',
-                    }}
-                  >
-                    <ThemeIcon
-                      size={30}
-                      radius="md"
-                      color={isCompleted ? 'teal' : isCurrent ? 'primary' : 'gray'}
-                      variant={isCompleted || isCurrent ? 'filled' : 'light'}
-                    >
-                      {isCompleted ? (
-                        <IconCheck size={16} stroke={2.5} />
-                      ) : s.icon ? (
-                        s.icon
-                      ) : (
-                        <Text size="xs" fw={700}>
-                          {s.step + 1}
-                        </Text>
-                      )}
-                    </ThemeIcon>
-
-                    <Stack gap={0} visibleFrom="sm">
-                      <Text
-                        size="xs"
-                        fw={isCurrent ? 700 : 500}
-                        c={isCurrent ? 'primary.8' : 'inherit'}
-                        style={{ fontSize: rem(12.5) }}
-                      >
-                        {s.label}
-                      </Text>
-                      {s.description && (
-                        <Text size="11px" c="dimmed" lineClamp={1}>
-                          {s.description}
-                        </Text>
-                      )}
-                    </Stack>
-                  </Group>
-
-                  {idx < steps.length - 1 && (
-                    <Box
-                      style={{
-                        flex: 1,
-                        height: rem(1.5),
-                        backgroundColor: isCompleted
-                          ? 'var(--mantine-color-teal-6)'
-                          : 'var(--mantine-color-gray-2)',
-                        transition: 'background-color 0.2s ease',
-                      }}
-                    />
-                  )}
-                </React.Fragment>
-              );
-            })}
-          </Group>
-        </Paper>
-
-        {/* Content & Actions (Unboxed, fills the page) */}
-        {children}
-      </Box>
-    </AppStepperContext.Provider>
+    <StepperContext.Provider value={store}>
+      <AppStepperRoot>
+        {props.children}
+      </AppStepperRoot>
+    </StepperContext.Provider>
   );
 }
 
+// Compound component attachments
 AppStepper.Step = AppStepperStep;
+AppStepper.Step.Header = AppStepperStepHeader;
+AppStepper.Step.Content = AppStepperStepContent;
 AppStepper.Actions = AppStepperActions;
+AppStepper.Sidebar = AppStepperSidebar;
+AppStepper.Root = AppStepperRoot;

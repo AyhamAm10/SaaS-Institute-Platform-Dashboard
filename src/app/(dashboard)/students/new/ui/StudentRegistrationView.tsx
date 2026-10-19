@@ -67,7 +67,10 @@ export function StudentRegistrationView({
             description="اختيار أو تسجيل عائلة"
             icon={<IconUsers size={18} />}
           >
-            <Step1Family families={families} isLoadingFamilies={isLoadingFamilies} />
+            <AppStepper.Step.Header />
+            <AppStepper.Step.Content>
+              <Step1Family families={families} isLoadingFamilies={isLoadingFamilies} />
+            </AppStepper.Step.Content>
           </AppStepper.Step>
 
           <AppStepper.Step
@@ -76,7 +79,10 @@ export function StudentRegistrationView({
             description="البيانات الأساسية والحقول الإضافية"
             icon={<IconSchool size={18} />}
           >
-            <Step2BasicInfo branches={branches} sections={sections} fields={fields} />
+            <AppStepper.Step.Header />
+            <AppStepper.Step.Content>
+              <Step2BasicInfo branches={branches} sections={sections} fields={fields} />
+            </AppStepper.Step.Content>
           </AppStepper.Step>
 
           <AppStepper.Step
@@ -85,7 +91,10 @@ export function StudentRegistrationView({
             description="الاعتماد النهائي للتسجيل"
             icon={<IconCheck size={18} />}
           >
-            <Step4Review branches={branches} sections={sections} fields={fields} />
+            <AppStepper.Step.Header />
+            <AppStepper.Step.Content>
+              <Step4Review branches={branches} sections={sections} fields={fields} />
+            </AppStepper.Step.Content>
           </AppStepper.Step>
 
           <AppStepper.Actions

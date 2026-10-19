@@ -168,49 +168,47 @@ export function Step1Family({ families, isLoadingFamilies }: Step1FamilyProps) {
           )}
         </Stack>
       ) : (
-        <Card radius="lg" withBorder p="md">
-          <Stack gap="md">
-            <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="md">
-              <AppInput
-                label="كنية العائلة"
-                placeholder="مثال: العمر، الخالد..."
-                value={newFamily.familyName}
-                onChange={(e) =>
-                  setNewFamilyField('familyName', typeof e === 'string' ? e : e?.target?.value ?? '')
-                }
-                required
-              />
-              <AppInput
-                type="tel"
-                label="رقم هاتف التواصل"
-                placeholder="09xxxxxxxx"
-                value={newFamily.phone}
-                onChange={(e) =>
-                  setNewFamilyField('phone', typeof e === 'string' ? e : e?.target?.value ?? '')
-                }
-              />
-            </SimpleGrid>
+        <Stack gap="lg">
+          <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="lg">
+            <AppInput
+              label="كنية العائلة"
+              placeholder="مثال: العمر، الخالد..."
+              value={newFamily.familyName}
+              onChange={(e) =>
+                setNewFamilyField('familyName', typeof e === 'string' ? e : e?.target?.value ?? '')
+              }
+              required
+            />
+            <AppInput
+              type="tel"
+              label="رقم هاتف التواصل"
+              placeholder="09xxxxxxxx"
+              value={newFamily.phone}
+              onChange={(e) =>
+                setNewFamilyField('phone', typeof e === 'string' ? e : e?.target?.value ?? '')
+              }
+            />
+          </SimpleGrid>
 
-            <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="md">
-              <AppInput
-                label="اسم الأب"
-                placeholder="الاسم الأول للأب"
-                value={newFamily.fatherName}
-                onChange={(e) =>
-                  setNewFamilyField('fatherName', typeof e === 'string' ? e : e?.target?.value ?? '')
-                }
-              />
-              <AppInput
-                label="اسم الأم"
-                placeholder="الاسم الأول للأم"
-                value={newFamily.motherName}
-                onChange={(e) =>
-                  setNewFamilyField('motherName', typeof e === 'string' ? e : e?.target?.value ?? '')
-                }
-              />
-            </SimpleGrid>
-          </Stack>
-        </Card>
+          <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="lg">
+            <AppInput
+              label="اسم الأب"
+              placeholder="الاسم الأول للأب"
+              value={newFamily.fatherName}
+              onChange={(e) =>
+                setNewFamilyField('fatherName', typeof e === 'string' ? e : e?.target?.value ?? '')
+              }
+            />
+            <AppInput
+              label="اسم الأم"
+              placeholder="الاسم الأول للأم"
+              value={newFamily.motherName}
+              onChange={(e) =>
+                setNewFamilyField('motherName', typeof e === 'string' ? e : e?.target?.value ?? '')
+              }
+            />
+          </SimpleGrid>
+        </Stack>
       )}
     </Stack>
   );
