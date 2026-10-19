@@ -2,8 +2,7 @@
 
 import { Alert, Card, SimpleGrid, Stack, Text } from '@mantine/core';
 import { IconAlertCircle, IconInfoCircle } from '@tabler/icons-react';
-import { AppInput, AppSelect } from '@/src/components/controllers/input';
-import { AppDatePicker } from '@/src/components/ui/date-picker';
+import { AppDatePicker, AppInput, AppSelect } from '@/src/components/controllers';
 import { useStudentRegistrationMirror } from '../store/useStudentRegistrationMirror';
 import { StudentField } from '@/src/core/api';
 

@@ -1,7 +1,17 @@
 'use client';
 
-import { Button, Checkbox, Group, Stack } from '@mantine/core';
-import { IconListDetails } from '@tabler/icons-react';
+import { useState } from 'react';
+import {
+  ActionIcon,
+  Badge,
+  Box,
+  Button,
+  Checkbox,
+  Group,
+  Stack,
+  Text,
+} from '@mantine/core';
+import { IconListDetails, IconPlus, IconX } from '@tabler/icons-react';
 import { AppDrawer } from '@/src/components/controllers/drawer';
 import { AppInput, AppSelect } from '@/src/components/controllers/input';
 import { useStudentFieldsMirror } from '../store/useStudentFieldsMirror';
@@ -15,16 +25,26 @@ export function StudentFieldDrawer({ onSubmit }: StudentFieldDrawerProps) {
   const isDrawerOpen = useStudentFieldsMirror('isDrawerOpen');
   const closeDrawer = useStudentFieldsMirror('closeDrawer');
   const selectedField = useStudentFieldsMirror('selectedField');
-  const formName = useStudentFieldsMirror('formName');
   const formLabel = useStudentFieldsMirror('formLabel');
   const formType = useStudentFieldsMirror('formType');
-  const formOptionsText = useStudentFieldsMirror('formOptionsText');
+  const formOptions = useStudentFieldsMirror('formOptions');
   const formIsRequired = useStudentFieldsMirror('formIsRequired');
   const formDisplayInReport = useStudentFieldsMirror('formDisplayInReport');
   const isSubmitting = useStudentFieldsMirror('isSubmitting');
   const setFormField = useStudentFieldsMirror('setFormField');
+  const addOption = useStudentFieldsMirror('addOption');
+  const removeOption = useStudentFieldsMirror('removeOption');
+
+  const [newOptionDraft, setNewOptionDraft] = useState('');
 
   const isEditing = Boolean(selectedField);
+
+  const handleAddOption = () => {
+    if (newOptionDraft.trim()) {
+      addOption(newOptionDraft.trim());
+      setNewOptionDraft('');
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -58,17 +78,6 @@ export function StudentFieldDrawer({ onSubmit }: StudentFieldDrawerProps) {
               required
             />
 
-            <AppInput
-              label="رمز الحقل البرمجي (Key)"
-              placeholder="مثال: blood_type, morning_school"
-              value={formName}
-              onChange={(e) =>
-                setFormField('formName', typeof e === 'string' ? e : e?.target?.value ?? '')
-              }
-              disabled={isEditing}
-              required
-            />
-
             <AppSelect
               label="نوع الحقل"
               data={[
@@ -85,20 +94,73 @@ export function StudentFieldDrawer({ onSubmit }: StudentFieldDrawerProps) {
             />
 
             {formType === 'SELECT' && (
-              <AppInput
-                type="textarea"
-                label="خيارات القائمة المنسدلة (كل خيار بسطر منفصل)"
-                placeholder={'A+\nA-\nB+\nB-\nO+\nO-'}
-                value={formOptionsText}
-                onChange={(e) =>
-                  setFormField(
-                    'formOptionsText',
-                    typeof e === 'string' ? e : e?.target?.value ?? '',
-                  )
-                }
-                rows={4}
-                required
-              />
+              <Stack gap="xs">
+                <Text size="xs" fw={600} c="var(--mantine-color-text)">
+                  خيارات القائمة المنسدلة
+                </Text>
+                <Group gap="xs" align="flex-start" wrap="nowrap">
+                  <Box style={{ flex: 1 }}>
+                    <AppInput
+                      placeholder="أدخل خياراً (مثال: A+) واضغط إضافة..."
+                      value={newOptionDraft}
+                      onChange={(e) =>
+                        setNewOptionDraft(
+                          typeof e === 'string' ? e : e?.target?.value ?? '',
+                        )
+                      }
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          handleAddOption();
+                        }
+                      }}
+                    />
+                  </Box>
+                  <ActionIcon
+                    variant="filled"
+                    color="primary"
+                    size={38}
+                    radius="md"
+                    onClick={handleAddOption}
+                    aria-label="إضافة خيار"
+                  >
+                    <IconPlus size={18} />
+                  </ActionIcon>
+                </Group>
+
+                {formOptions && formOptions.length > 0 ? (
+                  <Group gap="xs" wrap="wrap" mt={4}>
+                    {formOptions.map((opt, idx) => (
+                      <Badge
+                        key={idx}
+                        size="md"
+                        radius="sm"
+                        variant="light"
+                        color="primary"
+                        style={{ paddingRight: 6, paddingLeft: 10 }}
+                        rightSection={
+                          <ActionIcon
+                            size="xs"
+                            color="red"
+                            variant="subtle"
+                            radius="xl"
+                            onClick={() => removeOption(idx)}
+                            aria-label={`حذف الخيار ${opt}`}
+                          >
+                            <IconX size={12} />
+                          </ActionIcon>
+                        }
+                      >
+                        {opt}
+                      </Badge>
+                    ))}
+                  </Group>
+                ) : (
+                  <Text size="xs" c="dimmed">
+                    لم تتم إضافة أي خيارات بعد. اكتب الخيار أعلاه واضغط على زر (+) أو مفتاح Enter.
+                  </Text>
+                )}
+              </Stack>
             )}
 
             <Stack gap="xs" mt="xs">

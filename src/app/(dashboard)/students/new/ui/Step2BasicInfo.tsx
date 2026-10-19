@@ -3,8 +3,7 @@
 import { useMemo } from 'react';
 import { Alert, Card, Divider, SimpleGrid, Stack, Text } from '@mantine/core';
 import { IconAlertCircle } from '@tabler/icons-react';
-import { AppInput, AppSelect } from '@/src/components/controllers/input';
-import { AppDatePicker } from '@/src/components/ui/date-picker';
+import { AppDatePicker, AppInput, AppSelect } from '@/src/components/controllers';
 import { useStudentRegistrationMirror } from '../store/useStudentRegistrationMirror';
 import { Branch, Section, StudentField } from '@/src/core/api';
 

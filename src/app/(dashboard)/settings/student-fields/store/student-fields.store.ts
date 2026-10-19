@@ -19,6 +19,7 @@ export function createStudentFieldsStore(): StudentFieldsStore {
     formLabel: '',
     formType: 'TEXT',
     formOptionsText: '',
+    formOptions: [],
     formIsRequired: false,
     formDisplayInReport: true,
     formSortOrder: 0,
@@ -35,23 +36,27 @@ export function createStudentFieldsStore(): StudentFieldsStore {
         formLabel: '',
         formType: 'TEXT',
         formOptionsText: '',
+        formOptions: [],
         formIsRequired: false,
         formDisplayInReport: true,
         formSortOrder: 0,
       }),
 
-    openEditDrawer: (field) =>
+    openEditDrawer: (field) => {
+      const opts = Array.isArray(field.options) ? field.options : [];
       set({
         isDrawerOpen: true,
         selectedField: field,
         formName: field.name,
         formLabel: field.label,
         formType: field.type,
-        formOptionsText: Array.isArray(field.options) ? field.options.join('\n') : '',
+        formOptionsText: opts.join('\n'),
+        formOptions: [...opts],
         formIsRequired: field.isRequired,
         formDisplayInReport: field.displayInReport,
         formSortOrder: field.sortOrder,
-      }),
+      });
+    },
 
     closeDrawer: () =>
       set({
@@ -61,6 +66,30 @@ export function createStudentFieldsStore(): StudentFieldsStore {
 
     setFormField: (field, value) =>
       set((state) => ({ ...state, [field]: value })),
+
+    addOption: (option) => {
+      const trimmed = option.trim();
+      if (!trimmed) return;
+      set((state) => {
+        if (state.formOptions.includes(trimmed)) return state;
+        const next = [...state.formOptions, trimmed];
+        return {
+          ...state,
+          formOptions: next,
+          formOptionsText: next.join('\n'),
+        };
+      });
+    },
+
+    removeOption: (index) =>
+      set((state) => {
+        const next = state.formOptions.filter((_, i) => i !== index);
+        return {
+          ...state,
+          formOptions: next,
+          formOptionsText: next.join('\n'),
+        };
+      }),
 
     setSubmitting: (isSubmitting) => set({ isSubmitting }),
   }));

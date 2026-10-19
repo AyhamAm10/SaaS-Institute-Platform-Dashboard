@@ -40,15 +40,6 @@ export function getStudentFieldsColumns(
       ),
     },
     {
-      key: 'name',
-      title: 'رمز الحقل (Key)',
-      render: (field) => (
-        <Badge variant="outline" color="gray" radius="xl" size="sm" dir="ltr">
-          {field.name}
-        </Badge>
-      ),
-    },
-    {
       key: 'type',
       title: 'نوع الحقل',
       render: (field) => getFieldTypeBadge(field.type),

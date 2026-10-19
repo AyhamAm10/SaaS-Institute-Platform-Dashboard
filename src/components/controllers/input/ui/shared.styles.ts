@@ -41,10 +41,17 @@ export function getUnifiedInputStyles(config: ResolvedInputConfig, isFocused: bo
         : '0 1px 2px rgba(0, 0, 0, 0.02)',
       transition: 'border-color 120ms ease, box-shadow 120ms ease, background-color 120ms ease',
       '&:hover': {
-        backgroundColor: isFocused ? '#ffffff' : '#ffffff',
+        backgroundColor: '#ffffff',
         borderColor: isFocused
           ? 'var(--mantine-color-primary-6)'
           : 'var(--mantine-color-gray-4)',
+      },
+      '&::-webkit-inner-spin-button, &::-webkit-outer-spin-button': {
+        WebkitAppearance: 'none',
+        margin: 0,
+      },
+      '&[type=number]': {
+        MozAppearance: 'textfield',
       },
       ...customStyles?.input,
     },

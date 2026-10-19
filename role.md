@@ -136,21 +136,24 @@ import { AppInput, AppSelect } from '@/src/components/controllers';
 />
 ```
 
-### 5.2 Mandatory Unified Date Picker Standard (`AppDatePicker`)
+### 5.2 Mandatory Unified Date Picker Standard (`AppDatePicker` / `DatePickerController`)
 
-> **CRITICAL RULE:** It is **MANDATORY** across the entire application to use `<AppDatePicker />` (from `@/src/components/controllers/date-picker`) for all date selection fields instead of manual text inputs, raw browser date fields, or ad-hoc date pickers.
+> **CRITICAL RULE:** It is **MANDATORY** across the entire application to use `<AppDatePicker />` (from `@/src/components/controllers` or `@/src/components/controllers/date-picker`) for all date selection fields instead of manual text inputs, raw browser date fields, or ad-hoc custom implementations.
 
-#### Why?
-1. **Design System & Organic UI Consistency:** Adopts the curved, modern rounded container (`radius="md"`, subtle borders, soft glow) with an interactive popover calendar styled in harmony with the Modern Curved Organic UI standard.
-2. **Native Arabic & RTL Support:** Implements native Arabic calendar navigation with Arabic month names (يناير، فبراير، ...) and Arabic day headers, flowing correctly with RTL reading order.
-3. **Instant Direct Year & Month Selection (Zero Monotonous Clicking):** Includes dedicated Year and Month dropdown selectors right in the popover header, double arrows (`«` / `»`) for jumping full years with 1 click, and a row of Quick Year Jump chips (`[2025] [2026] [2027] [2028] [2029]`) so users can jump to any upcoming or past year immediately without clicking through individual months.
-4. **Reliable Standardized ISO Output:** Automatically emits standard ISO `YYYY-MM-DD` strings on selection, preventing date parsing discrepancies and backend validation failures across all APIs.
-5. **Fast Shortcuts:** Quick "اليوم" (Today) and "مسح" (Clear) action buttons.
+#### Architecture & Mantine Integration:
+1. **Built on Mantine's Official `@mantine/dates` (`DatePickerInput`):** Directly leverages Mantine's official `DatePickerInput` with native decade/year/month zoom level picker, eliminating manual date logic while guaranteeing full accessibility and keyboard navigation.
+2. **Pixel-Perfect Form Height Harmony (`height: 38px`):** The input trigger strictly matches `height: rem(38)`, `minHeight: rem(38)`, `borderRadius: rem(8)`, `fontSize: rem(13)`, and `label: { fontSize: rem(12.5), fontWeight: 600 }` to align seamlessly in form grids alongside `<AppInput />` and `<AppSelect />`.
+3. **Single Down Chevron (`<IconChevronDown size={15} />`):** Clean single down chevron without cluttered double selectors (`⇅`) or raw browser arrows.
+4. **Decade & Century Navigation (No 2011 Barrier):** Users can click the calendar header level to zoom out to Decade and Year views, selecting historical birth dates from any decade without restriction or UI desync.
+5. **Native Arabic & RTL Support:** Implements native Arabic calendar navigation with Arabic month names (يناير، فبراير، ...) and Arabic day headers, flowing correctly with RTL reading order.
+6. **Reliable Standardized ISO Output:** Automatically emits standard ISO `YYYY-MM-DD` strings on selection, preventing date parsing discrepancies and backend validation failures across all APIs.
+7. **Per-Instance State Isolation:** Fully adheres to Section 3 of `role.md` with an isolated Zustand store per instance.
 
 ```tsx
-import { AppDatePicker } from '@/src/components/controllers/date-picker';
+import { AppDatePicker } from '@/src/components/controllers';
 
 // Examples:
+<AppDatePicker label="تاريخ الميلاد" value={birthDate} onChange={setBirthDate} required />
 <AppDatePicker label="تاريخ البداية" value={startDate} onChange={setStartDate} required />
 <AppDatePicker label="تاريخ النهاية" value={endDate} onChange={setEndDate} required />
 ```
@@ -278,9 +281,9 @@ All design tokens, colors, typography, and component default overrides must live
 
 ## 7. Component Ownership, Boundaries & Reusability
 
-1. **Simple Components vs. Controllers:**
-   - Simple presentational components (`Logo`, `UserAvatar`, `StatusBadge`, `StatCard`) do **NOT** need a Controller folder. Keep them simple files in `src/components/ui/`.
-   - Complex, multi-variant, or state-heavy modules (`Sidebar`, `Layout`, `DataTable`, `Stepper`, `ComplexForm`, `FilterModal`, `Wizard`) **MUST** follow the Controller pattern.
+1. **Strict Controller Architecture (No `src/components/ui/` Allowed):**
+   - **CRITICAL PROHIBITION:** There is **NO** `src/components/ui/` directory in this platform. All shared, reusable, or presentation components across the platform **MUST** reside exclusively in `src/components/controllers/<name>/` following the Controller Separation Pattern (`init/`, `store/`, `ui/`, `<Name>Controller.tsx`, `index.ts`). Creating or adding a `src/components/ui/` folder is **STRICTLY FORBIDDEN**.
+   - All modules (`date-picker`, `drawer`, `input`, `modal`, `data-module`, `layout`, `sidebar`, `stepper`) must be built as Controllers.
 2. **Controller Hierarchy & Composition:**
    - A parent Controller may compose child Controllers (e.g. `LayoutController` composes `SidebarController`).
    - A parent Controller must **NOT** reach into or manage the internal state of child Controllers. Each Controller remains the sole owner of its state.
@@ -293,7 +296,7 @@ All design tokens, colors, typography, and component default overrides must live
 ## 8. TypeScript & Code Quality Standards
 
 1. **Strict Typing:** Avoid `any` without exception. Use generics, mapped types, discriminated unions, and `unknown` with type guards.
-2. **No Circular Dependencies:** Organize imports strictly: `core/` → `theme/` → `components/ui/` → `components/controllers/` → `app/`.
+2. **No Circular Dependencies:** Organize imports strictly: `core/` → `theme/` → `components/controllers/` → `app/`.
 3. **Naming Conventions:**
    - Controllers: `<Name>Controller.tsx` (e.g., `SidebarController.tsx`, `LayoutController.tsx`)
    - Store & Mirror: `<name>.store.ts`, `use<Name>Mirror.ts`
@@ -556,8 +559,10 @@ export function AcademicBranchesDrawer({ opened, onClose, onCreate }: Props) {
 
 | ❌ PROHIBITED | ✅ REQUIRED |
 |---|---|
+| Creating a `src/components/ui/` folder | All components must reside strictly in `src/components/controllers/<name>/` with `init/`, `store/`, `ui/`, `<Name>Controller.tsx` |
 | Using raw HTML elements (`<div>`, `<span>`, `<button>`, `<input>`) for UI structure | Use Mantine components (`Box`, `Group`, `Stack`, `Button`, `Text`, etc.) |
 | Using raw Mantine input primitives (`TextInput`, `PasswordInput`, `NumberInput`) directly | Use `<AppInput />` from `@/src/components/controllers/input` |
+| Using ad-hoc date pickers or raw browser inputs | Use `<AppDatePicker />` from `@/src/components/controllers/date-picker` |
 | Creating custom table wrappers, bespoke Card/Paper containers, or manual Thead styling for entity tables | Use `<DataModuleController>` compound pattern exclusively as the sole source of layout and design truth |
 | Controlling table or list layout, paddings, or borders from outside the controller component | Layout is 100% owned by the controller; page views only provide children slots and columns |
 | Hardcoding hex/rgb colors in components | Use theme tokens (`c="primary.6"`, `bg="var(--mantine-color-body)"`) |
@@ -575,5 +580,6 @@ Before finalizing any page or component, ask yourself:
 6. ✅ Is column/table definition separated from business logic?
 7. ✅ Are modals/drawers state managed in the store, not in UI components?
 8. ✅ Does every entity list/table view use `<DataModuleController>` without ad-hoc outer Card/Thead/Paper layout wrappers?
+9. ✅ Are all shared components housed in `src/components/controllers/` with ZERO `src/components/ui/` folders?
 
 If **ANY** answer is "No", the code violates these rules and MUST be refactored before proceeding.

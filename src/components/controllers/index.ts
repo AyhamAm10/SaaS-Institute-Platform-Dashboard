@@ -5,3 +5,4 @@ export * from './data-module';
 export * from './layout';
 export * from './sidebar';
 export * from './stepper';
+export * from './date-picker';

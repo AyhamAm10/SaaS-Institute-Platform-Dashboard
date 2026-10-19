@@ -209,10 +209,34 @@ export const defaultComponents: MantineThemeComponents = {
     },
   },
 
+  NumberInput: {
+    defaultProps: {
+      radius: 'md',
+      size: 'sm',
+      hideControls: true,
+    },
+    styles: {
+      input: {
+        borderRadius: rem(8),
+        borderColor: 'var(--mantine-color-gray-3)',
+        backgroundColor: '#ffffff',
+        fontWeight: 400,
+        fontSize: rem(13),
+        height: rem(38),
+        transition: 'all 120ms ease',
+        '&:focus': {
+          borderColor: 'var(--mantine-color-primary-6)',
+          boxShadow: '0 0 0 2px rgba(32, 183, 223, 0.15)',
+        },
+      },
+    },
+  },
+
   Select: {
     defaultProps: {
       radius: 'md',
       size: 'sm',
+      checkIconPosition: 'right',
     },
     styles: {
       input: {
@@ -221,6 +245,17 @@ export const defaultComponents: MantineThemeComponents = {
         backgroundColor: '#ffffff',
         height: rem(38),
         fontSize: rem(13),
+      },
+      dropdown: {
+        borderRadius: rem(8),
+        boxShadow: '0 4px 16px rgba(0, 0, 0, 0.08)',
+        border: '1px solid var(--mantine-color-gray-2)',
+      },
+      option: {
+        borderRadius: rem(6),
+        fontSize: rem(13),
+        fontWeight: 500,
+        padding: `${rem(8)} ${rem(12)}`,
       },
     },
   },

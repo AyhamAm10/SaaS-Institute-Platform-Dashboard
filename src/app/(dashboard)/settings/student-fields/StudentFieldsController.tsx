@@ -44,23 +44,36 @@ export function StudentFieldsController() {
       formName,
       formLabel,
       formType,
+      formOptions,
       formOptionsText,
       formIsRequired,
       formDisplayInReport,
       formSortOrder,
     } = store.getState();
 
-    if (!formName.trim() || !formLabel.trim()) {
+    if (!formLabel.trim()) {
       return;
     }
 
     const options =
       formType === 'SELECT'
-        ? formOptionsText
-            .split('\n')
-            .map((s) => s.trim())
-            .filter(Boolean)
+        ? formOptions && formOptions.length > 0
+          ? formOptions
+          : formOptionsText
+              .split('\n')
+              .map((s) => s.trim())
+              .filter(Boolean)
         : undefined;
+
+    // Auto-generate a clean, slugified key from label or fallback to unique timestamp id
+    const slugifiedLabel = formLabel
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, '_')
+      .replace(/[^a-z0-9_]/g, '');
+    const generatedName = selectedField
+      ? selectedField.name
+      : formName.trim() || slugifiedLabel || `field_${Date.now()}`;
 
     store.getState().setSubmitting(true);
     try {
@@ -68,7 +81,7 @@ export function StudentFieldsController() {
         await updateMutation.mutateAsync({
           id: selectedField.id,
           payload: {
-            name: formName.trim(),
+            name: selectedField.name,
             label: formLabel.trim(),
             type: formType,
             options,
@@ -79,7 +92,7 @@ export function StudentFieldsController() {
         });
       } else {
         await createMutation.mutateAsync({
-          name: formName.trim(),
+          name: generatedName,
           label: formLabel.trim(),
           type: formType,
           options,
