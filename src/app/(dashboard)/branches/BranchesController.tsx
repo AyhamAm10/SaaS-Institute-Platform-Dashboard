@@ -2,7 +2,11 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { useStore } from 'zustand';
-import { useBranchesQuery, Branch } from '@/src/core/api';
+import {
+  useBranchesQuery,
+  useCreateBranchMutation,
+  useUpdateBranchMutation,
+} from '@/src/core/api';
 import { createBranchesStore, BranchesContext } from './store/branches.store';
 import { BranchesView } from './ui/BranchesView';
 
@@ -12,7 +16,11 @@ import { BranchesView } from './ui/BranchesView';
  * Bridges React Query data for physical branches into the isolated Zustand store.
  * Strictly adheres to QuerySync pattern from Section 9 & 12 of role.md.
  */
-function QuerySync({ store }: { store: ReturnType<typeof createBranchesStore> }) {
+function QuerySync({
+  store,
+}: {
+  store: ReturnType<typeof createBranchesStore>;
+}) {
   const syncBranches = useStore(store, (s) => s.syncBranches);
   const { data = [], isLoading } = useBranchesQuery();
 
@@ -27,49 +35,45 @@ function QuerySync({ store }: { store: ReturnType<typeof createBranchesStore> })
  * BranchesController
  *
  * Root Controller Component for Geographical Branches management.
- * Owns the isolated Zustand store lifecycle and coordinates state transitions.
+ * Owns the isolated Zustand store lifecycle and coordinates state transitions and mutations.
  */
 export function BranchesController() {
   const [store] = useState(() => createBranchesStore());
+  const createMutation = useCreateBranchMutation();
+  const updateMutation = useUpdateBranchMutation();
 
   const handleSubmit = useCallback(async () => {
-    const { selectedBranch, formName, formCode, formPhone, formAddress, branches } =
+    const { selectedBranch, formName, formCode, formPhone, formAddress } =
       store.getState();
 
     store.getState().setSubmitting(true);
     try {
       if (selectedBranch) {
-        // Optimistic / Local update for selected branch
-        const updated = branches.map((b) =>
-          b.id === selectedBranch.id
-            ? {
-                ...b,
-                name: formName.trim(),
-                code: formCode.trim() || undefined,
-                phone: formPhone.trim() || undefined,
-                address: formAddress.trim() || undefined,
-              }
-            : b,
-        );
-        store.getState().syncBranches(updated, false);
+        await updateMutation.mutateAsync({
+          id: selectedBranch.id,
+          data: {
+            name: formName.trim(),
+            code: formCode.trim() || undefined,
+            phone: formPhone.trim() || undefined,
+            address: formAddress.trim() || undefined,
+          },
+        });
       } else {
-        // Optimistic / Local addition for new branch
-        const newBranch: Branch = {
-          id: Date.now(),
-          instituteId: 1,
+        await createMutation.mutateAsync({
           name: formName.trim(),
-          code: formCode.trim() || undefined,
+          code: formCode.trim(),
           phone: formPhone.trim() || undefined,
           address: formAddress.trim() || undefined,
-        };
-        store.getState().syncBranches([...branches, newBranch], false);
+        });
       }
       store.getState().closeDrawer();
       store.getState().resetForm();
+    } catch (err: unknown) {
+      console.error('Failed to save branch:', err);
     } finally {
       store.getState().setSubmitting(false);
     }
-  }, [store]);
+  }, [store, createMutation, updateMutation]);
 
   return (
     <BranchesContext.Provider value={store}>

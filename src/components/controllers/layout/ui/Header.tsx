@@ -69,18 +69,24 @@ export function DashboardHeader() {
     { enabled: !isSuperAdmin },
   );
 
-  // Auto-initialize active branch if not yet set
+  // Auto-initialize active branch if not yet set or if stored ID does not exist in branches
   useEffect(() => {
-    if (!isSuperAdmin && !activeBranchId && branches && branches.length > 0) {
-      setActiveBranchId(branches[0].id);
+    if (!isSuperAdmin && branches && branches.length > 0) {
+      const branchExists = branches.some((b) => b.id === activeBranchId);
+      if (!activeBranchId || !branchExists) {
+        setActiveBranchId(branches[0].id);
+      }
     }
   }, [isSuperAdmin, activeBranchId, branches, setActiveBranchId]);
 
-  // Auto-initialize active academic year to current year if not yet set
+  // Auto-initialize active academic year to current year if not yet set or invalid
   useEffect(() => {
-    if (!isSuperAdmin && !activeAcademicYearId && yearsData?.data && yearsData.data.length > 0) {
-      const currentYear = yearsData.data.find((y) => y.isCurrent) ?? yearsData.data[0];
-      setActiveAcademicYearId(currentYear.id);
+    if (!isSuperAdmin && yearsData?.data && yearsData.data.length > 0) {
+      const yearExists = yearsData.data.some((y) => y.id === activeAcademicYearId);
+      if (!activeAcademicYearId || !yearExists) {
+        const currentYear = yearsData.data.find((y) => y.isCurrent) ?? yearsData.data[0];
+        setActiveAcademicYearId(currentYear.id);
+      }
     }
   }, [isSuperAdmin, activeAcademicYearId, yearsData, setActiveAcademicYearId]);
 
