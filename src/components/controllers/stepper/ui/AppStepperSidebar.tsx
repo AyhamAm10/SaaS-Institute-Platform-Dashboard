@@ -63,7 +63,7 @@ export function AppStepperSidebar({ children }: AppStepperSidebarProps) {
                     <Text
                       size="md"
                       fw={isCurrent ? 700 : isCompleted ? 600 : 500}
-                      c={isCurrent ? 'primary.8' : isCompleted ? 'dark.4' : 'dimmed'}
+                      c={isCurrent ? '#491d2b' : isCompleted ? '#351b25' : '#806c69'}
                       style={{
                         transition: 'color 0.2s ease',
                         fontSize: rem(14.5),
@@ -78,7 +78,15 @@ export function AppStepperSidebar({ children }: AppStepperSidebarProps) {
                       </Badge>
                     )}
                     {isCompleted && (
-                      <Badge size="xs" variant="light" color="teal" radius="sm">
+                      <Badge
+                        size="xs"
+                        radius="sm"
+                        style={{
+                          backgroundColor: '#f0e3d8',
+                          color: '#8b6a34',
+                          fontWeight: 600,
+                        }}
+                      >
                         مكتملة
                       </Badge>
                     )}
@@ -87,11 +95,11 @@ export function AppStepperSidebar({ children }: AppStepperSidebarProps) {
                   {s.description && (
                     <Text
                       size="xs"
-                      c="dimmed"
+                      c="#806c69"
                       lineClamp={2}
                       style={{
                         lineHeight: 1.5,
-                        opacity: isCurrent ? 0.95 : isCompleted ? 0.75 : 0.6,
+                        opacity: isCurrent ? 0.95 : isCompleted ? 0.8 : 0.65,
                         fontSize: rem(12),
                       }}
                     >
@@ -120,8 +128,8 @@ export function AppStepperSidebar({ children }: AppStepperSidebarProps) {
                         bottom: rem(-44), // Bridges the gap="44px" to the next circle
                         width: rem(2.5),
                         backgroundColor: isCompleted
-                          ? 'var(--mantine-color-teal-6)'
-                          : 'var(--mantine-color-gray-2)',
+                          ? '#c4a66b'
+                          : '#e5d9cf',
                         transition: 'background-color 0.25s ease',
                         zIndex: 1,
                       }}
@@ -140,20 +148,20 @@ export function AppStepperSidebar({ children }: AppStepperSidebarProps) {
                       zIndex: 2,
                       transition: 'all 0.25s ease',
                       backgroundColor: isCompleted
-                        ? 'var(--mantine-color-teal-6)'
+                        ? '#c4a66b'
                         : isCurrent
-                        ? 'var(--mantine-color-primary-6)'
-                        : 'var(--mantine-color-body)',
+                        ? '#491d2b'
+                        : '#fffaf5',
                       border:
                         isCompleted || isCurrent
                           ? 'none'
-                          : '1.5px solid var(--mantine-color-gray-3)',
+                          : '1.5px solid #e5d9cf',
                       color:
                         isCompleted || isCurrent
                           ? '#ffffff'
-                          : 'var(--mantine-color-gray-6)',
+                          : '#9d817a',
                       boxShadow: isCurrent
-                        ? '0 4px 16px rgba(var(--mantine-color-primary-6-rgb), 0.45)'
+                        ? '0 6px 18px rgba(73, 29, 43, 0.25)'
                         : 'none',
                     }}
                   >

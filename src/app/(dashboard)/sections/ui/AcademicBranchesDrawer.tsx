@@ -61,7 +61,7 @@ export function AcademicBranchesDrawer({
 
   const handleDelete = async (branch: AcademicBranch) => {
     if (branch._count && branch._count.sections > 0) {
-      setBranchError(`لا يمكن حذف الفرع "${branch.name}" لأنه مرتبط بشُعب دراسية.`);
+      setBranchError(`لا يمكن حذف الفرع "${branch.name}" لأنه مرتبط بشعب دراسية.`);
       return;
     }
 
@@ -115,7 +115,7 @@ export function AcademicBranchesDrawer({
           {/* Form to add new branch */}
           <AppDrawer.Section
             title={sectionFormLabels.branchCreateTitle}
-            description="أنشئ فرعاً أو مرحلة جديدة لمعهدك لتوزيع الشُعب عليها"
+            description="أنشئ فرعا أو مرحلة جديدة لمعهدك لتوزيع الشعب عليها"
           >
             <form onSubmit={handleCreate}>
               <Stack gap="sm">
@@ -198,7 +198,7 @@ export function AcademicBranchesDrawer({
             <Stack gap="xs">
               {branches.length === 0 ? (
                 <Text size="sm" c="dimmed" ta="center" py="md">
-                  لا توجد فروع أكاديمية مسجلة حالياً
+                  لا توجد فروع أكاديمية مسجلة حاليا
                 </Text>
               ) : (
                 branches.map((b) => (
@@ -227,7 +227,7 @@ export function AcademicBranchesDrawer({
                           )}
                           {b._count && b._count.sections > 0 && (
                             <Badge size="xs" variant="light" color="blue">
-                              {b._count.sections} شُعب
+                              {b._count.sections} شعب
                             </Badge>
                           )}
                         </Group>

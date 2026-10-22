@@ -76,7 +76,7 @@ export function getSubjectsColumns(
           <Group gap={6} wrap="nowrap">
             <IconLayoutGrid size={14} color="var(--mantine-color-dimmed)" />
             <Text size="xs" fw={500}>
-              {sectionsCount} شُعبة
+              {sectionsCount} شعبة
             </Text>
           </Group>
         );

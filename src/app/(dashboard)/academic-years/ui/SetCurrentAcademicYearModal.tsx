@@ -105,7 +105,7 @@ export function SetCurrentAcademicYearModal({
             <Group justify="space-between" align="center">
               <Group gap="xs">
                 <IconCalendarTime size={16} color="var(--mantine-color-gray-6)" />
-                <Text size="xs" c="dimmed">السنة النشطة حالياً:</Text>
+                <Text size="xs" c="dimmed">السنة النشطة حاليا:</Text>
               </Group>
               {currentActiveYear ? (
                 <Group gap="xs">

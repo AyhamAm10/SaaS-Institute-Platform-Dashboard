@@ -65,12 +65,12 @@ export function TimetableGenerateModal({ onGenerate }: TimetableGenerateModalPro
           <Stack gap="sm">
             <Checkbox
               label="جدولة تدريجية (Incremental Scheduling)"
-              description="الإبقاء على الحصص المجدولة حالياً ومحاولة إكمال الحصص الشاغرة فقط"
+              description="الإبقاء على الحصص المجدولة حاليا ومحاولة إكمال الحصص الشاغرة فقط"
               checked={generateIncremental}
               onChange={(e) => setGenerateIncremental(e.currentTarget.checked)}
             />
             <Checkbox
-              label="تثبيت الحصص الحالية تلقائياً"
+              label="تثبيت الحصص الحالية تلقائيا"
               description="تطبيق قفل الحماية على كافة الحصص الحالية لمنع تغيير مواعيدها"
               checked={generateLockExisting}
               onChange={(e) => setGenerateLockExisting(e.currentTarget.checked)}
@@ -113,7 +113,7 @@ export function TimetableGenerateModal({ onGenerate }: TimetableGenerateModalPro
                   <Stack gap={4}>
                     {generateResult.unassignedRequirements.map((u, i) => (
                       <Text key={i} size="xs">
-                        شُعبة {u.sectionId}: تبقى {u.periodsRemaining} حصص ({u.reason})
+                        شعبة {u.sectionId}: تبقى {u.periodsRemaining} حصص ({u.reason})
                       </Text>
                     ))}
                   </Stack>

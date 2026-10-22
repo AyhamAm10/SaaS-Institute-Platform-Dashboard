@@ -105,7 +105,7 @@ export function ScheduleSettingsView({
               إعدادات الجدول والدوام المدرسي
             </Title>
             <Text c="dimmed" size="sm">
-              ضبط أيام العمل، ساعات الدوام، مدد الحصص والاستراحات لإنشاء الحصص تلقائياً
+              ضبط أيام العمل، ساعات الدوام، مدد الحصص والاستراحات لإنشاء الحصص تلقائيا
             </Text>
           </Stack>
           <Button
@@ -159,7 +159,7 @@ export function ScheduleSettingsView({
                   </Text>
                 </Group>
                 <Text size="xs" c="dimmed">
-                  حدد الأيام التي تُقام فيها الدروس الأكاديمية
+                  حدد الأيام التي تقام فيها الدروس الأكاديمية
                 </Text>
 
                 <Group gap="xs">
@@ -278,7 +278,7 @@ export function ScheduleSettingsView({
                 {/* Existing Breaks List */}
                 {form.breaks.length === 0 ? (
                   <Text size="sm" c="dimmed" ta="center" py="xs">
-                    لا توجد استراحات مضافة حالياً
+                    لا توجد استراحات مضافة حاليا
                   </Text>
                 ) : (
                   <Stack gap="xs">
@@ -331,11 +331,11 @@ export function ScheduleSettingsView({
                   معاينة الحصص المحسوبة
                 </Title>
                 <Badge color="teal" variant="light" radius="xl">
-                  {slots.filter((s) => s.type === 'LESSON').length} حصص يومياً
+                  {slots.filter((s) => s.type === 'LESSON').length} حصص يوميا
                 </Badge>
               </Group>
               <Text size="xs" c="dimmed">
-                هذه الفترات الزمنية تُنشأ تلقائياً وتُستخدم كخانات ثابتة في الجداول الأسبوعية
+                هذه الفترات الزمنية تنشأ تلقائيا وتستخدم كخانات ثابتة في الجداول الأسبوعية
               </Text>
               <Divider />
 

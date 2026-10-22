@@ -120,7 +120,7 @@ export function Step2BasicInfo({ branches, sections, fields = [] }: Step2BasicIn
           placeholder={
             branchId
               ? 'اختر الشعبة الدراسية لتسكين الطالب'
-              : 'يرجى اختيار الفرع أولاً لتحديد الشُعب المتاحة'
+              : 'يرجى اختيار الفرع أولا لتحديد الشعب المتاحة'
           }
           data={sectionsOptions}
           value={sectionId ? String(sectionId) : null}

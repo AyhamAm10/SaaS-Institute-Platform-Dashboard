@@ -11,7 +11,7 @@ export function resolveLoginInitialProps(
   if (errorParam === 'unauthorized_role') {
     return {
       initialError:
-        'عذراً، هذا الحساب غير مصرح له بالدخول كمسؤول للنظام. يرجى استخدام حساب إداري.',
+        'عذرا، هذا الحساب غير مصرح له بالدخول كمسؤول للنظام. يرجى استخدام حساب إداري.',
     };
   }
   return {};

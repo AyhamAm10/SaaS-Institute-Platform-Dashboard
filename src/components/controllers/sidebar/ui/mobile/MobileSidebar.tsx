@@ -58,24 +58,45 @@ export function MobileSidebar() {
       padding="md"
       position="right"
       hiddenFrom="md"
+      styles={{
+        content: {
+          backgroundColor: '#fbf7f2',
+        },
+        header: {
+          backgroundColor: '#fbf7f2',
+          borderBottom: '1px solid #e5d9cf',
+        },
+      }}
       title={
         <Group gap="xs">
           <Paper
             p="xs"
             radius="xl"
-            withBorder
             style={{
-              backgroundColor: 'var(--mantine-color-primary-0)',
-              borderColor: 'var(--mantine-color-primary-2)',
+              backgroundColor: '#491d2b',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: rem(36),
+              height: rem(36),
             }}
           >
-            <IconSchool size={20} color="var(--mantine-color-primary-6)" />
+            <IconSchool size={20} color="#fff9f3" />
           </Paper>
           <Stack gap={0}>
-            <Text fw={700} size="sm">
+            <Text fw={700} size="sm" c="#351b25">
               {user?.institute?.name || 'معهد النور الأكاديمي'}
             </Text>
-            <Badge variant="light" color="primary" size="xs" radius="xl">
+            <Badge
+              size="xs"
+              radius="xl"
+              style={{
+                backgroundColor: '#f0e3d8',
+                color: '#8b6a34',
+                fontWeight: 600,
+                border: '1px solid #e5d9cf',
+              }}
+            >
               {branchLabel}
             </Badge>
           </Stack>
@@ -98,10 +119,12 @@ export function MobileSidebar() {
                     <ThemeIcon
                       size={30}
                       radius="md"
-                      variant={isActive ? 'filled' : 'light'}
-                      color={isActive ? 'primary' : 'gray'}
+                      style={{
+                        backgroundColor: isActive ? '#491d2b' : '#f0e3d8',
+                        color: isActive ? '#fff9f3' : '#491d2b',
+                      }}
                     >
-                      <IconComponent size={16} stroke={1.6} />
+                      <IconComponent size={16} stroke={1.8} />
                     </ThemeIcon>
                   }
                   opened={isSectionOpen}
@@ -110,15 +133,21 @@ export function MobileSidebar() {
                   variant="subtle"
                   styles={{
                     root: {
-                      borderRadius: rem(14),
-                      paddingTop: rem(10),
-                      paddingBottom: rem(10),
-                      paddingLeft: rem(14),
-                      paddingRight: rem(14),
+                      borderRadius: rem(12),
+                      paddingTop: rem(8),
+                      paddingBottom: rem(8),
+                      paddingLeft: rem(12),
+                      paddingRight: rem(12),
+                      backgroundColor: isActive && !isSectionOpen ? '#f0e3d8' : undefined,
+                      color: isActive ? '#491d2b' : '#806c69',
+                      fontWeight: isActive ? 600 : 500,
+                    },
+                    label: {
+                      color: isActive ? '#491d2b' : '#806c69',
                     },
                   }}
                 >
-                  <Stack gap={4} pt={4}>
+                  <Stack gap={3} pt={4}>
                     {item.subItems.map((sub: NavSubItem) => {
                       const isSubActive = pathname === sub.href;
                       return (
@@ -128,21 +157,19 @@ export function MobileSidebar() {
                           href={sub.href}
                           label={sub.label}
                           active={isSubActive}
-                          variant="filled"
-                          color="primary"
                           styles={{
                             root: {
-                              borderRadius: rem(12),
-                              paddingRight: rem(36),
-                              paddingTop: rem(8),
-                              paddingBottom: rem(8),
+                              borderRadius: rem(10),
+                              paddingRight: rem(34),
+                              paddingTop: rem(7),
+                              paddingBottom: rem(7),
                               backgroundColor: isSubActive
-                                ? 'var(--mantine-color-primary-0)'
+                                ? '#491d2b'
                                 : 'transparent',
                               color: isSubActive
-                                ? 'var(--mantine-color-primary-7)'
-                                : 'var(--mantine-color-dimmed)',
-                              fontWeight: isSubActive ? 700 : 500,
+                                ? '#fff9f3'
+                                : '#806c69',
+                              fontWeight: isSubActive ? 600 : 400,
                             },
                           }}
                           onClick={close}
@@ -162,25 +189,31 @@ export function MobileSidebar() {
                 label={item.label}
                 leftSection={
                   <ThemeIcon
-                    size={32}
+                    size={30}
                     radius="md"
-                    variant={isActive ? 'filled' : 'light'}
-                    color={isActive ? 'primary' : 'gray'}
+                    style={{
+                      backgroundColor: isActive ? 'transparent' : '#f0e3d8',
+                      color: isActive ? '#fff9f3' : '#491d2b',
+                    }}
                   >
-                    <IconComponent size={16} stroke={1.6} />
+                    <IconComponent size={16} stroke={1.8} />
                   </ThemeIcon>
                 }
                 active={isActive}
-                variant="light"
                 styles={{
                   root: {
-                    borderRadius: rem(14),
-                    paddingTop: rem(10),
-                    paddingBottom: rem(10),
-                    paddingLeft: rem(14),
-                    paddingRight: rem(14),
-                    backgroundColor: isActive ? 'var(--mantine-color-primary-0)' : undefined,
-                    color: isActive ? 'var(--mantine-color-primary-7)' : undefined,
+                    borderRadius: rem(12),
+                    paddingTop: rem(8),
+                    paddingBottom: rem(8),
+                    paddingLeft: rem(12),
+                    paddingRight: rem(12),
+                    backgroundColor: isActive ? '#491d2b' : 'transparent',
+                    color: isActive ? '#fff9f3' : '#806c69',
+                    fontWeight: isActive ? 600 : 500,
+                    boxShadow: isActive ? '0 4px 12px rgba(73, 29, 43, 0.14)' : 'none',
+                  },
+                  label: {
+                    color: isActive ? '#fff9f3' : '#806c69',
                   },
                 }}
                 onClick={close}
@@ -190,7 +223,7 @@ export function MobileSidebar() {
         </Stack>
       </ScrollArea>
 
-      <Box pt="md" style={{ borderTop: '1px solid var(--mantine-color-gray-2)' }}>
+      <Box pt="md" style={{ borderTop: '1px solid #e5d9cf' }}>
         <UnstyledButton
           onClick={() => {
             close();
@@ -205,8 +238,8 @@ export function MobileSidebar() {
             width: '100%',
             padding: rem(8),
             borderRadius: rem(10),
-            color: 'var(--mantine-color-red-6)',
-            backgroundColor: 'var(--mantine-color-red-0)',
+            color: '#9b4b51',
+            backgroundColor: '#f5e6e8',
             opacity: isLoggingOut ? 0.6 : 1,
             cursor: isLoggingOut ? 'not-allowed' : 'pointer',
           }}

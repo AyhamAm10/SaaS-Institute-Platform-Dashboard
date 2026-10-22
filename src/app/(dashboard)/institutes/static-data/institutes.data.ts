@@ -5,7 +5,7 @@ export const institutesLabels = {
   createNewButton: 'إضافة معهد جديد',
   searchPlaceholder: 'البحث باسم المعهد، رقم الهاتف، أو العنوان...',
   refreshButton: 'تحديث البيانات',
-  emptyState: 'لا يوجد أي معهد مسجل حالياً.',
+  emptyState: 'لا يوجد أي معهد مسجل حاليا.',
   emptySearch: 'لم يتم العثور على معاهد تطابق البحث.',
   
   // Table Headers

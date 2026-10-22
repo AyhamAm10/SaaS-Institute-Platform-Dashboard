@@ -99,8 +99,9 @@ export function DashboardHeader() {
     <AppShell.Header
       p="xs"
       style={{
-        borderBottom: '1px solid var(--mantine-color-gray-2)',
-        backgroundColor: 'var(--mantine-color-body)',
+        borderBottom: '1px solid #e5d9cf',
+        backgroundColor: 'rgba(245, 238, 230, 0.94)',
+        backdropFilter: 'blur(12px)',
       }}
     >
       <Group justify="space-between" h="100%" px="md">
@@ -121,15 +122,15 @@ export function DashboardHeader() {
               style={{
                 borderRadius: rem(4),
                 backgroundColor: isSuperAdmin
-                  ? 'var(--mantine-color-primary-6)'
-                  : 'var(--mantine-color-teal-5)',
+                  ? '#491d2b'
+                  : '#8b6a34',
               }}
             />
             <Stack gap={0}>
-              <Text size="xs" c="dimmed" fw={600}>
+              <Text size="xs" c="#806c69" fw={600}>
                 {isSuperAdmin ? 'إدارة المنصة المركزية' : 'إدارة المعهد'}
               </Text>
-              <Text size="sm" fw={800} style={{ letterSpacing: '-0.2px' }}>
+              <Text size="sm" fw={800} c="#351b25" style={{ letterSpacing: '-0.2px' }}>
                 {isSuperAdmin ? 'لوحة تحكم المشرف العام' : 'لوحة التحكم'}
               </Text>
             </Stack>
@@ -148,19 +149,20 @@ export function DashboardHeader() {
                     withBorder
                     style={{
                       cursor: 'pointer',
-                      backgroundColor: 'var(--mantine-color-gray-0)',
-                      borderColor: 'var(--mantine-color-gray-2)',
+                      backgroundColor: '#fffaf5',
+                      borderColor: '#e5d9cf',
                       display: 'flex',
                       alignItems: 'center',
                       gap: rem(8),
                       transition: 'all 150ms ease',
+                      boxShadow: '0 1px 3px rgba(73, 29, 43, 0.03)',
                     }}
                   >
-                    <IconBuildingCommunity size={16} color="var(--mantine-color-teal-6)" />
-                    <Text size="xs" fw={700} lineClamp={1}>
+                    <IconBuildingCommunity size={16} color="#8b6a34" />
+                    <Text size="xs" fw={700} c="#351b25" lineClamp={1}>
                       {activeBranchName}
                     </Text>
-                    <IconChevronDown size={13} color="var(--mantine-color-dimmed)" />
+                    <IconChevronDown size={13} color="#9d817a" />
                   </Paper>
                 </Menu.Target>
                 <Menu.Dropdown p="xs">
@@ -172,7 +174,7 @@ export function DashboardHeader() {
                         key={b.id}
                         leftSection={<IconBuildingCommunity size={14} />}
                         style={{ fontWeight: isSelected ? 700 : 500 }}
-                        color={isSelected ? 'teal' : undefined}
+                        color={isSelected ? 'primary' : undefined}
                         onClick={() => {
                           if (b.id !== activeBranchId) {
                             setActiveBranchId(b.id);
@@ -197,19 +199,20 @@ export function DashboardHeader() {
                     withBorder
                     style={{
                       cursor: 'pointer',
-                      backgroundColor: 'var(--mantine-color-gray-0)',
-                      borderColor: 'var(--mantine-color-gray-2)',
+                      backgroundColor: '#fffaf5',
+                      borderColor: '#e5d9cf',
                       display: 'flex',
                       alignItems: 'center',
                       gap: rem(8),
                       transition: 'all 150ms ease',
+                      boxShadow: '0 1px 3px rgba(73, 29, 43, 0.03)',
                     }}
                   >
-                    <IconCalendarEvent size={16} color="var(--mantine-color-primary-6)" />
-                    <Text size="xs" fw={700} lineClamp={1}>
+                    <IconCalendarEvent size={16} color="#491d2b" />
+                    <Text size="xs" fw={700} c="#351b25" lineClamp={1}>
                       {activeYearName}
                     </Text>
-                    <IconChevronDown size={13} color="var(--mantine-color-dimmed)" />
+                    <IconChevronDown size={13} color="#9d817a" />
                   </Paper>
                 </Menu.Target>
                 <Menu.Dropdown p="xs">
@@ -245,21 +248,21 @@ export function DashboardHeader() {
             placeholder="البحث عن..."
             size="sm"
             radius="xl"
-            rightSection={<IconSearch size={16} stroke={2} color="var(--mantine-color-gray-5)" />}
+            rightSection={<IconSearch size={16} stroke={2} color="#9d817a" />}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.currentTarget.value)}
             styles={{
               input: {
-                backgroundColor: 'var(--mantine-color-gray-0)',
-                border: '1px solid var(--mantine-color-gray-2)',
-                height: rem(42),
+                backgroundColor: '#fffaf5',
+                border: '1px solid #e5d9cf',
+                height: rem(40),
                 borderRadius: rem(9999),
                 paddingRight: rem(38),
                 transition: 'all 150ms ease',
                 '&:focus': {
                   backgroundColor: '#ffffff',
-                  borderColor: 'var(--mantine-color-primary-4)',
-                  boxShadow: '0 0 0 3px rgba(32, 183, 223, 0.12)',
+                  borderColor: '#c4a66b',
+                  boxShadow: '0 0 0 3px rgba(196, 166, 107, 0.18)',
                 },
               },
             }}
@@ -270,9 +273,10 @@ export function DashboardHeader() {
         <Group gap="sm">
           {/* Color Scheme Toggle */}
           <ActionIcon
-            variant="light"
+            variant="subtle"
             size="lg"
             radius="xl"
+            color="gray"
             onClick={() => toggleColorScheme()}
             aria-label="تبديل المظهر"
           >
@@ -281,7 +285,7 @@ export function DashboardHeader() {
 
           {/* Notifications */}
           <ActionIcon
-            variant="light"
+            variant="subtle"
             size="lg"
             radius="xl"
             color="gray"
@@ -300,10 +304,10 @@ export function DashboardHeader() {
                 withBorder
                 style={{
                   cursor: 'pointer',
-                  borderColor: 'var(--mantine-color-gray-2)',
-                  backgroundColor: 'var(--mantine-color-body)',
+                  borderColor: '#e5d9cf',
+                  backgroundColor: '#fffaf5',
                   transition: 'all 150ms ease',
-                  boxShadow: '0 1px 3px rgba(0, 0, 0, 0.02)',
+                  boxShadow: '0 1px 3px rgba(73, 29, 43, 0.04)',
                 }}
               >
                 <Group gap="xs" wrap="nowrap">
@@ -313,20 +317,28 @@ export function DashboardHeader() {
                     color="primary"
                     radius="xl"
                     size="sm"
+                    styles={{
+                      placeholder: {
+                        backgroundColor: '#491d2b',
+                        color: '#fff9f3',
+                        fontWeight: 600,
+                        fontSize: rem(12),
+                      },
+                    }}
                   >
                     {user?.fullName ? user.fullName.slice(0, 2) : 'من'}
                   </Avatar>
                   <Stack gap={0} visibleFrom="sm" pr="xs">
-                    <Text size="xs" fw={700} lineClamp={1}>
+                    <Text size="xs" fw={700} c="#351b25" lineClamp={1}>
                       {user?.fullName || (isSuperAdmin ? 'المشرف العام' : 'مدير النظام')}
                     </Text>
-                    <Text size="10px" c="dimmed">
+                    <Text size="10px" c="#806c69">
                       {isSuperAdmin
                         ? 'المشرف العام للنظام'
                         : user?.institute?.name || 'الفرع الرئيسي'}
                     </Text>
                   </Stack>
-                  <IconChevronDown size={14} color="var(--mantine-color-dimmed)" />
+                  <IconChevronDown size={14} color="#9d817a" />
                 </Group>
               </Paper>
             </Menu.Target>

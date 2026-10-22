@@ -101,7 +101,7 @@ export function SectionDetailsDrawer({
 
   const teacherOptions = useMemo(
     () => [
-      { value: '', label: 'بدون تحديد معلم حالياً' },
+      { value: '', label: 'بدون تحديد معلم حاليا' },
       ...(teachersData ?? []).map((t: Teacher) => ({
         value: String(t.id),
         label: t.user?.fullName ?? '',
@@ -138,8 +138,8 @@ export function SectionDetailsDrawer({
           <AppDrawer.Title>{sectionFormLabels.detailsTitle}</AppDrawer.Title>
           <AppDrawer.Description>
             {details?.name
-              ? `بيانات وإحصائيات شُعبة ${details.name}`
-              : 'عرض تفاصيل الشُعبة والمقررات المسندة'}
+              ? `بيانات وإحصائيات شعبة ${details.name}`
+              : 'عرض تفاصيل الشعبة والمقررات المسندة'}
           </AppDrawer.Description>
         </Stack>
       </AppDrawer.Header>
@@ -192,7 +192,7 @@ export function SectionDetailsDrawer({
 
             {/* Quick Metrics Section */}
             <AppDrawer.Section
-              title="إحصائيات الشُعبة"
+              title="إحصائيات الشعبة"
               description="نظرة سريعة على أعداد الطلاب والمعلمين والمواد"
             >
               <SimpleGrid cols={2} spacing="sm">
@@ -287,14 +287,14 @@ export function SectionDetailsDrawer({
               title={
                 <Group justify="space-between" align="center" style={{ width: '100%' }}>
                   <Text fw={700} size="sm">
-                    المواد الدراسية المقررة للشُعبة
+                    المواد الدراسية المقررة للشعبة
                   </Text>
                   <Badge variant="filled" color="indigo" size="sm" radius="xl">
                     {sectionSubjects?.length ?? 0} مواد
                   </Badge>
                 </Group>
               }
-              description="إسناد المواد التعليمية المعتمدة في المعهد لهذه الشُعبة"
+              description="إسناد المواد التعليمية المعتمدة في المعهد لهذه الشعبة"
             >
               <Stack gap="md">
                 {assignSubjectError && (
@@ -331,7 +331,7 @@ export function SectionDetailsDrawer({
                           size="xs"
                         />
                         <AppSelect
-                          label="المعلم المكلّف (اختياري)"
+                          label="المعلم المكلف (اختياري)"
                           placeholder="اختر المعلم..."
                           data={teacherOptions}
                           value={assignTeacherId}
@@ -344,7 +344,7 @@ export function SectionDetailsDrawer({
                       <Group justify="space-between" align="flex-end">
                         <Box style={{ width: 140 }}>
                           <AppInput
-                            label="الحصص أسبوعياً"
+                            label="الحصص أسبوعيا"
                             type="number"
                             size="xs"
                             value={String(assignWeeklyPeriods || 2)}
@@ -384,7 +384,7 @@ export function SectionDetailsDrawer({
                     }}
                   >
                     <Text size="xs" c="dimmed">
-                      لم يتم إسناد أي مواد دراسية لهذه الشُعبة بعد.
+                      لم يتم إسناد أي مواد دراسية لهذه الشعبة بعد.
                     </Text>
                   </Paper>
                 ) : (
@@ -418,7 +418,7 @@ export function SectionDetailsDrawer({
                                   {item.subject.code}
                                 </Badge>
                                 <Badge size="xs" variant="outline" color="blue">
-                                  {item.weeklyPeriods || 1} حصص أسبوعياً
+                                  {item.weeklyPeriods || 1} حصص أسبوعيا
                                 </Badge>
                                 <Badge
                                   size="xs"
@@ -436,7 +436,7 @@ export function SectionDetailsDrawer({
                           <Group gap="xs">
                             {onRemoveSubject && (
                               <Tooltip
-                                label="إزالة المادة من هذه الشُعبة"
+                                label="إزالة المادة من هذه الشعبة"
                                 withArrow
                                 position="top"
                               >
@@ -447,7 +447,7 @@ export function SectionDetailsDrawer({
                                   radius="xl"
                                   onClick={() => handleRemove(item.subjectId)}
                                   loading={isRemovingSubjectId === item.subjectId}
-                                  aria-label="إزالة المادة من الشُعبة"
+                                  aria-label="إزالة المادة من الشعبة"
                                 >
                                   <IconTrash size={14} />
                                 </ActionIcon>

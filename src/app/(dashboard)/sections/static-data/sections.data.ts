@@ -3,26 +3,26 @@
  */
 
 export const sectionsPageMetadata = {
-  title: 'الشُعب والفصول',
-  description: 'إدارة الشُعب الدراسية وتوزيع الطلاب وتحديد الرسوم الدراسية لكل شُعبة.',
-  emptyMessage: 'لا توجد شُعب دراسية مسجلة',
-  emptyDescription: 'ابدأ بإضافة أول شُعبة دراسية للمعهد وربطها بالفرع الأكاديمي والسنة الدراسية المناسبة.',
-  searchPlaceholder: 'بحث باسم الشُعبة أو الفرع الأكاديمي...',
+  title: 'الشعب والفصول',
+  description: 'إدارة الشعب الدراسية وتوزيع الطلاب وتحديد الرسوم الدراسية لكل شعبة.',
+  emptyMessage: 'لا توجد شعب دراسية مسجلة',
+  emptyDescription: 'ابدأ بإضافة أول شعبة دراسية للمعهد وربطها بالفرع الأكاديمي والسنة الدراسية المناسبة.',
+  searchPlaceholder: 'بحث باسم الشعبة أو الفرع الأكاديمي...',
 };
 
 export const sectionFormLabels = {
-  name: 'اسم الشُعبة',
+  name: 'اسم الشعبة',
   namePlaceholder: 'مثال: الشعبة 1-أ',
   academicBranchId: 'الفرع الأكاديمي',
   academicYearId: 'السنة الدراسية',
   branchId: 'فرع المعهد',
   feeAmount: 'الرسوم الدراسية (ر.س)',
   feePlaceholder: 'مثال: 1500',
-  createTitle: 'إضافة شُعبة جديدة',
-  editTitle: 'تعديل بيانات الشُعبة',
+  createTitle: 'إضافة شعبة جديدة',
+  editTitle: 'تعديل بيانات الشعبة',
   feeModalTitle: 'تعديل الرسوم الدراسية',
-  detailsTitle: 'تفاصيل الشُعبة',
-  submitCreate: 'إنشاء الشُعبة',
+  detailsTitle: 'تفاصيل الشعبة',
+  submitCreate: 'إنشاء الشعبة',
   submitEdit: 'حفظ التعديلات',
   submitFee: 'تحديث الرسوم',
   cancel: 'إلغاء',

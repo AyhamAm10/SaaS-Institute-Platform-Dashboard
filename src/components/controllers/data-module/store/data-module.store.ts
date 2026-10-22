@@ -27,7 +27,7 @@ export function createDataModuleStore<T = unknown>(
     sort: { column: null, direction: null },
     selectedIds: [],
     filters: {},
-    emptyMessage: props?.emptyMessage ?? 'لا توجد بيانات متاحة حالياً',
+    emptyMessage: props?.emptyMessage ?? 'لا توجد بيانات متاحة حاليا',
     emptyDescription: props?.emptyDescription,
     keyExtractor:
       props?.keyExtractor ??

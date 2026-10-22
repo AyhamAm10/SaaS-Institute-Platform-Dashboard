@@ -229,7 +229,7 @@ export function TeacherDetailsDrawer({
         <Tabs.Panel value="qualifications">
           <Stack gap="md">
             <Text size="xs" c="dimmed">
-              يُحدد المؤهل الأكاديمي المادة والفرع الذي يحق للمعلم تدريسه. تُستخدم هذه المؤهلات للتحقق من سلامة الجداول تلقائياً.
+              يحدد المؤهل الأكاديمي المادة والفرع الذي يحق للمعلم تدريسه. تستخدم هذه المؤهلات للتحقق من سلامة الجداول تلقائيا.
             </Text>
 
             {/* Add Qualification Bar */}
@@ -311,7 +311,7 @@ export function TeacherDetailsDrawer({
         <Tabs.Panel value="availability">
           <Stack gap="md">
             <Text size="xs" c="dimmed">
-              حدد الفترات الزمنية الأسبوعية التي يتواجد فيها المعلم في المعهد. في حال عدم تحديد أي فترات، يُعتبر المعلم متاحاً في كامل أوقات دوام المعهد.
+              حدد الفترات الزمنية الأسبوعية التي يتواجد فيها المعلم في المعهد. في حال عدم تحديد أي فترات، يعتبر المعلم متاحا في كامل أوقات دوام المعهد.
             </Text>
 
             {/* Add Availability Window Bar */}

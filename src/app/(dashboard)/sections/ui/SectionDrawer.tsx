@@ -80,8 +80,8 @@ export function SectionDrawer({
           </AppDrawer.Title>
           <AppDrawer.Description>
             {isEditing
-              ? 'تحديث بيانات ومرحلة الشُعبة الدراسية'
-              : 'إضافة شُعبة دراسية جديدة وتعيين الرسوم والمرحلة التعليمية'}
+              ? 'تحديث بيانات ومرحلة الشعبة الدراسية'
+              : 'إضافة شعبة دراسية جديدة وتعيين الرسوم والمرحلة التعليمية'}
           </AppDrawer.Description>
         </Stack>
       </AppDrawer.Header>
@@ -103,7 +103,7 @@ export function SectionDrawer({
             {/* Basic Information Section */}
             <AppDrawer.Section
               title="البيانات الأساسية"
-              description="حدد اسم الشُعبة والمرحلة التعليمية والسنة الدراسية"
+              description="حدد اسم الشعبة والمرحلة التعليمية والسنة الدراسية"
             >
               <AppInput
                 type="text"
@@ -155,7 +155,7 @@ export function SectionDrawer({
             {/* Financial Information Section */}
             <AppDrawer.Section
               title="البيانات المالية"
-              description="الرسوم الدراسية المقررة لطلاب هذه الشُعبة"
+              description="الرسوم الدراسية المقررة لطلاب هذه الشعبة"
             >
               <AppInput
                 type="number"

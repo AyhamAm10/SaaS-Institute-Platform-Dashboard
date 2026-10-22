@@ -7,4 +7,12 @@ body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  background-color: #f5eee6;
+  color: #351b25;
 }
+
+::selection {
+  background-color: #e8c9ce;
+  color: #491d2b;
+}
+

@@ -54,7 +54,7 @@ export function TimetableEntryModal({ onSave }: TimetableEntryModalProps) {
 
   const subjectOptions = (sectionSubjects || []).map((ss: any) => ({
     value: String(ss.subjectId),
-    label: `${ss.subject.name} (${ss.weeklyPeriods || 1} حصص أسبوعياً)`,
+    label: `${ss.subject.name} (${ss.weeklyPeriods || 1} حصص أسبوعيا)`,
   }));
 
   const teacherOptions = (teachersData?.data || []).map((t: any) => ({
@@ -113,7 +113,7 @@ export function TimetableEntryModal({ onSave }: TimetableEntryModalProps) {
 
         <AppSelect
           label="المادة الدراسية"
-          placeholder="اختر المادة المقررة للشُعبة"
+          placeholder="اختر المادة المقررة للشعبة"
           data={subjectOptions}
           value={entryForm.subjectId ? String(entryForm.subjectId) : null}
           onChange={(val: any) => {
@@ -129,7 +129,7 @@ export function TimetableEntryModal({ onSave }: TimetableEntryModalProps) {
         />
 
         <AppSelect
-          label="المعلم المكلّف"
+          label="المعلم المكلف"
           placeholder="اختر المعلم"
           data={teacherOptions}
           value={entryForm.teacherId ? String(entryForm.teacherId) : null}
@@ -151,7 +151,7 @@ export function TimetableEntryModal({ onSave }: TimetableEntryModalProps) {
 
         <Switch
           label="تثبيت هذه الحصة (قفل)"
-          description="الحصص المثبتة لا تتأثر أو يُعاد جدولتها عند تشغيل التوليد الآلي"
+          description="الحصص المثبتة لا تتأثر أو يعاد جدولتها عند تشغيل التوليد الآلي"
           checked={entryForm.isLocked}
           onChange={(e) => setEntryFormField('isLocked', e.currentTarget.checked)}
         />

@@ -39,7 +39,7 @@ export interface QuickActionItem {
 
 export const dashboardStaticData = {
   header: {
-    welcomeSubtitle: 'نظرة شاملة ومباشرة على أداء المعهد، الشُعب، والعمليات التعليمية اليومية.',
+    welcomeSubtitle: 'نظرة شاملة ومباشرة على أداء المعهد، الشعب، والعمليات التعليمية اليومية.',
     capacityTitle: 'نسبة الاستيعاب الكلية للمعهد',
     capacityValue: '83%',
     capacityDetail: '1,248 من أصل 1,500 طالب',
@@ -50,7 +50,7 @@ export const dashboardStaticData = {
       id: 'students',
       title: 'إجمالي الطلاب المسجلين',
       value: '1,248',
-      subtitle: 'طالباً وطالبة هذا الفصل',
+      subtitle: 'طالبا وطالبة هذا الفصل',
       badgeText: '+12% نمو سنوي',
       badgeColor: 'teal',
       progressPercent: 83,
@@ -58,7 +58,7 @@ export const dashboardStaticData = {
     },
     {
       id: 'sections',
-      title: 'الشُعب والقاعات النشطة',
+      title: 'الشعب والقاعات النشطة',
       value: '38',
       subtitle: 'شعبة في 14 قاعة دراسية',
       badgeText: '92% إشغال القاعات',
@@ -70,7 +70,7 @@ export const dashboardStaticData = {
       id: 'teachers',
       title: 'الكادر التدريسي المعتمد',
       value: '34',
-      subtitle: 'مدرساً ومدرسة متخصصاً',
+      subtitle: 'مدرسا ومدرسة متخصصا',
       badgeText: '100% تغطية الحصص',
       badgeColor: 'violet',
       progressPercent: 100,
@@ -165,7 +165,7 @@ export const dashboardStaticData = {
   quickActions: [
     {
       id: 'add-section',
-      title: 'إدارة وتوزيع الشُعب',
+      title: 'إدارة وتوزيع الشعب',
       description: 'إنشاء شعبة صفية جديدة وتحديد الرسوم والقاعات',
       href: '/sections',
       iconType: 'section',

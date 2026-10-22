@@ -31,7 +31,7 @@ export function useSectionsColumns(
     () => [
       {
         key: 'name',
-        title: 'اسم الشُعبة',
+        title: 'اسم الشعبة',
         sortable: true,
         render: (row: Section) => (
           <Text fw={600} size="sm">

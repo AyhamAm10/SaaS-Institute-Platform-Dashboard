@@ -21,8 +21,8 @@ export function AppStepperStepHeader({ children }: AppStepperStepHeaderProps) {
         padding: `${rem(16)} ${rem(22)}`,
         borderRadius: 0,
         userSelect: 'none',
-        backgroundColor: isOpen ? 'var(--mantine-color-gray-0)' : 'transparent',
-        borderBottom: isOpen ? '1px solid var(--mantine-color-gray-2)' : 'none',
+        backgroundColor: isOpen ? '#f5eee6' : 'transparent',
+        borderBottom: isOpen ? '1px solid #e5d9cf' : 'none',
         transition: 'background-color 0.2s ease',
       }}
     >
@@ -43,12 +43,12 @@ export function AppStepperStepHeader({ children }: AppStepperStepHeaderProps) {
                 justifyContent: 'center',
                 flexShrink: 0,
                 backgroundColor: isCompleted
-                  ? 'var(--mantine-color-teal-6)'
+                  ? '#c4a66b'
                   : isCurrent
-                  ? 'var(--mantine-color-primary-6)'
-                  : 'var(--mantine-color-gray-1)',
-                color: isCompleted || isCurrent ? '#ffffff' : 'var(--mantine-color-gray-6)',
-                border: isCompleted || isCurrent ? 'none' : '1px solid var(--mantine-color-gray-3)',
+                  ? '#491d2b'
+                  : '#f0e3d8',
+                color: isCompleted || isCurrent ? '#ffffff' : '#806c69',
+                border: isCompleted || isCurrent ? 'none' : '1px solid #e5d9cf',
                 transition: 'all 0.2s ease',
               }}
             >
@@ -66,14 +66,22 @@ export function AppStepperStepHeader({ children }: AppStepperStepHeaderProps) {
                 <Text
                   size="sm"
                   fw={isOpen ? 700 : 600}
-                  c={isOpen ? 'primary.8' : isCompleted ? 'dark.4' : 'gray.7'}
+                  c={isOpen ? '#491d2b' : isCompleted ? '#351b25' : '#806c69'}
                   lineClamp={1}
                 >
                   {label}
                 </Text>
 
                 {isCompleted && (
-                  <Badge variant="light" color="teal" size="xs" radius="sm">
+                  <Badge
+                    size="xs"
+                    radius="sm"
+                    style={{
+                      backgroundColor: '#f0e3d8',
+                      color: '#8b6a34',
+                      fontWeight: 600,
+                    }}
+                  >
                     مكتمل
                   </Badge>
                 )}
@@ -85,7 +93,7 @@ export function AppStepperStepHeader({ children }: AppStepperStepHeaderProps) {
               </Group>
 
               {description && (
-                <Text size="xs" c="dimmed" lineClamp={1}>
+                <Text size="xs" c="#806c69" lineClamp={1}>
                   {description}
                 </Text>
               )}
@@ -99,7 +107,7 @@ export function AppStepperStepHeader({ children }: AppStepperStepHeaderProps) {
               transition: 'transform 0.3s ease',
               display: 'flex',
               alignItems: 'center',
-              color: isOpen ? 'var(--mantine-color-primary-6)' : 'var(--mantine-color-gray-5)',
+              color: isOpen ? '#491d2b' : '#9d817a',
             }}
           >
             <IconChevronDown size={18} />

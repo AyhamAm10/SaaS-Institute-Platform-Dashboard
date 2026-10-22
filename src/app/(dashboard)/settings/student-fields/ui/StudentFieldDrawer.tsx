@@ -101,7 +101,7 @@ export function StudentFieldDrawer({ onSubmit }: StudentFieldDrawerProps) {
                 <Group gap="xs" align="flex-start" wrap="nowrap">
                   <Box style={{ flex: 1 }}>
                     <AppInput
-                      placeholder="أدخل خياراً (مثال: A+) واضغط إضافة..."
+                      placeholder="أدخل خيارا (مثال: A+) واضغط إضافة..."
                       value={newOptionDraft}
                       onChange={(e) =>
                         setNewOptionDraft(

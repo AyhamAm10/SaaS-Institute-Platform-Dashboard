@@ -3,7 +3,7 @@ import { RenderUi } from './render-ui';
 
 export const metadata: Metadata = {
   title: 'تسجيل طالب جديد | منصة إدارة المعاهد',
-  description: 'معالج تسجيل وقيد طالب جديد بالمعهد وتسكينه في الشُعب الدراسية',
+  description: 'معالج تسجيل وقيد طالب جديد بالمعهد وتسكينه في الشعب الدراسية',
 };
 
 /**

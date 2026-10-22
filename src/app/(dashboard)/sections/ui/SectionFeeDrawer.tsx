@@ -46,7 +46,7 @@ export function SectionFeeModal({
         <AppModal.Icon icon={<IconCoin size={20} />} />
         <AppModal.Title>{sectionFormLabels.feeModalTitle}</AppModal.Title>
         <AppModal.Description>
-          تعديل الرسوم الدراسية المعتمدة لطلاب هذه الشُعبة
+          تعديل الرسوم الدراسية المعتمدة لطلاب هذه الشعبة
         </AppModal.Description>
         <AppModal.Close />
       </AppModal.Header>
@@ -67,7 +67,7 @@ export function SectionFeeModal({
 
             {feeSection && (
               <Text size="sm" fw={600} c="dimmed">
-                الشُعبة: <Text span c="dark" fw={700}>{feeSection.name}</Text>
+                الشعبة: <Text span c="dark" fw={700}>{feeSection.name}</Text>
               </Text>
             )}
 

@@ -173,7 +173,7 @@ export function RoomDetailsDrawer({
         <Tabs.Panel value="availability">
           <Stack gap="md">
             <Text size="xs" c="dimmed">
-              حدد الفترات التي تتاح فيها القاعة للتدريس. إذا لم يتم إدخال فترات، تُعتبر القاعة متاحة طيلة أوقات دوام المعهد.
+              حدد الفترات التي تتاح فيها القاعة للتدريس. إذا لم يتم إدخال فترات، تعتبر القاعة متاحة طيلة أوقات دوام المعهد.
             </Text>
 
             {/* Add Availability Window Bar */}

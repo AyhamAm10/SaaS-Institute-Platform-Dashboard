@@ -47,7 +47,7 @@ export const defaultNavigationConfig: NavItem[] = [
   },
   {
     key: 'sections',
-    label: 'الشُعب والفصول',
+    label: 'الشعب والفصول',
     icon: IconLayoutGrid,
     href: '/sections',
   },

@@ -2,8 +2,8 @@ import { Metadata } from 'next';
 import { RenderUi } from './render-ui';
 
 export const metadata: Metadata = {
-  title: 'الشُعب والفصول | منصة إدارة المعاهد',
-  description: 'إدارة وتوزيع الشُعب الدراسية وتحديد الرسوم الدراسية للمعهد',
+  title: 'الشعب والفصول | منصة إدارة المعاهد',
+  description: 'إدارة وتوزيع الشعب الدراسية وتحديد الرسوم الدراسية للمعهد',
 };
 
 /**

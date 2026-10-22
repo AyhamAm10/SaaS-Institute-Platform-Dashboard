@@ -191,7 +191,7 @@ export function SectionsController() {
 
     const name = sectionForm.name.trim();
     if (!name) {
-      store.getState().setSectionFormError('يرجى إدخال اسم الشُعبة');
+      store.getState().setSectionFormError('يرجى إدخال اسم الشعبة');
       return;
     }
     if (!sectionForm.academicBranchId) {
@@ -232,7 +232,7 @@ export function SectionsController() {
       store.getState().closeFormModal();
       store.getState().resetSectionForm();
     } catch (err: unknown) {
-      store.getState().setSectionFormError(getErrorMessage(err, 'حدث خطأ أثناء حفظ الشُعبة'));
+      store.getState().setSectionFormError(getErrorMessage(err, 'حدث خطأ أثناء حفظ الشعبة'));
     } finally {
       store.getState().setFormSubmitting(false);
     }
@@ -330,7 +330,7 @@ export function SectionsController() {
         });
         store.getState().setAssignSubjectId(null);
       } catch (err: unknown) {
-        store.getState().setAssignSubjectError(getErrorMessage(err, 'حدث خطأ أثناء إسناد المادة للشُعبة'));
+        store.getState().setAssignSubjectError(getErrorMessage(err, 'حدث خطأ أثناء إسناد المادة للشعبة'));
       } finally {
         store.getState().setIsAssigningSubject(false);
       }
@@ -348,7 +348,7 @@ export function SectionsController() {
           subjectId,
         });
       } catch (err: unknown) {
-        store.getState().setAssignSubjectError(getErrorMessage(err, 'حدث خطأ أثناء إزالة المادة من الشُعبة'));
+        store.getState().setAssignSubjectError(getErrorMessage(err, 'حدث خطأ أثناء إزالة المادة من الشعبة'));
       } finally {
         store.getState().setIsRemovingSubjectId(null);
       }

@@ -3,7 +3,7 @@ import { RenderUi } from './render-ui';
 
 export const metadata: Metadata = {
   title: 'سجل الطلاب | منصة إدارة المعاهد',
-  description: 'إدارة ومتابعة سجلات الطلاب المقيدين في المعهد والشُعب الدراسية',
+  description: 'إدارة ومتابعة سجلات الطلاب المقيدين في المعهد والشعب الدراسية',
 };
 
 /**

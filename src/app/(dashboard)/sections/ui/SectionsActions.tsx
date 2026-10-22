@@ -32,7 +32,7 @@ export function SectionsActions() {
         leftSection={<IconPlus size={16} />}
         onClick={openCreate}
       >
-        إضافة شُعبة جديدة
+        إضافة شعبة جديدة
       </Button>
     </Group>
   );

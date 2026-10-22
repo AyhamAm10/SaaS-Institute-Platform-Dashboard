@@ -56,7 +56,7 @@ export function TimetableToolbar({ onRefresh }: TimetableToolbarProps) {
             }}
           />
           <AppSelect
-            placeholder="اختر الشُعبة الدراسية"
+            placeholder="اختر الشعبة الدراسية"
             data={sectionOptions}
             value={sectionId ? String(sectionId) : null}
             onChange={(val: any) => setSectionId(val ? Number(val) : null)}
@@ -82,7 +82,7 @@ export function TimetableToolbar({ onRefresh }: TimetableToolbarProps) {
             onClick={openGenerateModal}
             disabled={!academicYearId}
           >
-            توليد الجدول آلياً
+            توليد الجدول آليا
           </Button>
         </Group>
       </Group>

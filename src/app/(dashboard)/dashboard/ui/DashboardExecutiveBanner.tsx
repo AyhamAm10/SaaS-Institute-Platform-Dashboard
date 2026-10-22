@@ -49,7 +49,7 @@ export function DashboardExecutiveBanner() {
           <Stack gap={6}>
             <Group gap="xs" wrap="wrap">
               <Title order={2} size="h3" fw={800}>
-                أهلاً بك، {user?.fullName || 'مدير المعهد'}
+                أهلا بك، {user?.fullName || 'مدير المعهد'}
               </Title>
               <Badge variant="light" color="teal" radius="xl" size="sm">
                 لوحة المتابعة التنفيذية

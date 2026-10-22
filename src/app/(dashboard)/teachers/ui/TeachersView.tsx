@@ -96,7 +96,7 @@ export function TeachersView({
         totalPages={totalPages}
         isLoading={isLoading}
         isFetching={isFetching}
-        emptyMessage="لا يوجد معلمون مسجلون حالياً"
+        emptyMessage="لا يوجد معلمون مسجلون حاليا"
         emptyDescription="يمكنك إضافة معلم جديد بالنقر على زر إضافة معلم في الأعلى"
         searchPlaceholder="البحث بالاسم أو رقم الهاتف..."
         keyExtractor={(item: Teacher) => item.id}

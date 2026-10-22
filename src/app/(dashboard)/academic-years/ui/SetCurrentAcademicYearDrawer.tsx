@@ -93,7 +93,7 @@ export function SetCurrentAcademicYearDrawer({
           {/* Current Active Year Card */}
           <AppDrawer.Section
             title="السنة الحالية الحالية"
-            description="السنة النشطة حالياً في النظام"
+            description="السنة النشطة حاليا في النظام"
           >
             {currentActiveYear ? (
               <AppDrawer.Details>
@@ -115,7 +115,7 @@ export function SetCurrentAcademicYearDrawer({
               </AppDrawer.Details>
             ) : (
               <Text size="sm" c="dimmed">
-                لا توجد سنة دراسية معينة كنشطة حالياً.
+                لا توجد سنة دراسية معينة كنشطة حاليا.
               </Text>
             )}
           </AppDrawer.Section>

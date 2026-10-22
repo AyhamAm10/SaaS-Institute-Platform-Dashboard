@@ -1,7 +1,7 @@
 import { MantineThemeComponents, rem } from '@mantine/core';
 
 /**
- * Component default overrides for the compact, clean, classic Arabic SaaS Admin Dashboard.
+ * Component default overrides for the warm academic editorial SaaS Admin Dashboard.
  */
 export const defaultComponents: MantineThemeComponents = {
   AppShell: {
@@ -17,40 +17,42 @@ export const defaultComponents: MantineThemeComponents = {
     },
     styles: {
       root: {
-        borderRadius: rem(8),
-        fontWeight: 600,
+        borderRadius: rem(10),
+        fontWeight: 500,
         fontSize: rem(13),
         height: rem(38),
-        transition: 'background-color 150ms ease, border-color 150ms ease',
+        transition: 'all 150ms ease',
       },
     },
   },
 
   Paper: {
     defaultProps: {
-      radius: 'md',
+      radius: 'lg',
       withBorder: true,
     },
     styles: {
       root: {
-        borderRadius: rem(10),
-        borderColor: 'var(--mantine-color-gray-2)',
-        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.04)',
+        borderRadius: rem(14),
+        borderColor: '#e5d9cf',
+        backgroundColor: '#fffaf5',
+        boxShadow: '0 2px 8px rgba(73, 29, 43, 0.04)',
       },
     },
   },
 
   Card: {
     defaultProps: {
-      radius: 'md',
+      radius: 'lg',
       withBorder: true,
-      padding: 'md',
+      padding: 'lg',
     },
     styles: {
       root: {
-        borderRadius: rem(10),
-        borderColor: 'var(--mantine-color-gray-2)',
-        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.04)',
+        borderRadius: rem(16),
+        borderColor: '#e5d9cf',
+        backgroundColor: '#fffaf5',
+        boxShadow: '0 4px 16px rgba(73, 29, 43, 0.05)',
       },
     },
   },
@@ -61,15 +63,15 @@ export const defaultComponents: MantineThemeComponents = {
     },
     styles: {
       root: {
-        borderRadius: rem(8),
+        borderRadius: rem(10),
         fontWeight: 500,
         fontSize: rem(13),
-        paddingTop: rem(8),
-        paddingBottom: rem(8),
+        paddingTop: rem(9),
+        paddingBottom: rem(9),
         paddingLeft: rem(12),
         paddingRight: rem(12),
-        marginBottom: rem(2),
-        transition: 'all 120ms ease',
+        marginBottom: rem(3),
+        transition: 'all 140ms ease',
       },
       label: {
         fontWeight: 500,
@@ -79,8 +81,8 @@ export const defaultComponents: MantineThemeComponents = {
 
   Drawer: {
     defaultProps: {
-      radius: 'md',
-      shadow: 'lg',
+      radius: 'lg',
+      shadow: 'xl',
       position: 'right',
     },
     styles: {
@@ -90,20 +92,32 @@ export const defaultComponents: MantineThemeComponents = {
       },
       content: {
         direction: 'rtl',
+        backgroundColor: '#fffaf5',
+        borderLeft: '1px solid #e5d9cf',
+      },
+      header: {
+        backgroundColor: '#fffaf5',
+        borderBottom: '1px solid #e5d9cf',
       },
     },
   },
 
   Modal: {
     defaultProps: {
-      radius: 'md',
-      shadow: 'lg',
+      radius: 'lg',
+      shadow: 'xl',
       centered: true,
     },
     styles: {
       content: {
-        borderRadius: rem(12),
-        boxShadow: '0 12px 32px rgba(0, 0, 0, 0.1)',
+        borderRadius: rem(16),
+        backgroundColor: '#fffaf5',
+        border: '1px solid #e5d9cf',
+        boxShadow: '0 16px 40px rgba(73, 29, 43, 0.12)',
+      },
+      header: {
+        backgroundColor: '#fffaf5',
+        borderBottom: '1px solid #e5d9cf',
       },
     },
   },
@@ -126,16 +140,17 @@ export const defaultComponents: MantineThemeComponents = {
   Menu: {
     defaultProps: {
       radius: 'md',
-      shadow: 'sm',
+      shadow: 'md',
     },
     styles: {
       dropdown: {
-        borderRadius: rem(8),
-        boxShadow: '0 4px 16px rgba(0, 0, 0, 0.08)',
-        border: '1px solid var(--mantine-color-gray-2)',
+        borderRadius: rem(12),
+        boxShadow: '0 8px 24px rgba(73, 29, 43, 0.08)',
+        border: '1px solid #e5d9cf',
+        backgroundColor: '#fffaf5',
       },
       item: {
-        borderRadius: rem(6),
+        borderRadius: rem(8),
         fontSize: rem(12.5),
         fontWeight: 500,
       },
@@ -159,6 +174,7 @@ export const defaultComponents: MantineThemeComponents = {
       root: {
         fontWeight: 600,
         fontSize: rem(11),
+        borderRadius: rem(8),
         paddingLeft: rem(8),
         paddingRight: rem(8),
       },
@@ -172,16 +188,16 @@ export const defaultComponents: MantineThemeComponents = {
     },
     styles: {
       input: {
-        borderRadius: rem(8),
-        borderColor: 'var(--mantine-color-gray-3)',
+        borderRadius: rem(10),
+        borderColor: '#e5d9cf',
         backgroundColor: '#ffffff',
         fontWeight: 400,
         fontSize: rem(13),
         height: rem(38),
         transition: 'all 120ms ease',
         '&:focus': {
-          borderColor: 'var(--mantine-color-primary-6)',
-          boxShadow: '0 0 0 2px rgba(32, 183, 223, 0.15)',
+          borderColor: '#c4a66b',
+          boxShadow: '0 0 0 3px rgba(196, 166, 107, 0.18)',
         },
       },
     },
@@ -194,16 +210,16 @@ export const defaultComponents: MantineThemeComponents = {
     },
     styles: {
       input: {
-        borderRadius: rem(8),
-        borderColor: 'var(--mantine-color-gray-3)',
+        borderRadius: rem(10),
+        borderColor: '#e5d9cf',
         backgroundColor: '#ffffff',
         fontWeight: 400,
         fontSize: rem(13),
         height: rem(38),
         transition: 'all 120ms ease',
         '&:focus': {
-          borderColor: 'var(--mantine-color-primary-6)',
-          boxShadow: '0 0 0 2px rgba(32, 183, 223, 0.15)',
+          borderColor: '#c4a66b',
+          boxShadow: '0 0 0 3px rgba(196, 166, 107, 0.18)',
         },
       },
     },
@@ -217,16 +233,16 @@ export const defaultComponents: MantineThemeComponents = {
     },
     styles: {
       input: {
-        borderRadius: rem(8),
-        borderColor: 'var(--mantine-color-gray-3)',
+        borderRadius: rem(10),
+        borderColor: '#e5d9cf',
         backgroundColor: '#ffffff',
         fontWeight: 400,
         fontSize: rem(13),
         height: rem(38),
         transition: 'all 120ms ease',
         '&:focus': {
-          borderColor: 'var(--mantine-color-primary-6)',
-          boxShadow: '0 0 0 2px rgba(32, 183, 223, 0.15)',
+          borderColor: '#c4a66b',
+          boxShadow: '0 0 0 3px rgba(196, 166, 107, 0.18)',
         },
       },
     },
@@ -240,19 +256,24 @@ export const defaultComponents: MantineThemeComponents = {
     },
     styles: {
       input: {
-        borderRadius: rem(8),
-        borderColor: 'var(--mantine-color-gray-3)',
+        borderRadius: rem(10),
+        borderColor: '#e5d9cf',
         backgroundColor: '#ffffff',
         height: rem(38),
         fontSize: rem(13),
+        '&:focus': {
+          borderColor: '#c4a66b',
+          boxShadow: '0 0 0 3px rgba(196, 166, 107, 0.18)',
+        },
       },
       dropdown: {
-        borderRadius: rem(8),
-        boxShadow: '0 4px 16px rgba(0, 0, 0, 0.08)',
-        border: '1px solid var(--mantine-color-gray-2)',
+        borderRadius: rem(12),
+        boxShadow: '0 8px 24px rgba(73, 29, 43, 0.08)',
+        border: '1px solid #e5d9cf',
+        backgroundColor: '#fffaf5',
       },
       option: {
-        borderRadius: rem(6),
+        borderRadius: rem(8),
         fontSize: rem(13),
         fontWeight: 500,
         padding: `${rem(8)} ${rem(12)}`,
@@ -266,7 +287,7 @@ export const defaultComponents: MantineThemeComponents = {
     },
     styles: {
       root: {
-        borderRadius: rem(8),
+        borderRadius: rem(10),
       },
     },
   },
@@ -278,9 +299,10 @@ export const defaultComponents: MantineThemeComponents = {
     },
     styles: {
       root: {
-        borderRadius: rem(6),
+        borderRadius: rem(8),
         transition: 'all 120ms ease',
       },
     },
   },
 };
+

@@ -109,7 +109,7 @@ export function TeacherFormDrawer({ onSubmit }: TeacherFormDrawerProps) {
 
         <MultiSelect
           label="فروع المعهد التابع لها"
-          placeholder="اختر فرعاً أو أكثر (اختياري)"
+          placeholder="اختر فرعا أو أكثر (اختياري)"
           data={branchOptions}
           value={form.branchIds.map(String)}
           onChange={(values) =>

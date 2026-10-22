@@ -33,7 +33,7 @@ export function Step3CustomFields({ fields }: Step3CustomFieldsProps) {
           <Stack align="center" gap="sm">
             <IconInfoCircle size={32} color="var(--mantine-color-primary-6)" />
             <Text size="sm" fw={600}>
-              لا توجد حقول إضافية معرفة حالياً في نظام المعهد.
+              لا توجد حقول إضافية معرفة حاليا في نظام المعهد.
             </Text>
             <Text size="xs" c="dimmed" maw={450}>
               يمكنك متابعة التسجيل مباشرة بالضغط على "التالي"، أو إضافة حقول مخصصة جديدة من خلال صفحة

@@ -1,14 +1,14 @@
 import type { Metadata } from 'next';
 import { ColorSchemeScript, DirectionProvider, MantineProvider } from '@mantine/core';
-import { IBM_Plex_Sans_Arabic } from 'next/font/google';
+import { Readex_Pro } from 'next/font/google';
 import { baseTheme } from '@/src/theme';
 import { QueryProvider } from '@/src/core/api';
 import './globals.css';
 
-const ibmPlexArabic = IBM_Plex_Sans_Arabic({
+const readexPro = Readex_Pro({
   subsets: ['arabic', 'latin'],
   weight: ['300', '400', '500', '600', '700'],
-  variable: '--font-ibm-plex-arabic',
+  variable: '--font-readex-pro',
   display: 'swap',
 });
 
@@ -23,11 +23,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ar" dir="rtl" className={ibmPlexArabic.variable} suppressHydrationWarning>
+    <html lang="ar" dir="rtl" className={readexPro.variable} suppressHydrationWarning>
       <head>
         <ColorSchemeScript defaultColorScheme="light" />
       </head>
-      <body dir="rtl" className={ibmPlexArabic.className}>
+      <body dir="rtl" className={readexPro.className}>
         <DirectionProvider initialDirection="rtl">
           <MantineProvider theme={baseTheme} defaultColorScheme="light">
             <QueryProvider>

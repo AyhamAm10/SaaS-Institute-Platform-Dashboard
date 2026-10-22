@@ -83,14 +83,12 @@ export function AppStepperStep({
         radius="lg"
         withBorder
         style={{
-          backgroundColor: 'var(--mantine-color-body)',
-          borderColor: isOpen
-            ? 'var(--mantine-color-primary-4)'
-            : 'var(--mantine-color-gray-2)',
+          backgroundColor: isOpen ? '#fffaf5' : '#fbf7f2',
+          borderColor: isOpen ? '#c4a66b' : '#e5d9cf',
           boxShadow: isOpen
-            ? '0 4px 18px rgba(0, 0, 0, 0.04)'
-            : '0 1px 3px rgba(0, 0, 0, 0.01)',
-          transition: 'border-color 0.25s ease, box-shadow 0.25s ease',
+            ? '0 8px 24px rgba(73, 29, 43, 0.05)'
+            : '0 1px 3px rgba(73, 29, 43, 0.02)',
+          transition: 'border-color 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease',
           overflow: 'hidden',
         }}
       >

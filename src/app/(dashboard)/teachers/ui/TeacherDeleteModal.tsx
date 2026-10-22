@@ -95,7 +95,7 @@ export function TeacherDeleteModal({ onConfirmDelete }: TeacherDeleteModalProps)
             </Alert>
           ) : (
             <Text size="xs" c="dimmed">
-              سيتم حذف سجل المعلم ومؤهلاته وتفرغه، وتعطيل حسابه في النظام نهائياً.
+              سيتم حذف سجل المعلم ومؤهلاته وتفرغه، وتعطيل حسابه في النظام نهائيا.
             </Text>
           )}
         </Stack>

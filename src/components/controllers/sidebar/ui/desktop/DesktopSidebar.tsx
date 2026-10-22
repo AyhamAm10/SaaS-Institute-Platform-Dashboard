@@ -63,8 +63,8 @@ export function DesktopSidebar() {
         width: isCollapsed ? rem(88) : rem(270),
         transition: 'width 250ms ease, padding 250ms ease',
         overflow: 'hidden',
-        borderLeft: '1px solid var(--mantine-color-gray-2)',
-        backgroundColor: 'var(--mantine-color-body)',
+        borderLeft: '1px solid #e5d9cf',
+        backgroundColor: '#fbf7f2',
       }}
     >
       {/* Brand Header */}
@@ -74,9 +74,11 @@ export function DesktopSidebar() {
             <ThemeIcon
               size={44}
               radius="xl"
-              variant="light"
-              color="primary"
-              style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}
+              style={{
+                backgroundColor: '#491d2b',
+                color: '#fff9f3',
+                boxShadow: '0 6px 16px rgba(73, 29, 43, 0.16)',
+              }}
             >
               <IconSchool size={24} />
             </ThemeIcon>
@@ -88,19 +90,18 @@ export function DesktopSidebar() {
               <Paper
                 p="sm"
                 radius="xl"
-                withBorder
                 style={{
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  backgroundColor: 'var(--mantine-color-primary-0)',
-                  borderColor: 'var(--mantine-color-primary-2)',
-                  width: rem(64),
-                  height: rem(64),
+                  backgroundColor: '#491d2b',
+                  width: rem(58),
+                  height: rem(58),
                   borderRadius: '50%',
+                  boxShadow: '0 6px 18px rgba(73, 29, 43, 0.18)',
                 }}
               >
-                <IconSchool size={30} color="var(--mantine-color-primary-6)" stroke={1.8} />
+                <IconSchool size={28} color="#fff9f3" stroke={1.8} />
               </Paper>
               <Box
                 pos="absolute"
@@ -109,18 +110,27 @@ export function DesktopSidebar() {
                 w={10}
                 h={10}
                 style={{
-                  backgroundColor: 'var(--mantine-color-teal-5)',
+                  backgroundColor: '#c4a66b',
                   borderRadius: '50%',
-                  border: '2px solid white',
+                  border: '2px solid #fbf7f2',
                 }}
               />
             </Box>
 
-            <Stack gap={2} align="center">
-              <Text fw={800} size="sm" ta="center">
+            <Stack gap={3} align="center">
+              <Text fw={700} size="sm" c="#351b25" ta="center">
                 {user?.institute?.name || 'معهد النور الأكاديمي'}
               </Text>
-              <Badge variant="light" color="primary" size="xs" radius="xl">
+              <Badge
+                size="xs"
+                radius="xl"
+                style={{
+                  backgroundColor: '#f0e3d8',
+                  color: '#8b6a34',
+                  fontWeight: 600,
+                  border: '1px solid #e5d9cf',
+                }}
+              >
                 {branchLabel}
               </Badge>
             </Stack>
@@ -138,8 +148,9 @@ export function DesktopSidebar() {
                 justifyContent: 'center',
                 padding: rem(6),
                 borderRadius: rem(8),
-                color: 'var(--mantine-color-dimmed)',
-                backgroundColor: 'var(--mantine-color-gray-0)',
+                color: '#806c69',
+                backgroundColor: '#f0e3d8',
+                transition: 'all 120ms ease',
               }}
             >
               <IconChevronRight size={16} />
@@ -161,14 +172,14 @@ export function DesktopSidebar() {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                width: rem(48),
-                height: rem(48),
+                width: rem(46),
+                height: rem(46),
                 margin: '0 auto',
-                borderRadius: rem(14),
-                backgroundColor: isActive ? 'var(--mantine-color-primary-6)' : 'transparent',
-                color: isActive ? '#ffffff' : 'var(--mantine-color-gray-7)',
+                borderRadius: rem(12),
+                backgroundColor: isActive ? '#491d2b' : 'transparent',
+                color: isActive ? '#fff9f3' : '#806c69',
                 transition: 'all 150ms ease',
-                boxShadow: isActive ? '0 4px 12px rgba(0,0,0,0.12)' : 'none',
+                boxShadow: isActive ? '0 6px 18px rgba(73, 29, 43, 0.18)' : 'none',
               };
 
               if (item.href) {
@@ -185,7 +196,7 @@ export function DesktopSidebar() {
                       href={item.href}
                       style={buttonStyle}
                     >
-                      <IconComponent size={22} stroke={1.6} />
+                      <IconComponent size={20} stroke={1.8} />
                     </UnstyledButton>
                   </Tooltip>
                 );
@@ -203,7 +214,7 @@ export function DesktopSidebar() {
                     onClick={toggleCollapse}
                     style={buttonStyle}
                   >
-                    <IconComponent size={22} stroke={1.6} />
+                    <IconComponent size={20} stroke={1.8} />
                   </UnstyledButton>
                 </Tooltip>
               );
@@ -219,12 +230,14 @@ export function DesktopSidebar() {
                   label={item.label}
                   leftSection={
                     <ThemeIcon
-                      size={34}
-                      radius="lg"
-                      variant={isActive ? 'filled' : 'light'}
-                      color={isActive ? 'primary' : 'gray'}
+                      size={32}
+                      radius="md"
+                      style={{
+                        backgroundColor: isActive ? '#491d2b' : '#f0e3d8',
+                        color: isActive ? '#fff9f3' : '#491d2b',
+                      }}
                     >
-                      <IconComponent size={18} stroke={1.6} />
+                      <IconComponent size={17} stroke={1.8} />
                     </ThemeIcon>
                   }
                   opened={isSectionOpen}
@@ -233,16 +246,21 @@ export function DesktopSidebar() {
                   variant="subtle"
                   styles={{
                     root: {
-                      borderRadius: rem(14),
-                      paddingTop: rem(10),
-                      paddingBottom: rem(10),
-                      paddingLeft: rem(14),
-                      paddingRight: rem(14),
-                      backgroundColor: isActive && !isSectionOpen ? 'var(--mantine-color-primary-0)' : undefined,
+                      borderRadius: rem(12),
+                      paddingTop: rem(9),
+                      paddingBottom: rem(9),
+                      paddingLeft: rem(12),
+                      paddingRight: rem(12),
+                      backgroundColor: isActive && !isSectionOpen ? '#f0e3d8' : undefined,
+                      color: isActive ? '#491d2b' : '#806c69',
+                      fontWeight: isActive ? 600 : 500,
+                    },
+                    label: {
+                      color: isActive ? '#491d2b' : '#806c69',
                     },
                   }}
                 >
-                  <Stack gap={4} pt={4}>
+                  <Stack gap={3} pt={4}>
                     {item.subItems.map((sub: NavSubItem) => {
                       const isSubActive = pathname === sub.href;
                       return (
@@ -252,21 +270,22 @@ export function DesktopSidebar() {
                           href={sub.href}
                           label={sub.label}
                           active={isSubActive}
-                          variant="filled"
-                          color="primary"
                           styles={{
                             root: {
-                              borderRadius: rem(12),
-                              paddingRight: rem(38),
+                              borderRadius: rem(10),
+                              paddingRight: rem(36),
                               paddingTop: rem(8),
                               paddingBottom: rem(8),
                               backgroundColor: isSubActive
-                                ? 'var(--mantine-color-primary-0)'
+                                ? '#491d2b'
                                 : 'transparent',
                               color: isSubActive
-                                ? 'var(--mantine-color-primary-7)'
-                                : 'var(--mantine-color-dimmed)',
-                              fontWeight: isSubActive ? 700 : 500,
+                                ? '#fff9f3'
+                                : '#806c69',
+                              fontWeight: isSubActive ? 600 : 400,
+                              boxShadow: isSubActive
+                                ? '0 4px 12px rgba(73, 29, 43, 0.14)'
+                                : 'none',
                             },
                           }}
                         />
@@ -285,25 +304,35 @@ export function DesktopSidebar() {
                 label={item.label}
                 leftSection={
                   <ThemeIcon
-                    size={34}
-                    radius="lg"
-                    variant={isActive ? 'filled' : 'light'}
-                    color={isActive ? 'primary' : 'gray'}
+                    size={32}
+                    radius="md"
+                    style={{
+                      backgroundColor: isActive ? 'transparent' : '#f0e3d8',
+                      color: isActive ? '#fff9f3' : '#491d2b',
+                    }}
                   >
-                    <IconComponent size={18} stroke={1.6} />
+                    <IconComponent size={17} stroke={1.8} />
                   </ThemeIcon>
                 }
                 active={isActive}
-                variant="light"
                 styles={{
                   root: {
-                    borderRadius: rem(14),
-                    paddingTop: rem(10),
-                    paddingBottom: rem(10),
-                    paddingLeft: rem(14),
-                    paddingRight: rem(14),
-                    backgroundColor: isActive ? 'var(--mantine-color-primary-0)' : undefined,
-                    color: isActive ? 'var(--mantine-color-primary-7)' : undefined,
+                    borderRadius: rem(12),
+                    paddingTop: rem(9),
+                    paddingBottom: rem(9),
+                    paddingLeft: rem(12),
+                    paddingRight: rem(12),
+                    backgroundColor: isActive ? '#491d2b' : 'transparent',
+                    color: isActive ? '#fff9f3' : '#806c69',
+                    fontWeight: isActive ? 600 : 500,
+                    boxShadow: isActive ? '0 6px 16px rgba(73, 29, 43, 0.15)' : 'none',
+                    '&:hover': {
+                      backgroundColor: isActive ? '#491d2b' : '#f1e7de',
+                      color: isActive ? '#fff9f3' : '#491d2b',
+                    },
+                  },
+                  label: {
+                    color: isActive ? '#fff9f3' : '#806c69',
                   },
                 }}
               />
@@ -313,7 +342,7 @@ export function DesktopSidebar() {
       </AppShell.Section>
 
       {/* Footer: Logout & Expand button */}
-      <AppShell.Section pt="md" style={{ borderTop: '1px solid var(--mantine-color-gray-2)' }}>
+      <AppShell.Section pt="md" style={{ borderTop: '1px solid #e5d9cf' }}>
         {isCollapsed ? (
           <Tooltip label="توسيع القائمة" position="left" withArrow>
             <UnstyledButton
@@ -325,11 +354,12 @@ export function DesktopSidebar() {
                 justifyContent: 'center',
                 width: '100%',
                 padding: rem(10),
-                borderRadius: rem(12),
-                color: 'var(--mantine-color-dimmed)',
+                borderRadius: rem(10),
+                color: '#806c69',
+                backgroundColor: '#f0e3d8',
               }}
             >
-              <IconChevronLeft size={20} />
+              <IconChevronLeft size={18} />
             </UnstyledButton>
           </Tooltip>
         ) : (
@@ -342,17 +372,17 @@ export function DesktopSidebar() {
               alignItems: 'center',
               justifyContent: 'space-between',
               width: '100%',
-              padding: `${rem(12)} ${rem(14)}`,
-              borderRadius: rem(14),
-              color: 'var(--mantine-color-red-6)',
-              backgroundColor: 'var(--mantine-color-red-0)',
+              padding: `${rem(10)} ${rem(14)}`,
+              borderRadius: rem(12),
+              color: '#9b4b51',
+              backgroundColor: '#f5e6e8',
               transition: 'background-color 150ms ease',
               opacity: isLoggingOut ? 0.6 : 1,
               cursor: isLoggingOut ? 'not-allowed' : 'pointer',
             }}
           >
             <Group gap="xs">
-              <IconLogout size={18} stroke={1.8} />
+              <IconLogout size={17} stroke={1.8} />
               <Text size="xs" fw={700}>
                 {isLoggingOut ? 'جاري الخروج...' : 'تسجيل الخروج'}
               </Text>

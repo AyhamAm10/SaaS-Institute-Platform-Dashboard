@@ -96,14 +96,14 @@ export function SubjectDeleteModal({ onConfirmDelete }: SubjectDeleteModalProps)
                 </Text>
                 <Group gap="xs">
                   <Badge color="orange" variant="filled" size="xs">
-                    {linkedSectionsCount} شُعبة دراسية مرتبطة
+                    {linkedSectionsCount} شعبة دراسية مرتبطة
                   </Badge>
                 </Group>
               </Stack>
             </Alert>
           ) : (
             <Text size="xs" c="dimmed">
-              هذا الإجراء سيقوم بحذف المادة نهائياً من قائمة مواد المعهد.
+              هذا الإجراء سيقوم بحذف المادة نهائيا من قائمة مواد المعهد.
             </Text>
           )}
         </Stack>

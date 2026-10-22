@@ -35,7 +35,7 @@ export function DashboardDistributionCard() {
                 توزيع الطلاب حسب المراحل
               </Title>
               <Text size="xs" c="dimmed">
-                نسبة الإقبال والتسجيل في التخصصات والشُعب
+                نسبة الإقبال والتسجيل في التخصصات والشعب
               </Text>
             </Stack>
           </Group>

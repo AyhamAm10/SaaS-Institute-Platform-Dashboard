@@ -30,10 +30,10 @@ export function TimetableStats() {
       <Stack gap="sm">
         <Group justify="space-between">
           <Text fw={700} size="sm">
-            حالة إنجاز الحصص الأسبوعية المطلوبة للشُعبة
+            حالة إنجاز الحصص الأسبوعية المطلوبة للشعبة
           </Text>
           <Text size="xs" c="dimmed">
-            مقارنة النصاب المطلوب مع عدد الحصص المجدولة فعلياً في الجدول
+            مقارنة النصاب المطلوب مع عدد الحصص المجدولة فعليا في الجدول
           </Text>
         </Group>
 

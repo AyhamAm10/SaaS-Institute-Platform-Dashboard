@@ -43,10 +43,10 @@ export function TimetableGrid({ onToggleLock, onDeleteEntry }: TimetableGridProp
           <Stack align="center" gap="xs">
             <IconCalendarOff size={48} color="var(--mantine-color-gray-4)" />
             <Text fw={700} size="md" c="dimmed">
-              يرجى اختيار الشُعبة الدراسية لعرض جدولها الأسبوعي
+              يرجى اختيار الشعبة الدراسية لعرض جدولها الأسبوعي
             </Text>
             <Text size="xs" c="dimmed">
-              اختر السنة الدراسية ثم الشُعبة من شريط الأدوات أعلاه
+              اختر السنة الدراسية ثم الشعبة من شريط الأدوات أعلاه
             </Text>
           </Stack>
         </Center>

@@ -6,7 +6,7 @@ export const academicYearsPageMetadata = {
   title: 'السنوات الدراسية',
   description: 'إدارة وتحديد السنوات الدراسية للمعهد وضبط السنة النشطة الحالية.',
   emptyMessage: 'لا توجد سنوات دراسية مسجلة',
-  emptyDescription: 'ابدأ بإضافة أول سنة دراسية للمعهد للبدء بتنظيم الشُعب والفصول.',
+  emptyDescription: 'ابدأ بإضافة أول سنة دراسية للمعهد للبدء بتنظيم الشعب والفصول.',
   searchPlaceholder: 'بحث باسم السنة الدراسية...',
 };
 

@@ -53,7 +53,7 @@ export function Step1Family({ families, isLoadingFamilies }: Step1FamilyProps) {
             الخطوة الأولى: تحديد عائلة الطالب
           </Text>
           <Text size="xs" c="dimmed">
-            يمكنك ربط الطالب بعائلة موجودة مسبقاً في المعهد أو تسجيل عائلة جديدة
+            يمكنك ربط الطالب بعائلة موجودة مسبقا في المعهد أو تسجيل عائلة جديدة
           </Text>
         </Stack>
 
