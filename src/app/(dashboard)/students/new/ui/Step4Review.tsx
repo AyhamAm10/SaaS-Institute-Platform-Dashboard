@@ -6,23 +6,20 @@ import { useStudentRegistrationMirror } from '../store/useStudentRegistrationMir
 import { Branch, Section, StudentField } from '@/src/core/api';
 
 export interface Step4ReviewProps {
-  branches: Branch[];
   sections: Section[];
   fields: StudentField[];
 }
 
-export function Step4Review({ branches, sections, fields }: Step4ReviewProps) {
+export function Step4Review({ sections, fields }: Step4ReviewProps) {
   const fullName = useStudentRegistrationMirror('fullName');
   const birthDate = useStudentRegistrationMirror('birthDate');
   const gender = useStudentRegistrationMirror('gender');
-  const branchId = useStudentRegistrationMirror('branchId');
   const sectionId = useStudentRegistrationMirror('sectionId');
   const familyMode = useStudentRegistrationMirror('familyMode');
   const selectedFamily = useStudentRegistrationMirror('selectedFamily');
   const newFamily = useStudentRegistrationMirror('newFamily');
   const customFields = useStudentRegistrationMirror('customFields');
 
-  const branch = branches.find((b) => b.id === branchId);
   const section = sections.find((s) => s.id === sectionId);
 
   const familyDisplay =
@@ -75,9 +72,6 @@ export function Step4Review({ branches, sections, fields }: Step4ReviewProps) {
 
               <Text size="xs" c="dimmed">تاريخ الميلاد:</Text>
               <Text size="xs" fw={600}>{birthDate || '—'}</Text>
-
-              <Text size="xs" c="dimmed">الفرع المسجل به:</Text>
-              <Text size="xs" fw={700} c="primary">{branch?.name || '—'}</Text>
 
               <Text size="xs" c="dimmed">الشعبة الصفية:</Text>
               <Text size="xs" fw={600}>{section ? `${section.name} (${section.grade || ''})` : 'بدون تسكين مباشر'}</Text>

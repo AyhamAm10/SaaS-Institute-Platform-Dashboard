@@ -102,10 +102,6 @@ export function createStudentRegistrationStore(): StudentRegistrationStore {
           state.setStepError(1, 'يرجى تحديد جنس الطالب');
           return false;
         }
-        if (!state.branchId) {
-          state.setStepError(1, 'يرجى اختيار الفرع الجغرافي المسجل به الطالب');
-          return false;
-        }
         for (const field of configuredFields) {
           if (field.isRequired) {
             const val = state.customFields[field.name];

@@ -8,10 +8,9 @@ import { useStudentRegistrationMirror } from '../store/useStudentRegistrationMir
 import { Step1Family } from './Step1Family';
 import { Step2BasicInfo } from './Step2BasicInfo';
 import { Step4Review } from './Step4Review';
-import { Branch, Family, Section, StudentField } from '@/src/core/api';
+import { Family, Section, StudentField } from '@/src/core/api';
 
 export interface StudentRegistrationViewProps {
-  branches: Branch[];
   sections: Section[];
   families: Family[];
   fields: StudentField[];
@@ -24,7 +23,6 @@ export interface StudentRegistrationViewProps {
 }
 
 export function StudentRegistrationView({
-  branches,
   sections,
   families,
   fields,
@@ -81,7 +79,7 @@ export function StudentRegistrationView({
           >
             <AppStepper.Step.Header />
             <AppStepper.Step.Content>
-              <Step2BasicInfo branches={branches} sections={sections} fields={fields} />
+              <Step2BasicInfo sections={sections} fields={fields} />
             </AppStepper.Step.Content>
           </AppStepper.Step>
 
@@ -93,7 +91,7 @@ export function StudentRegistrationView({
           >
             <AppStepper.Step.Header />
             <AppStepper.Step.Content>
-              <Step4Review branches={branches} sections={sections} fields={fields} />
+              <Step4Review sections={sections} fields={fields} />
             </AppStepper.Step.Content>
           </AppStepper.Step>
 

@@ -12,6 +12,7 @@ import {
   Group,
   Loader,
   Paper,
+  SegmentedControl,
   SimpleGrid,
   Stack,
   Text,
@@ -125,6 +126,11 @@ export function SectionDetailsDrawer({
     await onRemoveSubject(sectionId, subjectId);
   };
 
+  const detailsActiveTab = useSectionsMirror('detailsActiveTab');
+  const setDetailsActiveTab = useSectionsMirror('setDetailsActiveTab');
+
+  const isSubjectsTab = (detailsActiveTab || 'subjects') === 'subjects';
+
   return (
     <AppDrawer
       opened={opened}
@@ -133,13 +139,20 @@ export function SectionDetailsDrawer({
       loading={isLoading}
     >
       <AppDrawer.Header>
-        <AppDrawer.Icon icon={<IconInfoCircle size={20} />} color="blue" />
+        <AppDrawer.Icon
+          icon={isSubjectsTab ? <IconBook size={20} /> : <IconInfoCircle size={20} />}
+          color={isSubjectsTab ? 'indigo' : 'blue'}
+        />
         <Stack gap={2} style={{ flex: 1, minWidth: 0 }}>
-          <AppDrawer.Title>{sectionFormLabels.detailsTitle}</AppDrawer.Title>
-          <AppDrawer.Description>
+          <AppDrawer.Title>
             {details?.name
-              ? `بيانات وإحصائيات شعبة ${details.name}`
-              : 'عرض تفاصيل الشعبة والمقررات المسندة'}
+              ? `${details.name} — ${isSubjectsTab ? 'إسناد المواد والخطة التدريسية' : 'بيانات الشعبة'}`
+              : sectionFormLabels.detailsTitle}
+          </AppDrawer.Title>
+          <AppDrawer.Description>
+            {isSubjectsTab
+              ? 'تحديد المواد التعليمية، المعلمين المكلفين، وعدد الحصص الأسبوعية'
+              : 'عرض المعلومات الأساسية وإحصائيات التسجيل والرسوم'}
           </AppDrawer.Description>
         </Stack>
       </AppDrawer.Header>
@@ -147,156 +160,189 @@ export function SectionDetailsDrawer({
       <AppDrawer.Content>
         {details && (
           <Stack gap="lg">
-            {/* Section Basic Details Card */}
-            <AppDrawer.Section
-              title={
-                <Group justify="space-between" align="center" style={{ width: '100%' }}>
-                  <Text fw={700} size="md">
-                    {details.name}
-                  </Text>
-                  <Badge radius="xl" variant="light" color="teal">
-                    {details.academicBranch?.name ?? details.grade}
-                  </Badge>
-                </Group>
-              }
-              description="المعلومات الأساسية والفرع والسنة الدراسية"
-            >
-              <AppDrawer.Details>
-                <AppDrawer.Detail
-                  label="الفرع الأكاديمي"
-                  value={details.academicBranch?.name ?? details.grade}
-                  icon={<IconCalendar size={16} />}
-                />
-                <AppDrawer.Detail
-                  label="السنة الدراسية"
-                  value={details.academicYear?.name ?? '—'}
-                  icon={<IconCalendar size={16} />}
-                />
-                <AppDrawer.Detail
-                  label="فرع المعهد"
-                  value={details.branch?.name ?? 'الفرع الرئيسي'}
-                  icon={<IconMapPin size={16} />}
-                />
-                <AppDrawer.Detail
-                  label="الرسوم المعتمدة"
-                  value={
-                    <Text fw={700} c="teal" span>
-                      {Number(details.feeAmount).toLocaleString('ar-SA')} ر.س
-                    </Text>
+            <SegmentedControl
+              fullWidth
+              radius="xl"
+              size="sm"
+              color="indigo"
+              value={detailsActiveTab || 'subjects'}
+              onChange={setDetailsActiveTab}
+              data={[
+                {
+                  value: 'subjects',
+                  label: (
+                    <Group gap={6} justify="center">
+                      <IconBook size={16} />
+                      <Text size="xs" fw={600}>
+                        المواد المقررة والخطة ({sectionSubjects?.length ?? 0})
+                      </Text>
+                    </Group>
+                  ),
+                },
+                {
+                  value: 'info',
+                  label: (
+                    <Group gap={6} justify="center">
+                      <IconInfoCircle size={16} />
+                      <Text size="xs" fw={600}>
+                        بيانات وإحصائيات الشعبة
+                      </Text>
+                    </Group>
+                  ),
+                },
+              ]}
+            />
+
+            {!isSubjectsTab && (
+              <>
+                {/* Section Basic Details Card */}
+                <AppDrawer.Section
+                  title={
+                    <Group justify="space-between" align="center" style={{ width: '100%' }}>
+                      <Text fw={700} size="md">
+                        {details.name}
+                      </Text>
+                      <Badge radius="xl" variant="light" color="teal">
+                        {details.academicBranch?.name ?? details.grade}
+                      </Badge>
+                    </Group>
                   }
-                  icon={<IconCoin size={16} />}
-                  iconColor="teal"
-                />
-              </AppDrawer.Details>
-            </AppDrawer.Section>
-
-            {/* Quick Metrics Section */}
-            <AppDrawer.Section
-              title="إحصائيات الشعبة"
-              description="نظرة سريعة على أعداد الطلاب والمعلمين والمواد"
-            >
-              <SimpleGrid cols={2} spacing="sm">
-                <Card
-                  radius="md"
-                  withBorder
-                  p="sm"
-                  style={{ backgroundColor: 'var(--mantine-color-gray-0)' }}
+                  description="المعلومات الأساسية والفرع والسنة الدراسية"
                 >
-                  <Group gap="xs">
-                    <ThemeIcon size="lg" radius="xl" variant="light" color="blue">
-                      <IconUsers size={20} />
-                    </ThemeIcon>
-                    <Stack gap={2}>
-                      <Text size="xs" c="dimmed">
-                        الطلاب المسجلين
-                      </Text>
-                      <Text fw={700} size="md">
-                        {details._count?.studentEnrollments ?? 0} طالب
-                      </Text>
-                    </Stack>
-                  </Group>
-                </Card>
+                  <AppDrawer.Details>
+                    <AppDrawer.Detail
+                      label="الفرع الأكاديمي"
+                      value={details.academicBranch?.name ?? details.grade}
+                      icon={<IconCalendar size={16} />}
+                    />
+                    <AppDrawer.Detail
+                      label="السنة الدراسية"
+                      value={details.academicYear?.name ?? '—'}
+                      icon={<IconCalendar size={16} />}
+                    />
+                    <AppDrawer.Detail
+                      label="الرسوم المعتمدة"
+                      value={
+                        <Text fw={700} c="teal" span>
+                          {Number(details.feeAmount).toLocaleString('ar-SA')} ر.س
+                        </Text>
+                      }
+                      icon={<IconCoin size={16} />}
+                      iconColor="teal"
+                    />
+                  </AppDrawer.Details>
+                </AppDrawer.Section>
 
-                <Card
-                  radius="md"
-                  withBorder
-                  p="sm"
-                  style={{ backgroundColor: 'var(--mantine-color-gray-0)' }}
+                {/* Quick Metrics Section */}
+                <AppDrawer.Section
+                  title="إحصائيات الشعبة"
+                  description="نظرة سريعة على أعداد الطلاب والمعلمين والمواد"
                 >
-                  <Group gap="xs">
-                    <ThemeIcon size="lg" radius="xl" variant="light" color="violet">
-                      <IconBook size={20} />
-                    </ThemeIcon>
-                    <Stack gap={2}>
-                      <Text size="xs" c="dimmed">
-                        المواد المقررة
-                      </Text>
-                      <Text fw={700} size="md">
-                        {sectionSubjects?.length ?? details._count?.sectionSubjects ?? 0} مادة
-                      </Text>
-                    </Stack>
-                  </Group>
-                </Card>
+                  <SimpleGrid cols={2} spacing="sm">
+                    <Card
+                      radius="md"
+                      withBorder
+                      p="sm"
+                      style={{ backgroundColor: 'var(--mantine-color-gray-0)' }}
+                    >
+                      <Group gap="xs">
+                        <ThemeIcon size="lg" radius="xl" variant="light" color="blue">
+                          <IconUsers size={20} />
+                        </ThemeIcon>
+                        <Stack gap={2}>
+                          <Text size="xs" c="dimmed">
+                            الطلاب المسجلين
+                          </Text>
+                          <Text fw={700} size="md">
+                            {details._count?.studentEnrollments ?? 0} طالب
+                          </Text>
+                        </Stack>
+                      </Group>
+                    </Card>
 
-                <Card
-                  radius="md"
-                  withBorder
-                  p="sm"
-                  style={{ backgroundColor: 'var(--mantine-color-gray-0)' }}
-                >
-                  <Group gap="xs">
-                    <ThemeIcon size="lg" radius="xl" variant="light" color="orange">
-                      <IconSchool size={20} />
-                    </ThemeIcon>
-                    <Stack gap={2}>
-                      <Text size="xs" c="dimmed">
-                        المدرسين
-                      </Text>
-                      <Text fw={700} size="md">
-                        {details._count?.sectionTeachers ?? 0} معلم
-                      </Text>
-                    </Stack>
-                  </Group>
-                </Card>
+                    <Card
+                      radius="md"
+                      withBorder
+                      p="sm"
+                      style={{ backgroundColor: 'var(--mantine-color-gray-0)' }}
+                    >
+                      <Group gap="xs">
+                        <ThemeIcon size="lg" radius="xl" variant="light" color="violet">
+                          <IconBook size={20} />
+                        </ThemeIcon>
+                        <Stack gap={2}>
+                          <Text size="xs" c="dimmed">
+                            المواد المقررة
+                          </Text>
+                          <Text fw={700} size="md">
+                            {sectionSubjects?.length ?? details._count?.sectionSubjects ?? 0} مادة
+                          </Text>
+                        </Stack>
+                      </Group>
+                    </Card>
 
-                <Card
-                  radius="md"
-                  withBorder
-                  p="sm"
-                  style={{ backgroundColor: 'var(--mantine-color-gray-0)' }}
-                >
-                  <Group gap="xs">
-                    <ThemeIcon size="lg" radius="xl" variant="light" color="teal">
-                      <IconCalendarTime size={20} />
-                    </ThemeIcon>
-                    <Stack gap={2}>
-                      <Text size="xs" c="dimmed">
-                        الحصص والجدول
-                      </Text>
-                      <Text fw={700} size="md">
-                        {details._count?.timetables ?? 0} حصة
-                      </Text>
-                    </Stack>
-                  </Group>
-                </Card>
-              </SimpleGrid>
-            </AppDrawer.Section>
+                    <Card
+                      radius="md"
+                      withBorder
+                      p="sm"
+                      style={{ backgroundColor: 'var(--mantine-color-gray-0)' }}
+                    >
+                      <Group gap="xs">
+                        <ThemeIcon size="lg" radius="xl" variant="light" color="orange">
+                          <IconSchool size={20} />
+                        </ThemeIcon>
+                        <Stack gap={2}>
+                          <Text size="xs" c="dimmed">
+                            المدرسين
+                          </Text>
+                          <Text fw={700} size="md">
+                            {details._count?.sectionTeachers ?? 0} معلم
+                          </Text>
+                        </Stack>
+                      </Group>
+                    </Card>
 
-            {/* Section Subjects Management */}
-            <AppDrawer.Section
-              title={
-                <Group justify="space-between" align="center" style={{ width: '100%' }}>
-                  <Text fw={700} size="sm">
-                    المواد الدراسية المقررة للشعبة
-                  </Text>
-                  <Badge variant="filled" color="indigo" size="sm" radius="xl">
-                    {sectionSubjects?.length ?? 0} مواد
-                  </Badge>
-                </Group>
-              }
-              description="إسناد المواد التعليمية المعتمدة في المعهد لهذه الشعبة"
-            >
-              <Stack gap="md">
+                    <Card
+                      radius="md"
+                      withBorder
+                      p="sm"
+                      style={{ backgroundColor: 'var(--mantine-color-gray-0)' }}
+                    >
+                      <Group gap="xs">
+                        <ThemeIcon size="lg" radius="xl" variant="light" color="teal">
+                          <IconCalendarTime size={20} />
+                        </ThemeIcon>
+                        <Stack gap={2}>
+                          <Text size="xs" c="dimmed">
+                            الحصص والجدول
+                          </Text>
+                          <Text fw={700} size="md">
+                            {details._count?.timetables ?? 0} حصة
+                          </Text>
+                        </Stack>
+                      </Group>
+                    </Card>
+                  </SimpleGrid>
+                </AppDrawer.Section>
+              </>
+            )}
+
+            {isSubjectsTab && (
+              /* Section Subjects Management */
+              <AppDrawer.Section
+                title={
+                  <Group justify="space-between" align="center" style={{ width: '100%' }}>
+                    <Text fw={700} size="sm">
+                      المواد الدراسية المقررة للشعبة
+                    </Text>
+                    <Badge variant="filled" color="indigo" size="sm" radius="xl">
+                      {sectionSubjects?.length ?? 0} مواد
+                    </Badge>
+                  </Group>
+                }
+                description="إسناد المواد التعليمية وتحديد الحصص الأسبوعية والمعلم المكلف"
+              >
+                <Stack gap="md">
                 {assignSubjectError && (
                   <Alert
                     icon={<IconAlertCircle size={16} />}
@@ -348,7 +394,17 @@ export function SectionDetailsDrawer({
                             type="number"
                             size="xs"
                             value={String(assignWeeklyPeriods || 2)}
-                            onChange={(val: unknown) => setAssignWeeklyPeriods(Number(val) || 1)}
+                            onChange={(val: unknown) => {
+                              const parsed =
+                                typeof val === 'number'
+                                  ? val
+                                  : typeof val === 'string'
+                                    ? Number(val)
+                                    : val && typeof val === 'object' && 'target' in val
+                                      ? Number((val.target as HTMLInputElement).value)
+                                      : 2;
+                              setAssignWeeklyPeriods(isNaN(parsed) || parsed < 1 ? 1 : parsed);
+                            }}
                           />
                         </Box>
                         <Button
@@ -458,6 +514,7 @@ export function SectionDetailsDrawer({
                 )}
               </Stack>
             </AppDrawer.Section>
+            )}
           </Stack>
         )}
       </AppDrawer.Content>

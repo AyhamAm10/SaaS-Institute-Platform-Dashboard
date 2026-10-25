@@ -76,6 +76,7 @@ export interface CreateTeacherPayload {
   password?: string;
   branchIds: number[];
   specialization?: string;
+  isActive?: boolean;
   qualifications?: Array<{
     academicBranchId: number;
     subjectId: number;

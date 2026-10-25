@@ -8,16 +8,14 @@ import { useStudentRegistrationMirror } from '../store/useStudentRegistrationMir
 import { Branch, Section, StudentField } from '@/src/core/api';
 
 export interface Step2BasicInfoProps {
-  branches: Branch[];
   sections: Section[];
   fields?: StudentField[];
 }
 
-export function Step2BasicInfo({ branches, sections, fields = [] }: Step2BasicInfoProps) {
+export function Step2BasicInfo({ sections, fields = [] }: Step2BasicInfoProps) {
   const fullName = useStudentRegistrationMirror('fullName');
   const birthDate = useStudentRegistrationMirror('birthDate');
   const gender = useStudentRegistrationMirror('gender');
-  const branchId = useStudentRegistrationMirror('branchId');
   const sectionId = useStudentRegistrationMirror('sectionId');
   const customFields = useStudentRegistrationMirror('customFields');
   const setStudentField = useStudentRegistrationMirror('setStudentField');
@@ -26,23 +24,13 @@ export function Step2BasicInfo({ branches, sections, fields = [] }: Step2BasicIn
 
   const error = stepErrors[1];
 
-  const branchesOptions = useMemo(
-    () => branches.map((b) => ({ value: String(b.id), label: b.name })),
-    [branches],
-  );
-
-  const availableSections = useMemo(() => {
-    if (!branchId) return sections;
-    return sections.filter((s) => s.branchId === branchId);
-  }, [sections, branchId]);
-
   const sectionsOptions = useMemo(
     () =>
-      availableSections.map((s) => ({
+      sections.map((s) => ({
         value: String(s.id),
         label: `${s.name} ${s.grade ? `(${s.grade})` : ''}`,
       })),
-    [availableSections],
+    [sections],
   );
 
   return (
@@ -52,7 +40,7 @@ export function Step2BasicInfo({ branches, sections, fields = [] }: Step2BasicIn
           الخطوة الثانية: بيانات الطالب الأساسية والإضافية
         </Text>
         <Text size="xs" c="dimmed">
-          أدخل اسم الطالب وتاريخ ميلاده، وحدد الفرع والشعبة، وأكمل أي حقول مخصصة مطلوبة
+          أدخل اسم الطالب وتاريخ ميلاده، وحدد الشعبة الدراسية (تُسجل تلقائياً في الفرع النشط للمعهد)
         </Text>
       </Stack>
 
@@ -101,34 +89,17 @@ export function Step2BasicInfo({ branches, sections, fields = [] }: Step2BasicIn
           />
 
           <AppSelect
-            label="الفرع الجغرافي المسجل به"
-            placeholder="اختر فرع المعهد"
-            data={branchesOptions}
-            value={branchId ? String(branchId) : null}
-            onChange={(val: string | null) => {
-              setStudentField('branchId', val ? Number(val) : null);
-              setStudentField('sectionId', null);
-            }}
-            required
+            label="الشعبة الصفية (اختياري - للإدراج المباشر)"
+            placeholder="اختر الشعبة الدراسية لتسكين الطالب..."
+            data={sectionsOptions}
+            value={sectionId ? String(sectionId) : null}
+            onChange={(val: string | null) =>
+              setStudentField('sectionId', val ? Number(val) : null)
+            }
             searchable
             clearable
           />
         </SimpleGrid>
-
-        <AppSelect
-          label="الشعبة الصفية (اختياري - للإدراج المباشر)"
-          placeholder={
-            branchId
-              ? 'اختر الشعبة الدراسية لتسكين الطالب'
-              : 'يرجى اختيار الفرع أولا لتحديد الشعب المتاحة'
-          }
-          data={sectionsOptions}
-          value={sectionId ? String(sectionId) : null}
-          onChange={(val: string | null) => setStudentField('sectionId', val ? Number(val) : null)}
-          disabled={!branchId}
-          searchable
-          clearable
-        />
 
         {fields.length > 0 && (
           <Stack gap="lg" mt="xs">

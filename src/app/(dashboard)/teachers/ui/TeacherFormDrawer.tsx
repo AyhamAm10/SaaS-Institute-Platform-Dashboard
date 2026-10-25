@@ -5,7 +5,6 @@ import {
   Button,
   Drawer,
   Group,
-  MultiSelect,
   Stack,
   Switch,
   Text,
@@ -16,7 +15,6 @@ import {
   IconUser,
 } from '@tabler/icons-react';
 import { AppInput } from '@/src/components/controllers';
-import { useBranchesQuery } from '@/src/core/api';
 import { useTeachersMirror } from '../store/useTeachersMirror';
 
 interface TeacherFormDrawerProps {
@@ -33,12 +31,6 @@ export function TeacherFormDrawer({ onSubmit }: TeacherFormDrawerProps) {
 
   const closeDrawer = useTeachersMirror('closeDrawer');
   const setFormField = useTeachersMirror('setFormField');
-
-  const { data: branches } = useBranchesQuery();
-  const branchOptions = (branches || []).map((b: any) => ({
-    value: String(b.id),
-    label: b.name,
-  }));
 
   const isEdit = drawerMode === 'edit';
 
@@ -105,19 +97,6 @@ export function TeacherFormDrawer({ onSubmit }: TeacherFormDrawerProps) {
           placeholder="مثال: لغة عربية، رياضيات، فيزياء..."
           value={form.specialization}
           onChange={(val: any) => setFormField('specialization', val)}
-        />
-
-        <MultiSelect
-          label="فروع المعهد التابع لها"
-          placeholder="اختر فرعا أو أكثر (اختياري)"
-          data={branchOptions}
-          value={form.branchIds.map(String)}
-          onChange={(values) =>
-            setFormField('branchIds', values.map(Number))
-          }
-          radius="xl"
-          searchable
-          clearable
         />
 
         <Switch

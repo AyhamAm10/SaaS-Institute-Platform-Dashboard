@@ -52,6 +52,7 @@ export function createSectionsStore(): SectionsStore {
 
     // ── Details Drawer State ──
     drawerOpened: false,
+    detailsActiveTab: 'subjects',
     detailSectionId: null,
     detailsData: null,
     sectionSubjectsData: [],
@@ -161,13 +162,15 @@ export function createSectionsStore(): SectionsStore {
     setFeeError: (error) => set({ feeError: error }),
 
     // ── Actions: Details Drawer ──
-    openDetails: (section) =>
+    openDetails: (section, tab = 'subjects') =>
       set({
         detailSectionId: section.id,
         drawerOpened: true,
+        detailsActiveTab: tab,
         assignSubjectId: null,
         assignSubjectError: null,
       }),
+    setDetailsActiveTab: (tab) => set({ detailsActiveTab: tab }),
     closeDrawer: () =>
       set({
         drawerOpened: false,

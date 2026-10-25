@@ -34,6 +34,7 @@ export interface Section {
   branch?: SectionBranchSummary;
   academicYear?: SectionAcademicYearSummary;
   academicBranch?: SectionAcademicBranchSummary;
+  _count?: SectionDetailsCounts;
 }
 
 export interface SectionDetailsCounts {

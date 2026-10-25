@@ -55,6 +55,8 @@ function QuerySync({ store }: { store: ReturnType<typeof createSectionsStore> })
   const syncInstituteSubjects = useStore(store, (s) => s.syncInstituteSubjects);
   const syncTeachers = useStore(store, (s) => s.syncTeachers);
 
+  const { activeBranchId } = useOperationalContext();
+
   // 1. Sections query (Main table list — always enabled)
   const { data: paginatedData, isLoading, isFetching } = useSectionsQuery({
     page,
@@ -62,6 +64,7 @@ function QuerySync({ store }: { store: ReturnType<typeof createSectionsStore> })
     search: search.trim() ? search.trim() : undefined,
     academicYearId: selectedYearId ? Number(selectedYearId) : undefined,
     academicBranchId: selectedBranchId ? Number(selectedBranchId) : undefined,
+    branchId: activeBranchId ?? undefined,
   });
 
   useEffect(() => {

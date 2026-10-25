@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { useStore } from 'zustand';
-import { useStudentsQuery, useBranchesQuery } from '@/src/core/api';
+import { useStudentsQuery } from '@/src/core/api';
+import { useOperationalContext } from '@/src/core/context';
 import { createStudentsStore, StudentsContext } from './store/students.store';
 import { StudentsView } from './ui/StudentsView';
 
@@ -13,17 +14,17 @@ import { StudentsView } from './ui/StudentsView';
  * Strictly adheres to QuerySync pattern from Section 9 & 12 of role.md.
  */
 function QuerySync({ store }: { store: ReturnType<typeof createStudentsStore> }) {
+  const { activeBranchId } = useOperationalContext();
   const page = useStore(store, (s) => s.page);
   const limit = useStore(store, (s) => s.limit);
   const search = useStore(store, (s) => s.search);
-  const selectedBranchId = useStore(store, (s) => s.selectedBranchId);
   const syncQueryData = useStore(store, (s) => s.syncQueryData);
 
   const { data: paginatedData, isLoading } = useStudentsQuery({
     page,
     limit,
     search: search.trim() ? search.trim() : undefined,
-    branchId: selectedBranchId || undefined,
+    branchId: activeBranchId || undefined,
   });
 
   useEffect(() => {
@@ -46,12 +47,11 @@ function QuerySync({ store }: { store: ReturnType<typeof createStudentsStore> })
  */
 export function StudentsController() {
   const [store] = useState(() => createStudentsStore());
-  const { data: branches = [] } = useBranchesQuery();
 
   return (
     <StudentsContext.Provider value={store}>
       <QuerySync store={store} />
-      <StudentsView branches={branches} />
+      <StudentsView />
     </StudentsContext.Provider>
   );
 }

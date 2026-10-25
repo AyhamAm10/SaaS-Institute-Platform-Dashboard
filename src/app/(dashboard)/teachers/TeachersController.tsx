@@ -14,6 +14,7 @@ import {
   useTeachersQuery,
   useUpdateTeacherMutation,
   getTeacherById,
+  useOperationalContext,
 } from '@/src/core/api';
 import {
   createTeachersStore,
@@ -26,17 +27,17 @@ function QuerySync({
 }: {
   store: ReturnType<typeof createTeachersStore>;
 }) {
+  const { activeBranchId } = useOperationalContext();
   const page = useStore(store, (s) => s.page);
   const limit = useStore(store, (s) => s.limit);
   const search = useStore(store, (s) => s.search);
-  const branchId = useStore(store, (s) => s.branchId);
   const syncQueryData = useStore(store, (s) => s.syncQueryData);
 
   const { data: paginated, isLoading, isFetching } = useTeachersQuery({
     page,
     limit,
     search: search.trim() ? search.trim() : undefined,
-    branchId,
+    branchId: activeBranchId ?? undefined,
   });
 
   useEffect(() => {
@@ -55,6 +56,7 @@ function QuerySync({
 export function TeachersController() {
   const [store] = useState(() => createTeachersStore());
   const queryClient = useQueryClient();
+  const { activeBranchId } = useOperationalContext();
 
   const createMutation = useCreateTeacherMutation();
   const updateMutation = useUpdateTeacherMutation();
@@ -104,6 +106,13 @@ export function TeachersController() {
 
     store.getState().setIsSubmitting(true);
     try {
+      const targetBranchIds =
+        form.branchIds && form.branchIds.length > 0
+          ? form.branchIds
+          : activeBranchId
+            ? [activeBranchId]
+            : [];
+
       if (drawerMode === 'edit' && selectedTeacher) {
         await updateMutation.mutateAsync({
           id: selectedTeacher.id,
@@ -112,7 +121,7 @@ export function TeachersController() {
             phone: form.phone.trim(),
             password: form.password?.trim() ? form.password.trim() : undefined,
             specialization: form.specialization?.trim() || undefined,
-            branchIds: form.branchIds,
+            branchIds: targetBranchIds,
             isActive: form.isActive,
           },
         });
@@ -122,7 +131,7 @@ export function TeachersController() {
           phone: form.phone.trim(),
           password: form.password?.trim() || 'Teacher@123456',
           specialization: form.specialization?.trim() || undefined,
-          branchIds: form.branchIds,
+          branchIds: targetBranchIds,
         });
       }
 
@@ -137,7 +146,7 @@ export function TeachersController() {
     } finally {
       store.getState().setIsSubmitting(false);
     }
-  }, [store, createMutation, updateMutation]);
+  }, [store, createMutation, updateMutation, activeBranchId]);
 
   const handleConfirmDelete = useCallback(
     async (teacher: Teacher) => {

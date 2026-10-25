@@ -2,15 +2,14 @@
 
 import { useMemo } from 'react';
 import { ActionIcon, Button, Tooltip } from '@mantine/core';
+import Link from 'next/link';
 import {
   IconPlus,
   IconRefresh,
   IconUserCheck,
 } from '@tabler/icons-react';
 import { DataModuleController } from '@/src/components/controllers/data-module';
-import { AppSelect } from '@/src/components/controllers/input';
-import { useBranchesQuery, Teacher } from '@/src/core/api';
-import { useOperationalContext } from '@/src/core/context';
+import { Teacher } from '@/src/core/api';
 import { useTeachersMirror } from '../store/useTeachersMirror';
 import { getTeachersColumns } from './TeachersTable';
 import { TeacherFormDrawer } from './TeacherFormDrawer';
@@ -50,7 +49,6 @@ export function TeachersView({
 }: TeachersViewProps) {
   const data = useTeachersMirror('data');
   const search = useTeachersMirror('search');
-  const branchId = useTeachersMirror('branchId');
   const isFetching = useTeachersMirror('isFetching');
   const isLoading = useTeachersMirror('isLoading');
   const page = useTeachersMirror('page');
@@ -59,24 +57,10 @@ export function TeachersView({
   const limit = useTeachersMirror('limit');
   const setPage = useTeachersMirror('setPage');
   const setSearch = useTeachersMirror('setSearch');
-  const setBranchId = useTeachersMirror('setBranchId');
   const openCreateDrawer = useTeachersMirror('openCreateDrawer');
   const openEditDrawer = useTeachersMirror('openEditDrawer');
   const openDetailsDrawer = useTeachersMirror('openDetailsDrawer');
   const openDeleteModal = useTeachersMirror('openDeleteModal');
-  const { activeBranchId } = useOperationalContext();
-
-  const { data: branches } = useBranchesQuery();
-  const branchOptions = useMemo(
-    () => [
-      { value: 'all', label: 'كافة الفروع' },
-      ...(branches || []).map((b: any) => ({
-        value: String(b.id),
-        label: b.name,
-      })),
-    ],
-    [branches],
-  );
 
   const columns = useMemo(
     () => getTeachersColumns(openDetailsDrawer, openEditDrawer, openDeleteModal),
@@ -110,8 +94,9 @@ export function TeachersView({
           />
           <DataModuleController.Actions>
             <Button
+              component={Link}
+              href="/teachers/new"
               leftSection={<IconPlus size={16} />}
-              onClick={() => openCreateDrawer(activeBranchId ?? undefined)}
               color="primary"
               radius="md"
             >
@@ -123,13 +108,6 @@ export function TeachersView({
         <DataModuleController.FilterBar>
           <DataModuleController.SearchInput placeholder="البحث بالاسم أو رقم الهاتف..." />
           <DataModuleController.FilterSlot>
-            <AppSelect
-              placeholder="تصفية حسب الفرع"
-              data={branchOptions}
-              value={branchId ? String(branchId) : 'all'}
-              onChange={(val: any) => setBranchId(val && val !== 'all' ? Number(val) : undefined)}
-              clearable
-            />
             {onRefresh && (
               <Tooltip label="تحديث البيانات" withArrow position="top">
                 <ActionIcon

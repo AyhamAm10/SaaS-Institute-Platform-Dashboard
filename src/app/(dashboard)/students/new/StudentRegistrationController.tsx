@@ -1,15 +1,15 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
-  useBranchesQuery,
   useSectionsQuery,
   useFamiliesSearchQuery,
   useStudentFieldsQuery,
   useCreateStudentMutation,
   CreateStudentPayload,
 } from '@/src/core/api';
+import { useOperationalContext } from '@/src/core/context';
 import {
   createStudentRegistrationStore,
   StudentRegistrationContext,
@@ -19,9 +19,18 @@ import { StudentRegistrationView } from './ui/StudentRegistrationView';
 export function StudentRegistrationController() {
   const router = useRouter();
   const [store] = useState(() => createStudentRegistrationStore());
+  const { activeBranchId } = useOperationalContext();
 
-  const { data: branches = [] } = useBranchesQuery();
-  const { data: sectionsData } = useSectionsQuery({ limit: 100 });
+  useEffect(() => {
+    if (activeBranchId) {
+      store.getState().setStudentField('branchId', activeBranchId);
+    }
+  }, [store, activeBranchId]);
+
+  const { data: sectionsData } = useSectionsQuery({
+    limit: 100,
+    branchId: activeBranchId || undefined,
+  });
   const { data: families = [], isLoading: isLoadingFamilies } = useFamiliesSearchQuery();
   const { data: fields = [] } = useStudentFieldsQuery(false);
 
@@ -75,7 +84,7 @@ export function StudentRegistrationController() {
         fullName: state.fullName.trim(),
         birthDate: state.birthDate,
         gender: state.gender,
-        branchId: state.branchId || undefined,
+        branchId: activeBranchId || undefined,
         sectionId: state.sectionId || undefined,
         customFields: state.customFields,
       };
@@ -98,12 +107,11 @@ export function StudentRegistrationController() {
     } finally {
       state.setSubmitting(false);
     }
-  }, [store, fields, createStudentMutation, router]);
+  }, [store, activeBranchId, fields, createStudentMutation, router]);
 
   return (
     <StudentRegistrationContext.Provider value={store}>
       <StudentRegistrationView
-        branches={branches}
         sections={sectionsData?.data || []}
         families={families}
         fields={fields}

@@ -29,15 +29,15 @@ function QuerySync({
   const limit = useStore(store, (s) => s.limit);
   const search = useStore(store, (s) => s.search);
   const type = useStore(store, (s) => s.type);
-  const branchId = useStore(store, (s) => s.branchId);
   const syncQueryData = useStore(store, (s) => s.syncQueryData);
+  const { activeBranchId } = useOperationalContext();
 
   const { data: paginated, isLoading, isFetching } = useRoomsQuery({
     page,
     limit,
     search: search.trim() ? search.trim() : undefined,
     type,
-    branchId,
+    branchId: activeBranchId ?? undefined,
   });
 
   useEffect(() => {
@@ -97,11 +97,7 @@ export function RoomsController() {
       hasError = true;
     }
 
-    const targetBranchId = form.branchId ?? activeBranchId ?? undefined;
-    if (!targetBranchId) {
-      store.getState().setFieldError('branchId', 'يرجى تحديد الفرع التابع له');
-      hasError = true;
-    }
+    const targetBranchId = activeBranchId ?? selectedRoom?.branchId ?? undefined;
 
     if (hasError) return;
 

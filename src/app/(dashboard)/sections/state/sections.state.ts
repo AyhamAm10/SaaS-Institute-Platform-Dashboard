@@ -54,6 +54,7 @@ export interface SectionsState {
 
   // ── Details Drawer State ──
   drawerOpened: boolean;
+  detailsActiveTab: string;
   detailSectionId: number | null;
   detailsData: SectionDetails | null;
   sectionSubjectsData: SectionSubjectItem[];
@@ -117,7 +118,8 @@ export interface SectionsState {
   setFeeError: (error: string | null) => void;
 
   // ── Actions: Details Drawer ──
-  openDetails: (section: Section) => void;
+  openDetails: (section: Section, tab?: string) => void;
+  setDetailsActiveTab: (tab: string) => void;
   closeDrawer: () => void;
 
   // ── Actions: Branches Modal ──
