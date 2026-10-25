@@ -279,7 +279,6 @@ export function SectionsController() {
     try {
       await createBranchMutation.mutateAsync({
         name: branchForm.name.trim(),
-        code: branchForm.code.trim() || undefined,
         description: branchForm.description.trim() || undefined,
       });
       store.getState().resetBranchForm();

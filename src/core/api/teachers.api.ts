@@ -13,7 +13,6 @@ export interface TeacherAssignment {
   subject?: {
     id: number;
     name: string;
-    code: string;
   };
 }
 

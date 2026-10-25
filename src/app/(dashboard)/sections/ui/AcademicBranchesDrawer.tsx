@@ -137,40 +137,22 @@ export function AcademicBranchesDrawer({
                   required
                 />
 
-                <Group grow>
-                  <AppInput
-                    type="text"
-                    label={sectionFormLabels.branchCode}
-                    placeholder={sectionFormLabels.branchCodePlaceholder}
-                    value={branchForm.code}
-                    onChange={(e) =>
-                      setBranchFormField(
-                        'code',
-                        typeof e === 'string'
-                          ? e
-                          : e && typeof e === 'object' && 'target' in e
-                            ? (e.target as HTMLInputElement).value
-                            : '',
-                      )
-                    }
-                  />
-                  <AppInput
-                    type="text"
-                    label={sectionFormLabels.branchDescription}
-                    placeholder={sectionFormLabels.branchDescriptionPlaceholder}
-                    value={branchForm.description}
-                    onChange={(e) =>
-                      setBranchFormField(
-                        'description',
-                        typeof e === 'string'
-                          ? e
-                          : e && typeof e === 'object' && 'target' in e
-                            ? (e.target as HTMLInputElement).value
-                            : '',
-                      )
-                    }
-                  />
-                </Group>
+                <AppInput
+                  type="text"
+                  label={sectionFormLabels.branchDescription}
+                  placeholder={sectionFormLabels.branchDescriptionPlaceholder}
+                  value={branchForm.description}
+                  onChange={(e) =>
+                    setBranchFormField(
+                      'description',
+                      typeof e === 'string'
+                        ? e
+                        : e && typeof e === 'object' && 'target' in e
+                          ? (e.target as HTMLInputElement).value
+                          : '',
+                    )
+                  }
+                />
 
                 <Group justify="flex-end" mt="xs">
                   <Button
@@ -220,11 +202,6 @@ export function AcademicBranchesDrawer({
                           <Text fw={600} size="sm">
                             {b.name}
                           </Text>
-                          {b.code && (
-                            <Badge size="xs" variant="outline" color="gray">
-                              {b.code}
-                            </Badge>
-                          )}
                           {b._count && b._count.sections > 0 && (
                             <Badge size="xs" variant="light" color="blue">
                               {b._count.sections} شعب

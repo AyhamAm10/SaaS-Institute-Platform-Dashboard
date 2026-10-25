@@ -12,7 +12,6 @@ export interface BranchesState {
 
   // Form Fields
   formName: string;
-  formCode: string;
   formPhone: string;
   formAddress: string;
   isSubmitting: boolean;
@@ -23,7 +22,7 @@ export interface BranchesState {
   openCreateDrawer: () => void;
   openEditDrawer: (branch: Branch) => void;
   closeDrawer: () => void;
-  setFormField: (field: 'formName' | 'formCode' | 'formPhone' | 'formAddress', value: string) => void;
+  setFormField: (field: 'formName' | 'formPhone' | 'formAddress', value: string) => void;
   setSubmitting: (submitting: boolean) => void;
   resetForm: () => void;
 }

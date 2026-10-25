@@ -5,7 +5,6 @@ export interface AcademicBranch {
   id: number;
   instituteId: number;
   name: string;
-  code?: string | null;
   description?: string | null;
   createdAt: string;
   updatedAt: string;
@@ -30,13 +29,11 @@ export interface AcademicBranchesQueryParams {
 
 export interface CreateAcademicBranchPayload {
   name: string;
-  code?: string;
   description?: string;
 }
 
 export interface UpdateAcademicBranchPayload {
   name?: string;
-  code?: string;
   description?: string;
 }
 

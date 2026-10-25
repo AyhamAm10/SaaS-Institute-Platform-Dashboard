@@ -39,32 +39,10 @@ export function getSubjectsColumns(
           <Avatar color="primary" radius="md" size="sm" variant="light">
             <IconBook size={16} />
           </Avatar>
-          <Stack gap={1}>
-            <Text size="xs" fw={600} style={{ fontSize: '13px' }}>
-              {subject.name}
-            </Text>
-            <Text size="xs" c="dimmed" style={{ fontSize: '11px' }}>
-              معرف: #{subject.id}
-            </Text>
-          </Stack>
+          <Text size="sm" fw={600}>
+            {subject.name}
+          </Text>
         </Group>
-      ),
-    },
-    {
-      key: 'code',
-      title: subjectsLabels.tableCode,
-      sortable: true,
-      render: (subject) => (
-        <Badge
-          variant="light"
-          color="indigo"
-          size="sm"
-          radius="sm"
-          dir="ltr"
-          fw={600}
-        >
-          {subject.code}
-        </Badge>
       ),
     },
     {

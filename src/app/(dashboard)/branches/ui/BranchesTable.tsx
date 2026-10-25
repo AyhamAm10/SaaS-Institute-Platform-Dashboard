@@ -23,15 +23,6 @@ export function getBranchesColumns(onEdit: (branch: Branch) => void): DataModule
       ),
     },
     {
-      key: 'code',
-      title: 'رمز الفرع',
-      render: (branch) => (
-        <Badge variant="light" color="gray" radius="xl" size="sm">
-          {branch.code || '—'}
-        </Badge>
-      ),
-    },
-    {
       key: 'phone',
       title: 'هاتف التواصل',
       render: (branch) =>

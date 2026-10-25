@@ -62,7 +62,6 @@ export interface Student {
   branch?: {
     id: number;
     name: string;
-    code?: string | null;
   } | null;
   studentEnrollments?: StudentEnrollmentItem[];
 }

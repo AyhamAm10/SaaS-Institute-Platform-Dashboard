@@ -5,7 +5,6 @@ export interface Subject {
   id: number;
   instituteId: number;
   name: string;
-  code: string;
   createdAt: string;
   updatedAt: string;
   _count?: {
@@ -29,12 +28,10 @@ export interface SubjectsQueryParams {
 
 export interface CreateSubjectPayload {
   name: string;
-  code: string;
 }
 
 export interface UpdateSubjectPayload {
   name?: string;
-  code?: string;
 }
 
 // --------------------------------------------------------------------------

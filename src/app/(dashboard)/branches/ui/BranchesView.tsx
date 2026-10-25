@@ -28,7 +28,6 @@ export function BranchesView({ onSubmit }: BranchesViewProps) {
     return branches.filter(
       (b) =>
         b.name?.toLowerCase().includes(q) ||
-        b.code?.toLowerCase().includes(q) ||
         b.address?.toLowerCase().includes(q) ||
         b.phone?.includes(q),
     );

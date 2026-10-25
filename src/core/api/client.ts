@@ -3,7 +3,7 @@ import { tokenRefreshHandler } from './refresh';
 import { getActiveAcademicYearId, getActiveBranchId } from '../context/operational-context';
 
 export const API_BASE_URL =
-  process.env['NEXT_PUBLIC_API_URL'] || 'http://localhost:3000/api';
+  process.env['NEXT_PUBLIC_API_URL'] || 'http://localhost:4000/api';
 
 /**
  * Standard configured Axios client for the Admin Dashboard.

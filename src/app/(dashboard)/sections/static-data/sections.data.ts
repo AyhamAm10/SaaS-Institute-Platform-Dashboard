@@ -30,8 +30,6 @@ export const sectionFormLabels = {
   branchCreateTitle: 'إضافة فرع أكاديمي جديد',
   branchName: 'اسم الفرع الأكاديمي',
   branchNamePlaceholder: 'مثال: الثانوي العام — الفرع العلمي',
-  branchCode: 'رمز الفرع (اختياري)',
-  branchCodePlaceholder: 'مثال: SCI-SEC',
   branchDescription: 'الوصف (اختياري)',
   branchDescriptionPlaceholder: 'وصف موجز للمسار الأكاديمي...',
 };

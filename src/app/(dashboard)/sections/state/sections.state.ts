@@ -66,7 +66,6 @@ export interface SectionsState {
   branchesModalOpened: boolean;
   branchForm: {
     name: string;
-    code: string;
     description: string;
   };
   branchError: string | null;
@@ -124,7 +123,7 @@ export interface SectionsState {
   // ── Actions: Branches Modal ──
   openBranchesModal: () => void;
   closeBranchesModal: () => void;
-  setBranchFormField: (field: 'name' | 'code' | 'description', value: string) => void;
+  setBranchFormField: (field: 'name' | 'description', value: string) => void;
   resetBranchForm: () => void;
   setBranchError: (error: string | null) => void;
   setBranchSuccess: (success: string | null) => void;

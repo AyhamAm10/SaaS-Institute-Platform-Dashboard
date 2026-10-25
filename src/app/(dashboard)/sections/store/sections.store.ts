@@ -64,7 +64,6 @@ export function createSectionsStore(): SectionsStore {
     branchesModalOpened: false,
     branchForm: {
       name: '',
-      code: '',
       description: '',
     },
     branchError: null,
@@ -196,7 +195,6 @@ export function createSectionsStore(): SectionsStore {
       set({
         branchForm: {
           name: '',
-          code: '',
           description: '',
         },
       }),

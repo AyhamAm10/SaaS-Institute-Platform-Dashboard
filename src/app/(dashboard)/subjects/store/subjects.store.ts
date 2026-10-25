@@ -12,7 +12,6 @@ export type SubjectsStore = ControllerStoreApi<SubjectsState>;
 
 const defaultFormState: SubjectFormState = {
   name: '',
-  code: '',
 };
 
 /**
@@ -73,7 +72,6 @@ export function createSubjectsStore(): SubjectsStore {
         selectedSubject: subject,
         form: {
           name: subject.name,
-          code: subject.code,
         },
         formErrors: {},
         generalError: null,

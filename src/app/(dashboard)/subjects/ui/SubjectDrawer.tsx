@@ -84,16 +84,6 @@ export function SubjectDrawer({ onSubmit }: SubjectDrawerProps) {
               error={formErrors['name']}
               required
             />
-
-            <AppInput
-              label={subjectsLabels.fieldCodeLabel}
-              placeholder={subjectsLabels.fieldCodePlaceholder}
-              description={subjectsLabels.fieldCodeDescription}
-              value={form.code}
-              onChange={(val) => setFormField('code', val)}
-              error={formErrors['code']}
-              required
-            />
           </Stack>
         </form>
       </AppDrawer.Content>

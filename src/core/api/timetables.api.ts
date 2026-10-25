@@ -37,7 +37,6 @@ export interface TimetableEntry {
   subject?: {
     id: number;
     name: string;
-    code: string;
   };
   teacher?: {
     id: number;

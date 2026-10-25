@@ -16,7 +16,6 @@ export function createBranchesStore(): BranchesStore {
     selectedBranch: null,
 
     formName: '',
-    formCode: '',
     formPhone: '',
     formAddress: '',
     isSubmitting: false,
@@ -29,7 +28,6 @@ export function createBranchesStore(): BranchesStore {
         isDrawerOpen: true,
         selectedBranch: null,
         formName: '',
-        formCode: '',
         formPhone: '',
         formAddress: '',
       }),
@@ -39,7 +37,6 @@ export function createBranchesStore(): BranchesStore {
         isDrawerOpen: true,
         selectedBranch: branch,
         formName: branch.name,
-        formCode: branch.code || '',
         formPhone: branch.phone || '',
         formAddress: branch.address || '',
       }),
@@ -58,7 +55,6 @@ export function createBranchesStore(): BranchesStore {
     resetForm: () =>
       set({
         formName: '',
-        formCode: '',
         formPhone: '',
         formAddress: '',
         isSubmitting: false,

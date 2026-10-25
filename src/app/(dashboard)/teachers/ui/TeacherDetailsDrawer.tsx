@@ -112,7 +112,7 @@ export function TeacherDetailsDrawer({
 
   const subjectOptions = (subjectsData?.data || []).map((s) => ({
     value: String(s.id),
-    label: `${s.name} (${s.code})`,
+    label: s.name,
   }));
 
   if (!selectedTeacherDetails) return null;

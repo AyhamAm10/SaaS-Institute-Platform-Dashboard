@@ -5,7 +5,6 @@ export interface Branch {
   id: number;
   instituteId: number;
   name: string;
-  code?: string | null;
   address?: string | null;
   phone?: string | null;
   isActive?: boolean;
@@ -13,7 +12,6 @@ export interface Branch {
 
 export interface CreateBranchDto {
   name: string;
-  code: string;
   phone?: string;
   address?: string;
 }

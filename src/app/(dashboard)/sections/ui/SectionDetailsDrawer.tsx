@@ -94,7 +94,7 @@ export function SectionDetailsDrawer({
         .filter((s) => !assignedSubjectIds.has(s.id))
         .map((s) => ({
           value: String(s.id),
-          label: `${s.name} (${s.code})`,
+          label: s.name,
         })),
     [instituteSubjects, assignedSubjectIds],
   );
@@ -414,9 +414,6 @@ export function SectionDetailsDrawer({
                                 {item.subject.name}
                               </Text>
                               <Group gap={6}>
-                                <Badge size="xs" variant="light" color="indigo">
-                                  {item.subject.code}
-                                </Badge>
                                 <Badge size="xs" variant="outline" color="blue">
                                   {item.weeklyPeriods || 1} حصص أسبوعيا
                                 </Badge>

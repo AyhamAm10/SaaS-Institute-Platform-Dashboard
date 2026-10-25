@@ -2,7 +2,7 @@ export const subjectsLabels = {
   title: 'المواد الدراسية',
   subtitle: 'إدارة وتحديد المواد والمقررات التعليمية وتعيينها للشعب الدراسية في المعهد',
   totalCountBadge: 'مادة دراسية',
-  searchPlaceholder: 'البحث باسم المادة أو الرمز الكودي...',
+  searchPlaceholder: 'البحث باسم المادة...',
   createNewButton: 'إضافة مادة جديدة',
   refreshButton: 'تحديث البيانات',
   emptyState: 'لا توجد مواد دراسية مسجلة حاليا',
@@ -10,7 +10,6 @@ export const subjectsLabels = {
 
   // Table columns
   tableName: 'اسم المادة',
-  tableCode: 'الرمز الكودي',
   tableSectionsCount: 'الشعب المرتبطة',
   tableCreatedAt: 'تاريخ الإضافة',
   tableActions: 'الإجراءات',
@@ -21,16 +20,13 @@ export const subjectsLabels = {
 
   // Drawer labels
   createTitle: 'إضافة مادة دراسية جديدة',
-  createDescription: 'أدخل تفاصيل المادة الدراسية والرمز المميز لها في المعهد',
+  createDescription: 'أدخل تفاصيل المادة الدراسية للمعهد',
   editTitle: 'تعديل بيانات المادة الدراسية',
-  editDescription: 'تعديل اسم المادة أو رمزها الكودي في المعهد',
+  editDescription: 'تعديل اسم المادة الدراسية في المعهد',
 
   // Form fields
   fieldNameLabel: 'اسم المادة الدراسية',
   fieldNamePlaceholder: 'مثال: الرياضيات، اللغة العربية، الفيزياء',
-  fieldCodeLabel: 'الرمز الكودي (Code)',
-  fieldCodePlaceholder: 'مثال: MATH101, ARAB201, PHYS10',
-  fieldCodeDescription: 'رمز فريد للمادة على مستوى المعهد التعليمي',
 
   submitCreate: 'حفظ وإضافة المادة',
   submitEdit: 'حفظ التعديلات',

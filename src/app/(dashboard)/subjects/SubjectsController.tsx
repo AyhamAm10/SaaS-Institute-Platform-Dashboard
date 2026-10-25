@@ -83,11 +83,6 @@ export function SubjectsController() {
       hasError = true;
     }
 
-    if (!form.code.trim()) {
-      store.getState().setFieldError('code', 'يرجى إدخال الرمز الكودي للمادة');
-      hasError = true;
-    }
-
     if (hasError) return;
 
     store.getState().setIsSubmitting(true);
@@ -97,13 +92,11 @@ export function SubjectsController() {
           id: selectedSubject.id,
           payload: {
             name: form.name.trim(),
-            code: form.code.trim(),
           },
         });
       } else {
         await createMutation.mutateAsync({
           name: form.name.trim(),
-          code: form.code.trim(),
         });
       }
 

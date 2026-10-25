@@ -16,7 +16,6 @@ export function BranchDrawer({ onSubmit }: BranchDrawerProps) {
   const closeDrawer = useBranchesMirror('closeDrawer');
   const selectedBranch = useBranchesMirror('selectedBranch');
   const formName = useBranchesMirror('formName');
-  const formCode = useBranchesMirror('formCode');
   const formPhone = useBranchesMirror('formPhone');
   const formAddress = useBranchesMirror('formAddress');
   const isSubmitting = useBranchesMirror('isSubmitting');
@@ -55,18 +54,6 @@ export function BranchDrawer({ onSubmit }: BranchDrawerProps) {
                   onChange={(e) =>
                     setFormField(
                       'formName',
-                      typeof e === 'string' ? e : e?.target?.value ?? '',
-                    )
-                  }
-                  required
-                />
-                <AppInput
-                  label={branchesLabels.codeLabel}
-                  placeholder={branchesLabels.codePlaceholder}
-                  value={formCode}
-                  onChange={(e) =>
-                    setFormField(
-                      'formCode',
                       typeof e === 'string' ? e : e?.target?.value ?? '',
                     )
                   }

@@ -2,7 +2,6 @@ import { Subject } from '@/src/core/api';
 
 export interface SubjectFormState {
   name: string;
-  code: string;
 }
 
 /**

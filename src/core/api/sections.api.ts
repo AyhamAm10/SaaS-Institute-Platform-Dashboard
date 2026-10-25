@@ -4,7 +4,6 @@ import { apiClient } from './client';
 export interface SectionBranchSummary {
   id: number;
   name: string;
-  code?: string;
   address?: string;
 }
 
@@ -19,7 +18,6 @@ export interface SectionAcademicYearSummary {
 export interface SectionAcademicBranchSummary {
   id: number;
   name: string;
-  code?: string | null;
 }
 
 export interface Section {
@@ -99,7 +97,6 @@ export interface SectionSubjectItem {
     id: number;
     instituteId: number;
     name: string;
-    code: string;
     createdAt: string;
     updatedAt: string;
   };
