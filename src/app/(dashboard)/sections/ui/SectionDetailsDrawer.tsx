@@ -7,11 +7,10 @@ import {
   Badge,
   Box,
   Button,
-  Card,
   Center,
+  Divider,
   Group,
   Loader,
-  Paper,
   SegmentedControl,
   SimpleGrid,
   Stack,
@@ -26,7 +25,6 @@ import {
   IconCalendarTime,
   IconCoin,
   IconInfoCircle,
-  IconMapPin,
   IconPlus,
   IconSchool,
   IconTrash,
@@ -54,8 +52,10 @@ export interface SectionDetailsDrawerProps {
  * SectionDetailsDrawer
  *
  * Displays full section details, counts, and allows managing assigned subjects.
- * Strictly adheres to role.md.
- * ZERO React Query hooks — all data and query states read from useSectionsMirror.
+ * Clean, breathable, modern organic UI with ZERO nested cards.
+ * Strictly adheres to role.md:
+ * - ZERO useState (all state is stored in Zustand and read via useSectionsMirror).
+ * - Pure Mantine and unified controllers (AppDrawer, AppSelect, AppInput).
  */
 export function SectionDetailsDrawer({
   opened,
@@ -83,6 +83,9 @@ export function SectionDetailsDrawer({
   const isAssigningSubject = useSectionsMirror('isAssigningSubject');
   const isRemovingSubjectId = useSectionsMirror('isRemovingSubjectId');
 
+  const detailsActiveTab = useSectionsMirror('detailsActiveTab');
+  const setDetailsActiveTab = useSectionsMirror('setDetailsActiveTab');
+
   // ── Available subjects options (excluding already assigned) ──
   const assignedSubjectIds = useMemo(
     () => new Set(sectionSubjects?.map((s) => s.subjectId) ?? []),
@@ -100,16 +103,44 @@ export function SectionDetailsDrawer({
     [instituteSubjects, assignedSubjectIds],
   );
 
-  const teacherOptions = useMemo(
-    () => [
-      { value: '', label: 'بدون تحديد معلم حاليا' },
-      ...(teachersData ?? []).map((t: Teacher) => ({
+  // ── Filter teachers strictly by the selected subject ──
+  const filteredTeachers = useMemo(() => {
+    if (!assignSubjectId) return [];
+    const subId = Number(assignSubjectId);
+    const selectedSub = instituteSubjects?.find((s) => s.id === subId);
+    const subName = selectedSub?.name?.trim();
+
+    return (teachersData ?? []).filter((t: Teacher) => {
+      // 1. Check official assignments
+      const hasAssignment = t.assignments?.some(
+        (a) => a.subjectId === subId || (subName && a.subject?.name?.trim() === subName),
+      );
+      if (hasAssignment) return true;
+
+      // 2. Check specialization match
+      if (subName && t.specialization && t.specialization.includes(subName)) {
+        return true;
+      }
+
+      return false;
+    });
+  }, [assignSubjectId, instituteSubjects, teachersData]);
+
+  const teacherOptions = useMemo(() => {
+    if (!assignSubjectId) return [];
+    return [
+      { value: '', label: 'بدون تحديد معلم حالياً (توزيع آلي)' },
+      ...filteredTeachers.map((t: Teacher) => ({
         value: String(t.id),
-        label: t.user?.fullName ?? '',
+        label: `${t.user?.fullName}${t.specialization ? ` (${t.specialization})` : ''}`,
       })),
-    ],
-    [teachersData],
-  );
+    ];
+  }, [assignSubjectId, filteredTeachers]);
+
+  const handleSubjectChange = (val: string | null) => {
+    setAssignSubjectId(val);
+    setAssignTeacherId(null);
+  };
 
   const handleAssign = async () => {
     if (!sectionId || !assignSubjectId || !onAssignSubject) return;
@@ -125,9 +156,6 @@ export function SectionDetailsDrawer({
     if (!sectionId || !onRemoveSubject) return;
     await onRemoveSubject(sectionId, subjectId);
   };
-
-  const detailsActiveTab = useSectionsMirror('detailsActiveTab');
-  const setDetailsActiveTab = useSectionsMirror('setDetailsActiveTab');
 
   const isSubjectsTab = (detailsActiveTab || 'subjects') === 'subjects';
 
@@ -159,7 +187,8 @@ export function SectionDetailsDrawer({
 
       <AppDrawer.Content>
         {details && (
-          <Stack gap="lg">
+          <Stack gap="md">
+            {/* Pill Tabs Selector */}
             <SegmentedControl
               fullWidth
               radius="xl"
@@ -193,206 +222,90 @@ export function SectionDetailsDrawer({
               ]}
             />
 
-            {!isSubjectsTab && (
-              <>
-                {/* Section Basic Details Card */}
-                <AppDrawer.Section
-                  title={
-                    <Group justify="space-between" align="center" style={{ width: '100%' }}>
-                      <Text fw={700} size="md">
-                        {details.name}
-                      </Text>
-                      <Badge radius="xl" variant="light" color="teal">
-                        {details.academicBranch?.name ?? details.grade}
-                      </Badge>
-                    </Group>
-                  }
-                  description="المعلومات الأساسية والفرع والسنة الدراسية"
-                >
-                  <AppDrawer.Details>
-                    <AppDrawer.Detail
-                      label="الفرع الأكاديمي"
-                      value={details.academicBranch?.name ?? details.grade}
-                      icon={<IconCalendar size={16} />}
-                    />
-                    <AppDrawer.Detail
-                      label="السنة الدراسية"
-                      value={details.academicYear?.name ?? '—'}
-                      icon={<IconCalendar size={16} />}
-                    />
-                    <AppDrawer.Detail
-                      label="الرسوم المعتمدة"
-                      value={
-                        <Text fw={700} c="teal" span>
-                          {Number(details.feeAmount).toLocaleString('ar-SA')} ر.س
-                        </Text>
-                      }
-                      icon={<IconCoin size={16} />}
-                      iconColor="teal"
-                    />
-                  </AppDrawer.Details>
-                </AppDrawer.Section>
-
-                {/* Quick Metrics Section */}
-                <AppDrawer.Section
-                  title="إحصائيات الشعبة"
-                  description="نظرة سريعة على أعداد الطلاب والمعلمين والمواد"
-                >
-                  <SimpleGrid cols={2} spacing="sm">
-                    <Card
-                      radius="md"
-                      withBorder
-                      p="sm"
-                      style={{ backgroundColor: 'var(--mantine-color-gray-0)' }}
-                    >
-                      <Group gap="xs">
-                        <ThemeIcon size="lg" radius="xl" variant="light" color="blue">
-                          <IconUsers size={20} />
-                        </ThemeIcon>
-                        <Stack gap={2}>
-                          <Text size="xs" c="dimmed">
-                            الطلاب المسجلين
-                          </Text>
-                          <Text fw={700} size="md">
-                            {details._count?.studentEnrollments ?? 0} طالب
-                          </Text>
-                        </Stack>
-                      </Group>
-                    </Card>
-
-                    <Card
-                      radius="md"
-                      withBorder
-                      p="sm"
-                      style={{ backgroundColor: 'var(--mantine-color-gray-0)' }}
-                    >
-                      <Group gap="xs">
-                        <ThemeIcon size="lg" radius="xl" variant="light" color="violet">
-                          <IconBook size={20} />
-                        </ThemeIcon>
-                        <Stack gap={2}>
-                          <Text size="xs" c="dimmed">
-                            المواد المقررة
-                          </Text>
-                          <Text fw={700} size="md">
-                            {sectionSubjects?.length ?? details._count?.sectionSubjects ?? 0} مادة
-                          </Text>
-                        </Stack>
-                      </Group>
-                    </Card>
-
-                    <Card
-                      radius="md"
-                      withBorder
-                      p="sm"
-                      style={{ backgroundColor: 'var(--mantine-color-gray-0)' }}
-                    >
-                      <Group gap="xs">
-                        <ThemeIcon size="lg" radius="xl" variant="light" color="orange">
-                          <IconSchool size={20} />
-                        </ThemeIcon>
-                        <Stack gap={2}>
-                          <Text size="xs" c="dimmed">
-                            المدرسين
-                          </Text>
-                          <Text fw={700} size="md">
-                            {details._count?.sectionTeachers ?? 0} معلم
-                          </Text>
-                        </Stack>
-                      </Group>
-                    </Card>
-
-                    <Card
-                      radius="md"
-                      withBorder
-                      p="sm"
-                      style={{ backgroundColor: 'var(--mantine-color-gray-0)' }}
-                    >
-                      <Group gap="xs">
-                        <ThemeIcon size="lg" radius="xl" variant="light" color="teal">
-                          <IconCalendarTime size={20} />
-                        </ThemeIcon>
-                        <Stack gap={2}>
-                          <Text size="xs" c="dimmed">
-                            الحصص والجدول
-                          </Text>
-                          <Text fw={700} size="md">
-                            {details._count?.timetables ?? 0} حصة
-                          </Text>
-                        </Stack>
-                      </Group>
-                    </Card>
-                  </SimpleGrid>
-                </AppDrawer.Section>
-              </>
-            )}
-
+            {/* TAB 1: SUBJECTS MANAGEMENT (Clean, Flat, Non-nested UI) */}
             {isSubjectsTab && (
-              /* Section Subjects Management */
-              <AppDrawer.Section
-                title={
-                  <Group justify="space-between" align="center" style={{ width: '100%' }}>
-                    <Text fw={700} size="sm">
-                      المواد الدراسية المقررة للشعبة
-                    </Text>
-                    <Badge variant="filled" color="indigo" size="sm" radius="xl">
-                      {sectionSubjects?.length ?? 0} مواد
-                    </Badge>
-                  </Group>
-                }
-                description="إسناد المواد التعليمية وتحديد الحصص الأسبوعية والمعلم المكلف"
-              >
-                <Stack gap="md">
-                {assignSubjectError && (
-                  <Alert
-                    icon={<IconAlertCircle size={16} />}
-                    color="red"
-                    variant="light"
-                    radius="md"
-                    withCloseButton
-                    onClose={() => setAssignSubjectError(null)}
-                  >
-                    {assignSubjectError}
-                  </Alert>
-                )}
-
-                {/* Assign Subject Controls */}
+              <Stack gap="md">
+                {/* Clean Add Subject Surface */}
                 {onAssignSubject && (
-                  <Paper p="xs" radius="lg" withBorder bg="var(--mantine-color-gray-0)">
-                    <Stack gap="xs">
-                      <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="xs">
+                  <Box
+                    p="md"
+                    style={{
+                      backgroundColor: 'var(--mantine-color-gray-0)',
+                      borderRadius: 'var(--mantine-radius-lg)',
+                    }}
+                  >
+                    <Stack gap="sm">
+                      <Group justify="space-between" align="center">
+                        <Group gap={8}>
+                          <ThemeIcon size={26} radius="xl" variant="light" color="indigo">
+                            <IconPlus size={14} />
+                          </ThemeIcon>
+                          <Text size="sm" fw={700}>
+                            إسناد مادة جديدة للشعبة
+                          </Text>
+                        </Group>
+                        {availableSubjectOptions.length > 0 && (
+                          <Badge size="xs" variant="light" color="indigo" radius="xl">
+                            {availableSubjectOptions.length} مادة متاحة للإسناد
+                          </Badge>
+                        )}
+                      </Group>
+
+                      {assignSubjectError && (
+                        <Alert
+                          icon={<IconAlertCircle size={16} />}
+                          color="red"
+                          variant="light"
+                          radius="md"
+                          withCloseButton
+                          onClose={() => setAssignSubjectError(null)}
+                        >
+                          {assignSubjectError}
+                        </Alert>
+                      )}
+
+                      <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="sm">
                         <AppSelect
                           label="المادة الدراسية"
                           placeholder={
                             availableSubjectOptions.length === 0
                               ? 'جميع مواد المعهد مسندة بالفعل'
-                              : 'اختر مادة دراسية...'
+                              : 'اختر المادة الدراسية...'
                           }
                           data={availableSubjectOptions}
                           value={assignSubjectId}
-                          onChange={(val: string | null) => setAssignSubjectId(val)}
+                          onChange={handleSubjectChange}
                           disabled={availableSubjectOptions.length === 0}
                           clearable
                           searchable
-                          size="xs"
+                          size="sm"
                         />
+
                         <AppSelect
                           label="المعلم المكلف (اختياري)"
-                          placeholder="اختر المعلم..."
+                          placeholder={
+                            !assignSubjectId
+                              ? 'اختر المادة الدراسية أولاً...'
+                              : filteredTeachers.length === 0
+                                ? 'لا يوجد معلم مسجل لهذه المادة'
+                                : 'اختر المعلم المكلف...'
+                          }
                           data={teacherOptions}
                           value={assignTeacherId}
                           onChange={(val: string | null) => setAssignTeacherId(val)}
+                          disabled={!assignSubjectId || (teacherOptions.length <= 1 && filteredTeachers.length === 0)}
                           clearable
                           searchable
-                          size="xs"
+                          size="sm"
                         />
                       </SimpleGrid>
-                      <Group justify="space-between" align="flex-end">
+
+                      <Group justify="space-between" align="flex-end" pt={4}>
                         <Box style={{ width: 140 }}>
                           <AppInput
-                            label="الحصص أسبوعيا"
+                            label="الحصص أسبوعياً"
                             type="number"
-                            size="xs"
+                            size="sm"
                             value={String(assignWeeklyPeriods || 2)}
                             onChange={(val: unknown) => {
                               const parsed =
@@ -407,92 +320,99 @@ export function SectionDetailsDrawer({
                             }}
                           />
                         </Box>
+
                         <Button
                           variant="filled"
                           color="indigo"
-                          size="xs"
+                          size="sm"
                           radius="xl"
                           onClick={handleAssign}
                           disabled={!assignSubjectId || isAssigningSubject}
                           loading={isAssigningSubject}
-                          leftSection={<IconPlus size={14} />}
+                          leftSection={<IconPlus size={16} />}
+                          style={{ flex: 1, maxWidth: 220 }}
                         >
                           إسناد المادة للشعبة
                         </Button>
                       </Group>
                     </Stack>
-                  </Paper>
+                  </Box>
                 )}
 
-                {/* Assigned Subjects List */}
+                {/* Subtle Divider with Title & Count */}
+                <Divider
+                  my={4}
+                  label={
+                    <Group gap={6}>
+                      <IconBook size={15} style={{ opacity: 0.7 }} />
+                      <Text size="xs" fw={700} c="dimmed">
+                        المواد المقررة في الخطة ({sectionSubjects?.length ?? 0})
+                      </Text>
+                    </Group>
+                  }
+                  labelPosition="right"
+                />
+
+                {/* Assigned Subjects Content */}
                 {loadingSubjects ? (
-                  <Center py="md">
+                  <Center py="xl">
                     <Loader size="sm" color="indigo" />
                   </Center>
                 ) : !sectionSubjects || sectionSubjects.length === 0 ? (
-                  <Paper
-                    withBorder
-                    p="md"
-                    radius="md"
-                    style={{
-                      textAlign: 'center',
-                      backgroundColor: 'var(--mantine-color-gray-0)',
-                    }}
-                  >
-                    <Text size="xs" c="dimmed">
-                      لم يتم إسناد أي مواد دراسية لهذه الشعبة بعد.
+                  <Stack align="center" justify="center" py="xl" gap="xs">
+                    <ThemeIcon size={52} radius="xl" variant="light" color="indigo">
+                      <IconBook size={24} />
+                    </ThemeIcon>
+                    <Text size="sm" fw={600} c="dimmed">
+                      لم يتم إسناد أي مواد دراسية لهذه الشعبة بعد
                     </Text>
-                  </Paper>
+                    <Text size="xs" c="dimmed" ta="center" maw={320}>
+                      اختر المادة والمعلم المكلف وعدد الحصص من النموذج أعلاه لإضافتها للخطة التدريسية
+                    </Text>
+                  </Stack>
                 ) : (
                   <Stack gap="xs">
                     {sectionSubjects.map((item) => (
-                      <Paper
+                      <Box
                         key={item.id}
-                        withBorder
-                        p="xs"
-                        radius="md"
+                        p="sm"
                         style={{
-                          backgroundColor: 'var(--mantine-color-gray-0)',
+                          borderRadius: 'var(--mantine-radius-md)',
+                          border: '1px solid var(--mantine-color-gray-2)',
+                          backgroundColor: '#ffffff',
+                          transition: 'all 0.15s ease',
                         }}
                       >
-                        <Group justify="space-between" align="center">
-                          <Group gap="sm">
-                            <ThemeIcon
-                              size="md"
-                              radius="xl"
-                              color="indigo"
-                              variant="light"
-                            >
-                              <IconBook size={16} />
+                        <Group justify="space-between" align="center" wrap="nowrap">
+                          <Group gap="sm" wrap="nowrap" style={{ minWidth: 0, flex: 1 }}>
+                            <ThemeIcon size="lg" radius="xl" color="indigo" variant="light">
+                              <IconBook size={18} />
                             </ThemeIcon>
-                            <Stack gap={2}>
-                              <Text size="sm" fw={600}>
-                                {item.subject.name}
+                            <Stack gap={2} style={{ minWidth: 0, flex: 1 }}>
+                              <Text size="sm" fw={700} truncate>
+                                {item.subject?.name}
                               </Text>
-                              <Group gap={6}>
-                                <Badge size="xs" variant="outline" color="blue">
-                                  {item.weeklyPeriods || 1} حصص أسبوعيا
-                                </Badge>
-                                <Badge
-                                  size="xs"
-                                  variant="dot"
-                                  color={item.teacher ? 'teal' : 'gray'}
-                                >
-                                  {item.teacher?.user.fullName
-                                    ? `المعلم: ${item.teacher.user.fullName}`
-                                    : 'بدون معلم محدد'}
-                                </Badge>
-                              </Group>
+                              <Text size="xs" c={item.teacher ? 'dimmed' : 'orange'}>
+                                {item.teacher?.user?.fullName
+                                  ? `المعلم: ${item.teacher.user.fullName}`
+                                  : 'بدون معلم مكلف (توزيع آلي)'}
+                              </Text>
                             </Stack>
                           </Group>
 
-                          <Group gap="xs">
+                          <Group gap="xs" wrap="nowrap">
+                            <Badge variant="light" color="indigo" radius="xl" size="sm">
+                              {item.weeklyPeriods || 1}{' '}
+                              {item.weeklyPeriods === 1
+                                ? 'حصة'
+                                : item.weeklyPeriods === 2
+                                  ? 'حصتان'
+                                  : 'حصص'}{' '}
+                              / أسبوع
+                            </Badge>
+
                             {onRemoveSubject && (
-                              <Tooltip
-                                label="إزالة المادة من هذه الشعبة"
-                                withArrow
-                                position="top"
-                              >
+                              <Tooltip label="إزالة المادة من الشعبة" withArrow>
                                 <ActionIcon
                                   size="sm"
                                   variant="subtle"
@@ -502,18 +422,156 @@ export function SectionDetailsDrawer({
                                   loading={isRemovingSubjectId === item.subjectId}
                                   aria-label="إزالة المادة من الشعبة"
                                 >
-                                  <IconTrash size={14} />
+                                  <IconTrash size={15} />
                                 </ActionIcon>
                               </Tooltip>
                             )}
                           </Group>
                         </Group>
-                      </Paper>
+                      </Box>
                     ))}
                   </Stack>
                 )}
               </Stack>
-            </AppDrawer.Section>
+            )}
+
+            {/* TAB 2: SECTION BASIC INFO & METRICS (Clean, Flat Design) */}
+            {!isSubjectsTab && (
+              <Stack gap="md">
+                {/* Basic Details Box */}
+                <Box
+                  p="md"
+                  style={{
+                    backgroundColor: 'var(--mantine-color-gray-0)',
+                    borderRadius: 'var(--mantine-radius-lg)',
+                  }}
+                >
+                  <Stack gap="sm">
+                    <Group justify="space-between" align="center">
+                      <Text fw={700} size="md">
+                        {details.name}
+                      </Text>
+                      <Badge radius="xl" variant="light" color="teal">
+                        {details.academicBranch?.name ?? details.grade}
+                      </Badge>
+                    </Group>
+                    <Divider />
+                    <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="xs">
+                      <Group gap="xs">
+                        <ThemeIcon size="sm" variant="light" color="gray" radius="xl">
+                          <IconCalendar size={14} />
+                        </ThemeIcon>
+                        <Text size="xs" c="dimmed">السنة الدراسية:</Text>
+                        <Text size="xs" fw={600}>{details.academicYear?.name ?? '—'}</Text>
+                      </Group>
+                      <Group gap="xs">
+                        <ThemeIcon size="sm" variant="light" color="teal" radius="xl">
+                          <IconCoin size={14} />
+                        </ThemeIcon>
+                        <Text size="xs" c="dimmed">الرسوم المعتمدة:</Text>
+                        <Text size="xs" fw={700} c="teal">
+                          {Number(details.feeAmount).toLocaleString('ar-SA')} ر.س
+                        </Text>
+                      </Group>
+                    </SimpleGrid>
+                  </Stack>
+                </Box>
+
+                {/* Quick Metrics Grid */}
+                <SimpleGrid cols={2} spacing="sm">
+                  <Box
+                    p="sm"
+                    style={{
+                      borderRadius: 'var(--mantine-radius-md)',
+                      border: '1px solid var(--mantine-color-gray-2)',
+                      backgroundColor: '#ffffff',
+                    }}
+                  >
+                    <Group gap="xs">
+                      <ThemeIcon size="lg" radius="xl" variant="light" color="blue">
+                        <IconUsers size={20} />
+                      </ThemeIcon>
+                      <Stack gap={2}>
+                        <Text size="xs" c="dimmed">
+                          الطلاب المسجلين
+                        </Text>
+                        <Text fw={700} size="md">
+                          {details._count?.studentEnrollments ?? 0} طالب
+                        </Text>
+                      </Stack>
+                    </Group>
+                  </Box>
+
+                  <Box
+                    p="sm"
+                    style={{
+                      borderRadius: 'var(--mantine-radius-md)',
+                      border: '1px solid var(--mantine-color-gray-2)',
+                      backgroundColor: '#ffffff',
+                    }}
+                  >
+                    <Group gap="xs">
+                      <ThemeIcon size="lg" radius="xl" variant="light" color="violet">
+                        <IconBook size={20} />
+                      </ThemeIcon>
+                      <Stack gap={2}>
+                        <Text size="xs" c="dimmed">
+                          المواد المقررة
+                        </Text>
+                        <Text fw={700} size="md">
+                          {sectionSubjects?.length ?? details._count?.sectionSubjects ?? 0} مادة
+                        </Text>
+                      </Stack>
+                    </Group>
+                  </Box>
+
+                  <Box
+                    p="sm"
+                    style={{
+                      borderRadius: 'var(--mantine-radius-md)',
+                      border: '1px solid var(--mantine-color-gray-2)',
+                      backgroundColor: '#ffffff',
+                    }}
+                  >
+                    <Group gap="xs">
+                      <ThemeIcon size="lg" radius="xl" variant="light" color="orange">
+                        <IconSchool size={20} />
+                      </ThemeIcon>
+                      <Stack gap={2}>
+                        <Text size="xs" c="dimmed">
+                          المدرسين
+                        </Text>
+                        <Text fw={700} size="md">
+                          {details._count?.sectionTeachers ?? 0} معلم
+                        </Text>
+                      </Stack>
+                    </Group>
+                  </Box>
+
+                  <Box
+                    p="sm"
+                    style={{
+                      borderRadius: 'var(--mantine-radius-md)',
+                      border: '1px solid var(--mantine-color-gray-2)',
+                      backgroundColor: '#ffffff',
+                    }}
+                  >
+                    <Group gap="xs">
+                      <ThemeIcon size="lg" radius="xl" variant="light" color="teal">
+                        <IconCalendarTime size={20} />
+                      </ThemeIcon>
+                      <Stack gap={2}>
+                        <Text size="xs" c="dimmed">
+                          الحصص بالجدول
+                        </Text>
+                        <Text fw={700} size="md">
+                          {details._count?.timetables ?? 0} حصة
+                        </Text>
+                      </Stack>
+                    </Group>
+                  </Box>
+                </SimpleGrid>
+              </Stack>
             )}
           </Stack>
         )}
