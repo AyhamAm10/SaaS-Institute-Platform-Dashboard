@@ -43,7 +43,7 @@ export function BranchesController() {
   const updateMutation = useUpdateBranchMutation();
 
   const handleSubmit = useCallback(async () => {
-    const { selectedBranch, formName, formCode, formPhone, formAddress } =
+    const { selectedBranch, formName, formPhone, formAddress } =
       store.getState();
 
     store.getState().setSubmitting(true);
@@ -53,7 +53,6 @@ export function BranchesController() {
           id: selectedBranch.id,
           data: {
             name: formName.trim(),
-            code: formCode.trim() || undefined,
             phone: formPhone.trim() || undefined,
             address: formAddress.trim() || undefined,
           },
@@ -61,7 +60,6 @@ export function BranchesController() {
       } else {
         await createMutation.mutateAsync({
           name: formName.trim(),
-          code: formCode.trim(),
           phone: formPhone.trim() || undefined,
           address: formAddress.trim() || undefined,
         });
