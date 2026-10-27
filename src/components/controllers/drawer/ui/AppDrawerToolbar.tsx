@@ -17,8 +17,8 @@ export function AppDrawerToolbar({ children, className }: AppDrawerToolbarProps)
       py="xs"
       className={className}
       style={{
-        borderBottom: '1px solid var(--mantine-color-gray-2)',
-        backgroundColor: 'var(--mantine-color-gray-0)',
+        borderBottom: '1px solid var(--app-border)',
+        backgroundColor: 'var(--app-subtle)',
         flexShrink: 0,
       }}
     >

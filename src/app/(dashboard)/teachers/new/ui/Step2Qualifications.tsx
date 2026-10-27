@@ -99,7 +99,7 @@ export function Step2Qualifications({
       )}
 
       {/* Adding Qualification Bar */}
-      <Paper p="lg" radius="xl" withBorder bg="var(--mantine-color-gray-0)">
+      <Paper p="lg" radius="xl" withBorder bg="var(--app-subtle)">
         <Stack gap="md">
           <Text size="sm" fw={700} c="primary.8">
             إضافة مادة وفرع تدريسي جديد

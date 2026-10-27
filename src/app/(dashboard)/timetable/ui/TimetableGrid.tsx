@@ -76,14 +76,14 @@ export function TimetableGrid({ onToggleLock, onDeleteEntry }: TimetableGridProp
   return (
     <Card radius="xl" withBorder p="md">
       <Table.ScrollContainer minWidth={850}>
-        <Table withTableBorder withColumnBorders verticalSpacing="sm" horizontalSpacing="sm">
-          <Table.Thead>
-            <Table.Tr>
-              <Table.Th style={{ width: 140, textAlign: 'center' }}>
+        <Table withTableBorder withColumnBorders verticalSpacing="sm" horizontalSpacing="sm" style={{ borderColor: 'var(--app-table-border)' }}>
+          <Table.Thead style={{ backgroundColor: 'var(--app-table-header-bg)', borderBottom: '1px solid var(--app-table-border)' }}>
+            <Table.Tr style={{ borderColor: 'var(--app-table-border)' }}>
+              <Table.Th style={{ width: 140, textAlign: 'center', color: 'var(--app-text-secondary)', borderColor: 'var(--app-table-border)' }}>
                 الحصة / الوقت
               </Table.Th>
               {workingDays.map((day) => (
-                <Table.Th key={day} style={{ textAlign: 'center' }}>
+                <Table.Th key={day} style={{ textAlign: 'center', color: 'var(--app-text-secondary)', borderColor: 'var(--app-table-border)' }}>
                   <Text fw={700} size="sm">
                     {dayNames[day] || `يوم ${day}`}
                   </Text>

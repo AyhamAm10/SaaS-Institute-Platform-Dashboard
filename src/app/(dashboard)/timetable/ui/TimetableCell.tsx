@@ -82,11 +82,11 @@ export function TimetableCell({
         style={{
           minHeight: 90,
           backgroundColor: entry.isLocked
-            ? 'var(--mantine-color-indigo-0)'
-            : 'var(--mantine-color-blue-0)',
+            ? 'var(--app-subtle)'
+            : 'var(--app-surface)',
           borderColor: entry.isLocked
-            ? 'var(--mantine-color-indigo-4)'
-            : 'var(--mantine-color-blue-2)',
+            ? 'var(--app-brand-accent)'
+            : 'var(--app-border)',
           position: 'relative',
         }}
       >
@@ -174,7 +174,8 @@ export function TimetableCell({
         alignItems: 'center',
         justifyContent: 'center',
         borderStyle: 'dashed',
-        backgroundColor: 'var(--mantine-color-gray-0)',
+        borderColor: 'var(--app-border)',
+        backgroundColor: 'var(--app-subtle)',
         cursor: 'pointer',
       }}
       onClick={() =>

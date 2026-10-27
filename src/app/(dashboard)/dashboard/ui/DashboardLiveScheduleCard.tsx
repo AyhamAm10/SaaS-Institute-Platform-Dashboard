@@ -63,14 +63,14 @@ export function DashboardLiveScheduleCard() {
       withBorder
       p="lg"
       style={{
-        borderColor: 'var(--mantine-color-gray-2)',
+        borderColor: 'var(--app-border)',
         height: '100%',
       }}
     >
       <Stack justify="space-between" h="100%" gap="md">
         <Group justify="space-between" align="center">
           <Group gap="sm">
-            <ThemeIcon size={38} radius="xl" color="teal" variant="light">
+            <ThemeIcon size={38} radius="xl" color="secondary" variant="light">
               <IconLivePhoto size={20} />
             </ThemeIcon>
             <Stack gap={2}>
@@ -82,7 +82,7 @@ export function DashboardLiveScheduleCard() {
               </Text>
             </Stack>
           </Group>
-          <Badge variant="light" color="teal" radius="xl" size="sm">
+          <Badge variant="light" color="secondary" radius="xl" size="sm">
             اليوم (مباشر)
           </Badge>
         </Group>
@@ -97,12 +97,12 @@ export function DashboardLiveScheduleCard() {
               style={{
                 borderColor:
                   item.status === 'live'
-                    ? 'rgba(20, 184, 166, 0.4)'
-                    : 'var(--mantine-color-gray-2)',
+                    ? 'rgba(196, 166, 107, 0.4)'
+                    : 'var(--app-border)',
                 backgroundColor:
                   item.status === 'live'
-                    ? 'rgba(20, 184, 166, 0.03)'
-                    : 'var(--mantine-color-body)',
+                    ? 'rgba(196, 166, 107, 0.08)'
+                    : 'var(--app-surface)',
               }}
             >
               <Stack gap={6}>

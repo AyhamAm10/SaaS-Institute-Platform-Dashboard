@@ -99,9 +99,10 @@ export function DashboardHeader() {
     <AppShell.Header
       p="xs"
       style={{
-        borderBottom: '1px solid #e5d9cf',
-        backgroundColor: 'rgba(245, 238, 230, 0.94)',
+        borderBottom: '1px solid var(--app-border)',
+        backgroundColor: 'var(--app-header-bg)',
         backdropFilter: 'blur(12px)',
+        transition: 'background-color 200ms ease, border-color 200ms ease',
       }}
     >
       <Group justify="space-between" h="100%" px="md">
@@ -122,15 +123,15 @@ export function DashboardHeader() {
               style={{
                 borderRadius: rem(4),
                 backgroundColor: isSuperAdmin
-                  ? '#491d2b'
-                  : '#8b6a34',
+                  ? 'var(--app-brand-primary)'
+                  : 'var(--app-brand-accent)',
               }}
             />
             <Stack gap={0}>
-              <Text size="xs" c="#806c69" fw={600}>
+              <Text size="xs" c="var(--app-text-secondary)" fw={600}>
                 {isSuperAdmin ? 'إدارة المنصة المركزية' : 'إدارة المعهد'}
               </Text>
-              <Text size="sm" fw={800} c="#351b25" style={{ letterSpacing: '-0.2px' }}>
+              <Text size="sm" fw={800} c="var(--app-text-primary)" style={{ letterSpacing: '-0.2px' }}>
                 {isSuperAdmin ? 'لوحة تحكم المشرف العام' : 'لوحة التحكم'}
               </Text>
             </Stack>
@@ -149,20 +150,20 @@ export function DashboardHeader() {
                     withBorder
                     style={{
                       cursor: 'pointer',
-                      backgroundColor: '#fffaf5',
-                      borderColor: '#e5d9cf',
+                      backgroundColor: 'var(--app-surface)',
+                      borderColor: 'var(--app-border)',
                       display: 'flex',
                       alignItems: 'center',
                       gap: rem(8),
                       transition: 'all 150ms ease',
-                      boxShadow: '0 1px 3px rgba(73, 29, 43, 0.03)',
+                      boxShadow: 'var(--app-card-shadow)',
                     }}
                   >
-                    <IconBuildingCommunity size={16} color="#8b6a34" />
-                    <Text size="xs" fw={700} c="#351b25" lineClamp={1}>
+                    <IconBuildingCommunity size={16} color="var(--app-brand-accent)" />
+                    <Text size="xs" fw={700} c="var(--app-text-primary)" lineClamp={1}>
                       {activeBranchName}
                     </Text>
-                    <IconChevronDown size={13} color="#9d817a" />
+                    <IconChevronDown size={13} color="var(--app-text-muted)" />
                   </Paper>
                 </Menu.Target>
                 <Menu.Dropdown p="xs">
@@ -199,20 +200,20 @@ export function DashboardHeader() {
                     withBorder
                     style={{
                       cursor: 'pointer',
-                      backgroundColor: '#fffaf5',
-                      borderColor: '#e5d9cf',
+                      backgroundColor: 'var(--app-surface)',
+                      borderColor: 'var(--app-border)',
                       display: 'flex',
                       alignItems: 'center',
                       gap: rem(8),
                       transition: 'all 150ms ease',
-                      boxShadow: '0 1px 3px rgba(73, 29, 43, 0.03)',
+                      boxShadow: 'var(--app-card-shadow)',
                     }}
                   >
-                    <IconCalendarEvent size={16} color="#491d2b" />
-                    <Text size="xs" fw={700} c="#351b25" lineClamp={1}>
+                    <IconCalendarEvent size={16} color="var(--app-brand-primary)" />
+                    <Text size="xs" fw={700} c="var(--app-text-primary)" lineClamp={1}>
                       {activeYearName}
                     </Text>
-                    <IconChevronDown size={13} color="#9d817a" />
+                    <IconChevronDown size={13} color="var(--app-text-muted)" />
                   </Paper>
                 </Menu.Target>
                 <Menu.Dropdown p="xs">
@@ -248,21 +249,22 @@ export function DashboardHeader() {
             placeholder="البحث عن..."
             size="sm"
             radius="xl"
-            rightSection={<IconSearch size={16} stroke={2} color="#9d817a" />}
+            rightSection={<IconSearch size={16} stroke={2} color="var(--app-text-muted)" />}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.currentTarget.value)}
             styles={{
               input: {
-                backgroundColor: '#fffaf5',
-                border: '1px solid #e5d9cf',
+                backgroundColor: 'var(--app-input-bg)',
+                border: '1px solid var(--app-input-border)',
+                color: 'var(--app-text-primary)',
                 height: rem(40),
                 borderRadius: rem(9999),
                 paddingRight: rem(38),
                 transition: 'all 150ms ease',
                 '&:focus': {
-                  backgroundColor: '#ffffff',
-                  borderColor: '#c4a66b',
-                  boxShadow: '0 0 0 3px rgba(196, 166, 107, 0.18)',
+                  backgroundColor: 'var(--app-input-bg-focus)',
+                  borderColor: 'var(--app-input-focus-border)',
+                  boxShadow: 'var(--app-input-focus-ring)',
                 },
               },
             }}
@@ -280,7 +282,7 @@ export function DashboardHeader() {
             onClick={() => toggleColorScheme()}
             aria-label="تبديل المظهر"
           >
-            {isDark ? <IconSun size={18} /> : <IconMoon size={18} />}
+            {isDark ? <IconSun size={18} color="var(--app-brand-accent)" /> : <IconMoon size={18} />}
           </ActionIcon>
 
           {/* Notifications */}
@@ -304,10 +306,10 @@ export function DashboardHeader() {
                 withBorder
                 style={{
                   cursor: 'pointer',
-                  borderColor: '#e5d9cf',
-                  backgroundColor: '#fffaf5',
+                  borderColor: 'var(--app-border)',
+                  backgroundColor: 'var(--app-surface)',
                   transition: 'all 150ms ease',
-                  boxShadow: '0 1px 3px rgba(73, 29, 43, 0.04)',
+                  boxShadow: 'var(--app-card-shadow)',
                 }}
               >
                 <Group gap="xs" wrap="nowrap">
@@ -319,7 +321,7 @@ export function DashboardHeader() {
                     size="sm"
                     styles={{
                       placeholder: {
-                        backgroundColor: '#491d2b',
+                        backgroundColor: 'var(--app-brand-primary)',
                         color: '#fff9f3',
                         fontWeight: 600,
                         fontSize: rem(12),
@@ -329,16 +331,16 @@ export function DashboardHeader() {
                     {user?.fullName ? user.fullName.slice(0, 2) : 'من'}
                   </Avatar>
                   <Stack gap={0} visibleFrom="sm" pr="xs">
-                    <Text size="xs" fw={700} c="#351b25" lineClamp={1}>
+                    <Text size="xs" fw={700} c="var(--app-text-primary)" lineClamp={1}>
                       {user?.fullName || (isSuperAdmin ? 'المشرف العام' : 'مدير النظام')}
                     </Text>
-                    <Text size="10px" c="#806c69">
+                    <Text size="10px" c="var(--app-text-secondary)">
                       {isSuperAdmin
                         ? 'المشرف العام للنظام'
                         : user?.institute?.name || 'الفرع الرئيسي'}
                     </Text>
                   </Stack>
-                  <IconChevronDown size={14} color="#9d817a" />
+                  <IconChevronDown size={14} color="var(--app-text-muted)" />
                 </Group>
               </Paper>
             </Menu.Target>

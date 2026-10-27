@@ -39,8 +39,8 @@ export function AppDrawerHeader({
         py="lg"
         className={className}
         style={{
-          borderBottom: '1px solid var(--mantine-color-gray-2)',
-          backgroundColor: '#ffffff',
+          borderBottom: '1px solid var(--app-border)',
+          backgroundColor: 'var(--app-surface)',
           flexShrink: 0,
         }}
       >
@@ -61,8 +61,8 @@ export function AppDrawerHeader({
       py="lg"
       className={className}
       style={{
-        borderBottom: '1px solid var(--mantine-color-gray-2)',
-        backgroundColor: '#ffffff',
+        borderBottom: '1px solid var(--app-border)',
+        backgroundColor: 'var(--app-surface)',
         flexShrink: 0,
       }}
     >

@@ -100,7 +100,7 @@ export function TimetableEntryModal({ onSave }: TimetableEntryModalProps) {
         )}
 
         {/* Slot Info Preview */}
-        <Paper p="xs" radius="md" withBorder bg="var(--mantine-color-gray-0)">
+        <Paper p="xs" radius="md" withBorder bg="var(--app-subtle)">
           <Group justify="space-between">
             <Text size="xs" c="dimmed">
               اليوم: {dayNames[entryForm.dayOfWeek] || entryForm.dayOfWeek}

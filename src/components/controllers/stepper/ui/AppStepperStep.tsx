@@ -83,11 +83,11 @@ export function AppStepperStep({
         radius="lg"
         withBorder
         style={{
-          backgroundColor: isOpen ? '#fffaf5' : '#fbf7f2',
-          borderColor: isOpen ? '#c4a66b' : '#e5d9cf',
+          backgroundColor: isOpen ? 'var(--app-surface)' : 'var(--app-subtle)',
+          borderColor: isOpen ? 'var(--app-brand-accent)' : 'var(--app-border)',
           boxShadow: isOpen
-            ? '0 8px 24px rgba(73, 29, 43, 0.05)'
-            : '0 1px 3px rgba(73, 29, 43, 0.02)',
+            ? 'var(--app-card-shadow)'
+            : '0 1px 3px rgba(0, 0, 0, 0.02)',
           transition: 'border-color 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease',
           overflow: 'hidden',
         }}

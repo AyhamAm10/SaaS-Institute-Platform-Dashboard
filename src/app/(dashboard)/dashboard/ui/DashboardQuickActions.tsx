@@ -55,7 +55,7 @@ export function DashboardQuickActions() {
             withBorder
             p="md"
             style={{
-              borderColor: 'var(--mantine-color-gray-2)',
+              borderColor: 'var(--app-border)',
               textDecoration: 'none',
               color: 'inherit',
               transition: 'transform 0.15s ease, border-color 0.15s ease',

@@ -63,7 +63,7 @@ export function AppStepperActions({
       gap="xs"
       pt="md"
       style={{
-        borderTop: '1.5px solid #e5d9cf',
+        borderTop: '1.5px solid var(--app-border)',
         width: '100%',
       }}
     >
@@ -115,9 +115,9 @@ export function AppStepperActions({
             rightSection={<IconArrowRight size={14} />}
             disabled={disablePrev || isSubmitting}
             style={{
-              borderColor: '#e5d9cf',
-              color: '#806c69',
-              backgroundColor: '#fffaf5',
+              borderColor: 'var(--app-border)',
+              color: 'var(--app-text-secondary)',
+              backgroundColor: 'var(--app-surface)',
             }}
           >
             {prevLabel}

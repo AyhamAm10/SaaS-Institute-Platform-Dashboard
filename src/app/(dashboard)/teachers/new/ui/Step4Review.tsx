@@ -139,12 +139,12 @@ export function Step4Review() {
                     key={`${q.academicBranchId}-${q.subjectId}`}
                     justify="space-between"
                     p="xs"
-                    style={{ background: 'var(--mantine-color-gray-0)', borderRadius: '8px' }}
+                    style={{ background: 'var(--app-subtle)', borderRadius: '8px' }}
                   >
                     <Text size="xs" fw={700}>
                       {q.subjectName}
                     </Text>
-                    <Badge size="xs" color="indigo" variant="light" radius="sm">
+                    <Badge size="xs" color="primary" variant="light" radius="sm">
                       {q.academicBranchName}
                     </Badge>
                   </Group>
@@ -180,9 +180,9 @@ export function Step4Review() {
                   key={`${avail.dayOfWeek}-${avail.startTime}-${idx}`}
                   gap="xs"
                   p="xs"
-                  style={{ background: 'var(--mantine-color-gray-0)', borderRadius: '8px' }}
+                  style={{ background: 'var(--app-subtle)', borderRadius: '8px' }}
                 >
-                  <IconClock size={14} color="teal" />
+                  <IconClock size={14} color="var(--app-brand-accent)" />
                   <Text size="xs" fw={700}>
                     {dayNameMap[avail.dayOfWeek]}
                   </Text>

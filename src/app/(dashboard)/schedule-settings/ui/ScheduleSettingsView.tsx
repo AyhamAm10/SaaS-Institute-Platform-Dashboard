@@ -100,14 +100,19 @@ export function ScheduleSettingsView({
       {/* Header */}
       <Paper p="lg" radius="xl" withBorder>
         <Group justify="space-between" align="center" wrap="wrap">
-          <Stack gap={4}>
-            <Title order={2} fw={800}>
-              إعدادات الجدول والدوام المدرسي
-            </Title>
-            <Text c="dimmed" size="sm">
-              ضبط أيام العمل، ساعات الدوام، مدد الحصص والاستراحات لإنشاء الحصص تلقائيا
-            </Text>
-          </Stack>
+          <Group gap="md">
+            <ThemeIcon size={46} radius="xl" variant="light" color="navy">
+              <IconCalendar size={24} />
+            </ThemeIcon>
+            <Stack gap={4}>
+              <Title order={2} fw={800}>
+                إعدادات الجدول والدوام المدرسي
+              </Title>
+              <Text c="dimmed" size="sm">
+                ضبط أيام العمل، ساعات الدوام، مدد الحصص والاستراحات لإنشاء الحصص تلقائيا
+              </Text>
+            </Stack>
+          </Group>
           <Button
             leftSection={<IconDeviceFloppy size={18} />}
             radius="xl"
@@ -151,13 +156,14 @@ export function ScheduleSettingsView({
             <Paper p="lg" radius="xl" withBorder>
               <Stack gap="md">
                 <Group gap="xs">
-                  <ThemeIcon size="md" radius="xl" variant="light" color="blue">
+                  <ThemeIcon size="md" radius="xl" variant="light" color="navy">
                     <IconCalendar size={18} />
                   </ThemeIcon>
                   <Text fw={700} size="md">
                     أيام الدوام الأسبوعي
                   </Text>
                 </Group>
+
                 <Text size="xs" c="dimmed">
                   حدد الأيام التي تقام فيها الدروس الأكاديمية
                 </Text>
@@ -169,7 +175,7 @@ export function ScheduleSettingsView({
                       <Button
                         key={day.value}
                         variant={isSelected ? 'filled' : 'light'}
-                        color={isSelected ? 'blue' : 'gray'}
+                        color={isSelected ? 'navy' : 'gray'}
                         radius="xl"
                         size="sm"
                         onClick={() => toggleDay(day.value)}
@@ -191,7 +197,7 @@ export function ScheduleSettingsView({
             <Paper p="lg" radius="xl" withBorder>
               <Stack gap="md">
                 <Group gap="xs">
-                  <ThemeIcon size="md" radius="xl" variant="light" color="teal">
+                  <ThemeIcon size="md" radius="xl" variant="light" color="secondary">
                     <IconClock size={18} />
                   </ThemeIcon>
                   <Text fw={700} size="md">
@@ -234,14 +240,14 @@ export function ScheduleSettingsView({
               <Stack gap="md">
                 <Group justify="space-between" align="center">
                   <Group gap="xs">
-                    <ThemeIcon size="md" radius="xl" variant="light" color="orange">
+                    <ThemeIcon size="md" radius="xl" variant="light" color="secondary">
                       <IconCoffee size={18} />
                     </ThemeIcon>
                     <Text fw={700} size="md">
                       فترات الاستراحة والفسحة
                     </Text>
                   </Group>
-                  <Badge variant="light" color="orange" radius="xl">
+                  <Badge variant="light" color="secondary" radius="xl">
                     {form.breaks.length} استراحات
                   </Badge>
                 </Group>
@@ -267,7 +273,7 @@ export function ScheduleSettingsView({
                     leftSection={<IconPlus size={16} />}
                     radius="xl"
                     variant="light"
-                    color="orange"
+                    color="secondary"
                     onClick={onAddBreak}
                     disabled={!newBreakName.trim() || !newBreakStart || !newBreakEnd}
                   >
@@ -288,11 +294,11 @@ export function ScheduleSettingsView({
                         p="xs"
                         radius="lg"
                         withBorder
-                        bg="var(--mantine-color-gray-0)"
+                        bg="var(--app-subtle)"
                       >
                         <Group justify="space-between" align="center">
                           <Group gap="xs">
-                            <ThemeIcon size="sm" radius="xl" color="orange" variant="light">
+                            <ThemeIcon size="sm" radius="xl" color="secondary" variant="light">
                               <IconCoffee size={14} />
                             </ThemeIcon>
                             <Text size="sm" fw={600}>
@@ -330,7 +336,7 @@ export function ScheduleSettingsView({
                 <Title order={4} fw={700}>
                   معاينة الحصص المحسوبة
                 </Title>
-                <Badge color="teal" variant="light" radius="xl">
+                <Badge color="secondary" variant="light" radius="xl">
                   {slots.filter((s) => s.type === 'LESSON').length} حصص يوميا
                 </Badge>
               </Group>
@@ -353,12 +359,12 @@ export function ScheduleSettingsView({
                         p="xs"
                         radius="lg"
                         withBorder
-                        bg={isBreak ? 'var(--mantine-color-orange-0)' : undefined}
+                        bg={isBreak ? 'var(--app-subtle)' : undefined}
                       >
                         <Group justify="space-between" align="center">
                           <Group gap="xs">
                             <Badge
-                              color={isBreak ? 'orange' : 'blue'}
+                              color={isBreak ? 'secondary' : 'navy'}
                               variant={isBreak ? 'filled' : 'light'}
                               radius="xl"
                               size="sm"
@@ -366,7 +372,7 @@ export function ScheduleSettingsView({
                               {isBreak ? 'استراحة' : `الحصة ${s.periodNumber}`}
                             </Badge>
                             {isBreak && (
-                              <Text size="xs" fw={600} c="orange.8">
+                              <Text size="xs" fw={600} c="secondary">
                                 {s.name}
                               </Text>
                             )}

@@ -12,14 +12,15 @@ export function DataModuleFilterBar({ children }: DataModuleFilterBarProps) {
     <Paper
       p="md"
       px="lg"
-      radius="md"
+      radius="lg"
       withBorder
       mb="md"
       style={{
-        backgroundColor: 'var(--mantine-color-body)',
-        borderColor: 'var(--mantine-color-gray-2)',
-        borderRadius: rem(8),
-        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.02)',
+        backgroundColor: 'var(--app-surface)',
+        borderColor: 'var(--app-border)',
+        borderRadius: rem(14),
+        boxShadow: 'var(--app-card-shadow)',
+        transition: 'background-color 200ms ease, border-color 200ms ease',
       }}
     >
       <Flex

@@ -18,8 +18,8 @@ export function AppModalFooter({ children, className }: AppModalFooterProps) {
         py="md"
         className={className}
         style={{
-          borderTop: '1px solid var(--mantine-color-gray-2)',
-          backgroundColor: '#ffffff',
+          borderTop: '1px solid var(--app-border)',
+          backgroundColor: 'var(--app-surface)',
           flexShrink: 0,
         }}
       >
@@ -36,8 +36,8 @@ export function AppModalFooter({ children, className }: AppModalFooterProps) {
       py="md"
       className={className}
       style={{
-        borderTop: '1px solid var(--mantine-color-gray-2)',
-        backgroundColor: '#ffffff',
+        borderTop: '1px solid var(--app-border)',
+        backgroundColor: 'var(--app-surface)',
         flexShrink: 0,
       }}
     >

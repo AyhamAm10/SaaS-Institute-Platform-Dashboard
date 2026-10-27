@@ -3,6 +3,7 @@ import { rem } from '@mantine/core';
 /**
  * Builds unified styles for DatePickerInput adhering strictly to the
  * 38px height and curved classic design tokens used by AppInput and AppSelect.
+ * Uses centralized CSS variables (--app-*) for unified light and dark support.
  */
 export function getUnifiedDatePickerStyles(isFocused: boolean, hasError: boolean, customStyles?: Record<string, any>) {
   return {
@@ -14,13 +15,13 @@ export function getUnifiedDatePickerStyles(isFocused: boolean, hasError: boolean
       fontWeight: 600,
       fontSize: rem(12.5),
       marginBottom: rem(4),
-      color: 'var(--mantine-color-text)',
+      color: 'var(--app-text-primary)',
       ...customStyles?.label,
     },
     description: {
       fontSize: rem(11.5),
       marginBottom: rem(4),
-      color: 'var(--mantine-color-dimmed)',
+      color: 'var(--app-text-muted)',
       ...customStyles?.description,
     },
     input: {
@@ -31,26 +32,27 @@ export function getUnifiedDatePickerStyles(isFocused: boolean, hasError: boolean
       minHeight: rem(38),
       height: rem(38),
       lineHeight: rem(36),
-      borderRadius: rem(8),
-      backgroundColor: isFocused ? '#ffffff' : 'var(--mantine-color-gray-0)',
+      borderRadius: rem(10),
+      backgroundColor: isFocused ? 'var(--app-input-bg-focus)' : 'var(--app-input-bg)',
       borderColor: hasError
         ? 'var(--mantine-color-error)'
         : isFocused
-          ? 'var(--mantine-color-primary-6)'
-          : 'var(--mantine-color-gray-3)',
+          ? 'var(--app-input-focus-border)'
+          : 'var(--app-input-border)',
       borderWidth: rem(1),
       borderStyle: 'solid',
+      color: 'var(--app-text-primary)',
       boxShadow: isFocused
-        ? '0 0 0 2px rgba(32, 183, 223, 0.15)'
+        ? 'var(--app-input-focus-ring)'
         : '0 1px 2px rgba(0, 0, 0, 0.02)',
-      transition: 'border-color 120ms ease, box-shadow 120ms ease, background-color 120ms ease',
+      transition: 'border-color 140ms ease, box-shadow 140ms ease, background-color 140ms ease',
       '&:hover': {
-        backgroundColor: '#ffffff',
+        backgroundColor: 'var(--app-input-bg-hover)',
         borderColor: hasError
           ? 'var(--mantine-color-error)'
           : isFocused
-            ? 'var(--mantine-color-primary-6)'
-            : 'var(--mantine-color-gray-4)',
+            ? 'var(--app-input-focus-border)'
+            : 'var(--app-input-border-hover)',
       },
       ...customStyles?.input,
     },
@@ -62,9 +64,9 @@ export function getUnifiedDatePickerStyles(isFocused: boolean, hasError: boolean
     },
     section: {
       color: isFocused
-        ? 'var(--mantine-color-primary-6)'
-        : 'var(--mantine-color-dimmed)',
-      transition: 'color 120ms ease',
+        ? 'var(--app-brand-primary)'
+        : 'var(--app-text-muted)',
+      transition: 'color 140ms ease',
       ...customStyles?.section,
     },
     calendarHeader: {
@@ -79,6 +81,7 @@ export function getUnifiedDatePickerStyles(isFocused: boolean, hasError: boolean
       borderRadius: rem(6),
       fontWeight: 600,
       fontSize: rem(13),
+      color: 'var(--app-text-primary)',
       ...customStyles?.calendarHeaderLevel,
     },
     day: {

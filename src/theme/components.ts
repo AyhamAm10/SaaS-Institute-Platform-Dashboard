@@ -2,6 +2,7 @@ import { MantineThemeComponents, rem } from '@mantine/core';
 
 /**
  * Component default overrides for the warm academic editorial SaaS Admin Dashboard.
+ * Relies on centralized CSS variables (--app-*) to seamlessly support Light & Dark modes.
  */
 export const defaultComponents: MantineThemeComponents = {
   AppShell: {
@@ -34,9 +35,11 @@ export const defaultComponents: MantineThemeComponents = {
     styles: {
       root: {
         borderRadius: rem(14),
-        borderColor: '#e5d9cf',
-        backgroundColor: '#fffaf5',
-        boxShadow: '0 2px 8px rgba(73, 29, 43, 0.04)',
+        borderColor: 'var(--app-border)',
+        backgroundColor: 'var(--app-surface)',
+        color: 'var(--app-text-primary)',
+        boxShadow: 'var(--app-card-shadow)',
+        transition: 'background-color 200ms ease, border-color 200ms ease, color 200ms ease',
       },
     },
   },
@@ -50,9 +53,11 @@ export const defaultComponents: MantineThemeComponents = {
     styles: {
       root: {
         borderRadius: rem(16),
-        borderColor: '#e5d9cf',
-        backgroundColor: '#fffaf5',
-        boxShadow: '0 4px 16px rgba(73, 29, 43, 0.05)',
+        borderColor: 'var(--app-border)',
+        backgroundColor: 'var(--app-surface)',
+        color: 'var(--app-text-primary)',
+        boxShadow: 'var(--app-card-shadow)',
+        transition: 'background-color 200ms ease, border-color 200ms ease, color 200ms ease',
       },
     },
   },
@@ -92,12 +97,17 @@ export const defaultComponents: MantineThemeComponents = {
       },
       content: {
         direction: 'rtl',
-        backgroundColor: '#fffaf5',
-        borderLeft: '1px solid #e5d9cf',
+        backgroundColor: 'var(--app-surface)',
+        borderLeft: '1px solid var(--app-border)',
+        color: 'var(--app-text-primary)',
       },
       header: {
-        backgroundColor: '#fffaf5',
-        borderBottom: '1px solid #e5d9cf',
+        backgroundColor: 'var(--app-surface)',
+        borderBottom: '1px solid var(--app-border)',
+        color: 'var(--app-text-primary)',
+      },
+      body: {
+        color: 'var(--app-text-primary)',
       },
     },
   },
@@ -111,13 +121,18 @@ export const defaultComponents: MantineThemeComponents = {
     styles: {
       content: {
         borderRadius: rem(16),
-        backgroundColor: '#fffaf5',
-        border: '1px solid #e5d9cf',
-        boxShadow: '0 16px 40px rgba(73, 29, 43, 0.12)',
+        backgroundColor: 'var(--app-surface)',
+        border: '1px solid var(--app-border)',
+        color: 'var(--app-text-primary)',
+        boxShadow: 'var(--app-dropdown-shadow)',
       },
       header: {
-        backgroundColor: '#fffaf5',
-        borderBottom: '1px solid #e5d9cf',
+        backgroundColor: 'var(--app-surface)',
+        borderBottom: '1px solid var(--app-border)',
+        color: 'var(--app-text-primary)',
+      },
+      body: {
+        color: 'var(--app-text-primary)',
       },
     },
   },
@@ -145,14 +160,21 @@ export const defaultComponents: MantineThemeComponents = {
     styles: {
       dropdown: {
         borderRadius: rem(12),
-        boxShadow: '0 8px 24px rgba(73, 29, 43, 0.08)',
-        border: '1px solid #e5d9cf',
-        backgroundColor: '#fffaf5',
+        boxShadow: 'var(--app-dropdown-shadow)',
+        border: '1px solid var(--app-border)',
+        backgroundColor: 'var(--app-surface)',
       },
       item: {
         borderRadius: rem(8),
         fontSize: rem(12.5),
         fontWeight: 500,
+        color: 'var(--app-text-primary)',
+        '&:hover': {
+          backgroundColor: 'var(--app-hover)',
+        },
+      },
+      label: {
+        color: 'var(--app-text-muted)',
       },
     },
   },
@@ -187,17 +209,28 @@ export const defaultComponents: MantineThemeComponents = {
       size: 'sm',
     },
     styles: {
+      label: {
+        color: 'var(--app-text-primary)',
+        fontWeight: 600,
+        fontSize: rem(12.5),
+        marginBottom: rem(4),
+      },
       input: {
         borderRadius: rem(10),
-        borderColor: '#e5d9cf',
-        backgroundColor: '#ffffff',
+        borderColor: 'var(--app-input-border)',
+        backgroundColor: 'var(--app-input-bg)',
+        color: 'var(--app-text-primary)',
         fontWeight: 400,
         fontSize: rem(13),
         height: rem(38),
-        transition: 'all 120ms ease',
+        transition: 'all 140ms ease',
         '&:focus': {
-          borderColor: '#c4a66b',
-          boxShadow: '0 0 0 3px rgba(196, 166, 107, 0.18)',
+          backgroundColor: 'var(--app-input-bg-focus)',
+          borderColor: 'var(--app-input-focus-border)',
+          boxShadow: 'var(--app-input-focus-ring)',
+        },
+        '&::placeholder': {
+          color: 'var(--app-input-placeholder)',
         },
       },
     },
@@ -209,17 +242,28 @@ export const defaultComponents: MantineThemeComponents = {
       size: 'sm',
     },
     styles: {
+      label: {
+        color: 'var(--app-text-primary)',
+        fontWeight: 600,
+        fontSize: rem(12.5),
+        marginBottom: rem(4),
+      },
       input: {
         borderRadius: rem(10),
-        borderColor: '#e5d9cf',
-        backgroundColor: '#ffffff',
+        borderColor: 'var(--app-input-border)',
+        backgroundColor: 'var(--app-input-bg)',
+        color: 'var(--app-text-primary)',
         fontWeight: 400,
         fontSize: rem(13),
         height: rem(38),
-        transition: 'all 120ms ease',
+        transition: 'all 140ms ease',
         '&:focus': {
-          borderColor: '#c4a66b',
-          boxShadow: '0 0 0 3px rgba(196, 166, 107, 0.18)',
+          backgroundColor: 'var(--app-input-bg-focus)',
+          borderColor: 'var(--app-input-focus-border)',
+          boxShadow: 'var(--app-input-focus-ring)',
+        },
+        '&::placeholder': {
+          color: 'var(--app-input-placeholder)',
         },
       },
     },
@@ -232,17 +276,28 @@ export const defaultComponents: MantineThemeComponents = {
       hideControls: true,
     },
     styles: {
+      label: {
+        color: 'var(--app-text-primary)',
+        fontWeight: 600,
+        fontSize: rem(12.5),
+        marginBottom: rem(4),
+      },
       input: {
         borderRadius: rem(10),
-        borderColor: '#e5d9cf',
-        backgroundColor: '#ffffff',
+        borderColor: 'var(--app-input-border)',
+        backgroundColor: 'var(--app-input-bg)',
+        color: 'var(--app-text-primary)',
         fontWeight: 400,
         fontSize: rem(13),
         height: rem(38),
-        transition: 'all 120ms ease',
+        transition: 'all 140ms ease',
         '&:focus': {
-          borderColor: '#c4a66b',
-          boxShadow: '0 0 0 3px rgba(196, 166, 107, 0.18)',
+          backgroundColor: 'var(--app-input-bg-focus)',
+          borderColor: 'var(--app-input-focus-border)',
+          boxShadow: 'var(--app-input-focus-ring)',
+        },
+        '&::placeholder': {
+          color: 'var(--app-input-placeholder)',
         },
       },
     },
@@ -255,28 +310,44 @@ export const defaultComponents: MantineThemeComponents = {
       checkIconPosition: 'right',
     },
     styles: {
+      label: {
+        color: 'var(--app-text-primary)',
+        fontWeight: 600,
+        fontSize: rem(12.5),
+        marginBottom: rem(4),
+      },
       input: {
         borderRadius: rem(10),
-        borderColor: '#e5d9cf',
-        backgroundColor: '#ffffff',
+        borderColor: 'var(--app-input-border)',
+        backgroundColor: 'var(--app-input-bg)',
+        color: 'var(--app-text-primary)',
         height: rem(38),
         fontSize: rem(13),
+        transition: 'all 140ms ease',
         '&:focus': {
-          borderColor: '#c4a66b',
-          boxShadow: '0 0 0 3px rgba(196, 166, 107, 0.18)',
+          backgroundColor: 'var(--app-input-bg-focus)',
+          borderColor: 'var(--app-input-focus-border)',
+          boxShadow: 'var(--app-input-focus-ring)',
+        },
+        '&::placeholder': {
+          color: 'var(--app-input-placeholder)',
         },
       },
       dropdown: {
         borderRadius: rem(12),
-        boxShadow: '0 8px 24px rgba(73, 29, 43, 0.08)',
-        border: '1px solid #e5d9cf',
-        backgroundColor: '#fffaf5',
+        boxShadow: 'var(--app-dropdown-shadow)',
+        border: '1px solid var(--app-border)',
+        backgroundColor: 'var(--app-surface)',
       },
       option: {
         borderRadius: rem(8),
         fontSize: rem(13),
         fontWeight: 500,
+        color: 'var(--app-text-primary)',
         padding: `${rem(8)} ${rem(12)}`,
+        '&:hover': {
+          backgroundColor: 'var(--app-hover)',
+        },
       },
     },
   },
@@ -305,4 +376,3 @@ export const defaultComponents: MantineThemeComponents = {
     },
   },
 };
-

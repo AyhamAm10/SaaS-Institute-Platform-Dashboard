@@ -66,12 +66,14 @@ export function DataModuleTable<T = Record<string, unknown>>(props: DataModuleTa
         withColumnBorders={false}
         style={{
           minWidth: rem(600),
+          backgroundColor: 'transparent',
         }}
       >
         <Table.Thead
           style={{
-            backgroundColor: 'var(--mantine-color-gray-0)',
-            borderBottom: '1px solid var(--mantine-color-gray-2)',
+            backgroundColor: 'var(--app-table-header-bg)',
+            borderBottom: '1px solid var(--app-table-border)',
+            transition: 'background-color 200ms ease, border-color 200ms ease',
           }}
         >
           <Table.Tr>
@@ -85,7 +87,7 @@ export function DataModuleTable<T = Record<string, unknown>>(props: DataModuleTa
                     textAlign: col.align ?? 'right',
                     fontSize: rem(12.5),
                     fontWeight: 600,
-                    color: 'var(--mantine-color-gray-7)',
+                    color: 'var(--app-text-secondary)',
                     letterSpacing: '0.1px',
                     padding: `${rem(14)} ${rem(18)}`,
                     whiteSpace: 'nowrap',
@@ -99,9 +101,10 @@ export function DataModuleTable<T = Record<string, unknown>>(props: DataModuleTa
                         alignItems: 'center',
                         gap: rem(4),
                         cursor: 'pointer',
+                        color: 'inherit',
                       }}
                     >
-                      <Text size="xs" fw={600} style={{ fontSize: rem(12.5) }}>
+                      <Text size="xs" fw={600} style={{ fontSize: rem(12.5), color: 'inherit' }}>
                         {col.title}
                       </Text>
                       <ActionIcon size="xs" variant="transparent" color="gray">
@@ -131,8 +134,9 @@ export function DataModuleTable<T = Record<string, unknown>>(props: DataModuleTa
               <Table.Tr
                 key={rowKey}
                 style={{
-                  borderBottom: '1px solid var(--mantine-color-gray-1)',
-                  transition: 'background-color 120ms ease',
+                  borderBottom: '1px solid var(--app-table-border)',
+                  transition: 'background-color 140ms ease',
+                  color: 'var(--app-table-text)',
                 }}
               >
                 {columns.map((col) => (
@@ -143,6 +147,7 @@ export function DataModuleTable<T = Record<string, unknown>>(props: DataModuleTa
                       fontSize: rem(13),
                       fontWeight: 400,
                       padding: `${rem(12)} ${rem(18)}`,
+                      color: 'var(--app-table-text)',
                     }}
                   >
                     {col.render ? col.render(row, index) : ((row as Record<string, unknown>)?.[col.key] as ReactNode ?? '—')}

@@ -41,7 +41,7 @@ export function DashboardKpiGrid() {
           withBorder
           p="lg"
           style={{
-            borderColor: 'var(--mantine-color-gray-2)',
+            borderColor: 'var(--app-border)',
             transition: 'transform 0.2s ease, box-shadow 0.2s ease',
           }}
         >

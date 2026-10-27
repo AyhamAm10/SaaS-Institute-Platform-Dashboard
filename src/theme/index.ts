@@ -3,6 +3,7 @@ import {
   defaultPrimaryColor,
   defaultSecondaryColor,
   slateNeutral,
+  warmGrayScale,
   deepNavyColor,
   InstituteBrandConfig,
 } from './colors';
@@ -10,7 +11,7 @@ import { defaultFontFamily, defaultFontFamilyMonospace, defaultHeadings } from '
 import { defaultComponents } from './components';
 
 /**
- * Base Theme for SaaS Admin Platform - Clean, Classic, Elegant Arabic Style
+ * Base Theme for SaaS Admin Platform - Clean, Classic, Warm Academic Editorial Style
  */
 export const baseTheme = createTheme({
   primaryColor: 'primary',
@@ -19,6 +20,7 @@ export const baseTheme = createTheme({
     primary: defaultPrimaryColor,
     secondary: defaultSecondaryColor,
     slate: slateNeutral,
+    gray: warmGrayScale,
     navy: deepNavyColor,
   },
   fontFamily: defaultFontFamily,
@@ -54,6 +56,7 @@ export function createInstituteTheme(brand?: InstituteBrandConfig): MantineTheme
   });
 }
 
+export * from './tokens';
 export * from './colors';
 export * from './typography';
 export * from './components';

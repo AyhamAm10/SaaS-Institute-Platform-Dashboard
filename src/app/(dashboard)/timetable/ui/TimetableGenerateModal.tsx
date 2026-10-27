@@ -61,7 +61,7 @@ export function TimetableGenerateModal({ onGenerate }: TimetableGenerateModalPro
           يقوم المحرك بحل قيود الجداول (Constraint Satisfaction Problem) وتوزيع الحصص على أيام الدوام مع مراعاة تفرغ المعلمين، صلاحيات القاعات، ومنع أي تضارب مزدوج.
         </Text>
 
-        <Paper p="md" radius="lg" withBorder bg="var(--mantine-color-gray-0)">
+        <Paper p="md" radius="lg" withBorder bg="var(--app-subtle)">
           <Stack gap="sm">
             <Checkbox
               label="جدولة تدريجية (Incremental Scheduling)"

@@ -1,18 +1,155 @@
 @import "@mantine/core/styles.css";
 @import "@mantine/dates/styles.css";
 
+/* ==========================================================================
+   Centralized Theme Semantic Variables (Single Source of Truth)
+   Light: Warm Academic Editorial (Porcelain Cashmere + Velvet Burgundy)
+   Dark: Midnight Velvet Mahogany & Amber Gold
+   ========================================================================== */
+
+:root,
+:root[data-mantine-color-scheme="light"] {
+  --app-bg: #f6f3ee;
+  --app-surface: #fffdfa;
+  --app-subtle: #eee6de;
+  --app-hover: #faf5ef;
+  --app-sidebar-bg: #fbf8f4;
+  --app-sidebar-subtle: #eee6de;
+  --app-header-bg: rgba(251, 248, 244, 0.94);
+
+  --app-border: #e3d7cb;
+  --app-border-subtle: #ede4da;
+  --app-border-hover: #cbbdaf;
+
+  --app-text-primary: #351b25;
+  --app-text-secondary: #7a6663;
+  --app-text-muted: #9c8983;
+
+  --app-input-bg: #faf6f1;
+  --app-input-bg-hover: #ffffff;
+  --app-input-bg-focus: #ffffff;
+  --app-input-border: #ded2c5;
+  --app-input-border-hover: #cbbdaf;
+  --app-input-focus-border: #491d2b;
+  --app-input-focus-ring: 0 0 0 3px rgba(73, 29, 43, 0.10);
+  --app-input-placeholder: #9c8983;
+
+  --app-table-bg: #fffdfa;
+  --app-table-header-bg: #f4ede5;
+  --app-table-border: #e6ded5;
+  --app-table-hover: #faf5ef;
+  --app-table-text: #351b25;
+
+  --app-brand-primary: #491d2b;
+  --app-brand-accent: #c4a66b;
+  --app-badge-bg: #eee6de;
+  --app-badge-text: #8b6a34;
+
+  --app-card-shadow: 0 4px 16px rgba(73, 29, 43, 0.04);
+  --app-dropdown-shadow: 0 12px 32px rgba(73, 29, 43, 0.10);
+}
+
+:root[data-mantine-color-scheme="dark"] {
+  --app-bg: #0c0e12;
+  --app-surface: #151821;
+  --app-subtle: #1b1f2b;
+  --app-hover: #1f2432;
+  --app-sidebar-bg: #10131a;
+  --app-sidebar-subtle: #181c26;
+  --app-header-bg: rgba(16, 19, 26, 0.94);
+
+  --app-border: #242938;
+  --app-border-subtle: #1b202c;
+  --app-border-hover: #373e54;
+
+  --app-text-primary: #f8fafc;
+  --app-text-secondary: #94a3b8;
+  --app-text-muted: #64748b;
+
+  --app-input-bg: #10131a;
+  --app-input-bg-hover: #141822;
+  --app-input-bg-focus: #141822;
+  --app-input-border: #272d3d;
+  --app-input-border-hover: #384157;
+  --app-input-focus-border: #2563eb;
+  --app-input-focus-ring: 0 0 0 3px rgba(37, 99, 235, 0.20);
+  --app-input-placeholder: #64748b;
+
+  --app-table-bg: #151821;
+  --app-table-header-bg: #1b202c;
+  --app-table-border: #222735;
+  --app-table-hover: #1a1f2b;
+  --app-table-text: #f8fafc;
+
+  --app-brand-primary: #1e40af;
+  --app-brand-accent: #d4a359;
+  --app-badge-bg: rgba(30, 64, 175, 0.15);
+  --app-badge-text: #93c5fd;
+
+  --app-button-bg: #1e40af;
+  --app-button-hover: #1d3899;
+
+  --mantine-color-primary-filled: #1e40af;
+  --mantine-color-primary-filled-hover: #1d3899;
+  --mantine-color-primary-light: rgba(30, 64, 175, 0.16);
+  --mantine-color-primary-light-hover: rgba(30, 64, 175, 0.24);
+  --mantine-color-primary-light-color: #93c5fd;
+
+  --app-card-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+  --app-dropdown-shadow: 0 16px 40px rgba(0, 0, 0, 0.60);
+}
+
+:root[data-mantine-color-scheme="dark"] .mantine-Button-root[data-variant="filled"]:not([data-color="red"]):not([data-color="green"]):not([data-color="teal"]):not([data-color="orange"]) {
+  background-color: var(--app-button-bg) !important;
+  color: #ffffff !important;
+}
+
+:root[data-mantine-color-scheme="dark"] .mantine-Button-root[data-variant="filled"]:not([data-color="red"]):not([data-color="green"]):not([data-color="teal"]):not([data-color="orange"]):hover {
+  background-color: var(--app-button-hover) !important;
+}
+
+:root[data-mantine-color-scheme="dark"] .mantine-Button-root[data-variant="light"][data-color="gray"] {
+  background-color: #171a23 !important;
+  color: #94a3b8 !important;
+  border: 1px solid #242938;
+}
+
+:root[data-mantine-color-scheme="dark"] .mantine-Button-root[data-variant="light"][data-color="gray"]:hover {
+  background-color: #1f2330 !important;
+  color: #f8fafc !important;
+}
+
 html,
 body {
   height: 100%;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  background-color: #f5eee6;
-  color: #351b25;
+  background-color: var(--app-bg);
+  color: var(--app-text-primary);
+  transition: background-color 200ms ease, color 200ms ease;
 }
 
 ::selection {
-  background-color: #e8c9ce;
-  color: #491d2b;
+  background-color: var(--app-subtle);
+  color: var(--app-brand-primary);
 }
 
+/* Custom Scrollbars adhering to warm theme */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--app-border);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--app-border-hover);
+}

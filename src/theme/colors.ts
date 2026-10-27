@@ -1,4 +1,5 @@
 import { MantineColorsTuple } from '@mantine/core';
+import { appTokens, darkTokens, lightTokens, ThemeSemanticTokens } from './tokens';
 
 /**
  * Primary Brand Color: Institutional Burgundy / Wine (#491d2b)
@@ -35,53 +36,72 @@ export const goldenOchreColor: MantineColorsTuple = [
 ];
 
 /**
- * Warm Sand & Porcelain Surface Scale for editorial backgrounds and borders.
+ * Warm Neutral Scale (Parchment, Alabaster Cashmere, Warm Sand).
+ * Zero yellowish/muddy cast - refined, high-end editorial surfaces.
  */
 export const warmSandNeutral: MantineColorsTuple = [
-  '#f5eee6', // 0: warm parchment canvas background
-  '#fbf7f2', // 1: sidebar and header background
-  '#fffaf5', // 2: crisp card surface background
-  '#f0e3d8', // 3: secondary container tint
-  '#e5d9cf', // 4: warm sand border
-  '#b29a8e', // 5: muted icons and dividers
-  '#9d817a', // 6: light taupe captions & subtitles
-  '#806c69', // 7: muted taupe body text
-  '#4d2936', // 8: dark burgundy charcoal
-  '#351b25', // 9: primary plum headings
+  '#f6f3ee', // 0: warm canvas
+  '#fbf8f4', // 1: sidebar & header surface
+  '#fffdfa', // 2: card surface
+  '#eee6de', // 3: secondary container / subtle surface
+  '#e3d7cb', // 4: primary border
+  '#b8a5a2', // 5: muted icons & secondary text
+  '#9c8983', // 6: placeholder & captions
+  '#7a6663', // 7: secondary body text
+  '#4a333c', // 8: deep plum charcoal
+  '#351b25', // 9: headings & deep text
+];
+
+/**
+ * Custom Warm Gray scale replacing Mantine's default cold blue-gray.
+ * Ensures any Mantine component or utility referencing 'gray' inherits the warm aesthetic.
+ */
+export const warmGrayScale: MantineColorsTuple = [
+  '#f6f3ee', // gray 0: subtle light surface
+  '#eee6de', // gray 1: soft container
+  '#e3d7cb', // gray 2: default border
+  '#d6c9bc', // gray 3: stronger border
+  '#b8a5a2', // gray 4: muted icons
+  '#9c8983', // gray 5: placeholder
+  '#7a6663', // gray 6: secondary text
+  '#4a333c', // gray 7: dark text
+  '#351b25', // gray 8: headings
+  '#1c1218', // gray 9: near black
 ];
 
 /**
  * Default assignments for Mantine core provider.
- * Existing code using 'primary', 'secondary', or 'slate' will automatically inherit this warm palette.
  */
 export const defaultPrimaryColor: MantineColorsTuple = academicWineColor;
 export const defaultSecondaryColor: MantineColorsTuple = goldenOchreColor;
 export const slateNeutral: MantineColorsTuple = warmSandNeutral;
 
 /**
- * Retained for backward compatibility with white-labeling configs.
+ * Academic Royal Navy scale for buttons and crisp contrast in dark mode.
  */
 export const deepNavyColor: MantineColorsTuple = [
-  '#f5eee6',
-  '#e5d9cf',
-  '#9d817a',
-  '#806c69',
-  '#59421e',
-  '#4d2936',
-  '#351b25',
-  '#2a141d',
-  '#1f0a12',
-  '#15060c',
+  '#f0f5fa', // 0: ultra light ice blue
+  '#dbe7f4', // 1: soft navy tint
+  '#b8d2ec', // 2: subtle navy glow
+  '#8bb4df', // 3: muted navy accent
+  '#5991cc', // 4: intermediate blue
+  '#3573b7', // 5: vibrant royal blue
+  '#2563eb', // 6: primary bright navy
+  '#1e40af', // 7: academic deep royal navy (primary action)
+  '#1e3a8a', // 8: midnight navy hover
+  '#0f172a', // 9: deepest midnight navy
 ];
+
+export { appTokens, lightTokens, darkTokens };
+export type { ThemeSemanticTokens };
 
 /**
  * Multi-Tenant White-Labeling Branding Configuration Interface.
- * Institutes can customize primary, secondary colors and logos.
  */
 export interface InstituteBrandConfig {
   name: string;
   logoUrl?: string;
-  primaryColor?: string; // hex or color key
+  primaryColor?: string;
   primaryShades?: MantineColorsTuple;
   secondaryColor?: string;
 }

@@ -90,7 +90,7 @@ export function Step3Availability() {
       )}
 
       {/* Add Availability Bar */}
-      <Paper p="lg" radius="xl" withBorder bg="var(--mantine-color-gray-0)">
+      <Paper p="lg" radius="xl" withBorder bg="var(--app-subtle)">
         <Stack gap="md">
           <Text size="sm" fw={700} c="primary.8">
             إضافة فترة دوام جديدة

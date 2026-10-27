@@ -61,10 +61,10 @@ export function DesktopSidebar() {
       visibleFrom="md"
       style={{
         width: isCollapsed ? rem(88) : rem(270),
-        transition: 'width 250ms ease, padding 250ms ease',
+        transition: 'width 250ms ease, padding 250ms ease, background-color 200ms ease, border-color 200ms ease',
         overflow: 'hidden',
-        borderLeft: '1px solid #e5d9cf',
-        backgroundColor: '#fbf7f2',
+        borderLeft: '1px solid var(--app-border)',
+        backgroundColor: 'var(--app-sidebar-bg)',
       }}
     >
       {/* Brand Header */}
@@ -75,7 +75,7 @@ export function DesktopSidebar() {
               size={44}
               radius="xl"
               style={{
-                backgroundColor: '#491d2b',
+                backgroundColor: 'var(--app-brand-primary)',
                 color: '#fff9f3',
                 boxShadow: '0 6px 16px rgba(73, 29, 43, 0.16)',
               }}
@@ -94,7 +94,7 @@ export function DesktopSidebar() {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  backgroundColor: '#491d2b',
+                  backgroundColor: 'var(--app-brand-primary)',
                   width: rem(58),
                   height: rem(58),
                   borderRadius: '50%',
@@ -110,25 +110,25 @@ export function DesktopSidebar() {
                 w={10}
                 h={10}
                 style={{
-                  backgroundColor: '#c4a66b',
+                  backgroundColor: 'var(--app-brand-accent)',
                   borderRadius: '50%',
-                  border: '2px solid #fbf7f2',
+                  border: '2px solid var(--app-sidebar-bg)',
                 }}
               />
             </Box>
 
             <Stack gap={3} align="center">
-              <Text fw={700} size="sm" c="#351b25" ta="center">
+              <Text fw={700} size="sm" c="var(--app-text-primary)" ta="center">
                 {user?.institute?.name || 'معهد النور الأكاديمي'}
               </Text>
               <Badge
                 size="xs"
                 radius="xl"
                 style={{
-                  backgroundColor: '#f0e3d8',
-                  color: '#8b6a34',
+                  backgroundColor: 'var(--app-badge-bg)',
+                  color: 'var(--app-badge-text)',
                   fontWeight: 600,
-                  border: '1px solid #e5d9cf',
+                  border: '1px solid var(--app-border)',
                 }}
               >
                 {branchLabel}
@@ -148,8 +148,8 @@ export function DesktopSidebar() {
                 justifyContent: 'center',
                 padding: rem(6),
                 borderRadius: rem(8),
-                color: '#806c69',
-                backgroundColor: '#f0e3d8',
+                color: 'var(--app-text-secondary)',
+                backgroundColor: 'var(--app-sidebar-subtle)',
                 transition: 'all 120ms ease',
               }}
             >
@@ -176,8 +176,8 @@ export function DesktopSidebar() {
                 height: rem(46),
                 margin: '0 auto',
                 borderRadius: rem(12),
-                backgroundColor: isActive ? '#491d2b' : 'transparent',
-                color: isActive ? '#fff9f3' : '#806c69',
+                backgroundColor: isActive ? 'var(--app-brand-primary)' : 'transparent',
+                color: isActive ? '#fff9f3' : 'var(--app-text-secondary)',
                 transition: 'all 150ms ease',
                 boxShadow: isActive ? '0 6px 18px rgba(73, 29, 43, 0.18)' : 'none',
               };
@@ -233,8 +233,8 @@ export function DesktopSidebar() {
                       size={32}
                       radius="md"
                       style={{
-                        backgroundColor: isActive ? '#491d2b' : '#f0e3d8',
-                        color: isActive ? '#fff9f3' : '#491d2b',
+                        backgroundColor: isActive ? 'var(--app-brand-primary)' : 'var(--app-sidebar-subtle)',
+                        color: isActive ? '#fff9f3' : 'var(--app-brand-primary)',
                       }}
                     >
                       <IconComponent size={17} stroke={1.8} />
@@ -251,12 +251,12 @@ export function DesktopSidebar() {
                       paddingBottom: rem(9),
                       paddingLeft: rem(12),
                       paddingRight: rem(12),
-                      backgroundColor: isActive && !isSectionOpen ? '#f0e3d8' : undefined,
-                      color: isActive ? '#491d2b' : '#806c69',
+                      backgroundColor: isActive && !isSectionOpen ? 'var(--app-sidebar-subtle)' : undefined,
+                      color: isActive ? 'var(--app-brand-primary)' : 'var(--app-text-secondary)',
                       fontWeight: isActive ? 600 : 500,
                     },
                     label: {
-                      color: isActive ? '#491d2b' : '#806c69',
+                      color: isActive ? 'var(--app-brand-primary)' : 'var(--app-text-secondary)',
                     },
                   }}
                 >
@@ -277,11 +277,11 @@ export function DesktopSidebar() {
                               paddingTop: rem(8),
                               paddingBottom: rem(8),
                               backgroundColor: isSubActive
-                                ? '#491d2b'
+                                ? 'var(--app-brand-primary)'
                                 : 'transparent',
                               color: isSubActive
                                 ? '#fff9f3'
-                                : '#806c69',
+                                : 'var(--app-text-secondary)',
                               fontWeight: isSubActive ? 600 : 400,
                               boxShadow: isSubActive
                                 ? '0 4px 12px rgba(73, 29, 43, 0.14)'
@@ -307,8 +307,8 @@ export function DesktopSidebar() {
                     size={32}
                     radius="md"
                     style={{
-                      backgroundColor: isActive ? 'transparent' : '#f0e3d8',
-                      color: isActive ? '#fff9f3' : '#491d2b',
+                      backgroundColor: isActive ? 'transparent' : 'var(--app-sidebar-subtle)',
+                      color: isActive ? '#fff9f3' : 'var(--app-brand-primary)',
                     }}
                   >
                     <IconComponent size={17} stroke={1.8} />
@@ -322,17 +322,17 @@ export function DesktopSidebar() {
                     paddingBottom: rem(9),
                     paddingLeft: rem(12),
                     paddingRight: rem(12),
-                    backgroundColor: isActive ? '#491d2b' : 'transparent',
-                    color: isActive ? '#fff9f3' : '#806c69',
+                    backgroundColor: isActive ? 'var(--app-brand-primary)' : 'transparent',
+                    color: isActive ? '#fff9f3' : 'var(--app-text-secondary)',
                     fontWeight: isActive ? 600 : 500,
                     boxShadow: isActive ? '0 6px 16px rgba(73, 29, 43, 0.15)' : 'none',
                     '&:hover': {
-                      backgroundColor: isActive ? '#491d2b' : '#f1e7de',
-                      color: isActive ? '#fff9f3' : '#491d2b',
+                      backgroundColor: isActive ? 'var(--app-brand-primary)' : 'var(--app-sidebar-subtle)',
+                      color: isActive ? '#fff9f3' : 'var(--app-brand-primary)',
                     },
                   },
                   label: {
-                    color: isActive ? '#fff9f3' : '#806c69',
+                    color: isActive ? '#fff9f3' : 'var(--app-text-secondary)',
                   },
                 }}
               />
@@ -342,7 +342,7 @@ export function DesktopSidebar() {
       </AppShell.Section>
 
       {/* Footer: Logout & Expand button */}
-      <AppShell.Section pt="md" style={{ borderTop: '1px solid #e5d9cf' }}>
+      <AppShell.Section pt="md" style={{ borderTop: '1px solid var(--app-border)' }}>
         {isCollapsed ? (
           <Tooltip label="توسيع القائمة" position="left" withArrow>
             <UnstyledButton
@@ -355,8 +355,8 @@ export function DesktopSidebar() {
                 width: '100%',
                 padding: rem(10),
                 borderRadius: rem(10),
-                color: '#806c69',
-                backgroundColor: '#f0e3d8',
+                color: 'var(--app-text-secondary)',
+                backgroundColor: 'var(--app-sidebar-subtle)',
               }}
             >
               <IconChevronLeft size={18} />
@@ -375,7 +375,7 @@ export function DesktopSidebar() {
               padding: `${rem(10)} ${rem(14)}`,
               borderRadius: rem(12),
               color: '#9b4b51',
-              backgroundColor: '#f5e6e8',
+              backgroundColor: 'var(--app-sidebar-subtle)',
               transition: 'background-color 150ms ease',
               opacity: isLoggingOut ? 0.6 : 1,
               cursor: isLoggingOut ? 'not-allowed' : 'pointer',

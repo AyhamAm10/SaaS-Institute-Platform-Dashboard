@@ -35,9 +35,10 @@ export function AppModalRoot({ children, zIndex = 350, className }: AppModalRoot
           maxHeight: '90vh',
           overflow: 'hidden',
           direction: 'rtl',
-          borderRadius: rem(24),
-          boxShadow: '0 24px 60px -12px rgba(0, 0, 0, 0.14)',
-          border: '1px solid var(--mantine-color-gray-2)',
+          borderRadius: rem(20),
+          boxShadow: 'var(--app-dropdown-shadow)',
+          border: '1px solid var(--app-border)',
+          backgroundColor: 'var(--app-surface)',
         },
         body: {
           display: 'flex',

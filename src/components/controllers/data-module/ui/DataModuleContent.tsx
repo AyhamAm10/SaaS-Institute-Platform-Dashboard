@@ -10,15 +10,16 @@ export interface DataModuleContentProps {
 export function DataModuleContent({ children }: DataModuleContentProps) {
   return (
     <Paper
-      radius="md"
+      radius="lg"
       withBorder
       style={{
         overflow: 'hidden',
         position: 'relative',
-        borderRadius: rem(8),
-        borderColor: 'var(--mantine-color-gray-2)',
-        backgroundColor: 'var(--mantine-color-body)',
-        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.03)',
+        borderRadius: rem(14),
+        borderColor: 'var(--app-border)',
+        backgroundColor: 'var(--app-surface)',
+        boxShadow: 'var(--app-card-shadow)',
+        transition: 'background-color 200ms ease, border-color 200ms ease',
       }}
     >
       {children}

@@ -63,7 +63,7 @@ export function AppStepperSidebar({ children }: AppStepperSidebarProps) {
                     <Text
                       size="md"
                       fw={isCurrent ? 700 : isCompleted ? 600 : 500}
-                      c={isCurrent ? '#491d2b' : isCompleted ? '#351b25' : '#806c69'}
+                      c={isCurrent ? 'var(--app-brand-primary)' : isCompleted ? 'var(--app-text-primary)' : 'var(--app-text-muted)'}
                       style={{
                         transition: 'color 0.2s ease',
                         fontSize: rem(14.5),
@@ -82,8 +82,8 @@ export function AppStepperSidebar({ children }: AppStepperSidebarProps) {
                         size="xs"
                         radius="sm"
                         style={{
-                          backgroundColor: '#f0e3d8',
-                          color: '#8b6a34',
+                          backgroundColor: 'var(--app-badge-bg)',
+                          color: 'var(--app-badge-text)',
                           fontWeight: 600,
                         }}
                       >
@@ -95,7 +95,7 @@ export function AppStepperSidebar({ children }: AppStepperSidebarProps) {
                   {s.description && (
                     <Text
                       size="xs"
-                      c="#806c69"
+                      c="var(--app-text-secondary)"
                       lineClamp={2}
                       style={{
                         lineHeight: 1.5,
@@ -128,8 +128,8 @@ export function AppStepperSidebar({ children }: AppStepperSidebarProps) {
                         bottom: rem(-44), // Bridges the gap="44px" to the next circle
                         width: rem(2.5),
                         backgroundColor: isCompleted
-                          ? '#c4a66b'
-                          : '#e5d9cf',
+                          ? 'var(--app-brand-accent)'
+                          : 'var(--app-border)',
                         transition: 'background-color 0.25s ease',
                         zIndex: 1,
                       }}
@@ -148,18 +148,18 @@ export function AppStepperSidebar({ children }: AppStepperSidebarProps) {
                       zIndex: 2,
                       transition: 'all 0.25s ease',
                       backgroundColor: isCompleted
-                        ? '#c4a66b'
+                        ? 'var(--app-brand-accent)'
                         : isCurrent
-                        ? '#491d2b'
-                        : '#fffaf5',
+                        ? 'var(--app-brand-primary)'
+                        : 'var(--app-surface)',
                       border:
                         isCompleted || isCurrent
                           ? 'none'
-                          : '1.5px solid #e5d9cf',
+                          : '1.5px solid var(--app-border)',
                       color:
                         isCompleted || isCurrent
                           ? '#ffffff'
-                          : '#9d817a',
+                          : 'var(--app-text-muted)',
                       boxShadow: isCurrent
                         ? '0 6px 18px rgba(73, 29, 43, 0.25)'
                         : 'none',

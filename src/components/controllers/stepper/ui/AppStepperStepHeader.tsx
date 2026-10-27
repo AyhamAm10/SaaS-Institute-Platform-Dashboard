@@ -21,8 +21,8 @@ export function AppStepperStepHeader({ children }: AppStepperStepHeaderProps) {
         padding: `${rem(16)} ${rem(22)}`,
         borderRadius: 0,
         userSelect: 'none',
-        backgroundColor: isOpen ? '#f5eee6' : 'transparent',
-        borderBottom: isOpen ? '1px solid #e5d9cf' : 'none',
+        backgroundColor: isOpen ? 'var(--app-subtle)' : 'transparent',
+        borderBottom: isOpen ? '1px solid var(--app-border)' : 'none',
         transition: 'background-color 0.2s ease',
       }}
     >
@@ -43,12 +43,12 @@ export function AppStepperStepHeader({ children }: AppStepperStepHeaderProps) {
                 justifyContent: 'center',
                 flexShrink: 0,
                 backgroundColor: isCompleted
-                  ? '#c4a66b'
+                  ? 'var(--app-brand-accent)'
                   : isCurrent
-                  ? '#491d2b'
-                  : '#f0e3d8',
-                color: isCompleted || isCurrent ? '#ffffff' : '#806c69',
-                border: isCompleted || isCurrent ? 'none' : '1px solid #e5d9cf',
+                  ? 'var(--app-brand-primary)'
+                  : 'var(--app-subtle)',
+                color: isCompleted || isCurrent ? '#ffffff' : 'var(--app-text-secondary)',
+                border: isCompleted || isCurrent ? 'none' : '1px solid var(--app-border)',
                 transition: 'all 0.2s ease',
               }}
             >
@@ -66,7 +66,7 @@ export function AppStepperStepHeader({ children }: AppStepperStepHeaderProps) {
                 <Text
                   size="sm"
                   fw={isOpen ? 700 : 600}
-                  c={isOpen ? '#491d2b' : isCompleted ? '#351b25' : '#806c69'}
+                  c={isOpen ? 'var(--app-brand-primary)' : isCompleted ? 'var(--app-text-primary)' : 'var(--app-text-secondary)'}
                   lineClamp={1}
                 >
                   {label}
@@ -77,8 +77,8 @@ export function AppStepperStepHeader({ children }: AppStepperStepHeaderProps) {
                     size="xs"
                     radius="sm"
                     style={{
-                      backgroundColor: '#f0e3d8',
-                      color: '#8b6a34',
+                      backgroundColor: 'var(--app-badge-bg)',
+                      color: 'var(--app-badge-text)',
                       fontWeight: 600,
                     }}
                   >
@@ -93,21 +93,19 @@ export function AppStepperStepHeader({ children }: AppStepperStepHeaderProps) {
               </Group>
 
               {description && (
-                <Text size="xs" c="#806c69" lineClamp={1}>
+                <Text size="xs" c="var(--app-text-muted)" lineClamp={1}>
                   {description}
                 </Text>
               )}
             </Stack>
           </Group>
 
-          {/* Left side in RTL: Animated Chevron indicator */}
+          {/* Left side in RTL: Chevron indicator */}
           <Box
             style={{
+              color: 'var(--app-text-muted)',
               transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-              transition: 'transform 0.3s ease',
-              display: 'flex',
-              alignItems: 'center',
-              color: isOpen ? '#491d2b' : '#9d817a',
+              transition: 'transform 0.2s ease',
             }}
           >
             <IconChevronDown size={18} />
@@ -117,5 +115,3 @@ export function AppStepperStepHeader({ children }: AppStepperStepHeaderProps) {
     </UnstyledButton>
   );
 }
-
-AppStepperStepHeader.displayName = 'AppStepperStep.Header';

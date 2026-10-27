@@ -28,10 +28,11 @@ export function AppDrawerSection({
       p="lg"
       className={className}
       style={{
-        backgroundColor: '#ffffff',
-        borderColor: 'var(--mantine-color-gray-2)',
-        borderRadius: rem(18),
-        boxShadow: '0 2px 10px rgba(0, 0, 0, 0.02)',
+        backgroundColor: 'var(--app-surface)',
+        borderColor: 'var(--app-border)',
+        borderRadius: rem(16),
+        boxShadow: 'var(--app-card-shadow)',
+        transition: 'background-color 200ms ease, border-color 200ms ease',
       }}
     >
       <Stack gap="md">

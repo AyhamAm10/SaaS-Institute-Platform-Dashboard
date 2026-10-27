@@ -36,7 +36,7 @@ export function LoginHeroPanel() {
           width: '100%',
           height: '100%',
           background:
-            'radial-gradient(circle at center, rgba(32, 183, 223, 0.16) 0%, rgba(20, 184, 166, 0.06) 55%, transparent 75%)',
+            'radial-gradient(circle at center, rgba(73, 29, 43, 0.12) 0%, rgba(196, 166, 107, 0.08) 55%, transparent 75%)',
           filter: 'blur(50px)',
           zIndex: 0,
           pointerEvents: 'none',

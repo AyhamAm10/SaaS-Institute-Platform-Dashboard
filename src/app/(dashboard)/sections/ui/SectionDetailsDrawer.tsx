@@ -169,7 +169,7 @@ export function SectionDetailsDrawer({
       <AppDrawer.Header>
         <AppDrawer.Icon
           icon={isSubjectsTab ? <IconBook size={20} /> : <IconInfoCircle size={20} />}
-          color={isSubjectsTab ? 'indigo' : 'blue'}
+          color="primary"
         />
         <Stack gap={2} style={{ flex: 1, minWidth: 0 }}>
           <AppDrawer.Title>
@@ -193,7 +193,7 @@ export function SectionDetailsDrawer({
               fullWidth
               radius="xl"
               size="sm"
-              color="indigo"
+              color="primary"
               value={detailsActiveTab || 'subjects'}
               onChange={setDetailsActiveTab}
               data={[
@@ -230,14 +230,15 @@ export function SectionDetailsDrawer({
                   <Box
                     p="md"
                     style={{
-                      backgroundColor: 'var(--mantine-color-gray-0)',
+                      backgroundColor: 'var(--app-subtle)',
+                      border: '1px solid var(--app-border)',
                       borderRadius: 'var(--mantine-radius-lg)',
                     }}
                   >
                     <Stack gap="sm">
                       <Group justify="space-between" align="center">
                         <Group gap={8}>
-                          <ThemeIcon size={26} radius="xl" variant="light" color="indigo">
+                          <ThemeIcon size={26} radius="xl" variant="light" color="primary">
                             <IconPlus size={14} />
                           </ThemeIcon>
                           <Text size="sm" fw={700}>
@@ -245,7 +246,7 @@ export function SectionDetailsDrawer({
                           </Text>
                         </Group>
                         {availableSubjectOptions.length > 0 && (
-                          <Badge size="xs" variant="light" color="indigo" radius="xl">
+                          <Badge size="xs" variant="light" color="primary" radius="xl">
                             {availableSubjectOptions.length} مادة متاحة للإسناد
                           </Badge>
                         )}
@@ -323,7 +324,7 @@ export function SectionDetailsDrawer({
 
                         <Button
                           variant="filled"
-                          color="indigo"
+                          color="primary"
                           size="sm"
                           radius="xl"
                           onClick={handleAssign}
@@ -356,11 +357,11 @@ export function SectionDetailsDrawer({
                 {/* Assigned Subjects Content */}
                 {loadingSubjects ? (
                   <Center py="xl">
-                    <Loader size="sm" color="indigo" />
+                    <Loader size="sm" color="primary" />
                   </Center>
                 ) : !sectionSubjects || sectionSubjects.length === 0 ? (
                   <Stack align="center" justify="center" py="xl" gap="xs">
-                    <ThemeIcon size={52} radius="xl" variant="light" color="indigo">
+                    <ThemeIcon size={52} radius="xl" variant="light" color="primary">
                       <IconBook size={24} />
                     </ThemeIcon>
                     <Text size="sm" fw={600} c="dimmed">
@@ -378,14 +379,14 @@ export function SectionDetailsDrawer({
                         p="sm"
                         style={{
                           borderRadius: 'var(--mantine-radius-md)',
-                          border: '1px solid var(--mantine-color-gray-2)',
-                          backgroundColor: '#ffffff',
+                          border: '1px solid var(--app-border)',
+                          backgroundColor: 'var(--app-surface)',
                           transition: 'all 0.15s ease',
                         }}
                       >
                         <Group justify="space-between" align="center" wrap="nowrap">
                           <Group gap="sm" wrap="nowrap" style={{ minWidth: 0, flex: 1 }}>
-                            <ThemeIcon size="lg" radius="xl" color="indigo" variant="light">
+                            <ThemeIcon size="lg" radius="xl" color="primary" variant="light">
                               <IconBook size={18} />
                             </ThemeIcon>
                             <Stack gap={2} style={{ minWidth: 0, flex: 1 }}>
@@ -401,7 +402,7 @@ export function SectionDetailsDrawer({
                           </Group>
 
                           <Group gap="xs" wrap="nowrap">
-                            <Badge variant="light" color="indigo" radius="xl" size="sm">
+                            <Badge variant="light" color="primary" radius="xl" size="sm">
                               {item.weeklyPeriods || 1}{' '}
                               {item.weeklyPeriods === 1
                                 ? 'حصة'
@@ -442,7 +443,8 @@ export function SectionDetailsDrawer({
                 <Box
                   p="md"
                   style={{
-                    backgroundColor: 'var(--mantine-color-gray-0)',
+                    backgroundColor: 'var(--app-subtle)',
+                    border: '1px solid var(--app-border)',
                     borderRadius: 'var(--mantine-radius-lg)',
                   }}
                 >
@@ -483,12 +485,12 @@ export function SectionDetailsDrawer({
                     p="sm"
                     style={{
                       borderRadius: 'var(--mantine-radius-md)',
-                      border: '1px solid var(--mantine-color-gray-2)',
-                      backgroundColor: '#ffffff',
+                      border: '1px solid var(--app-border)',
+                      backgroundColor: 'var(--app-surface)',
                     }}
                   >
                     <Group gap="xs">
-                      <ThemeIcon size="lg" radius="xl" variant="light" color="blue">
+                      <ThemeIcon size="lg" radius="xl" variant="light" color="primary">
                         <IconUsers size={20} />
                       </ThemeIcon>
                       <Stack gap={2}>
@@ -506,12 +508,12 @@ export function SectionDetailsDrawer({
                     p="sm"
                     style={{
                       borderRadius: 'var(--mantine-radius-md)',
-                      border: '1px solid var(--mantine-color-gray-2)',
-                      backgroundColor: '#ffffff',
+                      border: '1px solid var(--app-border)',
+                      backgroundColor: 'var(--app-surface)',
                     }}
                   >
                     <Group gap="xs">
-                      <ThemeIcon size="lg" radius="xl" variant="light" color="violet">
+                      <ThemeIcon size="lg" radius="xl" variant="light" color="secondary">
                         <IconBook size={20} />
                       </ThemeIcon>
                       <Stack gap={2}>
@@ -529,12 +531,12 @@ export function SectionDetailsDrawer({
                     p="sm"
                     style={{
                       borderRadius: 'var(--mantine-radius-md)',
-                      border: '1px solid var(--mantine-color-gray-2)',
-                      backgroundColor: '#ffffff',
+                      border: '1px solid var(--app-border)',
+                      backgroundColor: 'var(--app-surface)',
                     }}
                   >
                     <Group gap="xs">
-                      <ThemeIcon size="lg" radius="xl" variant="light" color="orange">
+                      <ThemeIcon size="lg" radius="xl" variant="light" color="primary">
                         <IconSchool size={20} />
                       </ThemeIcon>
                       <Stack gap={2}>
@@ -552,12 +554,12 @@ export function SectionDetailsDrawer({
                     p="sm"
                     style={{
                       borderRadius: 'var(--mantine-radius-md)',
-                      border: '1px solid var(--mantine-color-gray-2)',
-                      backgroundColor: '#ffffff',
+                      border: '1px solid var(--app-border)',
+                      backgroundColor: 'var(--app-surface)',
                     }}
                   >
                     <Group gap="xs">
-                      <ThemeIcon size="lg" radius="xl" variant="light" color="teal">
+                      <ThemeIcon size="lg" radius="xl" variant="light" color="secondary">
                         <IconCalendarTime size={20} />
                       </ThemeIcon>
                       <Stack gap={2}>

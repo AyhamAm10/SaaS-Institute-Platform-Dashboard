@@ -11,8 +11,9 @@ export function MainContent({ children }: MainContentProps) {
   return (
     <AppShell.Main
       style={{
-        backgroundColor: 'var(--mantine-color-slate-0)',
+        backgroundColor: 'var(--app-bg)',
         minHeight: '100vh',
+        transition: 'background-color 200ms ease',
       }}
     >
       <Container fluid px={{ base: 'md', sm: 'lg', md: 'xl' }} py="md">

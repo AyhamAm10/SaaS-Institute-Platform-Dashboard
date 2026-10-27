@@ -60,11 +60,13 @@ export function MobileSidebar() {
       hiddenFrom="md"
       styles={{
         content: {
-          backgroundColor: '#fbf7f2',
+          backgroundColor: 'var(--app-sidebar-bg)',
+          color: 'var(--app-text-primary)',
         },
         header: {
-          backgroundColor: '#fbf7f2',
-          borderBottom: '1px solid #e5d9cf',
+          backgroundColor: 'var(--app-sidebar-bg)',
+          borderBottom: '1px solid var(--app-border)',
+          color: 'var(--app-text-primary)',
         },
       }}
       title={
@@ -73,7 +75,7 @@ export function MobileSidebar() {
             p="xs"
             radius="xl"
             style={{
-              backgroundColor: '#491d2b',
+              backgroundColor: 'var(--app-brand-primary)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -84,17 +86,17 @@ export function MobileSidebar() {
             <IconSchool size={20} color="#fff9f3" />
           </Paper>
           <Stack gap={0}>
-            <Text fw={700} size="sm" c="#351b25">
+            <Text fw={700} size="sm" c="var(--app-text-primary)">
               {user?.institute?.name || 'معهد النور الأكاديمي'}
             </Text>
             <Badge
               size="xs"
               radius="xl"
               style={{
-                backgroundColor: '#f0e3d8',
-                color: '#8b6a34',
+                backgroundColor: 'var(--app-badge-bg)',
+                color: 'var(--app-badge-text)',
                 fontWeight: 600,
-                border: '1px solid #e5d9cf',
+                border: '1px solid var(--app-border)',
               }}
             >
               {branchLabel}
@@ -120,8 +122,8 @@ export function MobileSidebar() {
                       size={30}
                       radius="md"
                       style={{
-                        backgroundColor: isActive ? '#491d2b' : '#f0e3d8',
-                        color: isActive ? '#fff9f3' : '#491d2b',
+                        backgroundColor: isActive ? 'var(--app-brand-primary)' : 'var(--app-sidebar-subtle)',
+                        color: isActive ? '#fff9f3' : 'var(--app-brand-primary)',
                       }}
                     >
                       <IconComponent size={16} stroke={1.8} />
@@ -138,12 +140,12 @@ export function MobileSidebar() {
                       paddingBottom: rem(8),
                       paddingLeft: rem(12),
                       paddingRight: rem(12),
-                      backgroundColor: isActive && !isSectionOpen ? '#f0e3d8' : undefined,
-                      color: isActive ? '#491d2b' : '#806c69',
+                      backgroundColor: isActive && !isSectionOpen ? 'var(--app-sidebar-subtle)' : undefined,
+                      color: isActive ? 'var(--app-brand-primary)' : 'var(--app-text-secondary)',
                       fontWeight: isActive ? 600 : 500,
                     },
                     label: {
-                      color: isActive ? '#491d2b' : '#806c69',
+                      color: isActive ? 'var(--app-brand-primary)' : 'var(--app-text-secondary)',
                     },
                   }}
                 >
@@ -164,11 +166,11 @@ export function MobileSidebar() {
                               paddingTop: rem(7),
                               paddingBottom: rem(7),
                               backgroundColor: isSubActive
-                                ? '#491d2b'
+                                ? 'var(--app-brand-primary)'
                                 : 'transparent',
                               color: isSubActive
                                 ? '#fff9f3'
-                                : '#806c69',
+                                : 'var(--app-text-secondary)',
                               fontWeight: isSubActive ? 600 : 400,
                             },
                           }}
@@ -192,8 +194,8 @@ export function MobileSidebar() {
                     size={30}
                     radius="md"
                     style={{
-                      backgroundColor: isActive ? 'transparent' : '#f0e3d8',
-                      color: isActive ? '#fff9f3' : '#491d2b',
+                      backgroundColor: isActive ? 'transparent' : 'var(--app-sidebar-subtle)',
+                      color: isActive ? '#fff9f3' : 'var(--app-brand-primary)',
                     }}
                   >
                     <IconComponent size={16} stroke={1.8} />
@@ -207,13 +209,13 @@ export function MobileSidebar() {
                     paddingBottom: rem(8),
                     paddingLeft: rem(12),
                     paddingRight: rem(12),
-                    backgroundColor: isActive ? '#491d2b' : 'transparent',
-                    color: isActive ? '#fff9f3' : '#806c69',
+                    backgroundColor: isActive ? 'var(--app-brand-primary)' : 'transparent',
+                    color: isActive ? '#fff9f3' : 'var(--app-text-secondary)',
                     fontWeight: isActive ? 600 : 500,
                     boxShadow: isActive ? '0 4px 12px rgba(73, 29, 43, 0.14)' : 'none',
                   },
                   label: {
-                    color: isActive ? '#fff9f3' : '#806c69',
+                    color: isActive ? '#fff9f3' : 'var(--app-text-secondary)',
                   },
                 }}
                 onClick={close}
@@ -223,7 +225,7 @@ export function MobileSidebar() {
         </Stack>
       </ScrollArea>
 
-      <Box pt="md" style={{ borderTop: '1px solid #e5d9cf' }}>
+      <Box pt="md" style={{ borderTop: '1px solid var(--app-border)' }}>
         <UnstyledButton
           onClick={() => {
             close();
@@ -239,7 +241,7 @@ export function MobileSidebar() {
             padding: rem(8),
             borderRadius: rem(10),
             color: '#9b4b51',
-            backgroundColor: '#f5e6e8',
+            backgroundColor: 'var(--app-sidebar-subtle)',
             opacity: isLoggingOut ? 0.6 : 1,
             cursor: isLoggingOut ? 'not-allowed' : 'pointer',
           }}
