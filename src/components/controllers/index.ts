@@ -6,3 +6,7 @@ export * from './layout';
 export * from './sidebar';
 export * from './stepper';
 export * from './date-picker';
+export * from './stats';
+export * from './charts';
+export * from './app-module';
+

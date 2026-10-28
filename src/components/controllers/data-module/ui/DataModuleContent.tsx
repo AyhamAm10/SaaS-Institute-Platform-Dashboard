@@ -1,6 +1,6 @@
 'use client';
 
-import { Paper, rem } from '@mantine/core';
+import { Box, rem } from '@mantine/core';
 import { ReactNode } from 'react';
 
 export interface DataModuleContentProps {
@@ -9,20 +9,15 @@ export interface DataModuleContentProps {
 
 export function DataModuleContent({ children }: DataModuleContentProps) {
   return (
-    <Paper
-      radius="lg"
-      withBorder
+    <Box
       style={{
-        overflow: 'hidden',
         position: 'relative',
-        borderRadius: rem(14),
-        borderColor: 'var(--app-border)',
-        backgroundColor: 'var(--app-surface)',
-        boxShadow: 'var(--app-card-shadow)',
-        transition: 'background-color 200ms ease, border-color 200ms ease',
+        width: '100%',
+        overflow: 'hidden',
+        transition: 'background-color 200ms ease',
       }}
     >
       {children}
-    </Paper>
+    </Box>
   );
 }

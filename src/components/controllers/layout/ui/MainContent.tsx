@@ -1,6 +1,6 @@
 'use client';
 
-import { AppShell, Container } from '@mantine/core';
+import { AppShell, Box, Container } from '@mantine/core';
 import { ReactNode } from 'react';
 
 export interface MainContentProps {
@@ -11,14 +11,25 @@ export function MainContent({ children }: MainContentProps) {
   return (
     <AppShell.Main
       style={{
-        backgroundColor: 'var(--app-bg)',
+        position: 'relative',
         minHeight: '100vh',
-        transition: 'background-color 200ms ease',
+        backgroundColor: 'transparent',
       }}
     >
-      <Container fluid px={{ base: 'md', sm: 'lg', md: 'xl' }} py="md">
-        {children}
-      </Container>
+      <Box
+        style={{
+          position: 'relative',
+          minHeight: '100vh',
+          backgroundColor: 'var(--app-glass-bg)',
+          backdropFilter: 'blur(26px)',
+          WebkitBackdropFilter: 'blur(26px)',
+          transition: 'background-color 200ms ease',
+        }}
+      >
+        <Container fluid px={{ base: 'md', sm: 'lg', md: 'xl' }} py="md">
+          {children}
+        </Container>
+      </Box>
     </AppShell.Main>
   );
 }
