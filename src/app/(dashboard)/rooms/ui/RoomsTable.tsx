@@ -55,7 +55,7 @@ export function getRoomsColumns(
             <ThemeIcon radius="md" color={meta.color} variant="light" size="sm">
               <IconComp size={16} />
             </ThemeIcon>
-            <Text fw={600} size="xs" style={{ fontSize: '13px' }}>
+            <Text fw={500} size="xs" style={{ fontSize: '13px' }}>
               {room.name}
             </Text>
           </Group>

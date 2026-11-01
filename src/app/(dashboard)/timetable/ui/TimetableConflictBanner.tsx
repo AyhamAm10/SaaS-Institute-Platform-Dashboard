@@ -53,7 +53,7 @@ export function TimetableConflictBanner() {
       title={
         <Group justify="space-between" align="center" style={{ width: '100%' }}>
           <Group gap="xs">
-            <Text fw={700} size="sm">
+            <Text fw={500} size="sm">
               {isHard
                 ? `تم اكتشاف ${hardConflicts.length} تعارضات حرجة في الجدول`
                 : `تنبيه: يوجد ${softConflicts.length} ملاحظات حول الحصص المطلوبة`}
@@ -65,7 +65,7 @@ export function TimetableConflictBanner() {
 
           <UnstyledButton onClick={() => setOpened((o) => !o)}>
             <Group gap={4}>
-              <Text size="xs" fw={600} c={isHard ? 'red.9' : 'yellow.9'}>
+              <Text size="xs" fw={500} c={isHard ? 'red.9' : 'yellow.9'}>
                 {opened ? 'إخفاء التفاصيل' : 'عرض كافة التعارضات'}
               </Text>
               {opened ? <IconChevronUp size={14} /> : <IconChevronDown size={14} />}
@@ -95,7 +95,7 @@ export function TimetableConflictBanner() {
                 >
                   {c.severity === 'HARD' ? 'تعارض حرج' : 'ملاحظة'}
                 </Badge>
-                <Text size="xs" fw={600}>
+                <Text size="xs" fw={500}>
                   {c.message}
                 </Text>
               </Group>

@@ -21,7 +21,7 @@ export function getStudentsColumns(onView?: (student: Student) => void): DataMod
           >
             <IconUser size={15} />
           </ActionIcon>
-          <Text fw={600} size="xs" style={{ fontSize: '13px' }}>
+          <Text fw={500} size="xs" style={{ fontSize: '13px' }}>
             {student.fullName}
           </Text>
         </Group>

@@ -26,9 +26,9 @@ export function AppModalTitle({
     <Title
       order={order}
       size={size}
-      fw={700}
+      fw={600}
       className={className}
-      style={{ letterSpacing: '-0.2px', margin: 0, lineHeight: 1.3 }}
+      style={{ fontSize: 'var(--mantine-font-size-lg)', margin: 0, lineHeight: 1.35 }}
     >
       {content}
     </Title>

@@ -1,171 +1,202 @@
 'use client';
 
-import { Box, Flex, Group, Stack, Text, rem } from '@mantine/core';
-import { BarChartDataPoint } from '../init/charts.init';
+import { Box, Flex, Group, Text, UnstyledButton, rem } from '@mantine/core';
+import { formatNumber } from '@/src/core/format';
+import {
+  BarChartDataPoint,
+  resolveAxisMax,
+  resolveDefaultBarIndex,
+} from '../init/charts.init';
+import { useChartsMirror } from '../store/useChartsMirror';
 
 export interface BarChartProps {
-  data: BarChartDataPoint[];
-  yAxisLabels?: string[];
+  /** Static dataset (used when `datasets` has no entry for the active period). */
+  data?: BarChartDataPoint[];
+  /** One dataset per period label, e.g. { 'يومي': [...], 'أسبوعي': [...] }. */
+  datasets?: Record<string, BarChartDataPoint[]>;
+  /** Unit appended to values and axis ticks. */
+  unit?: string;
   maxHeight?: number;
-  highlightColor?: string;
-  defaultBarColor?: string;
+  /** Called when a bar is clicked (after it becomes the selected bar). */
+  onBarClick?: (point: BarChartDataPoint, index: number) => void;
+  /** Shows total / average / peak under the chart. */
+  withSummary?: boolean;
 }
 
-export function BarChart({
-  data,
-  yAxisLabels = ['24h', '16h', '8h', '4h', '0h'],
-  maxHeight = 220,
-  highlightColor = 'var(--app-brand-primary)',
-  defaultBarColor = 'var(--app-subtle)',
-}: BarChartProps) {
-  if (!data || data.length === 0) return null;
+const AXIS_TICKS = [1, 0.75, 0.5, 0.25, 0];
+const LABEL_HEIGHT = 30;
 
-  const maxValue = Math.max(...data.map((d) => d.value), 24);
+/**
+ * Interactive bar chart.
+ * - Period tabs (ChartCard) switch the dataset; bars are keyed by period, so they remount and grow in.
+ * - Hover shows a tooltip; click selects a bar (orange). The default selection is the peak.
+ * - Bars are pill cylinders with side shading and moving diagonal stripes, so they appear to twist.
+ */
+export function BarChart({
+  data = [],
+  datasets,
+  unit = 'h',
+  maxHeight = 240,
+  onBarClick,
+  withSummary = true,
+}: BarChartProps) {
+  const activePeriod = useChartsMirror('activePeriod');
+  const hoveredIndex = useChartsMirror('hoveredIndex');
+  const selectedIndex = useChartsMirror('selectedIndex');
+  const setHoveredIndex = useChartsMirror('setHoveredIndex');
+  const setSelectedIndex = useChartsMirror('setSelectedIndex');
+
+  const points = datasets?.[activePeriod] ?? data;
+  const axisMax = resolveAxisMax(points.map((p) => p.value));
+  const defaultIndex = resolveDefaultBarIndex(points);
+  const activeSelected = selectedIndex ?? defaultIndex;
+  const tooltipIndex = hoveredIndex ?? activeSelected;
+
+  if (points.length === 0) return null;
+
+  const format = (value: number) => `${formatNumber(Math.round(value * 10) / 10)}${unit}`;
+  const total = points.reduce((sum, p) => sum + p.value, 0);
 
   return (
-    <Box style={{ width: '100%', position: 'relative', paddingTop: rem(28) }}>
-      {/* Chart Grid Lines and Bars Area */}
-      <Box style={{ position: 'relative', height: maxHeight, width: '100%' }}>
-        {/* Horizontal Guidelines & Y-Axis */}
+    <Box style={{ width: '100%' }}>
+      <Flex gap={rem(10)} style={{ height: maxHeight, paddingTop: rem(40) }}>
+        {/* Y axis */}
         <Flex
           direction="column"
           justify="space-between"
-          style={{
-            position: 'absolute',
-            top: 0,
-            bottom: 0,
-            left: 0,
-            right: 0,
-            pointerEvents: 'none',
-          }}
+          style={{ width: rem(34), flexShrink: 0, paddingBottom: rem(LABEL_HEIGHT) }}
         >
-          {yAxisLabels.map((lbl, idx) => (
-            <Group key={idx} justify="space-between" align="center" gap="xs" style={{ width: '100%' }}>
-              <Text
-                size="xs"
-                c="dimmed"
-                style={{
-                  fontSize: rem(11),
-                  width: rem(26),
-                  textAlign: 'left',
-                  flexShrink: 0,
-                }}
-              >
-                {lbl}
-              </Text>
-              <Box
-                style={{
-                  flex: 1,
-                  height: 1,
-                  borderBottom: '1px dashed var(--app-border)',
-                  opacity: 0.6,
-                }}
-              />
-            </Group>
+          {AXIS_TICKS.map((tick) => (
+            <Text key={tick} fw={300} style={{ fontSize: rem(11), lineHeight: 0, color: 'var(--app-text-muted)' }}>
+              {format(axisMax * tick)}
+            </Text>
           ))}
         </Flex>
 
-        {/* Vertical Bars Columns */}
-        <Flex
-          justify="space-around"
-          align="flex-end"
-          style={{
-            position: 'absolute',
-            top: 0,
-            bottom: 0,
-            left: rem(36),
-            right: rem(10),
-          }}
-        >
-          {data.map((item, idx) => {
-            const heightPercent = Math.min(100, Math.max(8, (item.value / maxValue) * 100));
-            const isHighlight = item.highlight;
+        {/* Plot */}
+        <Box style={{ position: 'relative', flex: 1, minWidth: 0 }}>
+          <Flex
+            direction="column"
+            justify="space-between"
+            style={{ position: 'absolute', inset: 0, bottom: rem(LABEL_HEIGHT), pointerEvents: 'none' }}
+          >
+            {AXIS_TICKS.map((tick) => (
+              <Box key={tick} style={{ borderTop: '1px dashed var(--app-border)' }} />
+            ))}
+          </Flex>
 
-            return (
-              <Stack
-                key={idx}
-                align="center"
-                justify="flex-end"
-                gap={0}
-                style={{
-                  height: '100%',
-                  flex: 1,
-                  maxWidth: rem(64),
-                  position: 'relative',
-                }}
-              >
-                {/* Floating Tooltip Badge for highlighted bar (like Image 2) */}
-                {isHighlight && (
-                  <Box
+          <Flex
+            justify="space-around"
+            align="stretch"
+            style={{ position: 'absolute', inset: 0 }}
+            onMouseLeave={() => setHoveredIndex(null)}
+          >
+            {points.map((point, index) => {
+              const heightPercent = Math.max(4, (point.value / axisMax) * 100);
+              const isSelected = index === activeSelected;
+              const isHovered = index === hoveredIndex;
+              const showTooltip = index === tooltipIndex;
+
+              return (
+                <UnstyledButton
+                  key={`${activePeriod}-${point.label}`}
+                  onMouseEnter={() => setHoveredIndex(index)}
+                  onFocus={() => setHoveredIndex(index)}
+                  onBlur={() => setHoveredIndex(null)}
+                  onClick={() => {
+                    setSelectedIndex(index);
+                    onBarClick?.(point, index);
+                  }}
+                  aria-label={`${point.label}: ${format(point.value)}`}
+                  aria-pressed={isSelected}
+                  style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: 0 }}
+                >
+                  <Box style={{ position: 'relative', flex: 1, width: '100%', display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
+                    {showTooltip && (
+                      <Box
+                        style={{
+                          position: 'absolute',
+                          left: '50%',
+                          bottom: `calc(${heightPercent}% + ${rem(10)})`,
+                          transform: 'translateX(-50%)',
+                          zIndex: 3,
+                          padding: `${rem(5)} ${rem(12)}`,
+                          borderRadius: 'var(--app-radius-pill)',
+                          backgroundColor: 'var(--mantine-color-primary-6)',
+                          border: '1px solid var(--app-border)',
+                          color: 'var(--app-text-on-brand)',
+                          fontSize: rem(12),
+                          whiteSpace: 'nowrap',
+                          boxShadow: 'var(--app-elev-2)',
+                          pointerEvents: 'none',
+                          animation: 'app-tooltip-in 500ms var(--app-ease-soft) both',
+                        }}
+                      >
+                        {point.tooltipBadge ?? (
+                          <>
+                            {point.label} ·{' '}
+                            <Text span inherit fw={500} c="var(--mantine-color-brand-3)">
+                              {format(point.value)}
+                            </Text>
+                          </>
+                        )}
+                      </Box>
+                    )}
+
+                    <Box
+                      className="app-chart-bar"
+                      data-selected={isSelected || undefined}
+                      data-hovered={(isHovered && !isSelected) || undefined}
+                      style={{
+                        height: `${heightPercent}%`,
+                        // Grow-in delay (staggered), then a phase offset for the twist loop.
+                        animationDelay: `${index * 0.05}s, ${-index * 0.23}s`,
+                      }}
+                    />
+                  </Box>
+
+                  <Text
+                    fw={isSelected ? 500 : 400}
                     style={{
-                      position: 'absolute',
-                      top: `calc(${100 - heightPercent}% - ${rem(36)})`,
-                      padding: `${rem(3)} ${rem(10)}`,
-                      backgroundColor: '#181b24',
-                      color: '#ffffff',
-                      borderRadius: rem(8),
-                      fontSize: rem(11),
-                      fontWeight: 700,
+                      height: rem(LABEL_HEIGHT),
+                      display: 'flex',
+                      alignItems: 'flex-end',
+                      fontSize: rem(11.5),
                       whiteSpace: 'nowrap',
-                      boxShadow: '0 4px 14px rgba(0, 0, 0, 0.25)',
-                      zIndex: 3,
-                      animation: 'fadeInUp 200ms ease',
+                      color: isSelected ? 'var(--app-text-primary)' : 'var(--app-text-muted)',
+                      transition: 'color 200ms ease',
                     }}
                   >
-                    {item.tooltipBadge || `${item.value}h`}
-                  </Box>
-                )}
-
-                {/* The Bar */}
-                <Box
-                  style={{
-                    width: '65%',
-                    maxWidth: rem(48),
-                    height: `${heightPercent}%`,
-                    borderRadius: rem(12),
-                    backgroundColor: isHighlight ? highlightColor : defaultBarColor,
-                    backgroundImage: isHighlight
-                      ? undefined
-                      : 'repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(120,120,120,0.06) 5px, rgba(120,120,120,0.06) 10px)',
-                    boxShadow: isHighlight ? '0 8px 22px rgba(73, 29, 43, 0.28)' : 'none',
-                    transition: 'all 240ms cubic-bezier(0.16, 1, 0.3, 1)',
-                    cursor: 'pointer',
-                    border: isHighlight ? 'none' : '1px solid var(--app-border)',
-                  }}
-                />
-              </Stack>
-            );
-          })}
-        </Flex>
-      </Box>
-
-      {/* X-Axis Labels */}
-      <Flex
-        justify="space-around"
-        align="center"
-        mt={rem(10)}
-        style={{
-          marginLeft: rem(36),
-          marginRight: rem(10),
-        }}
-      >
-        {data.map((item, idx) => (
-          <Text
-            key={idx}
-            size="xs"
-            fw={item.highlight ? 700 : 500}
-            style={{
-              fontSize: rem(11.5),
-              color: item.highlight ? 'var(--app-text-primary)' : 'var(--app-text-secondary)',
-              textAlign: 'center',
-              flex: 1,
-              maxWidth: rem(64),
-            }}
-          >
-            {item.label}
-          </Text>
-        ))}
+                    {point.label}
+                  </Text>
+                </UnstyledButton>
+              );
+            })}
+          </Flex>
+        </Box>
       </Flex>
+
+      {withSummary && (
+        <Group gap="lg" mt="md" wrap="wrap">
+          <SummaryItem label="المجموع" value={format(total)} />
+          <SummaryItem label="المتوسط" value={format(total / points.length)} />
+          <SummaryItem label="الذروة" value={points[defaultIndex]?.label ?? '—'} />
+        </Group>
+      )}
     </Box>
   );
 }
+
+function SummaryItem({ label, value }: { label: string; value: string }) {
+  return (
+    <Text size="xs" fw={300} c="var(--app-text-muted)">
+      {label}{' '}
+      <Text span fw={500} c="var(--app-text-primary)">
+        {value}
+      </Text>
+    </Text>
+  );
+}
+
+// Re-exported for page-level fake data typing.
+export type { BarChartDataPoint };

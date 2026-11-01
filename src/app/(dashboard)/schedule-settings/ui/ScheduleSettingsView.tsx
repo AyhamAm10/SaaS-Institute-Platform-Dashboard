@@ -105,7 +105,7 @@ export function ScheduleSettingsView({
               <IconCalendar size={24} />
             </ThemeIcon>
             <Stack gap={4}>
-              <Title order={2} fw={800}>
+              <Title order={2} fw={500}>
                 إعدادات الجدول والدوام المدرسي
               </Title>
               <Text c="dimmed" size="sm">
@@ -150,7 +150,7 @@ export function ScheduleSettingsView({
 
       <SimpleGrid cols={{ base: 1, md: 2 }} spacing="lg">
         {/* Left Column: Form Settings */}
-        <div>
+        <Box>
           <Stack gap="lg">
             {/* Working Days */}
             <Paper p="lg" radius="xl" withBorder>
@@ -159,7 +159,7 @@ export function ScheduleSettingsView({
                   <ThemeIcon size="md" radius="xl" variant="light" color="navy">
                     <IconCalendar size={18} />
                   </ThemeIcon>
-                  <Text fw={700} size="md">
+                  <Text fw={500} size="md">
                     أيام الدوام الأسبوعي
                   </Text>
                 </Group>
@@ -200,7 +200,7 @@ export function ScheduleSettingsView({
                   <ThemeIcon size="md" radius="xl" variant="light" color="secondary">
                     <IconClock size={18} />
                   </ThemeIcon>
-                  <Text fw={700} size="md">
+                  <Text fw={500} size="md">
                     ساعات الدوام ومدة الحصة
                   </Text>
                 </Group>
@@ -243,7 +243,7 @@ export function ScheduleSettingsView({
                     <ThemeIcon size="md" radius="xl" variant="light" color="secondary">
                       <IconCoffee size={18} />
                     </ThemeIcon>
-                    <Text fw={700} size="md">
+                    <Text fw={500} size="md">
                       فترات الاستراحة والفسحة
                     </Text>
                   </Group>
@@ -301,7 +301,7 @@ export function ScheduleSettingsView({
                             <ThemeIcon size="sm" radius="xl" color="secondary" variant="light">
                               <IconCoffee size={14} />
                             </ThemeIcon>
-                            <Text size="sm" fw={600}>
+                            <Text size="sm" fw={500}>
                               {b.name}
                             </Text>
                             <Badge variant="outline" color="gray" size="sm">
@@ -326,14 +326,14 @@ export function ScheduleSettingsView({
               </Stack>
             </Paper>
           </Stack>
-        </div>
+        </Box>
 
         {/* Right Column: Live Calculated Slots Preview */}
-        <div>
+        <Box>
           <Paper p="lg" radius="xl" withBorder h="100%">
             <Stack gap="md">
               <Group justify="space-between" align="center">
-                <Title order={4} fw={700}>
+                <Title order={4} fw={500}>
                   معاينة الحصص المحسوبة
                 </Title>
                 <Badge color="secondary" variant="light" radius="xl">
@@ -372,12 +372,12 @@ export function ScheduleSettingsView({
                               {isBreak ? 'استراحة' : `الحصة ${s.periodNumber}`}
                             </Badge>
                             {isBreak && (
-                              <Text size="xs" fw={600} c="secondary">
+                              <Text size="xs" fw={500} c="secondary">
                                 {s.name}
                               </Text>
                             )}
                           </Group>
-                          <Text size="xs" fw={700} dir="ltr">
+                          <Text size="xs" fw={500} dir="ltr">
                             {s.startTime} - {s.endTime}
                           </Text>
                         </Group>
@@ -388,7 +388,7 @@ export function ScheduleSettingsView({
               )}
             </Stack>
           </Paper>
-        </div>
+        </Box>
       </SimpleGrid>
     </Stack>
   );

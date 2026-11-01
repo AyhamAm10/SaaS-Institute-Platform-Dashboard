@@ -40,7 +40,7 @@ export function getTeachersColumns(
             <IconUser size={16} />
           </Avatar>
           <Stack gap={1}>
-            <Text fw={600} size="xs" style={{ fontSize: '13px' }}>
+            <Text fw={500} size="xs" style={{ fontSize: '13px' }}>
               {teacher.user.fullName}
             </Text>
             <Text size="xs" c="dimmed" style={{ fontSize: '11px' }}>

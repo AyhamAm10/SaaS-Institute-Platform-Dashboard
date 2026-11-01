@@ -62,8 +62,8 @@ export function AppStepperSidebar({ children }: AppStepperSidebarProps) {
                   <Group gap="xs" align="center" wrap="nowrap">
                     <Text
                       size="md"
-                      fw={isCurrent ? 700 : isCompleted ? 600 : 500}
-                      c={isCurrent ? 'var(--app-brand-primary)' : isCompleted ? 'var(--app-text-primary)' : 'var(--app-text-muted)'}
+                      fw={isCurrent ? 500 : 400}
+                      c={isCurrent ? 'var(--mantine-color-primary-filled)' : isCompleted ? 'var(--app-text-primary)' : 'var(--app-text-muted)'}
                       style={{
                         transition: 'color 0.2s ease',
                         fontSize: rem(14.5),
@@ -84,7 +84,7 @@ export function AppStepperSidebar({ children }: AppStepperSidebarProps) {
                         style={{
                           backgroundColor: 'var(--app-badge-bg)',
                           color: 'var(--app-badge-text)',
-                          fontWeight: 600,
+                          fontWeight: 500,
                         }}
                       >
                         مكتملة
@@ -150,7 +150,7 @@ export function AppStepperSidebar({ children }: AppStepperSidebarProps) {
                       backgroundColor: isCompleted
                         ? 'var(--app-brand-accent)'
                         : isCurrent
-                        ? 'var(--app-brand-primary)'
+                        ? 'var(--mantine-color-primary-filled)'
                         : 'var(--app-surface)',
                       border:
                         isCompleted || isCurrent
@@ -158,17 +158,17 @@ export function AppStepperSidebar({ children }: AppStepperSidebarProps) {
                           : '1.5px solid var(--app-border)',
                       color:
                         isCompleted || isCurrent
-                          ? '#ffffff'
+                          ? 'var(--app-text-on-brand)'
                           : 'var(--app-text-muted)',
                       boxShadow: isCurrent
-                        ? '0 6px 18px rgba(73, 29, 43, 0.25)'
+                        ? '0 0 0 4px var(--app-brand-accent-ring), var(--app-elev-1)'
                         : 'none',
                     }}
                   >
                     {isCompleted ? (
                       <IconCheck size={18} stroke={2.5} />
                     ) : (
-                      <Text size="sm" fw={700}>
+                      <Text size="sm" fw={500}>
                         {s.step + 1}
                       </Text>
                     )}

@@ -1,37 +1,20 @@
 'use client';
 
-import { Box, rem } from '@mantine/core';
 import { ReactNode } from 'react';
+import { IconTile } from '../../info-tile';
 
 export interface StatCardIconProps {
   children?: ReactNode;
-  color?: string;
-  bg?: string;
+  /** brand = glossy orange tile, ink = glossy black tile. */
+  tone?: 'brand' | 'ink';
 }
 
-export function StatCardIcon({
-  children,
-  color = 'var(--app-brand-primary)',
-  bg = 'var(--app-subtle)',
-}: StatCardIconProps) {
+export function StatCardIcon({ children, tone = 'brand' }: StatCardIconProps) {
   if (!children) return null;
 
   return (
-    <Box
-      style={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: rem(32),
-        height: rem(32),
-        borderRadius: rem(8),
-        border: '1px solid var(--app-border)',
-        backgroundColor: bg,
-        color: color,
-        flexShrink: 0,
-      }}
-    >
+    <IconTile tone={tone} size={44}>
       {children}
-    </Box>
+    </IconTile>
   );
 }

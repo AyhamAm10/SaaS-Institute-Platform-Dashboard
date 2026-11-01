@@ -4,8 +4,6 @@ import React from 'react';
 import {
   Alert,
   Box,
-  Button,
-  Paper,
   Stack,
   Text,
   Title,
@@ -17,6 +15,9 @@ import {
 } from '@tabler/icons-react';
 import { useLoginMirror } from '../store/useLoginMirror';
 import { AppInput } from '@/src/components/controllers/input';
+import { AppButton } from '../../button';
+import { AppSurface } from '../../surface';
+import { BrandMark } from '../../sidebar/ui/shared/SidebarBrand';
 
 export function LoginForm() {
   const phone = useLoginMirror('phone');
@@ -33,31 +34,23 @@ export function LoginForm() {
   };
 
   return (
-    <Paper
-      p={{ base: 'xl', sm: rem(40) }}
-      radius={28}
-      withBorder
-      style={{
-        width: '100%',
-        maxWidth: rem(450),
-        borderColor: 'rgba(0, 0, 0, 0.06)',
-        boxShadow: '0 20px 50px rgba(11, 27, 46, 0.06), 0 1px 3px rgba(0, 0, 0, 0.02)',
-        backgroundColor: '#ffffff',
-      }}
+    <AppSurface
+      level={3}
+      radius="xl"
+      padding={{ base: 'xl', sm: rem(40) }}
+      style={{ width: '100%', maxWidth: rem(440) }}
     >
       <form onSubmit={handleSubmit}>
         <Stack gap="lg">
           {/* Title */}
-          <Box ta="center" mb={rem(4)}>
-            <Title
-              order={1}
-              fw={800}
-              size={rem(28)}
-              style={{ color: '#0a1128', letterSpacing: '-0.5px' }}
-            >
-              تسجيل الدخول
+          <Box mb={rem(4)}>
+            <Box hiddenFrom="md" mb="lg">
+              <BrandMark size={56} />
+            </Box>
+            <Title order={1} fw={600} size={rem(28)} style={{ letterSpacing: '-0.01em' }}>
+              أهلا بعودتك
             </Title>
-            <Text size="sm" c="dimmed" mt={rem(4)} fw={500}>
+            <Text size="sm" fw={300} c="var(--app-text-secondary)" mt={rem(6)}>
               أدخل بيانات حسابك للوصول إلى لوحة الإدارة
             </Text>
           </Box>
@@ -67,8 +60,8 @@ export function LoginForm() {
             <Alert
               icon={<IconAlertCircle size={18} />}
               title="تنبيه"
-              color="red"
-              radius="md"
+              color="danger"
+              radius="lg"
               variant="light"
             >
               {errorMessage}
@@ -110,28 +103,19 @@ export function LoginForm() {
             />
           </Stack>
 
-          {/* Submit Button (Deep Navy matching the mockup) */}
-          <Button
+          {/* Submit: ink primary button */}
+          <AppButton
             type="submit"
             size="md"
             loading={isSubmitting}
             rightSection={!isSubmitting ? <IconArrowLeft size={18} /> : undefined}
             fullWidth
-            style={{
-              height: rem(48),
-              borderRadius: rem(14),
-              backgroundColor: '#0a1128',
-              color: '#ffffff',
-              fontWeight: 700,
-              fontSize: rem(14.5),
-              boxShadow: '0 4px 14px rgba(10, 17, 40, 0.25)',
-              transition: 'all 150ms ease',
-            }}
+            style={{ height: rem(50), fontSize: rem(14.5) }}
           >
             {isSubmitting ? 'جاري التحقق...' : 'تسجيل الدخول'}
-          </Button>
+          </AppButton>
         </Stack>
       </form>
-    </Paper>
+    </AppSurface>
   );
 }

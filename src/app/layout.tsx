@@ -1,20 +1,20 @@
 import type { Metadata } from 'next';
-import { ColorSchemeScript, DirectionProvider, MantineProvider } from '@mantine/core';
-import { Readex_Pro } from 'next/font/google';
-import { baseTheme } from '@/src/theme';
+import { ColorSchemeScript, DirectionProvider } from '@mantine/core';
+import { Alexandria } from 'next/font/google';
+import { AppThemeProvider } from '@/src/theme/AppThemeProvider';
 import { QueryProvider } from '@/src/core/api';
 import './globals.css';
 
-const readexPro = Readex_Pro({
+const alexandria = Alexandria({
   subsets: ['arabic', 'latin'],
-  weight: ['300', '400', '500', '600', '700'],
-  variable: '--font-readex-pro',
+  weight: ['300', '400', '500', '600'],
+  variable: '--font-alexandria',
   display: 'swap',
 });
 
 export const metadata: Metadata = {
-  title: 'منصة إدارة المعاهد والمؤسسات التعليمية SaaS',
-  description: 'لوحة التحكم الإدارية الذكية للمؤسسات التعليمية',
+  title: 'معهد جيل السلام | لوحة التحكم',
+  description: 'لوحة التحكم الإدارية لمعهد جيل السلام',
 };
 
 export default function RootLayout({
@@ -23,17 +23,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ar" dir="rtl" className={readexPro.variable} suppressHydrationWarning>
+    <html lang="ar" dir="rtl" className={alexandria.variable} suppressHydrationWarning>
       <head>
         <ColorSchemeScript defaultColorScheme="light" />
       </head>
-      <body dir="rtl" className={readexPro.className}>
+      <body dir="rtl" className={alexandria.className}>
         <DirectionProvider initialDirection="rtl">
-          <MantineProvider theme={baseTheme} defaultColorScheme="light">
+          <AppThemeProvider>
             <QueryProvider>
               {children}
             </QueryProvider>
-          </MantineProvider>
+          </AppThemeProvider>
         </DirectionProvider>
       </body>
     </html>

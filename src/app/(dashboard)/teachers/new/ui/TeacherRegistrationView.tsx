@@ -47,11 +47,11 @@ export function TeacherRegistrationView({
             <Anchor component={Link} href="/teachers" c="dimmed">
               الكادر التدريسي
             </Anchor>
-            <Text size="xs" c="primary" fw={600}>
+            <Text size="xs" c="primary" fw={500}>
               إضافة معلم جديد
             </Text>
           </Breadcrumbs>
-          <Title order={2} fz={{ base: 17, sm: 20 }} fw={700}>
+          <Title order={2} fz={{ base: 17, sm: 20 }} fw={500}>
             إضافة معلم جديد وتحديد المؤهلات والدوام
           </Title>
           <Text size="xs" c="dimmed">

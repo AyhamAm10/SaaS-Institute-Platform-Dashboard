@@ -1,4 +1,5 @@
 'use client';
+import { formatDate } from '@/src/core/format';
 
 import {
   ActionIcon,
@@ -39,7 +40,7 @@ export function getSubjectsColumns(
           <Avatar color="primary" radius="md" size="sm" variant="light">
             <IconBook size={16} />
           </Avatar>
-          <Text size="sm" fw={600}>
+          <Text size="sm" fw={500}>
             {subject.name}
           </Text>
         </Group>
@@ -65,9 +66,7 @@ export function getSubjectsColumns(
       title: subjectsLabels.tableCreatedAt,
       sortable: true,
       render: (subject) => {
-        const formattedDate = subject.createdAt
-          ? new Date(subject.createdAt).toLocaleDateString('ar-SA')
-          : '—';
+        const formattedDate = formatDate(subject.createdAt);
         return (
           <Text size="xs" c="dimmed">
             {formattedDate}

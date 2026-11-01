@@ -1,35 +1,22 @@
 'use client';
 
-import { AppShell, Box, Container } from '@mantine/core';
+import { AppShell, Container } from '@mantine/core';
 import { ReactNode } from 'react';
 
 export interface MainContentProps {
   children: ReactNode;
 }
 
+/**
+ * Main content area. Intentionally transparent and un-blurred:
+ * the glass effect belongs to the cards, so the ambient blobs stay visible between them.
+ */
 export function MainContent({ children }: MainContentProps) {
   return (
-    <AppShell.Main
-      style={{
-        position: 'relative',
-        minHeight: '100vh',
-        backgroundColor: 'transparent',
-      }}
-    >
-      <Box
-        style={{
-          position: 'relative',
-          minHeight: '100vh',
-          backgroundColor: 'var(--app-glass-bg)',
-          backdropFilter: 'blur(26px)',
-          WebkitBackdropFilter: 'blur(26px)',
-          transition: 'background-color 200ms ease',
-        }}
-      >
-        <Container fluid px={{ base: 'md', sm: 'lg', md: 'xl' }} py="md">
-          {children}
-        </Container>
-      </Box>
+    <AppShell.Main style={{ position: 'relative', minHeight: '100vh' }}>
+      <Container fluid px={{ base: 'md', sm: 'lg', md: 'xl' }} pt="lg" pb="xl">
+        {children}
+      </Container>
     </AppShell.Main>
   );
 }

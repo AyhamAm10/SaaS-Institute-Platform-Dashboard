@@ -13,15 +13,15 @@ export function ChartHeader({ title, subtitle, actions }: ChartHeaderProps) {
   if (!title && !actions) return null;
 
   return (
-    <Group justify="space-between" align="center" mb={rem(14)} wrap="wrap" gap="xs">
-      <Stack gap={2}>
+    <Group justify="space-between" align="flex-start" mb={rem(18)} wrap="wrap" gap="sm">
+      <Stack gap={4}>
         {title && (
-          <Title order={4} fw={700} style={{ fontSize: rem(15), color: 'var(--app-text-primary)' }}>
+          <Title order={2} fw={500} style={{ fontSize: rem(17), color: 'var(--app-text-primary)' }}>
             {title}
           </Title>
         )}
         {subtitle && (
-          <Text size="xs" c="dimmed" style={{ fontSize: rem(12) }}>
+          <Text fw={300} style={{ fontSize: rem(12.5), color: 'var(--app-text-muted)' }}>
             {subtitle}
           </Text>
         )}

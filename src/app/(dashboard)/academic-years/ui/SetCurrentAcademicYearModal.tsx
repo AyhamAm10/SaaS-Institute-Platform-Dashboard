@@ -109,7 +109,7 @@ export function SetCurrentAcademicYearModal({
               </Group>
               {currentActiveYear ? (
                 <Group gap="xs">
-                  <Text size="xs" fw={600}>{currentActiveYear.name}</Text>
+                  <Text size="xs" fw={500}>{currentActiveYear.name}</Text>
                   <AcademicYearStatusBadge isCurrent={true} />
                 </Group>
               ) : (
@@ -131,9 +131,9 @@ export function SetCurrentAcademicYearModal({
               <Group justify="space-between" align="center">
                 <Group gap="xs">
                   <IconCalendarCheck size={16} color="var(--mantine-color-teal-7)" />
-                  <Text size="xs" c="teal.9" fw={600}>السنة المراد اعتمادها:</Text>
+                  <Text size="xs" c="teal.9" fw={500}>السنة المراد اعتمادها:</Text>
                 </Group>
-                <Text size="sm" fw={700} c="teal.8">{targetYear.name}</Text>
+                <Text size="sm" fw={500} c="teal.8">{targetYear.name}</Text>
               </Group>
               <Text size="xs" c="dimmed" mt={4}>
                 فترة الدوام: {targetYear.startDate?.split('T')[0] ?? '—'} إلى {targetYear.endDate?.split('T')[0] ?? '—'}

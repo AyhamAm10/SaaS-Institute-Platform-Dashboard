@@ -37,8 +37,7 @@ export function AppModalHeader({
         py="lg"
         className={className}
         style={{
-          borderBottom: '1px solid var(--app-border)',
-          backgroundColor: 'var(--app-surface)',
+          borderBottom: '1px solid var(--app-border-subtle)',
           flexShrink: 0,
         }}
       >
@@ -58,8 +57,7 @@ export function AppModalHeader({
       py="lg"
       className={className}
       style={{
-        borderBottom: '1px solid var(--app-border)',
-        backgroundColor: 'var(--app-surface)',
+        borderBottom: '1px solid var(--app-border-subtle)',
         flexShrink: 0,
       }}
     >

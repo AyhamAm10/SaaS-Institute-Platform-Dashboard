@@ -6,6 +6,7 @@ import { AppInput } from '@/src/components/controllers/input';
 import { AppModal } from '@/src/components/controllers';
 import { sectionFormLabels } from '../static-data/sections.data';
 import { useSectionsMirror } from '../store/useSectionsMirror';
+import { formatNumber } from '@/src/core/format';
 
 export interface SectionFeeModalProps {
   opened: boolean;
@@ -66,13 +67,13 @@ export function SectionFeeModal({
             )}
 
             {feeSection && (
-              <Text size="sm" fw={600} c="dimmed">
-                الشعبة: <Text span c="dark" fw={700}>{feeSection.name}</Text>
+              <Text size="sm" fw={500} c="dimmed">
+                الشعبة: <Text span c="dark" fw={500}>{feeSection.name}</Text>
               </Text>
             )}
 
             <Text size="xs" c="dimmed">
-              الرسوم السابقة: {Number(feeSection?.feeAmount ?? 0).toLocaleString()} ر.س
+              الرسوم السابقة: {formatNumber(feeSection?.feeAmount ?? 0)} ر.س
             </Text>
 
             <AppInput

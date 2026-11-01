@@ -1,6 +1,6 @@
 'use client';
 
-import { Group } from '@mantine/core';
+import { Box, Group } from '@mantine/core';
 import { ReactNode } from 'react';
 
 export interface AppModalFooterStartProps {
@@ -9,7 +9,7 @@ export interface AppModalFooterStartProps {
 }
 
 export function AppModalFooterStart({ children, className }: AppModalFooterStartProps) {
-  if (!children) return <div />;
+  if (!children) return <Box />;
 
   return (
     <Group gap="sm" align="center" className={className} wrap="nowrap">

@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  Box,
   ActionIcon,
   Badge,
   Button,
@@ -16,11 +17,11 @@ import {
   SimpleGrid,
   Stack,
   Table,
-  Tabs,
   Text,
   ThemeIcon,
   Tooltip,
 } from '@mantine/core';
+import { AppTabs } from '@/src/components/controllers/tabs';
 import {
   IconBriefcase,
   IconCalendarTime,
@@ -126,7 +127,7 @@ export function TeacherDetailsDrawer({
       title={
         <Group gap="xs">
           <IconUser size={20} />
-          <Text fw={700} size="md">
+          <Text fw={500} size="md">
             ملف المعلم: {selectedTeacherDetails.user.fullName}
           </Text>
         </Group>
@@ -134,61 +135,59 @@ export function TeacherDetailsDrawer({
       padding="lg"
       radius="xl"
     >
-      <Tabs
-        value={activeDetailsTab}
+      <AppTabs
+        value={activeDetailsTab || 'overview'}
         onChange={(val) => setActiveDetailsTab(val || 'overview')}
+        items={[
+          { value: 'overview', label: 'نظرة عامة', icon: <IconUser size={16} stroke={1.6} /> },
+          {
+            value: 'qualifications',
+            label: 'المواد المعتمدة',
+            icon: <IconBriefcase size={16} stroke={1.6} />,
+            count: selectedTeacherDetails.assignments?.length || 0,
+          },
+          {
+            value: 'availability',
+            label: 'أوقات الدوام',
+            icon: <IconCalendarTime size={16} stroke={1.6} />,
+            count: stagedAvailabilities.length,
+          },
+        ]}
       >
-        <Tabs.List mb="md">
-          <Tabs.Tab
-            value="overview"
-            leftSection={<IconUser size={16} />}
-          >
-            نظرة عامة
-          </Tabs.Tab>
-          <Tabs.Tab
-            value="qualifications"
-            leftSection={<IconBriefcase size={16} />}
-          >
-            المواد المعتمدة ({selectedTeacherDetails.assignments?.length || 0})
-          </Tabs.Tab>
-          <Tabs.Tab
-            value="availability"
-            leftSection={<IconCalendarTime size={16} />}
-          >
-            أوقات الدوام الأسبوعي ({stagedAvailabilities.length})
-          </Tabs.Tab>
-        </Tabs.List>
+        <Box mb="md">
+          <AppTabs.List />
+        </Box>
 
         {/* ── Tab 1: Overview ── */}
-        <Tabs.Panel value="overview">
+        <AppTabs.Panel value="overview">
           <Stack gap="md">
             <Paper p="md" radius="xl" withBorder>
               <SimpleGrid cols={2} spacing="md">
-                <div>
+                <Box>
                   <Text size="xs" c="dimmed">
                     الاسم الكامل
                   </Text>
-                  <Text size="sm" fw={700}>
+                  <Text size="sm" fw={500}>
                     {selectedTeacherDetails.user.fullName}
                   </Text>
-                </div>
-                <div>
+                </Box>
+                <Box>
                   <Text size="xs" c="dimmed">
                     رقم الهاتف
                   </Text>
-                  <Text size="sm" fw={700} dir="ltr" ta="right">
+                  <Text size="sm" fw={500} dir="ltr" ta="right">
                     {selectedTeacherDetails.user.phone}
                   </Text>
-                </div>
-                <div>
+                </Box>
+                <Box>
                   <Text size="xs" c="dimmed">
                     التخصص الأكاديمي
                   </Text>
-                  <Text size="sm" fw={700}>
+                  <Text size="sm" fw={500}>
                     {selectedTeacherDetails.specialization || 'غير محدد'}
                   </Text>
-                </div>
-                <div>
+                </Box>
+                <Box>
                   <Text size="xs" c="dimmed">
                     حالة الحساب
                   </Text>
@@ -199,7 +198,7 @@ export function TeacherDetailsDrawer({
                   >
                     {selectedTeacherDetails.isActive ? 'نشط' : 'غير نشط'}
                   </Badge>
-                </div>
+                </Box>
               </SimpleGrid>
             </Paper>
 
@@ -223,10 +222,10 @@ export function TeacherDetailsDrawer({
               </Group>
             </Paper>
           </Stack>
-        </Tabs.Panel>
+        </AppTabs.Panel>
 
         {/* ── Tab 2: Qualifications ── */}
-        <Tabs.Panel value="qualifications">
+        <AppTabs.Panel value="qualifications">
           <Stack gap="md">
             <Text size="xs" c="dimmed">
               يحدد المؤهل الأكاديمي المادة والفرع الذي يحق للمعلم تدريسه. تستخدم هذه المؤهلات للتحقق من سلامة الجداول تلقائيا.
@@ -281,7 +280,7 @@ export function TeacherDetailsDrawer({
                           <IconBriefcase size={16} />
                         </ThemeIcon>
                         <Stack gap={2}>
-                          <Text size="sm" fw={700}>
+                          <Text size="sm" fw={500}>
                             {assignment.subject?.name || `مادة ${assignment.subjectId}`}
                           </Text>
                           <Text size="xs" c="dimmed">
@@ -305,10 +304,10 @@ export function TeacherDetailsDrawer({
               </Stack>
             )}
           </Stack>
-        </Tabs.Panel>
+        </AppTabs.Panel>
 
         {/* ── Tab 3: Availability Windows ── */}
-        <Tabs.Panel value="availability">
+        <AppTabs.Panel value="availability">
           <Stack gap="md">
             <Text size="xs" c="dimmed">
               حدد الفترات الزمنية الأسبوعية التي يتواجد فيها المعلم في المعهد. في حال عدم تحديد أي فترات، يعتبر المعلم متاحا في كامل أوقات دوام المعهد.
@@ -372,7 +371,7 @@ export function TeacherDetailsDrawer({
                           </Badge>
                         </Table.Td>
                         <Table.Td>
-                          <Text size="sm" fw={600} dir="ltr">
+                          <Text size="sm" fw={500} dir="ltr">
                             {win.startTime} - {win.endTime}
                           </Text>
                         </Table.Td>
@@ -404,8 +403,8 @@ export function TeacherDetailsDrawer({
               </Button>
             </Group>
           </Stack>
-        </Tabs.Panel>
-      </Tabs>
+        </AppTabs.Panel>
+      </AppTabs>
     </Drawer>
   );
 }

@@ -45,9 +45,9 @@ export function AppStepperStepHeader({ children }: AppStepperStepHeaderProps) {
                 backgroundColor: isCompleted
                   ? 'var(--app-brand-accent)'
                   : isCurrent
-                  ? 'var(--app-brand-primary)'
+                  ? 'var(--mantine-color-primary-filled)'
                   : 'var(--app-subtle)',
-                color: isCompleted || isCurrent ? '#ffffff' : 'var(--app-text-secondary)',
+                color: isCompleted || isCurrent ? 'var(--app-text-on-brand)' : 'var(--app-text-secondary)',
                 border: isCompleted || isCurrent ? 'none' : '1px solid var(--app-border)',
                 transition: 'all 0.2s ease',
               }}
@@ -55,7 +55,7 @@ export function AppStepperStepHeader({ children }: AppStepperStepHeaderProps) {
               {isCompleted ? (
                 <IconCheck size={14} stroke={2.5} />
               ) : (
-                <Text size="xs" fw={700}>
+                <Text size="xs" fw={500}>
                   {step + 1}
                 </Text>
               )}
@@ -65,8 +65,8 @@ export function AppStepperStepHeader({ children }: AppStepperStepHeaderProps) {
               <Group gap="xs" align="center" wrap="nowrap">
                 <Text
                   size="sm"
-                  fw={isOpen ? 700 : 600}
-                  c={isOpen ? 'var(--app-brand-primary)' : isCompleted ? 'var(--app-text-primary)' : 'var(--app-text-secondary)'}
+                  fw={500}
+                  c={isOpen ? 'var(--mantine-color-primary-filled)' : isCompleted ? 'var(--app-text-primary)' : 'var(--app-text-secondary)'}
                   lineClamp={1}
                 >
                   {label}
@@ -79,7 +79,7 @@ export function AppStepperStepHeader({ children }: AppStepperStepHeaderProps) {
                     style={{
                       backgroundColor: 'var(--app-badge-bg)',
                       color: 'var(--app-badge-text)',
-                      fontWeight: 600,
+                      fontWeight: 500,
                     }}
                   >
                     مكتمل

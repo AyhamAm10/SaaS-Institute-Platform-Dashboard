@@ -1,9 +1,44 @@
 import { MantineThemeComponents, rem } from '@mantine/core';
 
 /**
- * Component default overrides for the warm academic editorial SaaS Admin Dashboard.
- * Relies on centralized CSS variables (--app-*) to seamlessly support Light & Dark modes.
+ * Component default overrides.
+ * Base looks only — interactive states (hover / focus / active) live in globals.css,
+ * because Mantine `styles` objects are inline styles and cannot target pseudo-classes.
+ * All values reference the `--app-*` variables emitted by the CSS variables resolver.
  */
+
+const inputStyles = {
+  label: {
+    color: 'var(--app-text-primary)',
+    fontWeight: 500,
+    fontSize: rem(13),
+    marginBottom: rem(6),
+  },
+  description: {
+    color: 'var(--app-text-muted)',
+    fontWeight: 300,
+  },
+  input: {
+    borderRadius: 'var(--app-radius-md)',
+    borderColor: 'var(--app-input-border)',
+    backgroundColor: 'var(--app-input-bg)',
+    color: 'var(--app-text-primary)',
+    fontWeight: 400,
+    fontSize: rem(13.5),
+    minHeight: rem(42),
+  },
+};
+
+const floatingDropdown = {
+  borderRadius: 'var(--app-radius-md)',
+  boxShadow: 'var(--app-dropdown-shadow)',
+  border: '1px solid var(--app-glass-border)',
+  backgroundColor: 'var(--app-glass-bg-strong)',
+  backdropFilter: 'var(--app-glass-blur)',
+  WebkitBackdropFilter: 'var(--app-glass-blur)',
+  padding: rem(6),
+};
+
 export const defaultComponents: MantineThemeComponents = {
   AppShell: {
     defaultProps: {
@@ -13,16 +48,16 @@ export const defaultComponents: MantineThemeComponents = {
 
   Button: {
     defaultProps: {
-      radius: 'md',
+      radius: 'xl',
       size: 'sm',
     },
     styles: {
       root: {
-        borderRadius: rem(10),
+        borderRadius: 'var(--app-radius-pill)',
         fontWeight: 500,
-        fontSize: rem(13),
-        height: rem(38),
-        transition: 'all 150ms ease',
+        fontSize: rem(13.5),
+        height: rem(40),
+        paddingInline: rem(20),
       },
     },
   },
@@ -34,12 +69,13 @@ export const defaultComponents: MantineThemeComponents = {
     },
     styles: {
       root: {
-        borderRadius: rem(14),
-        borderColor: 'var(--app-border)',
-        backgroundColor: 'var(--app-surface)',
+        borderRadius: 'var(--app-radius-lg)',
+        borderColor: 'var(--app-glass-border)',
+        backgroundColor: 'var(--app-glass-bg)',
+        backdropFilter: 'var(--app-glass-blur)',
+        WebkitBackdropFilter: 'var(--app-glass-blur)',
         color: 'var(--app-text-primary)',
         boxShadow: 'var(--app-card-shadow)',
-        transition: 'background-color 200ms ease, border-color 200ms ease, color 200ms ease',
       },
     },
   },
@@ -52,12 +88,13 @@ export const defaultComponents: MantineThemeComponents = {
     },
     styles: {
       root: {
-        borderRadius: rem(16),
-        borderColor: 'var(--app-border)',
-        backgroundColor: 'var(--app-surface)',
+        borderRadius: 'var(--app-radius-lg)',
+        borderColor: 'var(--app-glass-border)',
+        backgroundColor: 'var(--app-glass-bg)',
+        backdropFilter: 'var(--app-glass-blur)',
+        WebkitBackdropFilter: 'var(--app-glass-blur)',
         color: 'var(--app-text-primary)',
         boxShadow: 'var(--app-card-shadow)',
-        transition: 'background-color 200ms ease, border-color 200ms ease, color 200ms ease',
       },
     },
   },
@@ -68,27 +105,26 @@ export const defaultComponents: MantineThemeComponents = {
     },
     styles: {
       root: {
-        borderRadius: rem(10),
-        fontWeight: 500,
-        fontSize: rem(13),
-        paddingTop: rem(9),
-        paddingBottom: rem(9),
-        paddingLeft: rem(12),
-        paddingRight: rem(12),
-        marginBottom: rem(3),
-        transition: 'all 140ms ease',
+        borderRadius: 'var(--app-radius-md)',
+        fontWeight: 400,
+        fontSize: rem(13.5),
+        paddingBlock: rem(10),
+        paddingInline: rem(12),
+        marginBottom: rem(2),
       },
       label: {
-        fontWeight: 500,
+        fontWeight: 400,
       },
     },
   },
 
   Drawer: {
     defaultProps: {
-      radius: 'lg',
+      radius: 'xl',
       shadow: 'xl',
       position: 'right',
+      offset: 12,
+      overlayProps: { backgroundOpacity: 0.18, blur: 3 },
     },
     styles: {
       inner: {
@@ -97,13 +133,15 @@ export const defaultComponents: MantineThemeComponents = {
       },
       content: {
         direction: 'rtl',
-        backgroundColor: 'var(--app-surface)',
-        borderLeft: '1px solid var(--app-border)',
+        backgroundColor: 'var(--app-glass-bg-strong)',
+        backdropFilter: 'var(--app-glass-blur)',
+        WebkitBackdropFilter: 'var(--app-glass-blur)',
+        border: '1px solid var(--app-glass-border)',
+        boxShadow: 'var(--app-glass-highlight), var(--app-elev-3)',
         color: 'var(--app-text-primary)',
       },
       header: {
-        backgroundColor: 'var(--app-surface)',
-        borderBottom: '1px solid var(--app-border)',
+        backgroundColor: 'transparent',
         color: 'var(--app-text-primary)',
       },
       body: {
@@ -114,21 +152,23 @@ export const defaultComponents: MantineThemeComponents = {
 
   Modal: {
     defaultProps: {
-      radius: 'lg',
+      radius: 'xl',
       shadow: 'xl',
       centered: true,
+      overlayProps: { backgroundOpacity: 0.18, blur: 3 },
     },
     styles: {
       content: {
-        borderRadius: rem(16),
-        backgroundColor: 'var(--app-surface)',
-        border: '1px solid var(--app-border)',
+        borderRadius: 'var(--app-radius-xl)',
+        backgroundColor: 'var(--app-glass-bg-strong)',
+        backdropFilter: 'var(--app-glass-blur)',
+        WebkitBackdropFilter: 'var(--app-glass-blur)',
+        border: '1px solid var(--app-glass-border)',
         color: 'var(--app-text-primary)',
-        boxShadow: 'var(--app-dropdown-shadow)',
+        boxShadow: 'var(--app-glass-highlight), var(--app-elev-3)',
       },
       header: {
-        backgroundColor: 'var(--app-surface)',
-        borderBottom: '1px solid var(--app-border)',
+        backgroundColor: 'transparent',
         color: 'var(--app-text-primary)',
       },
       body: {
@@ -147,7 +187,7 @@ export const defaultComponents: MantineThemeComponents = {
 
   Pagination: {
     defaultProps: {
-      radius: 'md',
+      radius: 'xl',
       size: 'sm',
     },
   },
@@ -158,23 +198,39 @@ export const defaultComponents: MantineThemeComponents = {
       shadow: 'md',
     },
     styles: {
-      dropdown: {
-        borderRadius: rem(12),
-        boxShadow: 'var(--app-dropdown-shadow)',
-        border: '1px solid var(--app-border)',
-        backgroundColor: 'var(--app-surface)',
-      },
+      dropdown: floatingDropdown,
       item: {
-        borderRadius: rem(8),
-        fontSize: rem(12.5),
-        fontWeight: 500,
+        borderRadius: 'var(--app-radius-sm)',
+        fontSize: rem(13),
+        fontWeight: 400,
         color: 'var(--app-text-primary)',
-        '&:hover': {
-          backgroundColor: 'var(--app-hover)',
-        },
       },
       label: {
         color: 'var(--app-text-muted)',
+        fontWeight: 400,
+      },
+    },
+  },
+
+  Popover: {
+    styles: {
+      dropdown: floatingDropdown,
+    },
+  },
+
+  Tooltip: {
+    defaultProps: {
+      radius: 'xl',
+      withArrow: false,
+      color: 'primary',
+    },
+    styles: {
+      tooltip: {
+        fontSize: rem(12),
+        fontWeight: 400,
+        paddingInline: rem(12),
+        paddingBlock: rem(6),
+        boxShadow: 'var(--app-elev-1)',
       },
     },
   },
@@ -188,120 +244,61 @@ export const defaultComponents: MantineThemeComponents = {
 
   Badge: {
     defaultProps: {
-      radius: 'sm',
+      radius: 'xl',
       size: 'sm',
       variant: 'light',
     },
     styles: {
       root: {
-        fontWeight: 600,
-        fontSize: rem(11),
-        borderRadius: rem(8),
-        paddingLeft: rem(8),
-        paddingRight: rem(8),
+        fontWeight: 500,
+        fontSize: rem(11.5),
+        textTransform: 'none',
+        letterSpacing: 0,
+        paddingInline: rem(10),
+        height: rem(24),
       },
     },
   },
 
-  TextInput: {
+  SegmentedControl: {
     defaultProps: {
-      radius: 'md',
-      size: 'sm',
+      radius: 'xl',
     },
     styles: {
-      label: {
-        color: 'var(--app-text-primary)',
-        fontWeight: 600,
-        fontSize: rem(12.5),
-        marginBottom: rem(4),
+      root: {
+        backgroundColor: 'var(--app-glass-bg)',
+        border: '1px solid var(--app-border)',
+        padding: rem(4),
       },
-      input: {
-        borderRadius: rem(10),
-        borderColor: 'var(--app-input-border)',
-        backgroundColor: 'var(--app-input-bg)',
-        color: 'var(--app-text-primary)',
+      indicator: {
+        backgroundColor: 'var(--app-brand-primary)',
+        boxShadow: 'var(--app-elev-1)',
+      },
+      label: {
         fontWeight: 400,
-        fontSize: rem(13),
-        height: rem(38),
-        transition: 'all 140ms ease',
-        '&:focus': {
-          backgroundColor: 'var(--app-input-bg-focus)',
-          borderColor: 'var(--app-input-focus-border)',
-          boxShadow: 'var(--app-input-focus-ring)',
-        },
-        '&::placeholder': {
-          color: 'var(--app-input-placeholder)',
-        },
+        fontSize: rem(12.5),
       },
     },
   },
 
-  PasswordInput: {
+  Tabs: {
     defaultProps: {
-      radius: 'md',
-      size: 'sm',
+      variant: 'pills',
+      radius: 'xl',
     },
     styles: {
-      label: {
-        color: 'var(--app-text-primary)',
-        fontWeight: 600,
-        fontSize: rem(12.5),
-        marginBottom: rem(4),
-      },
-      input: {
-        borderRadius: rem(10),
-        borderColor: 'var(--app-input-border)',
-        backgroundColor: 'var(--app-input-bg)',
-        color: 'var(--app-text-primary)',
+      tab: {
         fontWeight: 400,
         fontSize: rem(13),
-        height: rem(38),
-        transition: 'all 140ms ease',
-        '&:focus': {
-          backgroundColor: 'var(--app-input-bg-focus)',
-          borderColor: 'var(--app-input-focus-border)',
-          boxShadow: 'var(--app-input-focus-ring)',
-        },
-        '&::placeholder': {
-          color: 'var(--app-input-placeholder)',
-        },
       },
     },
   },
 
-  NumberInput: {
-    defaultProps: {
-      radius: 'md',
-      size: 'sm',
-      hideControls: true,
-    },
-    styles: {
-      label: {
-        color: 'var(--app-text-primary)',
-        fontWeight: 600,
-        fontSize: rem(12.5),
-        marginBottom: rem(4),
-      },
-      input: {
-        borderRadius: rem(10),
-        borderColor: 'var(--app-input-border)',
-        backgroundColor: 'var(--app-input-bg)',
-        color: 'var(--app-text-primary)',
-        fontWeight: 400,
-        fontSize: rem(13),
-        height: rem(38),
-        transition: 'all 140ms ease',
-        '&:focus': {
-          backgroundColor: 'var(--app-input-bg-focus)',
-          borderColor: 'var(--app-input-focus-border)',
-          boxShadow: 'var(--app-input-focus-ring)',
-        },
-        '&::placeholder': {
-          color: 'var(--app-input-placeholder)',
-        },
-      },
-    },
-  },
+  TextInput: { defaultProps: { radius: 'md', size: 'sm' }, styles: inputStyles },
+  PasswordInput: { defaultProps: { radius: 'md', size: 'sm' }, styles: inputStyles },
+  Textarea: { defaultProps: { radius: 'md', size: 'sm' }, styles: inputStyles },
+  NumberInput: { defaultProps: { radius: 'md', size: 'sm', hideControls: true }, styles: inputStyles },
+  MultiSelect: { defaultProps: { radius: 'md', size: 'sm' }, styles: { ...inputStyles, dropdown: floatingDropdown } },
 
   Select: {
     defaultProps: {
@@ -310,44 +307,14 @@ export const defaultComponents: MantineThemeComponents = {
       checkIconPosition: 'right',
     },
     styles: {
-      label: {
-        color: 'var(--app-text-primary)',
-        fontWeight: 600,
-        fontSize: rem(12.5),
-        marginBottom: rem(4),
-      },
-      input: {
-        borderRadius: rem(10),
-        borderColor: 'var(--app-input-border)',
-        backgroundColor: 'var(--app-input-bg)',
-        color: 'var(--app-text-primary)',
-        height: rem(38),
-        fontSize: rem(13),
-        transition: 'all 140ms ease',
-        '&:focus': {
-          backgroundColor: 'var(--app-input-bg-focus)',
-          borderColor: 'var(--app-input-focus-border)',
-          boxShadow: 'var(--app-input-focus-ring)',
-        },
-        '&::placeholder': {
-          color: 'var(--app-input-placeholder)',
-        },
-      },
-      dropdown: {
-        borderRadius: rem(12),
-        boxShadow: 'var(--app-dropdown-shadow)',
-        border: '1px solid var(--app-border)',
-        backgroundColor: 'var(--app-surface)',
-      },
+      ...inputStyles,
+      dropdown: floatingDropdown,
       option: {
-        borderRadius: rem(8),
+        borderRadius: 'var(--app-radius-sm)',
         fontSize: rem(13),
-        fontWeight: 500,
+        fontWeight: 400,
         color: 'var(--app-text-primary)',
         padding: `${rem(8)} ${rem(12)}`,
-        '&:hover': {
-          backgroundColor: 'var(--app-hover)',
-        },
       },
     },
   },
@@ -356,23 +323,32 @@ export const defaultComponents: MantineThemeComponents = {
     defaultProps: {
       radius: 'md',
     },
-    styles: {
-      root: {
-        borderRadius: rem(10),
-      },
-    },
   },
 
   ActionIcon: {
     defaultProps: {
-      radius: 'md',
-      size: 'sm',
+      radius: 'xl',
+      size: 'md',
     },
-    styles: {
-      root: {
-        borderRadius: rem(8),
-        transition: 'all 120ms ease',
-      },
+  },
+
+  Checkbox: {
+    defaultProps: {
+      radius: 'sm',
+      color: 'primary',
+    },
+  },
+
+  Switch: {
+    defaultProps: {
+      color: 'brand',
+    },
+  },
+
+  Progress: {
+    defaultProps: {
+      radius: 'xl',
+      color: 'brand',
     },
   },
 };

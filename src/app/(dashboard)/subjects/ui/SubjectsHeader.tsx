@@ -22,7 +22,7 @@ export function SubjectsHeader() {
       <Stack gap={4}>
         <Group gap="xs" align="center">
           <IconBook size={28} color="var(--mantine-color-primary-6)" />
-          <Title order={2} size="h3" fw={700}>
+          <Title order={2} size="h3" fw={500}>
             {subjectsLabels.title}
           </Title>
           <Badge variant="filled" color="primary" radius="xl" size="lg">

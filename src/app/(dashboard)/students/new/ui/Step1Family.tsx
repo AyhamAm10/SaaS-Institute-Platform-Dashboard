@@ -49,7 +49,7 @@ export function Step1Family({ families, isLoadingFamilies }: Step1FamilyProps) {
     <Stack gap="lg">
       <Group justify="space-between" align="center" wrap="wrap">
         <Stack gap={2}>
-          <Text size="md" fw={700}>
+          <Text size="md" fw={500}>
             الخطوة الأولى: تحديد عائلة الطالب
           </Text>
           <Text size="xs" c="dimmed">
@@ -129,7 +129,7 @@ export function Step1Family({ families, isLoadingFamilies }: Step1FamilyProps) {
                           <IconUsers size={18} />
                         </ThemeIcon>
                         <Stack gap={2}>
-                          <Text size="sm" fw={700}>
+                          <Text size="sm" fw={500}>
                             عائلة {fam.familyName}
                           </Text>
                           <Group gap="xs">

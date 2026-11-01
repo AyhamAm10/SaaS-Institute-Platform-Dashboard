@@ -9,7 +9,7 @@ export type LayoutStore = ControllerStoreApi<LayoutState>;
 
 export function createLayoutStore(props?: LayoutInitialProps): LayoutStore {
   return createControllerStore<LayoutState>((set) => ({
-    headerHeight: props?.headerHeight ?? 64,
+    headerHeight: props?.headerHeight ?? 80,
     searchQuery: '',
     isSearchOpen: false,
 

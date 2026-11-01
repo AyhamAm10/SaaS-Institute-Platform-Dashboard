@@ -2,8 +2,9 @@ import { rem } from '@mantine/core';
 import { ResolvedInputConfig } from '../init/input.init';
 
 /**
- * Builds unified input styles adhering to classic, clean, compact UI proportions.
+ * Builds unified input styles: airy 42px fields, soft borders, ink border + orange ring on focus.
  * Relies on centralized CSS variables (--app-*) for unified light and dark themes.
+ * Hover / placeholder states are handled in globals.css (`.mantine-Input-input`).
  */
 export function getUnifiedInputStyles(config: ResolvedInputConfig, isFocused: boolean, customStyles?: Record<string, any>) {
   return {
@@ -11,26 +12,27 @@ export function getUnifiedInputStyles(config: ResolvedInputConfig, isFocused: bo
       ...customStyles?.root,
     },
     label: {
-      fontWeight: 600,
-      fontSize: rem(12.5),
-      marginBottom: rem(4),
+      fontWeight: 500,
+      fontSize: rem(13),
+      marginBottom: rem(6),
       color: 'var(--app-text-primary)',
       ...customStyles?.label,
     },
     description: {
-      fontSize: rem(11.5),
-      marginBottom: rem(4),
+      fontSize: rem(12),
+      fontWeight: 300,
+      marginBottom: rem(6),
       color: 'var(--app-text-muted)',
       ...customStyles?.description,
     },
     input: {
       direction: config.direction,
       textAlign: config.textAlign,
-      fontSize: rem(13),
+      fontSize: rem(13.5),
       fontWeight: 400,
-      minHeight: rem(38),
-      height: rem(38),
-      borderRadius: rem(10),
+      minHeight: rem(42),
+      height: rem(42),
+      borderRadius: 'var(--app-radius-md)',
       backgroundColor: isFocused ? 'var(--app-input-bg-focus)' : 'var(--app-input-bg)',
       borderColor: isFocused
         ? 'var(--app-input-focus-border)'
@@ -38,37 +40,18 @@ export function getUnifiedInputStyles(config: ResolvedInputConfig, isFocused: bo
       borderWidth: rem(1),
       borderStyle: 'solid',
       color: 'var(--app-text-primary)',
-      boxShadow: isFocused
-        ? 'var(--app-input-focus-ring)'
-        : '0 1px 2px rgba(0, 0, 0, 0.02)',
-      transition: 'border-color 140ms ease, box-shadow 140ms ease, background-color 140ms ease',
-      '&:hover': {
-        backgroundColor: 'var(--app-input-bg-hover)',
-        borderColor: isFocused
-          ? 'var(--app-input-focus-border)'
-          : 'var(--app-input-border-hover)',
-      },
-      '&::placeholder': {
-        color: 'var(--app-input-placeholder)',
-      },
-      '&::-webkit-inner-spin-button, &::-webkit-outer-spin-button': {
-        WebkitAppearance: 'none',
-        margin: 0,
-      },
-      '&[type=number]': {
-        MozAppearance: 'textfield',
-      },
+      boxShadow: isFocused ? 'var(--app-input-focus-ring)' : 'none',
       ...customStyles?.input,
     },
     error: {
-      fontSize: rem(11.5),
-      marginTop: rem(3),
-      fontWeight: 500,
+      fontSize: rem(12),
+      marginTop: rem(4),
+      fontWeight: 400,
       ...customStyles?.error,
     },
     section: {
       color: isFocused
-        ? 'var(--app-brand-primary)'
+        ? 'var(--app-brand-accent)'
         : 'var(--app-text-muted)',
       transition: 'color 140ms ease',
       ...customStyles?.section,

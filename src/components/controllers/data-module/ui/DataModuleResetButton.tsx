@@ -1,7 +1,7 @@
 'use client';
 
-import { Button } from '@mantine/core';
 import { IconFilterOff } from '@tabler/icons-react';
+import { AppButton } from '../../button';
 import { useDataModuleMirror } from '../store/useDataModuleMirror';
 
 export interface DataModuleResetButtonProps {
@@ -22,15 +22,8 @@ export function DataModuleResetButton({ label = 'إعادة ضبط' }: DataModul
   }
 
   return (
-    <Button
-      variant="subtle"
-      color="gray"
-      size="xs"
-      radius="xl"
-      leftSection={<IconFilterOff size={14} />}
-      onClick={resetFilters}
-    >
+    <AppButton variant="ghost" size="xs" leftSection={<IconFilterOff size={14} />} onClick={resetFilters}>
       {label}
-    </Button>
+    </AppButton>
   );
 }

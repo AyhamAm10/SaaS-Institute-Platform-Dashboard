@@ -1,6 +1,6 @@
 'use client';
 
-import { Group } from '@mantine/core';
+import { Group, rem } from '@mantine/core';
 import { ReactNode } from 'react';
 
 export interface DataModuleHeaderProps {
@@ -9,7 +9,7 @@ export interface DataModuleHeaderProps {
 
 export function DataModuleHeader({ children }: DataModuleHeaderProps) {
   return (
-    <Group justify="space-between" align="center" mb="md" wrap="wrap" gap="md">
+    <Group justify="space-between" align="flex-end" mb={rem(22)} px={rem(4)} wrap="wrap" gap="md">
       {children}
     </Group>
   );

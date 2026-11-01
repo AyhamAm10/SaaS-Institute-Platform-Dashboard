@@ -83,7 +83,7 @@ export function CreateInstituteDrawer({ onSubmit }: CreateInstituteDrawerProps) 
             <Stack gap="xs">
               <Group gap="xs">
                 <IconSchool size={18} color="var(--mantine-color-primary-6)" />
-                <Text fw={700} size="sm" c="primary">
+                <Text fw={500} size="sm" c="primary">
                   {institutesLabels.instituteSectionTitle}
                 </Text>
               </Group>
@@ -155,7 +155,7 @@ export function CreateInstituteDrawer({ onSubmit }: CreateInstituteDrawerProps) 
             <Stack gap="xs">
               <Group gap="xs">
                 <IconUser size={18} color="var(--mantine-color-teal-6)" />
-                <Text fw={700} size="sm" c="teal">
+                <Text fw={500} size="sm" c="teal">
                   {institutesLabels.adminSectionTitle}
                 </Text>
               </Group>

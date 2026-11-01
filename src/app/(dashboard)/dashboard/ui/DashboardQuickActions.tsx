@@ -37,7 +37,7 @@ export function DashboardQuickActions() {
   return (
     <Stack gap="md">
       <Group justify="space-between" align="center">
-        <Title order={3} size="h5" fw={700}>
+        <Title order={3} size="h5" fw={500}>
           إجراءات سريعة واختصارات الإدارة
         </Title>
         <Text size="xs" c="dimmed">
@@ -77,7 +77,7 @@ export function DashboardQuickActions() {
               </Group>
 
               <Stack gap={2}>
-                <Text size="sm" fw={700}>
+                <Text size="sm" fw={500}>
                   {action.title}
                 </Text>
                 <Text size="xs" c="dimmed" lineClamp={2}>

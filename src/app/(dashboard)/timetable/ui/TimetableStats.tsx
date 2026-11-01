@@ -29,7 +29,7 @@ export function TimetableStats() {
     <Card radius="xl" withBorder p="md">
       <Stack gap="sm">
         <Group justify="space-between">
-          <Text fw={700} size="sm">
+          <Text fw={500} size="sm">
             حالة إنجاز الحصص الأسبوعية المطلوبة للشعبة
           </Text>
           <Text size="xs" c="dimmed">
@@ -66,7 +66,7 @@ export function TimetableStats() {
               >
                 <Group justify="space-between" align="center">
                   <Stack gap={2}>
-                    <Text size="xs" fw={700}>
+                    <Text size="xs" fw={500}>
                       {ss.subject.name}
                     </Text>
                     <Text size="11px" c="dimmed">

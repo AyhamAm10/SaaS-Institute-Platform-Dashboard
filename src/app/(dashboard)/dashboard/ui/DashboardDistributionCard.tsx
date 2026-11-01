@@ -31,7 +31,7 @@ export function DashboardDistributionCard() {
               <IconChartPie size={20} />
             </ThemeIcon>
             <Stack gap={2}>
-              <Title order={3} size="h5" fw={700}>
+              <Title order={3} size="h5" fw={500}>
                 توزيع الطلاب حسب المراحل
               </Title>
               <Text size="xs" c="dimmed">
@@ -74,13 +74,13 @@ export function DashboardDistributionCard() {
             >
               <Group gap="xs">
                 <Badge size="xs" color={item.color} variant="filled" circle />
-                <Text size="sm" fw={600}>
+                <Text size="sm" fw={500}>
                   {item.name}
                 </Text>
               </Group>
 
               <Group gap="xs">
-                <Text size="xs" fw={700} c="dimmed">
+                <Text size="xs" fw={500} c="dimmed">
                   {item.studentsCount} طالب
                 </Text>
                 <Badge size="sm" color={item.color} variant="light" radius="xl">

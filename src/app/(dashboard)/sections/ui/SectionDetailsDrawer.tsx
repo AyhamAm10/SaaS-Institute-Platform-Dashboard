@@ -11,13 +11,13 @@ import {
   Divider,
   Group,
   Loader,
-  SegmentedControl,
   SimpleGrid,
   Stack,
   Text,
   ThemeIcon,
   Tooltip,
 } from '@mantine/core';
+import { AppTabs } from '@/src/components/controllers/tabs';
 import {
   IconAlertCircle,
   IconBook,
@@ -34,6 +34,7 @@ import { AppDrawer, AppInput, AppSelect } from '@/src/components/controllers';
 import { Teacher } from '@/src/core/api';
 import { sectionFormLabels } from '../static-data/sections.data';
 import { useSectionsMirror } from '../store/useSectionsMirror';
+import { formatNumber } from '@/src/core/format';
 
 export interface SectionDetailsDrawerProps {
   opened: boolean;
@@ -189,38 +190,22 @@ export function SectionDetailsDrawer({
         {details && (
           <Stack gap="md">
             {/* Pill Tabs Selector */}
-            <SegmentedControl
+            <AppTabs
               fullWidth
-              radius="xl"
-              size="sm"
-              color="primary"
               value={detailsActiveTab || 'subjects'}
               onChange={setDetailsActiveTab}
-              data={[
+              items={[
                 {
                   value: 'subjects',
-                  label: (
-                    <Group gap={6} justify="center">
-                      <IconBook size={16} />
-                      <Text size="xs" fw={600}>
-                        المواد المقررة والخطة ({sectionSubjects?.length ?? 0})
-                      </Text>
-                    </Group>
-                  ),
+                  label: 'المواد والخطة',
+                  icon: <IconBook size={16} stroke={1.6} />,
+                  count: sectionSubjects?.length ?? 0,
                 },
-                {
-                  value: 'info',
-                  label: (
-                    <Group gap={6} justify="center">
-                      <IconInfoCircle size={16} />
-                      <Text size="xs" fw={600}>
-                        بيانات وإحصائيات الشعبة
-                      </Text>
-                    </Group>
-                  ),
-                },
+                { value: 'info', label: 'بيانات الشعبة', icon: <IconInfoCircle size={16} stroke={1.6} /> },
               ]}
-            />
+            >
+              <AppTabs.List />
+            </AppTabs>
 
             {/* TAB 1: SUBJECTS MANAGEMENT (Clean, Flat, Non-nested UI) */}
             {isSubjectsTab && (
@@ -241,7 +226,7 @@ export function SectionDetailsDrawer({
                           <ThemeIcon size={26} radius="xl" variant="light" color="primary">
                             <IconPlus size={14} />
                           </ThemeIcon>
-                          <Text size="sm" fw={700}>
+                          <Text size="sm" fw={500}>
                             إسناد مادة جديدة للشعبة
                           </Text>
                         </Group>
@@ -346,7 +331,7 @@ export function SectionDetailsDrawer({
                   label={
                     <Group gap={6}>
                       <IconBook size={15} style={{ opacity: 0.7 }} />
-                      <Text size="xs" fw={700} c="dimmed">
+                      <Text size="xs" fw={500} c="dimmed">
                         المواد المقررة في الخطة ({sectionSubjects?.length ?? 0})
                       </Text>
                     </Group>
@@ -364,7 +349,7 @@ export function SectionDetailsDrawer({
                     <ThemeIcon size={52} radius="xl" variant="light" color="primary">
                       <IconBook size={24} />
                     </ThemeIcon>
-                    <Text size="sm" fw={600} c="dimmed">
+                    <Text size="sm" fw={500} c="dimmed">
                       لم يتم إسناد أي مواد دراسية لهذه الشعبة بعد
                     </Text>
                     <Text size="xs" c="dimmed" ta="center" maw={320}>
@@ -390,7 +375,7 @@ export function SectionDetailsDrawer({
                               <IconBook size={18} />
                             </ThemeIcon>
                             <Stack gap={2} style={{ minWidth: 0, flex: 1 }}>
-                              <Text size="sm" fw={700} truncate>
+                              <Text size="sm" fw={500} truncate>
                                 {item.subject?.name}
                               </Text>
                               <Text size="xs" c={item.teacher ? 'dimmed' : 'orange'}>
@@ -450,7 +435,7 @@ export function SectionDetailsDrawer({
                 >
                   <Stack gap="sm">
                     <Group justify="space-between" align="center">
-                      <Text fw={700} size="md">
+                      <Text fw={500} size="md">
                         {details.name}
                       </Text>
                       <Badge radius="xl" variant="light" color="teal">
@@ -464,15 +449,15 @@ export function SectionDetailsDrawer({
                           <IconCalendar size={14} />
                         </ThemeIcon>
                         <Text size="xs" c="dimmed">السنة الدراسية:</Text>
-                        <Text size="xs" fw={600}>{details.academicYear?.name ?? '—'}</Text>
+                        <Text size="xs" fw={500}>{details.academicYear?.name ?? '—'}</Text>
                       </Group>
                       <Group gap="xs">
                         <ThemeIcon size="sm" variant="light" color="teal" radius="xl">
                           <IconCoin size={14} />
                         </ThemeIcon>
                         <Text size="xs" c="dimmed">الرسوم المعتمدة:</Text>
-                        <Text size="xs" fw={700} c="teal">
-                          {Number(details.feeAmount).toLocaleString('ar-SA')} ر.س
+                        <Text size="xs" fw={500} c="teal">
+                          {formatNumber(details.feeAmount)} ر.س
                         </Text>
                       </Group>
                     </SimpleGrid>
@@ -497,7 +482,7 @@ export function SectionDetailsDrawer({
                         <Text size="xs" c="dimmed">
                           الطلاب المسجلين
                         </Text>
-                        <Text fw={700} size="md">
+                        <Text fw={500} size="md">
                           {details._count?.studentEnrollments ?? 0} طالب
                         </Text>
                       </Stack>
@@ -520,7 +505,7 @@ export function SectionDetailsDrawer({
                         <Text size="xs" c="dimmed">
                           المواد المقررة
                         </Text>
-                        <Text fw={700} size="md">
+                        <Text fw={500} size="md">
                           {sectionSubjects?.length ?? details._count?.sectionSubjects ?? 0} مادة
                         </Text>
                       </Stack>
@@ -543,7 +528,7 @@ export function SectionDetailsDrawer({
                         <Text size="xs" c="dimmed">
                           المدرسين
                         </Text>
-                        <Text fw={700} size="md">
+                        <Text fw={500} size="md">
                           {details._count?.sectionTeachers ?? 0} معلم
                         </Text>
                       </Stack>
@@ -566,7 +551,7 @@ export function SectionDetailsDrawer({
                         <Text size="xs" c="dimmed">
                           الحصص بالجدول
                         </Text>
-                        <Text fw={700} size="md">
+                        <Text fw={500} size="md">
                           {details._count?.timetables ?? 0} حصة
                         </Text>
                       </Stack>

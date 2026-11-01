@@ -1,9 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { Paper, Stack, rem } from '@mantine/core';
+import { Stack, rem } from '@mantine/core';
 import { StatCardProps } from './init/stats.init';
 import { createStatsStore, StatsContext } from './store/stats.store';
+import { AppSurface } from '../surface';
 import { StatCardIcon } from './ui/StatCardIcon';
 import { StatCardTitle } from './ui/StatCardTitle';
 import { StatCardContent } from './ui/StatCardContent';
@@ -15,27 +16,18 @@ export function StatCard(props: StatCardProps) {
 
   return (
     <StatsContext.Provider value={store}>
-      <Paper
-        p="lg"
-        radius="xl"
-        withBorder
-        className="stat-card-frosted"
-        style={{
-          height: '100%',
-          minHeight: rem(175),
-          display: 'flex',
-          flexDirection: 'column',
-          backgroundColor: 'var(--app-surface)',
-          borderColor: 'var(--app-border)',
-          borderRadius: rem(18),
-          boxShadow: 'var(--app-card-shadow)',
-          transition: 'transform 180ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 180ms ease, border-color 180ms ease',
-        }}
+      <AppSurface
+        level={2}
+        radius="lg"
+        padding="lg"
+        interactive
+        className={props.className}
+        style={{ height: '100%', minHeight: rem(190), display: 'flex', flexDirection: 'column' }}
       >
-        <Stack gap="xs" style={{ height: '100%', flex: 1, justifyContent: 'space-between' }}>
+        <Stack gap="sm" style={{ height: '100%', flex: 1, justifyContent: 'space-between' }}>
           {props.children}
         </Stack>
-      </Paper>
+      </AppSurface>
     </StatsContext.Provider>
   );
 }

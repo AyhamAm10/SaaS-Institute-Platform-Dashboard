@@ -130,7 +130,7 @@ export function SetCurrentAcademicYearDrawer({
                 <AppDrawer.Detail
                   label="اسم السنة الجديدة"
                   value={
-                    <Text fw={700} c="teal" size="sm">
+                    <Text fw={500} c="teal" size="sm">
                       {targetYear.name}
                     </Text>
                   }

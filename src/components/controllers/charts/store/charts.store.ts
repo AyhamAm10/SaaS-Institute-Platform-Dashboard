@@ -12,9 +12,13 @@ export function createChartsStore(props: ChartCardProps): ChartsStore {
   return createControllerStore<ChartsState>((set, get) => ({
     ...initial,
     setActivePeriod: (period: string) => {
-      set({ activePeriod: period });
+      if (period === get().activePeriod) return;
+      // A new period brings a new dataset: drop the previous hover / selection.
+      set({ activePeriod: period, hoveredIndex: null, selectedIndex: null });
       get().rawProps.onPeriodChange?.(period);
     },
+    setHoveredIndex: (hoveredIndex: number | null) => set({ hoveredIndex }),
+    setSelectedIndex: (selectedIndex: number | null) => set({ selectedIndex }),
   }));
 }
 

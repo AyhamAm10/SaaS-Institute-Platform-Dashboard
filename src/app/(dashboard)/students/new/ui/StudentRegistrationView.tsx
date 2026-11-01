@@ -45,11 +45,11 @@ export function StudentRegistrationView({
             <Anchor component={Link} href="/students" c="dimmed">
               الطلاب
             </Anchor>
-            <Text size="xs" c="primary" fw={600}>
+            <Text size="xs" c="primary" fw={500}>
               تسجيل طالب جديد
             </Text>
           </Breadcrumbs>
-          <Title order={2} fz={{ base: 17, sm: 20 }} fw={700}>
+          <Title order={2} fz={{ base: 17, sm: 20 }} fw={500}>
             تسجيل طالب جديد بالمعهد
           </Title>
           <Text size="xs" c="dimmed">

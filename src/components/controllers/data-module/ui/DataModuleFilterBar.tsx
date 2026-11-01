@@ -1,37 +1,20 @@
 'use client';
 
-import { Flex, Paper, rem } from '@mantine/core';
+import { Flex, rem } from '@mantine/core';
 import { ReactNode } from 'react';
+import { AppSurface } from '../../surface';
 
 export interface DataModuleFilterBarProps {
   children?: ReactNode;
 }
 
+/** Light frosted toolbar holding search and filters, sitting above the data card. */
 export function DataModuleFilterBar({ children }: DataModuleFilterBarProps) {
   return (
-    <Paper
-      p="md"
-      px="lg"
-      radius="lg"
-      withBorder
-      mb="md"
-      style={{
-        backgroundColor: 'var(--app-surface)',
-        borderColor: 'var(--app-border)',
-        borderRadius: rem(14),
-        boxShadow: 'var(--app-card-shadow)',
-        transition: 'background-color 200ms ease, border-color 200ms ease',
-      }}
-    >
-      <Flex
-        gap="md"
-        align="center"
-        justify="space-between"
-        wrap="wrap"
-        direction={{ base: 'column', sm: 'row' }}
-      >
+    <AppSurface level={1} radius="lg" padding={rem(12)} style={{ marginBottom: rem(14) }}>
+      <Flex gap="sm" align="center" justify="space-between" wrap="wrap" direction={{ base: 'column', sm: 'row' }}>
         {children}
       </Flex>
-    </Paper>
+    </AppSurface>
   );
 }

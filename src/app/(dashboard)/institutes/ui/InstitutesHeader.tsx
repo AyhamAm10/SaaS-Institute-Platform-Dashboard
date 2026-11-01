@@ -21,7 +21,7 @@ export function InstitutesHeader() {
       <Stack gap={4}>
         <Group gap="xs" align="center">
           <IconSchool size={28} color="var(--mantine-color-primary-6)" />
-          <Title order={2} size="h3" fw={700}>
+          <Title order={2} size="h3" fw={500}>
             {institutesLabels.title}
           </Title>
           <Badge variant="filled" color="primary" radius="xl" size="lg">

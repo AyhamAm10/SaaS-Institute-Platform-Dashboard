@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from '@mantine/core';
+import { AppButton } from '../../button';
 import { ReactNode } from 'react';
 import { useModalMirror } from '../store/useModalMirror';
 
@@ -29,15 +29,8 @@ export function AppModalCancel({
   };
 
   return (
-    <Button
-      variant="subtle"
-      color="gray"
-      radius="xl"
-      onClick={handleClick}
-      disabled={disabled ?? loading}
-      className={className}
-    >
+    <AppButton variant="ghost" onClick={handleClick} disabled={disabled ?? loading} className={className}>
       {children}
-    </Button>
+    </AppButton>
   );
 }

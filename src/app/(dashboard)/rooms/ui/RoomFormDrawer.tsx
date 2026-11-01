@@ -49,7 +49,7 @@ export function RoomFormDrawer({ onSubmit }: RoomFormDrawerProps) {
       title={
         <Group gap="xs">
           <IconBuildingCommunity size={20} />
-          <Text fw={700} size="md">
+          <Text fw={500} size="md">
             {isEdit ? 'تعديل بيانات القاعة' : 'إضافة قاعة جديدة'}
           </Text>
         </Group>

@@ -14,7 +14,7 @@ export function AcademicYearStatusBadge({ isCurrent }: AcademicYearStatusBadgePr
         variant="light"
         radius="xl"
         size="sm"
-        fw={600}
+        fw={500}
       >
         السنة الحالية النشطة
       </Badge>

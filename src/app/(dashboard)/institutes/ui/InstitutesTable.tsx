@@ -1,4 +1,5 @@
 'use client';
+import { formatDate } from '@/src/core/format';
 
 import {
   ActionIcon,
@@ -45,7 +46,7 @@ export function getInstitutesColumns(
             {institute.name ? institute.name.slice(0, 2) : 'مع'}
           </Avatar>
           <Stack gap={1}>
-            <Text size="xs" fw={600} style={{ fontSize: '13px' }}>
+            <Text size="xs" fw={500} style={{ fontSize: '13px' }}>
               {institute.name}
             </Text>
             <Text size="xs" c="dimmed" style={{ fontSize: '11px' }}>
@@ -66,7 +67,7 @@ export function getInstitutesColumns(
               <IconUser size={12} />
             </Avatar>
             <Stack gap={0}>
-              <Text size="xs" fw={600}>
+              <Text size="xs" fw={500}>
                 {adminUser.fullName}
               </Text>
               <Text size="xs" c="dimmed" dir="ltr" ta="right">
@@ -123,9 +124,7 @@ export function getInstitutesColumns(
       title: institutesLabels.tableCreatedAt,
       sortable: true,
       render: (institute) => {
-        const formattedDate = institute.createdAt
-          ? new Date(institute.createdAt).toLocaleDateString('ar-SA')
-          : '—';
+        const formattedDate = formatDate(institute.createdAt);
         return (
           <Text size="xs" c="dimmed">
             {formattedDate}

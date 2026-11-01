@@ -54,7 +54,7 @@ export function DeleteConfirmationModal({
         <Stack gap="sm">
           {itemName && (
             <Text size="sm">
-              هل أنت متأكد من رغبتك في حذف <Text span fw={700} c="red.8">«{itemName}»</Text>؟
+              هل أنت متأكد من رغبتك في حذف <Text span fw={500} c="red.8">«{itemName}»</Text>؟
             </Text>
           )}
 

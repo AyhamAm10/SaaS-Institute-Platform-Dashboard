@@ -43,7 +43,7 @@ export function TeacherFormDrawer({ onSubmit }: TeacherFormDrawerProps) {
       title={
         <Group gap="xs">
           <IconUser size={20} />
-          <Text fw={700} size="md">
+          <Text fw={500} size="md">
             {isEdit ? 'تعديل بيانات المعلم' : 'إضافة معلم جديد'}
           </Text>
         </Group>

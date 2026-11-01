@@ -63,7 +63,7 @@ export function Step3Availability() {
   return (
     <Stack gap="xl">
       <Stack gap={3}>
-        <Text size="md" fw={700}>
+        <Text size="md" fw={500}>
           الخطوة الثالثة: أوقات الدوام والتفرغ الأسبوعي
         </Text>
         <Text size="xs" c="dimmed">
@@ -92,7 +92,7 @@ export function Step3Availability() {
       {/* Add Availability Bar */}
       <Paper p="lg" radius="xl" withBorder bg="var(--app-subtle)">
         <Stack gap="md">
-          <Text size="sm" fw={700} c="primary.8">
+          <Text size="sm" fw={500} c="primary.8">
             إضافة فترة دوام جديدة
           </Text>
 
@@ -143,7 +143,7 @@ export function Step3Availability() {
       {/* List of Added Intervals */}
       <Stack gap="sm">
         <Group justify="space-between" align="center">
-          <Text size="sm" fw={700} c="primary.8">
+          <Text size="sm" fw={500} c="primary.8">
             فترات الدوام المعتمدة ({availabilities.length})
           </Text>
           {availabilities.length > 0 && (
@@ -160,7 +160,7 @@ export function Step3Availability() {
                 <ThemeIcon color="gray" variant="light" size="xl" radius="xl">
                   <IconCalendarTime size={22} />
                 </ThemeIcon>
-                <Text size="sm" fw={600} c="dimmed">
+                <Text size="sm" fw={500} c="dimmed">
                   لم يتم تحديد فترات مخصصة (متاح كامل أوقات الدوام الرسمي)
                 </Text>
                 <Text size="xs" c="dimmed" ta="center">
@@ -180,7 +180,7 @@ export function Step3Availability() {
                       <IconClock size={16} />
                     </ThemeIcon>
                     <Stack gap={2}>
-                      <Text size="sm" fw={700}>
+                      <Text size="sm" fw={500}>
                         يوم {dayNameMap[avail.dayOfWeek] || `يوم ${avail.dayOfWeek}`}
                       </Text>
                       <Badge variant="outline" color="gray" size="sm" radius="md">

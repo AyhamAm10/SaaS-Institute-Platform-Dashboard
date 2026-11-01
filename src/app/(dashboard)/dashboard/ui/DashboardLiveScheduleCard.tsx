@@ -74,7 +74,7 @@ export function DashboardLiveScheduleCard() {
               <IconLivePhoto size={20} />
             </ThemeIcon>
             <Stack gap={2}>
-              <Title order={3} size="h5" fw={700}>
+              <Title order={3} size="h5" fw={500}>
                 نبض اليوم الدراسي والحصص
               </Title>
               <Text size="xs" c="dimmed">
@@ -108,7 +108,7 @@ export function DashboardLiveScheduleCard() {
               <Stack gap={6}>
                 <Group justify="space-between" align="center" wrap="wrap" gap="xs">
                   <Group gap="xs">
-                    <Text size="sm" fw={700}>
+                    <Text size="sm" fw={500}>
                       {item.sectionName}
                     </Text>
                     <Text size="xs" c="dimmed">
@@ -136,7 +136,7 @@ export function DashboardLiveScheduleCard() {
 
                   <Group gap={4} dir="ltr">
                     <IconClock size={13} color="var(--mantine-color-dimmed)" />
-                    <Text size="xs" fw={600} c="dimmed">
+                    <Text size="xs" fw={500} c="dimmed">
                       {item.timeSlot}
                     </Text>
                   </Group>

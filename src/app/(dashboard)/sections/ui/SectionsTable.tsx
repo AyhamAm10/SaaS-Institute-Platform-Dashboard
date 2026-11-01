@@ -1,4 +1,5 @@
 'use client';
+import { formatNumber } from '@/src/core/format';
 
 import { useMemo } from 'react';
 import {
@@ -37,7 +38,7 @@ export function useSectionsColumns(
         sortable: true,
         render: (row: Section) => (
           <Text
-            fw={600}
+            fw={500}
             size="sm"
             style={{ cursor: 'pointer' }}
             onClick={() => onOpenDetails(row, 'subjects')}
@@ -100,8 +101,8 @@ export function useSectionsColumns(
         key: 'feeAmount',
         title: 'الرسوم الدراسية',
         render: (row: Section) => (
-          <Text fw={600} size="sm" c="teal">
-            {Number(row.feeAmount).toLocaleString('ar-SA')} ر.س
+          <Text fw={500} size="sm" c="teal">
+            {formatNumber(row.feeAmount)} ر.س
           </Text>
         ),
       },

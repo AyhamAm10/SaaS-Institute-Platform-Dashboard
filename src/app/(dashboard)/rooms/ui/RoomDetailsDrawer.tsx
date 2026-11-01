@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  Box,
   ActionIcon,
   Badge,
   Button,
@@ -13,10 +14,10 @@ import {
   SimpleGrid,
   Stack,
   Table,
-  Tabs,
   Text,
   ThemeIcon,
 } from '@mantine/core';
+import { AppTabs } from '@/src/components/controllers/tabs';
 import {
   IconBuildingCommunity,
   IconCalendarTime,
@@ -89,7 +90,7 @@ export function RoomDetailsDrawer({
       title={
         <Group gap="xs">
           <IconBuildingCommunity size={20} />
-          <Text fw={700} size="md">
+          <Text fw={500} size="md">
             تفاصيل القاعة: {selectedRoomDetails.name}
           </Text>
         </Group>
@@ -97,62 +98,62 @@ export function RoomDetailsDrawer({
       padding="lg"
       radius="md"
     >
-      <Tabs defaultValue="overview">
-        <Tabs.List mb="md">
-          <Tabs.Tab
-            value="overview"
-            leftSection={<IconBuildingCommunity size={16} />}
-          >
-            نظرة عامة
-          </Tabs.Tab>
-          <Tabs.Tab
-            value="availability"
-            leftSection={<IconCalendarTime size={16} />}
-          >
-            أوقات إتاحة القاعة ({stagedAvailabilities.length})
-          </Tabs.Tab>
-        </Tabs.List>
+      <AppTabs
+        defaultValue="overview"
+        items={[
+          { value: 'overview', label: 'نظرة عامة', icon: <IconBuildingCommunity size={16} stroke={1.6} /> },
+          {
+            value: 'availability',
+            label: 'أوقات إتاحة القاعة',
+            icon: <IconCalendarTime size={16} stroke={1.6} />,
+            count: stagedAvailabilities.length,
+          },
+        ]}
+      >
+        <Box mb="md">
+          <AppTabs.List />
+        </Box>
 
         {/* ── Tab 1: Overview ── */}
-        <Tabs.Panel value="overview">
+        <AppTabs.Panel value="overview">
           <Stack gap="md">
             <Paper p="md" radius="xl" withBorder>
               <SimpleGrid cols={2} spacing="md">
-                <div>
+                <Box>
                   <Text size="xs" c="dimmed">
                     اسم القاعة
                   </Text>
-                  <Text size="sm" fw={700}>
+                  <Text size="sm" fw={500}>
                     {selectedRoomDetails.name}
                   </Text>
-                </div>
-                <div>
+                </Box>
+                <Box>
                   <Text size="xs" c="dimmed">
                     نوع القاعة
                   </Text>
                   <Badge variant="light" color="blue" radius="xl">
                     {selectedRoomDetails.type}
                   </Badge>
-                </div>
-                <div>
+                </Box>
+                <Box>
                   <Text size="xs" c="dimmed">
                     السعة الاستيعابية
                   </Text>
                   <Group gap={4}>
                     <IconUsers size={16} color="gray" />
-                    <Text size="sm" fw={700}>
+                    <Text size="sm" fw={500}>
                       {selectedRoomDetails.capacity} مقعد
                     </Text>
                   </Group>
-                </div>
-                <div>
+                </Box>
+                <Box>
                   <Text size="xs" c="dimmed">
                     الفرع
                   </Text>
-                  <Text size="sm" fw={700}>
+                  <Text size="sm" fw={500}>
                     {selectedRoomDetails.branch?.name || 'كافة الفروع'}
                   </Text>
-                </div>
+                </Box>
               </SimpleGrid>
             </Paper>
 
@@ -167,10 +168,10 @@ export function RoomDetailsDrawer({
               </Group>
             </Paper>
           </Stack>
-        </Tabs.Panel>
+        </AppTabs.Panel>
 
         {/* ── Tab 2: Availability Windows ── */}
-        <Tabs.Panel value="availability">
+        <AppTabs.Panel value="availability">
           <Stack gap="md">
             <Text size="xs" c="dimmed">
               حدد الفترات التي تتاح فيها القاعة للتدريس. إذا لم يتم إدخال فترات، تعتبر القاعة متاحة طيلة أوقات دوام المعهد.
@@ -234,7 +235,7 @@ export function RoomDetailsDrawer({
                           </Badge>
                         </Table.Td>
                         <Table.Td>
-                          <Text size="sm" fw={600} dir="ltr">
+                          <Text size="sm" fw={500} dir="ltr">
                             {win.startTime} - {win.endTime}
                           </Text>
                         </Table.Td>
@@ -266,8 +267,8 @@ export function RoomDetailsDrawer({
               </Button>
             </Group>
           </Stack>
-        </Tabs.Panel>
-      </Tabs>
+        </AppTabs.Panel>
+      </AppTabs>
     </Drawer>
   );
 }

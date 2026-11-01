@@ -69,7 +69,7 @@ export function RoomDeleteModal({ onConfirmDelete }: RoomDeleteModalProps) {
 
           <Text size="sm">
             هل أنت متأكد من رغبتك في حذف القاعة{' '}
-            <Text fw={700} span>
+            <Text fw={500} span>
               "{roomToDelete.name}"
             </Text>
             ؟
@@ -83,7 +83,7 @@ export function RoomDeleteModal({ onConfirmDelete }: RoomDeleteModalProps) {
               radius="md"
             >
               <Stack gap={4}>
-                <Text size="xs" fw={700}>
+                <Text size="xs" fw={500}>
                   لا يمكن حذف القاعة لوجود حصص دراسية مجدولة فيها
                 </Text>
                 <Group gap="xs">

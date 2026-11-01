@@ -67,24 +67,24 @@ export function AppStepperRoot({ children }: AppStepperRootProps) {
                       alignItems: 'center',
                       justifyContent: 'center',
                       backgroundColor: isCompleted
-                        ? 'var(--mantine-color-teal-6)'
+                        ? 'var(--app-brand-accent)'
                         : isCurrent
-                        ? 'var(--mantine-color-primary-6)'
-                        : 'var(--mantine-color-body)',
+                        ? 'var(--mantine-color-primary-filled)'
+                        : 'var(--app-glass-bg-strong)',
                       border:
                         isCompleted || isCurrent
                           ? 'none'
-                          : '1.5px solid var(--mantine-color-gray-3)',
-                      color: isCompleted || isCurrent ? '#ffffff' : 'var(--mantine-color-gray-6)',
+                          : '1.5px solid var(--app-border)',
+                      color: isCompleted || isCurrent ? 'var(--app-text-on-brand)' : 'var(--app-text-muted)',
                       boxShadow: isCurrent
-                        ? '0 2px 8px rgba(var(--mantine-color-primary-6-rgb), 0.35)'
+                        ? '0 0 0 4px var(--app-brand-accent-ring)'
                         : 'none',
                     }}
                   >
                     {isCompleted ? (
                       <IconCheck size={16} stroke={2.5} />
                     ) : (
-                      <Text size="xs" fw={700}>
+                      <Text size="xs" fw={500}>
                         {s.step + 1}
                       </Text>
                     )}
@@ -98,8 +98,8 @@ export function AppStepperRoot({ children }: AppStepperRootProps) {
                       height: rem(2),
                       backgroundColor:
                         idx < active
-                          ? 'var(--mantine-color-teal-6)'
-                          : 'var(--mantine-color-gray-2)',
+                          ? 'var(--app-brand-accent)'
+                          : 'var(--app-border)',
                       transition: 'background-color 0.2s ease',
                     }}
                   />
@@ -110,8 +110,8 @@ export function AppStepperRoot({ children }: AppStepperRootProps) {
         </Group>
 
         {currentStepConfig && (
-          <Box pt="xs" style={{ borderTop: '1px solid var(--mantine-color-gray-2)' }}>
-            <Text size="sm" fw={700} c="primary.8">
+          <Box pt="xs" style={{ borderTop: '1px solid var(--app-border)' }}>
+            <Text size="sm" fw={500} c="var(--app-text-primary)">
               {currentStepConfig.label}
             </Text>
             {currentStepConfig.description && (

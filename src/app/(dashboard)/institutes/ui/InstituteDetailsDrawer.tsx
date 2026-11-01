@@ -1,4 +1,5 @@
 'use client';
+import { formatLongDate } from '@/src/core/format';
 
 import {
   Avatar,
@@ -43,13 +44,7 @@ export function InstituteDetailsDrawer() {
   if (!selectedInstitute) return null;
 
   const adminUser = selectedInstitute.instituteAdmins?.[0]?.user;
-  const formattedCreatedDate = selectedInstitute.createdAt
-    ? new Date(selectedInstitute.createdAt).toLocaleDateString('ar-SA', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      })
-    : '—';
+  const formattedCreatedDate = formatLongDate(selectedInstitute.createdAt);
 
   return (
     <AppDrawer opened={opened} onClose={closeDetailsDrawer} size="lg">
@@ -86,7 +81,7 @@ export function InstituteDetailsDrawer() {
                 {selectedInstitute.name ? selectedInstitute.name.slice(0, 2) : 'مع'}
               </Avatar>
               <Stack gap={2}>
-                <Text fw={800} size="lg">
+                <Text fw={500} size="lg">
                   {selectedInstitute.name}
                 </Text>
                 <Group gap="xs">
@@ -103,7 +98,7 @@ export function InstituteDetailsDrawer() {
 
           {/* Contact & Location Information */}
           <Stack gap="sm">
-            <Text fw={700} size="sm" c="dimmed">
+            <Text fw={500} size="sm" c="dimmed">
               معلومات الاتصال والموقع:
             </Text>
 
@@ -117,7 +112,7 @@ export function InstituteDetailsDrawer() {
                     <Text size="xs" c="dimmed">
                       رقم الهاتف
                     </Text>
-                    <Text size="sm" fw={600} dir="ltr">
+                    <Text size="sm" fw={500} dir="ltr">
                       {selectedInstitute.phone || '—'}
                     </Text>
                   </Stack>
@@ -133,7 +128,7 @@ export function InstituteDetailsDrawer() {
                     <Text size="xs" c="dimmed">
                       العنوان
                     </Text>
-                    <Text size="sm" fw={600} lineClamp={1}>
+                    <Text size="sm" fw={500} lineClamp={1}>
                       {selectedInstitute.address || '—'}
                     </Text>
                   </Stack>
@@ -144,7 +139,7 @@ export function InstituteDetailsDrawer() {
 
           {/* Brand Palette */}
           <Stack gap="xs">
-            <Text fw={700} size="sm" c="dimmed">
+            <Text fw={500} size="sm" c="dimmed">
               الهوية البصرية والألوان:
             </Text>
             <Group gap="md">
@@ -154,7 +149,7 @@ export function InstituteDetailsDrawer() {
                   <Text size="xs" c="dimmed">
                     اللون الأساسي
                   </Text>
-                  <Text size="xs" fw={700} dir="ltr">
+                  <Text size="xs" fw={500} dir="ltr">
                     {selectedInstitute.primaryColor || '#1a73e8'}
                   </Text>
                 </Stack>
@@ -168,7 +163,7 @@ export function InstituteDetailsDrawer() {
                   <Text size="xs" c="dimmed">
                     اللون الثانوي
                   </Text>
-                  <Text size="xs" fw={700} dir="ltr">
+                  <Text size="xs" fw={500} dir="ltr">
                     {selectedInstitute.secondaryColor || '#34a853'}
                   </Text>
                 </Stack>
@@ -180,7 +175,7 @@ export function InstituteDetailsDrawer() {
 
           {/* Responsible Administrator Card */}
           <Stack gap="xs">
-            <Text fw={700} size="sm" c="dimmed">
+            <Text fw={500} size="sm" c="dimmed">
               المدير المسؤول عن المعهد:
             </Text>
 
@@ -192,7 +187,7 @@ export function InstituteDetailsDrawer() {
                       <IconUserCheck size={20} />
                     </Avatar>
                     <Stack gap={2}>
-                      <Text size="sm" fw={700}>
+                      <Text size="sm" fw={500}>
                         {adminUser.fullName}
                       </Text>
                       <Group gap="xs">

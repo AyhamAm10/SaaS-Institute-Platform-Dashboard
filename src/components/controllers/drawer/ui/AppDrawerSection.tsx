@@ -1,7 +1,8 @@
 'use client';
 
-import { Paper, Stack, rem } from '@mantine/core';
+import { Stack } from '@mantine/core';
 import { ReactNode } from 'react';
+import { AppSurface } from '../../surface';
 import { AppDrawerSectionHeader } from './AppDrawerSectionHeader';
 
 export interface AppDrawerSectionProps {
@@ -22,18 +23,12 @@ export function AppDrawerSection({
   className,
 }: AppDrawerSectionProps) {
   return (
-    <Paper
-      radius="xl"
-      withBorder={withBorder}
-      p="lg"
+    <AppSurface
+      level={1}
+      tone={withBorder ? 'glass' : 'subtle'}
+      radius="lg"
+      padding="lg"
       className={className}
-      style={{
-        backgroundColor: 'var(--app-surface)',
-        borderColor: 'var(--app-border)',
-        borderRadius: rem(16),
-        boxShadow: 'var(--app-card-shadow)',
-        transition: 'background-color 200ms ease, border-color 200ms ease',
-      }}
     >
       <Stack gap="md">
         {(title || description || action) && (
@@ -45,6 +40,6 @@ export function AppDrawerSection({
         )}
         {children}
       </Stack>
-    </Paper>
+    </AppSurface>
   );
 }

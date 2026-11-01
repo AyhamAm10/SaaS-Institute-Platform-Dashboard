@@ -16,7 +16,7 @@ export function getBranchesColumns(onEdit: (branch: Branch) => void): DataModule
           <ActionIcon size="md" radius="xl" variant="light" color="teal">
             <IconBuildingCommunity size={18} />
           </ActionIcon>
-          <Text fw={700} size="sm">
+          <Text fw={500} size="sm">
             {branch.name}
           </Text>
         </Group>

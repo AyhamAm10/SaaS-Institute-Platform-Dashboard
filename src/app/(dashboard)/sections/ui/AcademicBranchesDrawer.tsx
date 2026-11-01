@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  Box,
   ActionIcon,
   Alert,
   Badge,
@@ -197,9 +198,9 @@ export function AcademicBranchesDrawer({
                   >
                     <Group gap="sm">
                       <IconGitBranch size={18} color="teal" />
-                      <div>
+                      <Box>
                         <Group gap={8} align="center">
-                          <Text fw={600} size="sm">
+                          <Text fw={500} size="sm">
                             {b.name}
                           </Text>
                           {b._count && b._count.sections > 0 && (
@@ -213,7 +214,7 @@ export function AcademicBranchesDrawer({
                             {b.description}
                           </Text>
                         )}
-                      </div>
+                      </Box>
                     </Group>
 
                     <Tooltip label="حذف الفرع">

@@ -1,9 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { Paper, rem } from '@mantine/core';
 import { ChartCardProps } from './init/charts.init';
 import { createChartsStore, ChartsContext } from './store/charts.store';
+import { AppSurface } from '../surface';
 import { ChartHeader } from './ui/ChartHeader';
 import { ChartTabs } from './ui/ChartTabs';
 import { BarChart } from './ui/BarChart';
@@ -14,31 +14,22 @@ export function ChartCard(props: ChartCardProps) {
 
   return (
     <ChartsContext.Provider value={store}>
-      <Paper
-        p="lg"
-        radius="lg"
-        withBorder
-        className="stat-card-frosted"
-        style={{
-          height: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          backgroundColor: 'var(--app-surface)',
-          borderColor: 'var(--app-border)',
-          borderRadius: rem(16),
-          boxShadow: 'var(--app-card-shadow)',
-          transition: 'transform 180ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 180ms ease',
-        }}
+      <AppSurface
+        level={2}
+        radius="xl"
+        padding="xl"
+        className={props.className}
+        style={{ height: '100%', display: 'flex', flexDirection: 'column' }}
       >
         {(props.title || props.periods) && (
           <ChartHeader
             title={props.title}
             subtitle={props.subtitle}
-            actions={<ChartTabs />}
+            actions={props.periods ? <ChartTabs /> : undefined}
           />
         )}
         {props.children}
-      </Paper>
+      </AppSurface>
     </ChartsContext.Provider>
   );
 }

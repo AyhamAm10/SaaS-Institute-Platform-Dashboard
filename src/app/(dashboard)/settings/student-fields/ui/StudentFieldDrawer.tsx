@@ -95,7 +95,7 @@ export function StudentFieldDrawer({ onSubmit }: StudentFieldDrawerProps) {
 
             {formType === 'SELECT' && (
               <Stack gap="xs">
-                <Text size="xs" fw={600} c="var(--mantine-color-text)">
+                <Text size="xs" fw={500} c="var(--mantine-color-text)">
                   خيارات القائمة المنسدلة
                 </Text>
                 <Group gap="xs" align="flex-start" wrap="nowrap">

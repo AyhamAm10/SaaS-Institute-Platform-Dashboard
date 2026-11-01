@@ -77,7 +77,7 @@ export function SubjectDeleteModal({ onConfirmDelete }: SubjectDeleteModalProps)
 
           <Text size="sm">
             {subjectsLabels.deleteConfirmPrompt}{' '}
-            <Text fw={700} span>
+            <Text fw={500} span>
               "{subjectToDelete.name}"
             </Text>
             ؟
@@ -91,7 +91,7 @@ export function SubjectDeleteModal({ onConfirmDelete }: SubjectDeleteModalProps)
               radius="md"
             >
               <Stack gap={4}>
-                <Text size="xs" fw={700}>
+                <Text size="xs" fw={500}>
                   {subjectsLabels.deleteWarningLinkedSections}
                 </Text>
                 <Group gap="xs">

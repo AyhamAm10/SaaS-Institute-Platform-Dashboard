@@ -21,7 +21,7 @@ export function Step3CustomFields({ fields }: Step3CustomFieldsProps) {
     return (
       <Stack gap="md">
         <Stack gap={2}>
-          <Text size="md" fw={700}>
+          <Text size="md" fw={500}>
             الخطوة الثالثة: الحقول المخصصة والبيانات الإضافية
           </Text>
           <Text size="xs" c="dimmed">
@@ -32,7 +32,7 @@ export function Step3CustomFields({ fields }: Step3CustomFieldsProps) {
         <Card radius="lg" withBorder p="xl" ta="center">
           <Stack align="center" gap="sm">
             <IconInfoCircle size={32} color="var(--mantine-color-primary-6)" />
-            <Text size="sm" fw={600}>
+            <Text size="sm" fw={500}>
               لا توجد حقول إضافية معرفة حاليا في نظام المعهد.
             </Text>
             <Text size="xs" c="dimmed" maw={450}>
@@ -48,7 +48,7 @@ export function Step3CustomFields({ fields }: Step3CustomFieldsProps) {
   return (
     <Stack gap="lg">
       <Stack gap={2}>
-        <Text size="md" fw={700}>
+        <Text size="md" fw={500}>
           الخطوة الثالثة: الحقول الإضافية الخاصة بالمعهد
         </Text>
         <Text size="xs" c="dimmed">

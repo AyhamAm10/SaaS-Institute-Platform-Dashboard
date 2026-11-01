@@ -21,7 +21,7 @@ export function TimetableHeader() {
             <IconCalendarEvent size={28} />
           </Paper>
           <Stack gap={2}>
-            <Title order={2} fw={800}>
+            <Title order={2} fw={500}>
               الجدول الدراسي الأسبوعي
             </Title>
             <Text c="dimmed" size="xs">

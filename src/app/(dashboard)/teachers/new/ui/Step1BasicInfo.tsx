@@ -27,7 +27,7 @@ export function Step1BasicInfo() {
   return (
     <Stack gap="xl">
       <Stack gap={3}>
-        <Text size="md" fw={700}>
+        <Text size="md" fw={500}>
           الخطوة الأولى: البيانات الأساسية وحساب المعلم
         </Text>
         <Text size="xs" c="dimmed">
@@ -43,7 +43,7 @@ export function Step1BasicInfo() {
       )}
 
       <Stack gap="lg">
-        <Text size="sm" fw={700} c="primary.8">
+        <Text size="sm" fw={500} c="primary.8">
           معلومات الحساب والتواصل
         </Text>
 
@@ -95,7 +95,7 @@ export function Step1BasicInfo() {
 
         <Divider my="sm" />
 
-        <Text size="sm" fw={700} c="primary.8">
+        <Text size="sm" fw={500} c="primary.8">
           حالة الحساب
         </Text>
 

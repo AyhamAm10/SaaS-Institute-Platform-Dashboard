@@ -1,7 +1,8 @@
 'use client';
 
-import { Group, Text } from '@mantine/core';
+import { Box, Group, Text } from '@mantine/core';
 import { ReactNode } from 'react';
+import { formatNumber } from '@/src/core/format';
 import { useDataModuleMirror } from '../store/useDataModuleMirror';
 import { DataModulePagination } from './DataModulePagination';
 
@@ -17,15 +18,20 @@ export function DataModuleFooter({ children, showSummary = true }: DataModuleFoo
 
   const start = total === 0 ? 0 : (page - 1) * limit + 1;
   const end = Math.min(page * limit, total);
+  const strong = (value: number) => (
+    <Text span fw={500} c="var(--app-text-primary)">
+      {formatNumber(value)}
+    </Text>
+  );
 
   return (
-    <Group justify="space-between" align="center" mt="lg" px="xs" wrap="wrap" gap="md">
+    <Group justify="space-between" align="center" mt="md" px="sm" wrap="wrap" gap="md">
       {showSummary && total > 0 ? (
-        <Text size="xs" c="dimmed" fw={500}>
-          عرض <Text span fw={700} c="var(--mantine-color-text)">{start}</Text> - <Text span fw={700} c="var(--mantine-color-text)">{end}</Text> من أصل <Text span fw={700} c="var(--mantine-color-text)">{total}</Text> سجل
+        <Text size="sm" fw={300} c="var(--app-text-muted)">
+          عرض {strong(start)} - {strong(end)} من أصل {strong(total)} سجل
         </Text>
       ) : (
-        <span />
+        <Box />
       )}
       {children ?? <DataModulePagination />}
     </Group>

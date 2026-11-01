@@ -42,7 +42,7 @@ export function TimetableGrid({ onToggleLock, onDeleteEntry }: TimetableGridProp
         <Center py="xl">
           <Stack align="center" gap="xs">
             <IconCalendarOff size={48} color="var(--mantine-color-gray-4)" />
-            <Text fw={700} size="md" c="dimmed">
+            <Text fw={500} size="md" c="dimmed">
               يرجى اختيار الشعبة الدراسية لعرض جدولها الأسبوعي
             </Text>
             <Text size="xs" c="dimmed">
@@ -60,7 +60,7 @@ export function TimetableGrid({ onToggleLock, onDeleteEntry }: TimetableGridProp
         <Center py="xl">
           <Stack align="center" gap="md">
             <Loader size="md" color="indigo" />
-            <Text size="sm" c="dimmed" fw={600}>
+            <Text size="sm" c="dimmed" fw={500}>
               جاري تحميل الجدول الدراسي...
             </Text>
           </Stack>
@@ -84,7 +84,7 @@ export function TimetableGrid({ onToggleLock, onDeleteEntry }: TimetableGridProp
               </Table.Th>
               {workingDays.map((day) => (
                 <Table.Th key={day} style={{ textAlign: 'center', color: 'var(--app-text-secondary)', borderColor: 'var(--app-table-border)' }}>
-                  <Text fw={700} size="sm">
+                  <Text fw={500} size="sm">
                     {dayNames[day] || `يوم ${day}`}
                   </Text>
                 </Table.Th>
@@ -111,7 +111,7 @@ export function TimetableGrid({ onToggleLock, onDeleteEntry }: TimetableGridProp
                       >
                         {isBreak ? 'استراحة' : `الحصة ${slot.periodNumber}`}
                       </Badge>
-                      <Text size="11px" fw={700} dir="ltr">
+                      <Text size="11px" fw={500} dir="ltr">
                         {slot.startTime} - {slot.endTime}
                       </Text>
                     </Stack>

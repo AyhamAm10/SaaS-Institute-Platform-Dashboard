@@ -69,7 +69,7 @@ export function TeacherDeleteModal({ onConfirmDelete }: TeacherDeleteModalProps)
 
           <Text size="sm">
             هل أنت متأكد من رغبتك في حذف حساب المعلم{' '}
-            <Text fw={700} span>
+            <Text fw={500} span>
               "{teacherToDelete.user.fullName}"
             </Text>
             ؟
@@ -83,7 +83,7 @@ export function TeacherDeleteModal({ onConfirmDelete }: TeacherDeleteModalProps)
               radius="md"
             >
               <Stack gap={4}>
-                <Text size="xs" fw={700}>
+                <Text size="xs" fw={500}>
                   لا يمكن حذف المعلم لوجود حصص مجدولة مرتبطة به في الجداول الأسبوعية
                 </Text>
                 <Group gap="xs">

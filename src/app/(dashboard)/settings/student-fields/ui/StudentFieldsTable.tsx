@@ -33,7 +33,7 @@ export function getStudentFieldsColumns(
           <ActionIcon size="md" radius="xl" variant="light" color="primary">
             <IconListDetails size={18} />
           </ActionIcon>
-          <Text fw={700} size="sm">
+          <Text fw={500} size="sm">
             {field.label}
           </Text>
         </Group>

@@ -1,7 +1,9 @@
 'use client';
 
-import { Badge, Group, Stack, Text, ThemeIcon, Title, rem } from '@mantine/core';
+import { Box, Group, Stack, Text, Title, rem } from '@mantine/core';
 import { ReactNode } from 'react';
+import { StatusBadge } from '../../badge';
+import { formatNumber } from '@/src/core/format';
 import { useDataModuleMirror } from '../store/useDataModuleMirror';
 
 export interface DataModuleTitleProps {
@@ -22,36 +24,22 @@ export function DataModuleTitle(props: DataModuleTitleProps) {
   const showBadge = props.showBadge ?? true;
 
   return (
-    <Stack gap={2}>
-      <Group gap="xs" align="center">
+    <Stack gap={6}>
+      <Group gap="sm" align="center">
         {props.icon && (
-          <ThemeIcon size={28} radius="md" color="primary" variant="light">
-            {props.icon}
-          </ThemeIcon>
+          <Box style={{ display: 'inline-flex', color: 'var(--app-brand-accent)' }}>{props.icon}</Box>
         )}
-        <Title order={2} fz={{ base: 17, sm: 20 }} fw={700}>
+        <Title order={1} fw={600} style={{ fontSize: rem(26), letterSpacing: '-0.01em' }}>
           {title}
         </Title>
         {showBadge && total !== undefined && (
-          <Badge
-            variant="light"
-            color="primary"
-            radius="sm"
-            size="sm"
-            fw={600}
-            style={{
-              paddingLeft: rem(8),
-              paddingRight: rem(8),
-              height: rem(22),
-              fontSize: rem(11.5),
-            }}
-          >
-            {props.badgeLabel ? `${total} ${props.badgeLabel}` : total}
-          </Badge>
+          <StatusBadge tone="brand">
+            {props.badgeLabel ? `${formatNumber(total)} ${props.badgeLabel}` : formatNumber(total)}
+          </StatusBadge>
         )}
       </Group>
       {description && (
-        <Text size="xs" c="dimmed" fw={400} style={{ lineHeight: 1.4 }}>
+        <Text fw={300} style={{ fontSize: rem(13.5), lineHeight: 1.6, color: 'var(--app-text-secondary)' }}>
           {description}
         </Text>
       )}

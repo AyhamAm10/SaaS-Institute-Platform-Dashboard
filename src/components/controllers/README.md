@@ -275,3 +275,31 @@ AppStepper.Actions = AppStepperActions;
   <AppStepper.Actions onSubmit={handleSubmit} />
 </AppStepper>
 ```
+
+---
+
+## 6. Design System Layer (Theme + Primitives)
+
+Visual identity lives in exactly two places, so a redesign never touches page code:
+
+1. **`src/theme/`** — the single source of truth.
+   - `tokens.ts`: semantic tokens for light / dark (surfaces, glass, elevation, brand, tones). Emitted as `--app-*` CSS variables by `css-variables.ts` (Mantine `cssVariablesResolver`, mounted in `AppThemeProvider`).
+   - `colors.ts`: Mantine tuples. `primary` = ink (black actions), `brand` = logo orange `#F16726`. Legacy palette names (`teal`, `blue`, `violet`, …) are remapped onto semantic tuples in `index.ts`.
+   - `components.ts` + `src/app/globals.css`: Mantine defaults and interactive states (hover / focus cannot be expressed in Mantine `styles` objects).
+2. **Controllers** — pages compose these instead of styling Mantine directly:
+
+| Controller | Use it for |
+|---|---|
+| `AppAmbient` | Living background (orange liquid blobs). Mounted by the dashboard layout and login. |
+| `AppSurface` | Every card / panel / nested block (`level` 1–3 glass, `tone` glass / subtle / brand). |
+| `AppButton`, `AppIconButton` | All actions (`variant` primary / accent / outline / ghost / danger). |
+| `StatusBadge` | All statuses (`tone` brand / success / danger / warning / info / neutral / ink). |
+| `AppTabs` | All tab switching (`AppTabs.List`, `AppTabs.Panel`). |
+| `IconTile`, `InfoTile`, `DetailList` | Raised icon squares, small metrics, label/value grids. |
+| `AppEmptyState`, `AppPageHeader` | Empty states and page titles outside DataModule. |
+
+**Stateless primitives** (`surface`, `button`, `badge`, `info-tile`, `empty-state`, `page-header`) have no runtime state, so they ship `init/` (style resolution) + root component only. Controllers with state (e.g. `tabs`, `charts`, `ambient`) keep the full `init/state/store/ui` layering.
+
+**Typography:** Alexandria, weights 300 / 400 / 500 / 600 only. Numbers and dates go through `src/core/format` (Latin digits).
+
+**Guards:** `eslint.config.mjs` errors on hex colors, `fw` above 600 and Mantine `Tabs` inside `src/app`, and warns on raw `Button` / `ActionIcon` / `Badge` / `SegmentedControl` imports (migration backlog).

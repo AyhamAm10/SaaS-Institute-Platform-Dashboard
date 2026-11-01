@@ -1,40 +1,69 @@
 import { createTheme, MantineThemeOverride, rem } from '@mantine/core';
 import {
+  brandOrangeColor,
+  dangerColor,
   defaultPrimaryColor,
-  defaultSecondaryColor,
-  slateNeutral,
-  warmGrayScale,
-  deepNavyColor,
+  infoColor,
   InstituteBrandConfig,
+  successColor,
+  warmDarkScale,
+  warmGrayScale,
 } from './colors';
 import { defaultFontFamily, defaultFontFamilyMonospace, defaultHeadings } from './typography';
 import { defaultComponents } from './components';
 
 /**
- * Base Theme for SaaS Admin Platform - Clean, Classic, Warm Academic Editorial Style
+ * Base Theme — Jeel Al-Salam identity: ink actions, logo-orange accents, frosted glass surfaces.
+ *
+ * Legacy Mantine palette names still used by page code (teal, blue, indigo, violet, yellow, ...)
+ * are remapped onto the semantic tuples so every screen stays on-brand.
  */
 export const baseTheme = createTheme({
   primaryColor: 'primary',
-  primaryShade: { light: 6, dark: 5 },
+  primaryShade: { light: 6, dark: 6 },
   colors: {
     primary: defaultPrimaryColor,
-    secondary: defaultSecondaryColor,
-    slate: slateNeutral,
+    brand: brandOrangeColor,
+    secondary: brandOrangeColor,
+    orange: brandOrangeColor,
+    yellow: brandOrangeColor,
+    success: successColor,
+    teal: successColor,
+    green: successColor,
+    danger: dangerColor,
+    red: dangerColor,
+    info: infoColor,
+    blue: infoColor,
+    indigo: infoColor,
+    violet: infoColor,
+    cyan: infoColor,
+    grape: infoColor,
+    navy: infoColor,
+    slate: warmGrayScale,
     gray: warmGrayScale,
-    navy: deepNavyColor,
+    dark: warmDarkScale,
   },
+  white: '#FFFFFF',
+  black: '#141416',
   fontFamily: defaultFontFamily,
   fontFamilyMonospace: defaultFontFamilyMonospace,
   headings: defaultHeadings,
   components: defaultComponents,
   defaultRadius: 'md',
   cursorType: 'pointer',
-  spacing: {
-    xs: rem(6),
+  radius: {
+    xs: rem(8),
     sm: rem(10),
     md: rem(14),
     lg: rem(20),
     xl: rem(28),
+  },
+  spacing: {
+    xs: rem(6),
+    sm: rem(10),
+    md: rem(16),
+    lg: rem(22),
+    xl: rem(30),
   },
 });
 
@@ -43,7 +72,7 @@ export const baseTheme = createTheme({
  * Allows runtime multi-tenant white-labeling without altering UI code.
  */
 export function createInstituteTheme(brand?: InstituteBrandConfig): MantineThemeOverride {
-  if (!brand || !brand.primaryShades) {
+  if (!brand || (!brand.primaryShades && !brand.accentShades)) {
     return baseTheme;
   }
 
@@ -51,7 +80,8 @@ export function createInstituteTheme(brand?: InstituteBrandConfig): MantineTheme
     ...baseTheme,
     colors: {
       ...baseTheme.colors,
-      primary: brand.primaryShades,
+      ...(brand.primaryShades && { primary: brand.primaryShades }),
+      ...(brand.accentShades && { brand: brand.accentShades, secondary: brand.accentShades }),
     },
   });
 }
@@ -60,3 +90,4 @@ export * from './tokens';
 export * from './colors';
 export * from './typography';
 export * from './components';
+export * from './css-variables';

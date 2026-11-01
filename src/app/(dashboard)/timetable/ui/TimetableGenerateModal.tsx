@@ -49,7 +49,7 @@ export function TimetableGenerateModal({ onGenerate }: TimetableGenerateModalPro
           <ThemeIcon color="indigo" variant="light" radius="xl">
             <IconSparkles size={18} />
           </ThemeIcon>
-          <Text fw={700} size="md">
+          <Text fw={500} size="md">
             التوليد الآلي للجدول الدراسي (محرك الذكاء الاصطناعي)
           </Text>
         </Group>

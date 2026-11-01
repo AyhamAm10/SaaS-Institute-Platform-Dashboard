@@ -19,11 +19,11 @@ export function AppDrawerSectionHeader({
   return (
     <Group justify="space-between" align="flex-start" className={className} wrap="nowrap">
       <Stack gap={2} style={{ flex: 1, minWidth: 0 }}>
-        <Text fw={700} size="sm" c="var(--mantine-color-text)">
+        <Text fw={500} size="sm" c="var(--app-text-primary)">
           {title}
         </Text>
         {description && (
-          <Text size="xs" c="dimmed">
+          <Text size="xs" fw={300} c="var(--app-text-muted)">
             {description}
           </Text>
         )}

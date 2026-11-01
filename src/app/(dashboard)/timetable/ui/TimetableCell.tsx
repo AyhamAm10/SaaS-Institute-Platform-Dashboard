@@ -63,7 +63,7 @@ export function TimetableCell({
           <Badge size="xs" color="orange" variant="light">
             استراحة
           </Badge>
-          <Text size="xs" fw={700} c="orange.8">
+          <Text size="xs" fw={500} c="orange.8">
             {slot.name || 'فسحة'}
           </Text>
         </Stack>
@@ -97,7 +97,7 @@ export function TimetableCell({
               <ThemeIcon size="xs" color="blue" variant="light" radius="xl">
                 <IconBook size={12} />
               </ThemeIcon>
-              <Text size="xs" fw={800} lineClamp={1}>
+              <Text size="xs" fw={500} lineClamp={1}>
                 {entry.subject?.name || `مادة ${entry.subjectId}`}
               </Text>
             </Group>

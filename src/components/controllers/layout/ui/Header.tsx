@@ -1,21 +1,21 @@
 'use client';
 
 import {
-  ActionIcon,
   AppShell,
   Avatar,
   Box,
   Burger,
   Group,
+  Indicator,
   Menu,
-  Paper,
   Stack,
   Text,
   TextInput,
+  UnstyledButton,
   rem,
   useMantineColorScheme,
 } from '@mantine/core';
-import { useEffect } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import {
   IconBell,
@@ -31,6 +31,7 @@ import {
 } from '@tabler/icons-react';
 import { useSidebarMirror } from '../../sidebar/store/useSidebarMirror';
 import { useLayoutMirror } from '../store/useLayoutMirror';
+import { AppIconButton } from '../../button';
 import { useAuth } from '@/src/core/auth';
 import {
   useAcademicYearsQuery,
@@ -38,6 +39,38 @@ import {
   useOperationalContext,
   UserRole,
 } from '@/src/core/api';
+
+interface ContextPillProps {
+  icon: ReactNode;
+  label: string;
+  accent?: boolean;
+}
+
+/** Glass pill used as a menu trigger for the operational context switchers. */
+function ContextPill({ icon, label, accent }: ContextPillProps) {
+  return (
+    <UnstyledButton
+      className="app-pill-trigger"
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: rem(8),
+        height: rem(40),
+        padding: `0 ${rem(14)}`,
+        borderRadius: 'var(--app-radius-pill)',
+        border: '1px solid var(--app-border)',
+        backgroundColor: 'var(--app-glass-bg)',
+        color: 'var(--app-text-primary)',
+      }}
+    >
+      <Box style={{ display: 'flex', color: accent ? 'var(--app-brand-accent)' : 'var(--app-text-secondary)' }}>{icon}</Box>
+      <Text size="sm" fw={400} lineClamp={1}>
+        {label}
+      </Text>
+      <IconChevronDown size={14} color="var(--app-text-muted)" />
+    </UnstyledButton>
+  );
+}
 
 export function DashboardHeader() {
   const { user, logout, isLoggingOut } = useAuth();
@@ -95,19 +128,24 @@ export function DashboardHeader() {
   const activeYearName =
     yearsData?.data?.find((y) => y.id === activeAcademicYearId)?.name || 'السنة الدراسية';
 
+  const displayName = user?.fullName || (isSuperAdmin ? 'المشرف العام' : 'مدير النظام');
+
   return (
-    <AppShell.Header
-      p="xs"
-      style={{
-        borderBottom: '1px solid var(--app-border)',
-        backgroundColor: 'var(--app-header-bg)',
-        backdropFilter: 'blur(12px)',
-        transition: 'background-color 200ms ease, border-color 200ms ease',
-      }}
-    >
-      <Group justify="space-between" h="100%" px="md">
-        {/* Right Section (in RTL): Section Indicator with Accent Bar & Operational Selectors */}
-        <Group gap="md">
+    <AppShell.Header px={{ base: rem(12), md: rem(12) }} pt={rem(12)} pb={rem(4)}>
+      <Group
+        className="app-glass"
+        justify="space-between"
+        wrap="nowrap"
+        h="100%"
+        gap="sm"
+        px={rem(12)}
+        style={{
+          borderRadius: 'var(--app-radius-lg)',
+          backgroundColor: 'var(--app-header-bg)',
+        }}
+      >
+        {/* Start (right in RTL): menu toggle, context switchers */}
+        <Group gap="sm" wrap="nowrap">
           <Burger
             opened={isMobileOpen}
             onClick={toggleMobile}
@@ -116,66 +154,28 @@ export function DashboardHeader() {
             aria-label="تبديل القائمة الجانبية"
           />
 
-          <Group gap="xs">
-            <Box
-              w={4}
-              h={28}
-              style={{
-                borderRadius: rem(4),
-                backgroundColor: isSuperAdmin
-                  ? 'var(--app-brand-primary)'
-                  : 'var(--app-brand-accent)',
-              }}
-            />
-            <Stack gap={0}>
-              <Text size="xs" c="var(--app-text-secondary)" fw={600}>
-                {isSuperAdmin ? 'إدارة المنصة المركزية' : 'إدارة المعهد'}
-              </Text>
-              <Text size="sm" fw={800} c="var(--app-text-primary)" style={{ letterSpacing: '-0.2px' }}>
-                {isSuperAdmin ? 'لوحة تحكم المشرف العام' : 'لوحة التحكم'}
-              </Text>
-            </Stack>
-          </Group>
-
-          {/* Operational Context Switchers (Branch & Academic Year) - Institute Admin ONLY */}
-          {!isSuperAdmin && (
-            <Group gap="xs" visibleFrom="xs" ml="xs">
-              {/* Branch Selector Pill */}
-              <Menu shadow="md" width={220} position="bottom-start" radius="lg">
+          {isSuperAdmin ? (
+            <Text size="sm" fw={500} c="var(--app-text-primary)" visibleFrom="xs">
+              لوحة تحكم المشرف العام
+            </Text>
+          ) : (
+            <Group gap="xs" wrap="nowrap" visibleFrom="xs">
+              <Menu width={240} position="bottom-start">
                 <Menu.Target>
-                  <Paper
-                    px="md"
-                    py={7}
-                    radius="xl"
-                    withBorder
-                    style={{
-                      cursor: 'pointer',
-                      backgroundColor: 'var(--app-surface)',
-                      borderColor: 'var(--app-border)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: rem(8),
-                      transition: 'all 150ms ease',
-                      boxShadow: 'var(--app-card-shadow)',
-                    }}
-                  >
-                    <IconBuildingCommunity size={16} color="var(--app-brand-accent)" />
-                    <Text size="xs" fw={700} c="var(--app-text-primary)" lineClamp={1}>
-                      {activeBranchName}
-                    </Text>
-                    <IconChevronDown size={13} color="var(--app-text-muted)" />
-                  </Paper>
+                  <Box>
+                    <ContextPill icon={<IconBuildingCommunity size={16} stroke={1.6} />} label={activeBranchName} accent />
+                  </Box>
                 </Menu.Target>
-                <Menu.Dropdown p="xs">
-                  <Menu.Label>الفرع الجغرافي النشط</Menu.Label>
+                <Menu.Dropdown>
+                  <Menu.Label>الفرع النشط</Menu.Label>
                   {(branches || []).map((b) => {
                     const isSelected = b.id === activeBranchId;
                     return (
                       <Menu.Item
                         key={b.id}
-                        leftSection={<IconBuildingCommunity size={14} />}
-                        style={{ fontWeight: isSelected ? 700 : 500 }}
-                        color={isSelected ? 'primary' : undefined}
+                        leftSection={<IconBuildingCommunity size={15} stroke={1.6} />}
+                        style={{ fontWeight: isSelected ? 500 : 400 }}
+                        color={isSelected ? 'brand' : undefined}
                         onClick={() => {
                           if (b.id !== activeBranchId) {
                             setActiveBranchId(b.id);
@@ -190,42 +190,22 @@ export function DashboardHeader() {
                 </Menu.Dropdown>
               </Menu>
 
-              {/* Academic Year Selector Pill */}
-              <Menu shadow="md" width={220} position="bottom-start" radius="lg">
+              <Menu width={240} position="bottom-start">
                 <Menu.Target>
-                  <Paper
-                    px="md"
-                    py={7}
-                    radius="xl"
-                    withBorder
-                    style={{
-                      cursor: 'pointer',
-                      backgroundColor: 'var(--app-surface)',
-                      borderColor: 'var(--app-border)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: rem(8),
-                      transition: 'all 150ms ease',
-                      boxShadow: 'var(--app-card-shadow)',
-                    }}
-                  >
-                    <IconCalendarEvent size={16} color="var(--app-brand-primary)" />
-                    <Text size="xs" fw={700} c="var(--app-text-primary)" lineClamp={1}>
-                      {activeYearName}
-                    </Text>
-                    <IconChevronDown size={13} color="var(--app-text-muted)" />
-                  </Paper>
+                  <Box visibleFrom="sm">
+                    <ContextPill icon={<IconCalendarEvent size={16} stroke={1.6} />} label={activeYearName} />
+                  </Box>
                 </Menu.Target>
-                <Menu.Dropdown p="xs">
-                  <Menu.Label>الدورة الأكاديمية النشطة</Menu.Label>
+                <Menu.Dropdown>
+                  <Menu.Label>السنة الدراسية النشطة</Menu.Label>
                   {(yearsData?.data || []).map((y) => {
                     const isSelected = y.id === activeAcademicYearId;
                     return (
                       <Menu.Item
                         key={y.id}
-                        leftSection={<IconCalendarEvent size={14} />}
-                        style={{ fontWeight: isSelected ? 700 : 500 }}
-                        color={isSelected ? 'primary' : undefined}
+                        leftSection={<IconCalendarEvent size={15} stroke={1.6} />}
+                        style={{ fontWeight: isSelected ? 500 : 400 }}
+                        color={isSelected ? 'brand' : undefined}
                         onClick={() => {
                           if (y.id !== activeAcademicYearId) {
                             setActiveAcademicYearId(y.id);
@@ -243,120 +223,85 @@ export function DashboardHeader() {
           )}
         </Group>
 
-        {/* Center Section: Modern Curved Search Pill */}
-        <Box style={{ flex: 1, maxWidth: rem(460) }} visibleFrom="sm" mx="lg">
+        {/* Center: search pill */}
+        <Box style={{ flex: 1, maxWidth: rem(440) }} visibleFrom="md">
           <TextInput
-            placeholder="البحث عن..."
-            size="sm"
+            placeholder="ابحث عن طالب، شعبة، مادة..."
             radius="xl"
-            rightSection={<IconSearch size={16} stroke={2} color="var(--app-text-muted)" />}
+            leftSection={<IconSearch size={16} stroke={1.6} />}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.currentTarget.value)}
-            styles={{
-              input: {
-                backgroundColor: 'var(--app-input-bg)',
-                border: '1px solid var(--app-input-border)',
-                color: 'var(--app-text-primary)',
-                height: rem(40),
-                borderRadius: rem(9999),
-                paddingRight: rem(38),
-                transition: 'all 150ms ease',
-                '&:focus': {
-                  backgroundColor: 'var(--app-input-bg-focus)',
-                  borderColor: 'var(--app-input-focus-border)',
-                  boxShadow: 'var(--app-input-focus-ring)',
-                },
-              },
-            }}
+            styles={{ input: { borderRadius: 'var(--app-radius-pill)', minHeight: rem(40), height: rem(40) } }}
           />
         </Box>
 
-        {/* Left Section (in RTL): User Profile Pill & Quick Actions */}
-        <Group gap="sm">
-          {/* Color Scheme Toggle */}
-          <ActionIcon
-            variant="subtle"
-            size="lg"
-            radius="xl"
-            color="gray"
+        {/* End (left in RTL): quick actions and account */}
+        <Group gap={8} wrap="nowrap">
+          <AppIconButton
+            label={isDark ? 'الوضع الفاتح' : 'الوضع الليلي'}
             onClick={() => toggleColorScheme()}
-            aria-label="تبديل المظهر"
-          >
-            {isDark ? <IconSun size={18} color="var(--app-brand-accent)" /> : <IconMoon size={18} />}
-          </ActionIcon>
-
-          {/* Notifications */}
-          <ActionIcon
-            variant="subtle"
             size="lg"
-            radius="xl"
-            color="gray"
-            aria-label="الإشعارات والتنبيهات"
           >
-            <IconBell size={18} />
-          </ActionIcon>
+            {isDark ? <IconSun size={18} stroke={1.6} /> : <IconMoon size={18} stroke={1.6} />}
+          </AppIconButton>
 
-          {/* User Profile Pill Menu */}
-          <Menu shadow="lg" width={220} position="bottom-start" radius="lg">
+          <Indicator color="brand" size={8} offset={9} withBorder processing={false}>
+            <AppIconButton label="الإشعارات والتنبيهات" size="lg">
+              <IconBell size={18} stroke={1.6} />
+            </AppIconButton>
+          </Indicator>
+
+          <Menu width={230} position="bottom-end">
             <Menu.Target>
-              <Paper
-                px="sm"
-                py={5}
-                radius="xl"
-                withBorder
+              <UnstyledButton
+                className="app-pill-trigger"
                 style={{
-                  cursor: 'pointer',
-                  borderColor: 'var(--app-border)',
-                  backgroundColor: 'var(--app-surface)',
-                  transition: 'all 150ms ease',
-                  boxShadow: 'var(--app-card-shadow)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: rem(10),
+                  padding: rem(4),
+                  paddingInlineEnd: rem(12),
+                  borderRadius: 'var(--app-radius-pill)',
+                  border: '1px solid var(--app-border)',
+                  backgroundColor: 'var(--app-glass-bg)',
                 }}
               >
-                <Group gap="xs" wrap="nowrap">
-                  <Avatar
-                    src={null}
-                    alt={user?.fullName || 'مدير النظام'}
-                    color="primary"
-                    radius="xl"
-                    size="sm"
-                    styles={{
-                      placeholder: {
-                        backgroundColor: 'var(--app-brand-primary)',
-                        color: '#fff9f3',
-                        fontWeight: 600,
-                        fontSize: rem(12),
-                      },
-                    }}
-                  >
-                    {user?.fullName ? user.fullName.slice(0, 2) : 'من'}
-                  </Avatar>
-                  <Stack gap={0} visibleFrom="sm" pr="xs">
-                    <Text size="xs" fw={700} c="var(--app-text-primary)" lineClamp={1}>
-                      {user?.fullName || (isSuperAdmin ? 'المشرف العام' : 'مدير النظام')}
-                    </Text>
-                    <Text size="10px" c="var(--app-text-secondary)">
-                      {isSuperAdmin
-                        ? 'المشرف العام للنظام'
-                        : user?.institute?.name || 'الفرع الرئيسي'}
-                    </Text>
-                  </Stack>
-                  <IconChevronDown size={14} color="var(--app-text-muted)" />
-                </Group>
-              </Paper>
+                <Avatar
+                  alt={displayName}
+                  radius="xl"
+                  size={34}
+                  styles={{
+                    placeholder: {
+                      background: 'linear-gradient(145deg, var(--mantine-color-brand-5), var(--mantine-color-brand-7))',
+                      color: 'var(--app-text-on-brand)',
+                      fontWeight: 500,
+                      fontSize: rem(13),
+                      border: 0,
+                    },
+                  }}
+                >
+                  {user?.fullName ? user.fullName.slice(0, 1) : 'م'}
+                </Avatar>
+                <Stack gap={0} visibleFrom="sm">
+                  <Text size="sm" fw={500} c="var(--app-text-primary)" lineClamp={1}>
+                    {displayName}
+                  </Text>
+                  <Text size="xs" fw={300} c="var(--app-text-muted)" lineClamp={1}>
+                    {isSuperAdmin ? 'المشرف العام للنظام' : user?.institute?.name || 'الفرع الرئيسي'}
+                  </Text>
+                </Stack>
+                <IconChevronDown size={14} color="var(--app-text-muted)" />
+              </UnstyledButton>
             </Menu.Target>
 
-            <Menu.Dropdown p="xs">
+            <Menu.Dropdown>
               <Menu.Label>إدارة الحساب</Menu.Label>
-              <Menu.Item leftSection={<IconUser size={15} />}>
-                الملف التعريفي
-              </Menu.Item>
-              <Menu.Item leftSection={<IconSettings size={15} />}>
-                إعدادات المعهد
-              </Menu.Item>
+              <Menu.Item leftSection={<IconUser size={15} stroke={1.6} />}>الملف التعريفي</Menu.Item>
+              <Menu.Item leftSection={<IconSettings size={15} stroke={1.6} />}>إعدادات المعهد</Menu.Item>
               <Menu.Divider />
               <Menu.Item
-                color="red"
-                leftSection={<IconLogout size={15} />}
+                color="danger"
+                leftSection={<IconLogout size={15} stroke={1.6} />}
                 onClick={() => logout()}
                 disabled={isLoggingOut}
               >

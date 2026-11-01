@@ -72,7 +72,7 @@ export function Step2Qualifications({
   return (
     <Stack gap="xl">
       <Stack gap={3}>
-        <Text size="md" fw={700}>
+        <Text size="md" fw={500}>
           الخطوة الثانية: المواد والمؤهلات الأكاديمية المعتمدة
         </Text>
         <Text size="xs" c="dimmed">
@@ -101,7 +101,7 @@ export function Step2Qualifications({
       {/* Adding Qualification Bar */}
       <Paper p="lg" radius="xl" withBorder bg="var(--app-subtle)">
         <Stack gap="md">
-          <Text size="sm" fw={700} c="primary.8">
+          <Text size="sm" fw={500} c="primary.8">
             إضافة مادة وفرع تدريسي جديد
           </Text>
 
@@ -148,7 +148,7 @@ export function Step2Qualifications({
       {/* List of Added Qualifications */}
       <Stack gap="sm">
         <Group justify="space-between" align="center">
-          <Text size="sm" fw={700} c="primary.8">
+          <Text size="sm" fw={500} c="primary.8">
             المواد المعتمدة المضافة ({qualifications.length})
           </Text>
           {qualifications.length > 0 && (
@@ -165,7 +165,7 @@ export function Step2Qualifications({
                 <ThemeIcon color="gray" variant="light" size="xl" radius="xl">
                   <IconBook size={22} />
                 </ThemeIcon>
-                <Text size="sm" fw={600} c="dimmed">
+                <Text size="sm" fw={500} c="dimmed">
                   لم يتم إضافة أي مواد لهذا المعلم بعد
                 </Text>
                 <Text size="xs" c="dimmed" ta="center">
@@ -185,7 +185,7 @@ export function Step2Qualifications({
                       <IconBriefcase size={18} />
                     </ThemeIcon>
                     <Stack gap={2}>
-                      <Text size="sm" fw={700}>
+                      <Text size="sm" fw={500}>
                         {q.subjectName}
                       </Text>
                       <Text size="xs" c="dimmed">

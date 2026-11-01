@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Drawer, rem } from '@mantine/core';
+import { Box, Drawer } from '@mantine/core';
 import { ReactNode } from 'react';
 import { useDrawerMirror } from '../store/useDrawerMirror';
 import { AppDrawerHeader } from './AppDrawerHeader';
@@ -38,8 +38,7 @@ export function AppDrawerRoot({ children, zIndex = 300, className }: AppDrawerRo
           height: '100%',
           overflow: 'hidden',
           direction: 'rtl',
-          borderRadius: `${rem(24)} 0 0 ${rem(24)}`,
-          boxShadow: '-12px 0 40px rgba(0, 0, 0, 0.08)',
+          borderRadius: 'var(--app-radius-xl)',
         },
         body: {
           display: 'flex',

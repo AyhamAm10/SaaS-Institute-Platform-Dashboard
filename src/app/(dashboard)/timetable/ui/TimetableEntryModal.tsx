@@ -80,7 +80,7 @@ export function TimetableEntryModal({ onSave }: TimetableEntryModalProps) {
       title={
         <Group gap="xs">
           <IconCalendarEvent size={20} />
-          <Text fw={700} size="md">
+          <Text fw={500} size="md">
             {isEdit ? 'تعديل الحصة الدراسية' : 'إضافة حصة دراسية جديدة'}
           </Text>
         </Group>
@@ -105,7 +105,7 @@ export function TimetableEntryModal({ onSave }: TimetableEntryModalProps) {
             <Text size="xs" c="dimmed">
               اليوم: {dayNames[entryForm.dayOfWeek] || entryForm.dayOfWeek}
             </Text>
-            <Text size="xs" fw={700} dir="ltr">
+            <Text size="xs" fw={500} dir="ltr">
               الحصة {entryForm.periodNumber} ({entryForm.startTime} - {entryForm.endTime})
             </Text>
           </Group>

@@ -9,4 +9,11 @@ export * from './date-picker';
 export * from './stats';
 export * from './charts';
 export * from './app-module';
-
+export * from './ambient';
+export * from './surface';
+export * from './button';
+export * from './badge';
+export * from './tabs';
+export * from './info-tile';
+export * from './empty-state';
+export * from './page-header';

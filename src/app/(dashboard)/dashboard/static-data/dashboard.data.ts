@@ -197,3 +197,39 @@ export const dashboardStaticData = {
     },
   ] as QuickActionItem[],
 };
+
+/**
+ * Demo chart data (no API yet). One dataset per period tab of the activity chart.
+ * Values are attendance hours.
+ */
+export const dashboardActivityDatasets = {
+  'يومي': [
+    { label: '8 ص', value: 3.2 },
+    { label: '9 ص', value: 5.8 },
+    { label: '10 ص', value: 7.1 },
+    { label: '11 ص', value: 6.4 },
+    { label: '12 م', value: 4.2 },
+    { label: '1 م', value: 6.9 },
+    { label: '2 م', value: 5.1 },
+    { label: '3 م', value: 2.6 },
+  ],
+  'أسبوعي': [
+    { label: 'السبت', value: 6 },
+    { label: 'الأحد', value: 17 },
+    { label: 'الإثنين', value: 23 },
+    { label: 'الثلاثاء', value: 16 },
+    { label: 'الأربعاء', value: 21 },
+    { label: 'الخميس', value: 9 },
+  ],
+  'شهري': [
+    { label: 'الأسبوع 1', value: 78 },
+    { label: 'الأسبوع 2', value: 96 },
+    { label: 'الأسبوع 3', value: 112 },
+    { label: 'الأسبوع 4', value: 88 },
+  ],
+};
+
+export const dashboardCurriculumSegments = [
+  { label: 'المناهج المكتملة', value: 84 },
+  { label: 'قيد التدريس', value: 16 },
+];

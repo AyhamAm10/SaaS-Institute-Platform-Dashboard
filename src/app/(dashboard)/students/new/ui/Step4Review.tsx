@@ -40,7 +40,7 @@ export function Step4Review({ sections, fields }: Step4ReviewProps) {
   return (
     <Stack gap="lg">
       <Stack gap={2}>
-        <Text size="md" fw={700}>
+        <Text size="md" fw={500}>
           الخطوة الثالثة: مراجعة وتأكيد بيانات التسجيل
         </Text>
         <Text size="xs" c="dimmed">
@@ -56,7 +56,7 @@ export function Step4Review({ sections, fields }: Step4ReviewProps) {
               <ThemeIcon size="md" radius="xl" color="primary" variant="light">
                 <IconUser size={16} />
               </ThemeIcon>
-              <Text size="sm" fw={700}>
+              <Text size="sm" fw={500}>
                 بيانات الطالب الأكاديمية
               </Text>
             </Group>
@@ -65,16 +65,16 @@ export function Step4Review({ sections, fields }: Step4ReviewProps) {
 
             <SimpleGrid cols={2} spacing="xs">
               <Text size="xs" c="dimmed">الاسم الكامل:</Text>
-              <Text size="xs" fw={700}>{fullName || '—'}</Text>
+              <Text size="xs" fw={500}>{fullName || '—'}</Text>
 
               <Text size="xs" c="dimmed">الجنس:</Text>
-              <Text size="xs" fw={600}>{gender === 'MALE' ? 'ذكر' : 'أنثى'}</Text>
+              <Text size="xs" fw={500}>{gender === 'MALE' ? 'ذكر' : 'أنثى'}</Text>
 
               <Text size="xs" c="dimmed">تاريخ الميلاد:</Text>
-              <Text size="xs" fw={600}>{birthDate || '—'}</Text>
+              <Text size="xs" fw={500}>{birthDate || '—'}</Text>
 
               <Text size="xs" c="dimmed">الشعبة الصفية:</Text>
-              <Text size="xs" fw={600}>{section ? `${section.name} (${section.grade || ''})` : 'بدون تسكين مباشر'}</Text>
+              <Text size="xs" fw={500}>{section ? `${section.name} (${section.grade || ''})` : 'بدون تسكين مباشر'}</Text>
             </SimpleGrid>
           </Stack>
         </Card>
@@ -86,7 +86,7 @@ export function Step4Review({ sections, fields }: Step4ReviewProps) {
               <ThemeIcon size="md" radius="xl" color="teal" variant="light">
                 <IconUsers size={16} />
               </ThemeIcon>
-              <Text size="sm" fw={700}>
+              <Text size="sm" fw={500}>
                 بيانات العائلة والاتصال
               </Text>
             </Group>
@@ -95,16 +95,16 @@ export function Step4Review({ sections, fields }: Step4ReviewProps) {
 
             <SimpleGrid cols={2} spacing="xs">
               <Text size="xs" c="dimmed">كنية العائلة:</Text>
-              <Text size="xs" fw={700}>{familyDisplay.name || '—'}</Text>
+              <Text size="xs" fw={500}>{familyDisplay.name || '—'}</Text>
 
               <Text size="xs" c="dimmed">اسم الأب:</Text>
-              <Text size="xs" fw={600}>{familyDisplay.father}</Text>
+              <Text size="xs" fw={500}>{familyDisplay.father}</Text>
 
               <Text size="xs" c="dimmed">اسم الأم:</Text>
-              <Text size="xs" fw={600}>{familyDisplay.mother}</Text>
+              <Text size="xs" fw={500}>{familyDisplay.mother}</Text>
 
               <Text size="xs" c="dimmed">هاتف التواصل:</Text>
-              <Text size="xs" fw={600} dir="ltr" ta="right">{familyDisplay.phone}</Text>
+              <Text size="xs" fw={500} dir="ltr" ta="right">{familyDisplay.phone}</Text>
             </SimpleGrid>
           </Stack>
         </Card>
@@ -114,7 +114,7 @@ export function Step4Review({ sections, fields }: Step4ReviewProps) {
       {fields.length > 0 && (
         <Card radius="lg" withBorder p="md">
           <Stack gap="sm">
-            <Text size="sm" fw={700}>
+            <Text size="sm" fw={500}>
               البيانات الإضافية المخصصة
             </Text>
             <Divider />
@@ -124,7 +124,7 @@ export function Step4Review({ sections, fields }: Step4ReviewProps) {
                 return (
                   <Stack key={f.name} gap={2}>
                     <Text size="xs" c="dimmed">{f.label}:</Text>
-                    <Text size="xs" fw={600}>
+                    <Text size="xs" fw={500}>
                       {val !== undefined && val !== null && val !== ''
                         ? typeof val === 'boolean'
                           ? val ? 'نعم' : 'لا'

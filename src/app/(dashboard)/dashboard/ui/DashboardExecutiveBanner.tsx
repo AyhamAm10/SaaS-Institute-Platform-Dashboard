@@ -48,7 +48,7 @@ export function DashboardExecutiveBanner() {
         <Group justify="space-between" align="flex-start" wrap="wrap" gap="md">
           <Stack gap={6}>
             <Group gap="xs" wrap="wrap">
-              <Title order={2} size="h3" fw={800}>
+              <Title order={2} size="h3" fw={500}>
                 أهلا بك، {user?.fullName || 'مدير المعهد'}
               </Title>
               <Badge variant="light" color="teal" radius="xl" size="sm">
@@ -76,7 +76,7 @@ export function DashboardExecutiveBanner() {
                     <Text size="11px" c="dimmed">
                       العام الدراسي النشط
                     </Text>
-                    <Text size="xs" fw={700} c="teal">
+                    <Text size="xs" fw={500} c="teal">
                       {currentAcademicYear.name}
                     </Text>
                   </Stack>
@@ -106,7 +106,7 @@ export function DashboardExecutiveBanner() {
                 <ThemeIcon size="sm" radius="xl" color="primary" variant="light">
                   <IconSchool size={14} />
                 </ThemeIcon>
-                <Text size="xs" fw={700}>
+                <Text size="xs" fw={500}>
                   {dashboardStaticData.header.capacityTitle}
                 </Text>
               </Group>

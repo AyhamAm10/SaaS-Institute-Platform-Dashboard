@@ -8,22 +8,23 @@ export interface StatCardContentProps {
   subtitle?: ReactNode;
 }
 
+/** Large, light-weight figure (the reference "3D" dashboards favour big but airy numbers). */
 export function StatCardContent({ children, subtitle }: StatCardContentProps) {
   return (
-    <Box my={rem(6)}>
+    <Box my={rem(4)}>
       <Text
-        fw={800}
+        fw={500}
         style={{
-          fontSize: rem(34),
-          lineHeight: 1.1,
+          fontSize: rem(36),
+          lineHeight: 1.05,
           color: 'var(--app-text-primary)',
-          letterSpacing: '-0.5px',
+          letterSpacing: '-0.02em',
         }}
       >
         {children}
       </Text>
       {subtitle && (
-        <Text size="xs" c="dimmed" mt={rem(2)}>
+        <Text size="xs" fw={300} c="var(--app-text-muted)" mt={rem(6)}>
           {subtitle}
         </Text>
       )}

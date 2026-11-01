@@ -8,11 +8,11 @@ export interface DataModuleLoadingProps {
 
 export function DataModuleLoading({ rowsCount = 5 }: DataModuleLoadingProps) {
   return (
-    <Box p="md">
-      <Stack gap="sm">
-        <Skeleton height={40} radius="md" />
+    <Box py="md">
+      <Stack gap={8}>
+        <Skeleton height={18} width="40%" radius="xl" mb={6} opacity={0.6} />
         {Array.from({ length: rowsCount }).map((_, i) => (
-          <Skeleton key={i} height={36} radius="sm" opacity={0.7} />
+          <Skeleton key={i} height={54} radius="md" opacity={0.75 - i * 0.08} />
         ))}
       </Stack>
     </Box>

@@ -1,18 +1,7 @@
 'use client';
 
-import {
-  ActionIcon,
-  ScrollArea,
-  Table,
-  Text,
-  UnstyledButton,
-  rem,
-} from '@mantine/core';
-import {
-  IconChevronDown,
-  IconChevronUp,
-  IconSelector,
-} from '@tabler/icons-react';
+import { ScrollArea, Table, Text, UnstyledButton, rem } from '@mantine/core';
+import { IconChevronDown, IconChevronUp, IconSelector } from '@tabler/icons-react';
 import { ReactNode } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { DataModuleColumn } from '../init/data-module.init';
@@ -30,6 +19,13 @@ export interface DataModuleTableProps<T = Record<string, unknown>> {
   isLoading?: boolean;
 }
 
+const ROW_RADIUS = 'var(--app-radius-md)';
+const ROW_BORDER = '1px solid var(--app-table-border)';
+
+/**
+ * Rows render as separate frosted strips (border-spacing) inside the glass content card.
+ * Header is a quiet caption row; hover lifts a row to solid white (see `.data-module-floating-row`).
+ */
 export function DataModuleTable<T = Record<string, unknown>>(props: DataModuleTableProps<T>) {
   const storeData = useDataModuleMirror('data') as T[];
   const storeColumns = useDataModuleMirror('columns') as DataModuleColumn<T>[];
@@ -60,53 +56,32 @@ export function DataModuleTable<T = Record<string, unknown>>(props: DataModuleTa
   return (
     <ScrollArea type="auto">
       <Table
-        verticalSpacing="xs"
-        horizontalSpacing="md"
         withTableBorder={false}
         withColumnBorders={false}
+        highlightOnHover={false}
         style={{
-          minWidth: rem(600),
+          minWidth: rem(640),
           backgroundColor: 'transparent',
           borderCollapse: 'separate',
-          borderSpacing: '0 8px',
-          padding: `0 ${rem(14)}`,
+          borderSpacing: `0 ${rem(8)}`,
         }}
       >
-        <Table.Thead
-          style={{
-            backgroundColor: 'var(--app-table-header-bg)',
-            transition: 'background-color 200ms ease',
-          }}
-        >
-          <Table.Tr
-            style={{
-              backgroundColor: 'transparent',
-            }}
-          >
-            {columns.map((col, cIdx) => {
+        <Table.Thead>
+          <Table.Tr style={{ backgroundColor: 'transparent' }}>
+            {columns.map((col) => {
               const isSorted = sort.column === col.key;
-              const isFirst = cIdx === 0;
-              const isLast = cIdx === columns.length - 1;
               return (
                 <Table.Th
                   key={col.key}
                   style={{
                     width: col.width,
                     textAlign: col.align ?? 'right',
-                    fontSize: rem(12.5),
-                    fontWeight: 600,
-                    color: 'var(--app-text-secondary)',
-                    letterSpacing: '0.1px',
-                    padding: `${rem(12)} ${rem(18)}`,
+                    fontSize: rem(12),
+                    fontWeight: 400,
+                    color: 'var(--app-text-muted)',
+                    padding: `${rem(2)} ${rem(20)}`,
                     whiteSpace: 'nowrap',
-                    borderTopRightRadius: isFirst ? rem(10) : undefined,
-                    borderBottomRightRadius: isFirst ? rem(10) : undefined,
-                    borderTopLeftRadius: isLast ? rem(10) : undefined,
-                    borderBottomLeftRadius: isLast ? rem(10) : undefined,
-                    borderTop: '1px solid var(--app-border)',
-                    borderBottom: '1px solid var(--app-border)',
-                    borderRight: isFirst ? '1px solid var(--app-border)' : undefined,
-                    borderLeft: isLast ? '1px solid var(--app-border)' : undefined,
+                    border: 0,
                   }}
                 >
                   {col.sortable ? (
@@ -116,24 +91,21 @@ export function DataModuleTable<T = Record<string, unknown>>(props: DataModuleTa
                         display: 'inline-flex',
                         alignItems: 'center',
                         gap: rem(4),
-                        cursor: 'pointer',
-                        color: 'inherit',
+                        color: isSorted ? 'var(--app-text-primary)' : 'inherit',
                       }}
                     >
-                      <Text size="xs" fw={600} style={{ fontSize: rem(12.5), color: 'inherit' }}>
+                      <Text span inherit style={{ fontSize: rem(12) }}>
                         {col.title}
                       </Text>
-                      <ActionIcon size="xs" variant="transparent" color="gray">
-                        {isSorted ? (
-                          sort.direction === 'asc' ? (
-                            <IconChevronUp size={14} />
-                          ) : (
-                            <IconChevronDown size={14} />
-                          )
+                      {isSorted ? (
+                        sort.direction === 'asc' ? (
+                          <IconChevronUp size={13} color="var(--app-brand-accent)" />
                         ) : (
-                          <IconSelector size={14} opacity={0.4} />
-                        )}
-                      </ActionIcon>
+                          <IconChevronDown size={13} color="var(--app-brand-accent)" />
+                        )
+                      ) : (
+                        <IconSelector size={13} opacity={0.45} />
+                      )}
                     </UnstyledButton>
                   ) : (
                     col.title
@@ -151,25 +123,15 @@ export function DataModuleTable<T = Record<string, unknown>>(props: DataModuleTa
                 <motion.tr
                   key={rowKey}
                   className="data-module-floating-row"
-                  initial={{ opacity: 0, x: 50 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -30 }}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0 }}
                   transition={{
-                    duration: 0.38,
-                    delay: Math.min(index * 0.05, 0.45),
+                    duration: 0.36,
+                    delay: Math.min(index * 0.04, 0.4),
                     ease: [0.16, 1, 0.3, 1],
                   }}
-                  whileHover={{
-                    scale: 1.008,
-                    x: -8,
-                    y: -1,
-                    transition: { duration: 0.2, ease: 'easeOut' },
-                  }}
-                  style={{
-                    backgroundColor: 'var(--app-surface)',
-                    color: 'var(--app-table-text)',
-                    position: 'relative',
-                  }}
+                  style={{ color: 'var(--app-table-text)', borderRadius: ROW_RADIUS }}
                 >
                   {columns.map((col, cIdx) => {
                     const isFirst = cIdx === 0;
@@ -179,19 +141,19 @@ export function DataModuleTable<T = Record<string, unknown>>(props: DataModuleTa
                         key={col.key}
                         style={{
                           textAlign: col.align ?? 'right',
-                          fontSize: rem(13),
+                          fontSize: rem(13.5),
                           fontWeight: 400,
-                          padding: `${rem(13)} ${rem(18)}`,
+                          padding: `${rem(14)} ${rem(20)}`,
                           color: 'var(--app-table-text)',
-                          borderTop: '1px solid var(--app-border)',
-                          borderBottom: '1px solid var(--app-border)',
-                          borderRight: isFirst ? '1px solid var(--app-border)' : undefined,
-                          borderLeft: isLast ? '1px solid var(--app-border)' : undefined,
-                          borderTopRightRadius: isFirst ? rem(12) : undefined,
-                          borderBottomRightRadius: isFirst ? rem(12) : undefined,
-                          borderTopLeftRadius: isLast ? rem(12) : undefined,
-                          borderBottomLeftRadius: isLast ? rem(12) : undefined,
-                          backgroundColor: 'inherit',
+                          backgroundColor: 'var(--app-table-bg)',
+                          borderTop: ROW_BORDER,
+                          borderBottom: ROW_BORDER,
+                          borderRight: isFirst ? ROW_BORDER : undefined,
+                          borderLeft: isLast ? ROW_BORDER : undefined,
+                          borderTopRightRadius: isFirst ? ROW_RADIUS : undefined,
+                          borderBottomRightRadius: isFirst ? ROW_RADIUS : undefined,
+                          borderTopLeftRadius: isLast ? ROW_RADIUS : undefined,
+                          borderBottomLeftRadius: isLast ? ROW_RADIUS : undefined,
                         }}
                       >
                         {col.render ? col.render(row, index) : ((row as Record<string, unknown>)?.[col.key] as ReactNode ?? '—')}

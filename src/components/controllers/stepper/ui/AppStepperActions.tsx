@@ -73,13 +73,13 @@ export function AppStepperActions({
           fullWidth
           variant="filled"
           color="primary"
-          radius="md"
+          radius="xl"
           size="md"
           onClick={handleNext}
           leftSection={<IconArrowLeft size={16} />}
           disabled={disableNext || isSubmitting}
           style={{
-            boxShadow: '0 4px 14px rgba(73, 29, 43, 0.18)',
+            boxShadow: 'var(--app-elev-1)',
           }}
         >
           {nextLabel}
@@ -91,13 +91,13 @@ export function AppStepperActions({
           fullWidth
           variant="filled"
           color="primary"
-          radius="md"
+          radius="xl"
           size="md"
           onClick={onSubmit}
           loading={isSubmitting}
           leftSection={<IconCheck size={16} />}
           style={{
-            boxShadow: '0 4px 14px rgba(73, 29, 43, 0.22)',
+            boxShadow: 'var(--app-brand-glow)',
           }}
         >
           {submitLabel}
@@ -109,7 +109,7 @@ export function AppStepperActions({
         {!isFirstStep ? (
           <Button
             variant="default"
-            radius="md"
+            radius="xl"
             size="xs"
             onClick={handlePrev}
             rightSection={<IconArrowRight size={14} />}
@@ -133,7 +133,7 @@ export function AppStepperActions({
             <Button
               variant="subtle"
               color="gray"
-              radius="md"
+              radius="xl"
               size="xs"
               onClick={onCancel}
               disabled={isSubmitting}

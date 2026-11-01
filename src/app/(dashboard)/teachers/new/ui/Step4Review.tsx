@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  Box,
   Alert,
   Badge,
   Card,
@@ -45,7 +46,7 @@ export function Step4Review() {
   return (
     <Stack gap="lg">
       <Stack gap={2}>
-        <Text size="md" fw={700}>
+        <Text size="md" fw={500}>
           الخطوة الرابعة: مراجعة وتأكيد بيانات المعلم
         </Text>
         <Text size="xs" c="dimmed">
@@ -67,7 +68,7 @@ export function Step4Review() {
               <ThemeIcon size="md" radius="xl" color="primary" variant="light">
                 <IconUser size={16} />
               </ThemeIcon>
-              <Text fw={700} size="sm">
+              <Text fw={500} size="sm">
                 بيانات المعلم والحساب
               </Text>
             </Group>
@@ -75,41 +76,41 @@ export function Step4Review() {
             <Divider />
 
             <SimpleGrid cols={2} spacing="xs">
-              <div>
+              <Box>
                 <Text size="xs" c="dimmed">
                   الاسم الكامل:
                 </Text>
-                <Text size="xs" fw={700}>
+                <Text size="xs" fw={500}>
                   {fullName || '—'}
                 </Text>
-              </div>
+              </Box>
 
-              <div>
+              <Box>
                 <Text size="xs" c="dimmed">
                   رقم الهاتف:
                 </Text>
-                <Text size="xs" fw={700} dir="ltr" ta="right">
+                <Text size="xs" fw={500} dir="ltr" ta="right">
                   {phone || '—'}
                 </Text>
-              </div>
+              </Box>
 
-              <div>
+              <Box>
                 <Text size="xs" c="dimmed">
                   المسمى الأكاديمي:
                 </Text>
-                <Text size="xs" fw={700}>
+                <Text size="xs" fw={500}>
                   {specialization || 'غير محدد'}
                 </Text>
-              </div>
+              </Box>
 
-              <div>
+              <Box>
                 <Text size="xs" c="dimmed">
                   حالة الحساب:
                 </Text>
                 <Badge variant="dot" color={isActive ? 'teal' : 'red'} size="xs" radius="sm">
                   {isActive ? 'نشط' : 'غير نشط'}
                 </Badge>
-              </div>
+              </Box>
             </SimpleGrid>
           </Stack>
         </Card>
@@ -121,7 +122,7 @@ export function Step4Review() {
               <ThemeIcon size="md" radius="xl" color="indigo" variant="light">
                 <IconBriefcase size={16} />
               </ThemeIcon>
-              <Text fw={700} size="sm">
+              <Text fw={500} size="sm">
                 المواد والمؤهلات الأكاديمية ({qualifications.length})
               </Text>
             </Group>
@@ -141,7 +142,7 @@ export function Step4Review() {
                     p="xs"
                     style={{ background: 'var(--app-subtle)', borderRadius: '8px' }}
                   >
-                    <Text size="xs" fw={700}>
+                    <Text size="xs" fw={500}>
                       {q.subjectName}
                     </Text>
                     <Badge size="xs" color="primary" variant="light" radius="sm">
@@ -162,7 +163,7 @@ export function Step4Review() {
             <ThemeIcon size="md" radius="xl" color="teal" variant="light">
               <IconCalendarTime size={16} />
             </ThemeIcon>
-            <Text fw={700} size="sm">
+            <Text fw={500} size="sm">
               أوقات الدوام والتفرغ الأسبوعي للجدول ({availabilities.length})
             </Text>
           </Group>
@@ -183,7 +184,7 @@ export function Step4Review() {
                   style={{ background: 'var(--app-subtle)', borderRadius: '8px' }}
                 >
                   <IconClock size={14} color="var(--app-brand-accent)" />
-                  <Text size="xs" fw={700}>
+                  <Text size="xs" fw={500}>
                     {dayNameMap[avail.dayOfWeek]}
                   </Text>
                   <Badge size="xs" variant="outline" color="gray">

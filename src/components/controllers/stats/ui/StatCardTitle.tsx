@@ -13,7 +13,7 @@ export function StatCardTitle({ children }: StatCardTitleProps) {
   return (
     <Text
       size="xs"
-      fw={600}
+      fw={400}
       style={{
         color: 'var(--app-text-secondary)',
         fontSize: rem(13),

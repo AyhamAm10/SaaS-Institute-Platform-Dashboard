@@ -45,15 +45,15 @@ export function AppDrawerDetail({
             {icon}
           </ThemeIcon>
         )}
-        <Text size="sm" c="dimmed" style={{ whiteSpace: 'nowrap' }}>
+        <Text size="sm" c="var(--app-text-muted)" style={{ whiteSpace: 'nowrap' }}>
           {label}
         </Text>
       </Group>
 
       <Text
         size="sm"
-        fw={600}
-        c={isValueEmpty ? 'dimmed' : 'var(--mantine-color-text)'}
+        fw={500}
+        c={isValueEmpty ? 'var(--app-text-muted)' : 'var(--app-text-primary)'}
         ta="left"
         style={{
           minWidth: 0,

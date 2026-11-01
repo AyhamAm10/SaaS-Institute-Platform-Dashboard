@@ -66,10 +66,10 @@ export function DashboardKpiGrid() {
             </Group>
 
             <Stack gap={2}>
-              <Text size="xs" fw={600} c="dimmed">
+              <Text size="xs" fw={500} c="dimmed">
                 {kpi.title}
               </Text>
-              <Text size="1.8rem" fw={800} lh={1.1}>
+              <Text size="1.8rem" fw={500} lh={1.1}>
                 {kpi.value}
               </Text>
               <Text size="xs" c="dimmed">

@@ -36,7 +36,7 @@ export function Step2BasicInfo({ sections, fields = [] }: Step2BasicInfoProps) {
   return (
     <Stack gap="xl">
       <Stack gap={3}>
-        <Text size="md" fw={700}>
+        <Text size="md" fw={500}>
           الخطوة الثانية: بيانات الطالب الأساسية والإضافية
         </Text>
         <Text size="xs" c="dimmed">
@@ -52,7 +52,7 @@ export function Step2BasicInfo({ sections, fields = [] }: Step2BasicInfoProps) {
 
       {/* Unboxed open form fields with generous spacing */}
       <Stack gap="lg">
-        <Text size="sm" fw={700} c="primary.8">
+        <Text size="sm" fw={500} c="primary.8">
           البيانات الأساسية والتسكين الأكاديمي
         </Text>
 

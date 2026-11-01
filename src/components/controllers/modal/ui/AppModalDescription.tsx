@@ -16,7 +16,7 @@ export function AppModalDescription({ children, className }: AppModalDescription
   if (!content) return null;
 
   return (
-    <Text size="xs" c="dimmed" className={className} style={{ lineHeight: 1.4 }}>
+    <Text size="sm" fw={300} c="var(--app-text-secondary)" className={className} style={{ lineHeight: 1.5 }}>
       {content}
     </Text>
   );

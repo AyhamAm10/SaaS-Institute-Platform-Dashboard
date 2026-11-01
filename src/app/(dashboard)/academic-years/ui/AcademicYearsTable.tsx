@@ -36,7 +36,7 @@ export function useAcademicYearsColumns(
         title: 'السنة الدراسية',
         sortable: true,
         render: (row: AcademicYear) => (
-          <Text fw={600} size="sm">
+          <Text fw={500} size="sm">
             {row.name}
           </Text>
         ),
