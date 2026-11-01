@@ -6,9 +6,10 @@ import {
   IconCalendarStats,
   IconSchool,
   IconUserCheck,
+  IconUserPlus,
   IconUsers,
 } from '@tabler/icons-react';
-import { AppModule, StatCard, StatusBadge } from '@/src/components/controllers';
+import { AppButton, AppModule, StatCard, StatusBadge } from '@/src/components/controllers';
 import { ChartCard } from '@/src/components/controllers/charts';
 import { DataModuleController } from '@/src/components/controllers/data-module';
 import { useStudentsMirror } from '../store/useStudentsMirror';
@@ -96,7 +97,7 @@ export function StudentsView() {
       {/* 3. Modern Floating Strip Table */}
       <AppModule.Table>
         <DataModuleController
-          title=""
+          title={studentsLabels.title}
           description=""
           data={students}
           columns={columns}
@@ -112,6 +113,15 @@ export function StudentsView() {
           onPageChange={setPage}
           onSearchChange={setSearch}
         >
+          <DataModuleController.Header>
+            <DataModuleController.Title icon={<IconUsers size={22} stroke={1.7} />} badgeLabel="طالب" />
+            <DataModuleController.Actions>
+              <AppButton href="/students/new" leftSection={<IconUserPlus size={16} stroke={1.7} />}>
+                {studentsLabels.createAction}
+              </AppButton>
+            </DataModuleController.Actions>
+          </DataModuleController.Header>
+
           <DataModuleController.FilterBar>
             <DataModuleController.SearchInput placeholder={studentsLabels.searchPlaceholder} />
           </DataModuleController.FilterBar>

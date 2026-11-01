@@ -20,9 +20,6 @@ export function AppTabsList() {
       fullWidth={config.fullWidth}
       size={config.size}
       radius="xl"
-      color="primary"
-      transitionDuration={320}
-      transitionTimingFunction="cubic-bezier(0.16, 1, 0.3, 1)"
       data={items.map((item) => ({
         value: item.value,
         disabled: item.disabled,

@@ -1,9 +1,10 @@
 'use client';
 
 import { ReactNode } from 'react';
-import { Box, Button, Group, rem, Stack } from '@mantine/core';
+import { Box, Group, rem, Stack } from '@mantine/core';
 import { IconArrowLeft, IconArrowRight, IconCheck } from '@tabler/icons-react';
 import { useStepperMirror } from '../store/useStepperMirror';
+import { AppButton } from '../../button';
 
 export interface AppStepperActionsProps {
   onPrev?: () => void;
@@ -63,65 +64,41 @@ export function AppStepperActions({
       gap="xs"
       pt="md"
       style={{
-        borderTop: '1.5px solid var(--app-border)',
+        borderTop: '1px solid var(--app-border)',
         width: '100%',
       }}
     >
       {/* Primary Action Button (Next / Submit) */}
       {!isLastStep && (
-        <Button
+        <AppButton
           fullWidth
-          variant="filled"
-          color="primary"
-          radius="xl"
           size="md"
           onClick={handleNext}
-          leftSection={<IconArrowLeft size={16} />}
+          rightSection={<IconArrowLeft size={16} />}
           disabled={disableNext || isSubmitting}
-          style={{
-            boxShadow: 'var(--app-elev-1)',
-          }}
         >
           {nextLabel}
-        </Button>
+        </AppButton>
       )}
 
       {isLastStep && onSubmit && (
-        <Button
-          fullWidth
-          variant="filled"
-          color="primary"
-          radius="xl"
-          size="md"
-          onClick={onSubmit}
-          loading={isSubmitting}
-          leftSection={<IconCheck size={16} />}
-          style={{
-            boxShadow: 'var(--app-brand-glow)',
-          }}
-        >
+        <AppButton fullWidth size="md" onClick={onSubmit} loading={isSubmitting} leftSection={<IconCheck size={16} />}>
           {submitLabel}
-        </Button>
+        </AppButton>
       )}
 
       {/* Secondary Actions: Previous & Cancel */}
       <Group justify="space-between" align="center" wrap="nowrap" mt={rem(2)}>
         {!isFirstStep ? (
-          <Button
-            variant="default"
-            radius="xl"
+          <AppButton
+            variant="outline"
             size="xs"
             onClick={handlePrev}
-            rightSection={<IconArrowRight size={14} />}
+            leftSection={<IconArrowRight size={14} />}
             disabled={disablePrev || isSubmitting}
-            style={{
-              borderColor: 'var(--app-border)',
-              color: 'var(--app-text-secondary)',
-              backgroundColor: 'var(--app-surface)',
-            }}
           >
             {prevLabel}
-          </Button>
+          </AppButton>
         ) : (
           <Box />
         )}
@@ -130,16 +107,9 @@ export function AppStepperActions({
           {secondaryAction}
 
           {onCancel && (
-            <Button
-              variant="subtle"
-              color="gray"
-              radius="xl"
-              size="xs"
-              onClick={onCancel}
-              disabled={isSubmitting}
-            >
+            <AppButton variant="ghost" size="xs" onClick={onCancel} disabled={isSubmitting}>
               {cancelLabel}
-            </Button>
+            </AppButton>
           )}
         </Group>
       </Group>

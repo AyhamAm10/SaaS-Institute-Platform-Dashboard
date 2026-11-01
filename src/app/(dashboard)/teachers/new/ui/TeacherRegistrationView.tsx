@@ -1,14 +1,15 @@
 'use client';
 
-import { Anchor, Box, Breadcrumbs, Stack, Text, Title } from '@mantine/core';
+import { Box, Stack } from '@mantine/core';
 import {
   IconBriefcase,
   IconCalendarTime,
   IconCheck,
   IconUser,
+  IconArrowRight,
 } from '@tabler/icons-react';
-import Link from 'next/link';
 import { AppStepper } from '@/src/components/controllers/stepper';
+import { AppButton, AppPageHeader } from '@/src/components/controllers';
 import { useTeacherRegistrationMirror } from '../store/useTeacherRegistrationMirror';
 import { Step1BasicInfo } from './Step1BasicInfo';
 import { Step2Qualifications } from './Step2Qualifications';
@@ -41,24 +42,16 @@ export function TeacherRegistrationView({
   return (
     <Box w="100%">
       <Stack gap="md">
-        {/* Header Breadcrumbs & Title */}
-        <Stack gap={2}>
-          <Breadcrumbs separator="←" style={{ fontSize: '12px' }}>
-            <Anchor component={Link} href="/teachers" c="dimmed">
-              الكادر التدريسي
-            </Anchor>
-            <Text size="xs" c="primary" fw={500}>
-              إضافة معلم جديد
-            </Text>
-          </Breadcrumbs>
-          <Title order={2} fz={{ base: 17, sm: 20 }} fw={500}>
-            إضافة معلم جديد وتحديد المؤهلات والدوام
-          </Title>
-          <Text size="xs" c="dimmed">
-            معالج التسجيل الشامل لربط المعلم بالمواد الرسمية وجدول الدوام الأسبوعي لتوليد الجداول
-            تلقائياً
-          </Text>
-        </Stack>
+        {/* Page title + a way back; the sidebar already shows where we are. */}
+        <AppPageHeader
+          title="إضافة معلم جديد"
+          description="المؤهلات والمواد المعتمدة وأوقات الدوام الأسبوعي"
+          actions={
+            <AppButton href="C:/Program Files/Git/teachers" variant="outline" leftSection={<IconArrowRight size={16} stroke={1.7} />}>
+              العودة للكادر
+            </AppButton>
+          }
+        />
 
         {/* Compound Stepper */}
         <AppStepper active={activeStep} onStepClick={onStepClick} allowStepSelect>

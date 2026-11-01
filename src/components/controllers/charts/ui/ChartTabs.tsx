@@ -3,7 +3,7 @@
 import { SegmentedControl } from '@mantine/core';
 import { useChartsMirror } from '../store/useChartsMirror';
 
-/** Period switcher: glass pill with a sliding ink indicator. */
+/** Period switcher: recessed track with a raised indicator (theme SegmentedControl). */
 export function ChartTabs() {
   const periods = useChartsMirror('periods');
   const activePeriod = useChartsMirror('activePeriod');
@@ -15,12 +15,9 @@ export function ChartTabs() {
     <SegmentedControl
       size="xs"
       radius="xl"
-      color="primary"
       value={activePeriod}
       onChange={setActivePeriod}
       data={periods}
-      transitionDuration={320}
-      transitionTimingFunction="cubic-bezier(0.16, 1, 0.3, 1)"
       aria-label="الفترة الزمنية"
     />
   );

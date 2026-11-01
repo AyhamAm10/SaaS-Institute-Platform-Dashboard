@@ -150,7 +150,7 @@ export function BarChart({
                       style={{
                         height: `${heightPercent}%`,
                         // Grow-in delay (staggered), then a phase offset for the twist loop.
-                        animationDelay: `${index * 0.05}s, ${-index * 0.23}s`,
+                        animationDelay: `${index * 0.05}s, ${-index * 0.6}s`,
                       }}
                     />
                   </Box>

@@ -1,9 +1,9 @@
 'use client';
 
-import { Box, Stack, Title, Text, Breadcrumbs, Anchor } from '@mantine/core';
-import { IconCheck, IconSchool, IconUsers } from '@tabler/icons-react';
-import Link from 'next/link';
+import { Box, Stack } from '@mantine/core';
+import { IconArrowRight, IconCheck, IconSchool, IconUsers } from '@tabler/icons-react';
 import { AppStepper } from '@/src/components/controllers/stepper';
+import { AppButton, AppPageHeader } from '@/src/components/controllers';
 import { useStudentRegistrationMirror } from '../store/useStudentRegistrationMirror';
 import { Step1Family } from './Step1Family';
 import { Step2BasicInfo } from './Step2BasicInfo';
@@ -39,23 +39,16 @@ export function StudentRegistrationView({
   return (
     <Box w="100%">
       <Stack gap="md">
-        {/* Header Breadcrumbs & Title */}
-        <Stack gap={2}>
-          <Breadcrumbs separator="←" style={{ fontSize: '12px' }}>
-            <Anchor component={Link} href="/students" c="dimmed">
-              الطلاب
-            </Anchor>
-            <Text size="xs" c="primary" fw={500}>
-              تسجيل طالب جديد
-            </Text>
-          </Breadcrumbs>
-          <Title order={2} fz={{ base: 17, sm: 20 }} fw={500}>
-            تسجيل طالب جديد بالمعهد
-          </Title>
-          <Text size="xs" c="dimmed">
-            معالج التسجيل الموحد لربط العائلة والبيانات الأكاديمية والشخصية
-          </Text>
-        </Stack>
+        {/* Page title + a way back; the sidebar already shows where we are. */}
+        <AppPageHeader
+          title="تسجيل طالب جديد"
+          description="ربط الطالب بعائلته وإدخال بياناته الأكاديمية والشخصية"
+          actions={
+            <AppButton href="C:/Program Files/Git/students" variant="outline" leftSection={<IconArrowRight size={16} stroke={1.7} />}>
+              العودة للطلاب
+            </AppButton>
+          }
+        />
 
         {/* Compound Stepper */}
         <AppStepper active={activeStep} onStepClick={onStepClick} allowStepSelect>

@@ -160,8 +160,24 @@ body {
   box-shadow: var(--app-elev-1);
 }
 
-.mantine-SegmentedControl-label[data-active] {
-  color: var(--app-bg) !important;
+.mantine-SegmentedControl-label {
+  color: var(--app-text-secondary);
+  transition: color var(--app-duration-base) ease;
+}
+
+.mantine-SegmentedControl-label:hover:not([data-active]) {
+  color: var(--app-text-primary);
+}
+
+.mantine-SegmentedControl-label[data-active],
+.mantine-SegmentedControl-label[data-active]:hover {
+  color: var(--app-text-primary) !important;
+  font-weight: 500;
+}
+
+/* Icons inside the active tab pick up the brand orange. */
+.mantine-SegmentedControl-label[data-active] svg {
+  color: var(--app-brand-accent);
 }
 
 /* ===== Glass utility for components that opt in via className ===== */
@@ -268,8 +284,20 @@ body {
   color: var(--app-text-primary);
 }
 
+/* Active item: Mantine filled background, but our base color rule would dim the label — restore full contrast. */
+.app-nav-link[data-active][data-variant="filled"],
+.app-nav-link[data-active][data-variant="filled"] .mantine-NavLink-label,
+.app-nav-link[data-active][data-variant="filled"] .mantine-NavLink-section {
+  color: var(--app-text-on-brand);
+}
+
 .app-nav-link[data-active][data-variant="filled"] {
+  font-weight: 500;
   box-shadow: 0 10px 22px -10px rgba(20, 20, 22, 0.6);
+}
+
+.app-nav-link[data-active][data-variant="filled"] .mantine-NavLink-label {
+  font-weight: 500;
 }
 
 .app-nav-link[data-active][data-variant="subtle"] {
@@ -297,7 +325,7 @@ body {
 
 .app-nav-icon[data-active] {
   background-color: var(--mantine-color-primary-filled);
-  color: var(--app-bg);
+  color: var(--app-text-on-brand);
   box-shadow: 0 10px 22px -10px rgba(20, 20, 22, 0.6);
 }
 
@@ -322,7 +350,7 @@ body {
     linear-gradient(45deg, var(--bar-c1) 25%, var(--bar-c2) 25%, var(--bar-c2) 50%, var(--bar-c1) 50%, var(--bar-c1) 75%, var(--bar-c2) 75%);
   background-size: 100% 100%, 22px 22px;
   transform-origin: bottom;
-  animation: app-bar-grow 800ms var(--app-ease-soft) both, app-bar-twist 1.6s linear infinite;
+  animation: app-bar-grow 800ms var(--app-ease-soft) both, app-bar-twist 4s linear infinite;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
   transition: scale 300ms var(--app-ease-soft), box-shadow 300ms ease;
 }
@@ -337,7 +365,7 @@ body {
 .app-chart-bar[data-selected] {
   --bar-c1: var(--mantine-color-brand-6);
   --bar-c2: var(--mantine-color-brand-7);
-  animation-duration: 800ms, 0.9s;
+  animation-duration: 800ms, 2.6s;
   box-shadow: var(--app-brand-glow), 0 0 0 4px var(--app-brand-accent-ring);
 }
 

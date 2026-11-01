@@ -20,8 +20,8 @@ const ActiveDot = () => (
       width: rem(6),
       height: rem(6),
       borderRadius: '50%',
-      backgroundColor: 'var(--app-brand-accent)',
-      boxShadow: '0 0 10px var(--app-brand-accent)',
+      backgroundColor: 'var(--app-nav-active-dot)',
+      boxShadow: '0 0 10px var(--app-nav-active-dot)',
     }}
   />
 );

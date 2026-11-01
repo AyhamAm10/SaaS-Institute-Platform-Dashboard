@@ -1,18 +1,8 @@
 'use client';
 
-import {
-  Alert,
-  Badge,
-  Card,
-  Group,
-  Radio,
-  SegmentedControl,
-  SimpleGrid,
-  Stack,
-  Text,
-  ThemeIcon,
-} from '@mantine/core';
-import { IconAlertCircle, IconCheck, IconPhone, IconUser, IconUsers } from '@tabler/icons-react';
+import { Alert, Group, Radio, SimpleGrid, Stack, Text } from '@mantine/core';
+import { IconAlertCircle, IconCheck, IconPhone, IconSearch, IconUserPlus, IconUsers } from '@tabler/icons-react';
+import { AppEmptyState, AppSurface, AppTabs, IconTile } from '@/src/components/controllers';
 import { AppInput } from '@/src/components/controllers/input';
 import { useStudentRegistrationMirror } from '../store/useStudentRegistrationMirror';
 import { Family } from '@/src/core/api';
@@ -47,30 +37,30 @@ export function Step1Family({ families, isLoadingFamilies }: Step1FamilyProps) {
 
   return (
     <Stack gap="lg">
-      <Group justify="space-between" align="center" wrap="wrap">
-        <Stack gap={2}>
+      <Group justify="space-between" align="center" wrap="wrap" gap="md">
+        <Stack gap={4}>
           <Text size="md" fw={500}>
-            الخطوة الأولى: تحديد عائلة الطالب
+            تحديد عائلة الطالب
           </Text>
-          <Text size="xs" c="dimmed">
-            يمكنك ربط الطالب بعائلة موجودة مسبقا في المعهد أو تسجيل عائلة جديدة
+          <Text size="xs" fw={300} c="var(--app-text-muted)">
+            اربط الطالب بعائلة موجودة مسبقا أو سجل عائلة جديدة
           </Text>
         </Stack>
 
-        <SegmentedControl
-          radius="md"
-          size="xs"
+        <AppTabs
           value={familyMode}
           onChange={(val) => setFamilyMode(val as 'search' | 'create')}
-          data={[
-            { label: 'البحث عن عائلة سابقة', value: 'search' },
-            { label: 'تسجيل عائلة جديدة', value: 'create' },
+          items={[
+            { value: 'search', label: 'عائلة مسجلة', icon: <IconSearch size={15} stroke={1.7} />, count: families.length },
+            { value: 'create', label: 'عائلة جديدة', icon: <IconUserPlus size={15} stroke={1.7} /> },
           ]}
-        />
+        >
+          <AppTabs.List />
+        </AppTabs>
       </Group>
 
       {error && (
-        <Alert icon={<IconAlertCircle size={16} />} color="red" radius="md" variant="light">
+        <Alert icon={<IconAlertCircle size={16} />} color="danger" radius="lg" variant="light">
           {error}
         </Alert>
       )}
@@ -87,67 +77,59 @@ export function Step1Family({ families, isLoadingFamilies }: Step1FamilyProps) {
           />
 
           {isLoadingFamilies ? (
-            <Text size="xs" c="dimmed" ta="center" py="md">
+            <Text size="xs" c="var(--app-text-muted)" ta="center" py="md">
               جاري تحميل سجلات العائلات...
             </Text>
           ) : filteredFamilies.length === 0 ? (
-            <Card radius="lg" withBorder p="md" ta="center">
-              <Text size="sm" c="dimmed">
-                لا توجد عائلات مطابقة للبحث. يمكنك التبديل لخيار "تسجيل عائلة جديدة" أعلاه.
-              </Text>
-            </Card>
+            <AppEmptyState
+              compact
+              icon={<IconUsers size={22} stroke={1.5} />}
+              title="لا توجد عائلات مطابقة"
+              description='جرب كلمة بحث أخرى، أو انتقل إلى "عائلة جديدة" لتسجيلها.'
+            />
           ) : (
             <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="sm">
               {filteredFamilies.map((fam) => {
                 const isSelected = selectedFamily?.id === fam.id;
                 return (
-                  <Card
+                  <AppSurface
                     key={fam.id}
+                    level={isSelected ? 3 : 1}
                     radius="lg"
-                    withBorder
-                    p="sm"
+                    padding="md"
+                    interactive
                     onClick={() => setSelectedFamily(fam)}
                     style={{
-                      cursor: 'pointer',
-                      borderColor: isSelected
-                        ? 'var(--mantine-color-primary-6)'
-                        : 'var(--mantine-color-gray-2)',
-                      backgroundColor: isSelected
-                        ? 'var(--mantine-color-primary-0)'
-                        : 'var(--mantine-color-body)',
-                      transition: 'all 0.15s ease',
+                      boxShadow: isSelected
+                        ? 'var(--app-card-shadow), 0 0 0 2px var(--app-brand-accent)'
+                        : undefined,
                     }}
                   >
                     <Group justify="space-between" align="flex-start" wrap="nowrap">
                       <Group gap="sm" wrap="nowrap">
-                        <ThemeIcon
-                          size={36}
-                          radius="xl"
-                          color={isSelected ? 'primary' : 'gray'}
-                          variant="light"
-                        >
-                          <IconUsers size={18} />
-                        </ThemeIcon>
-                        <Stack gap={2}>
+                        <IconTile tone={isSelected ? 'brand' : 'neutral'} size={40}>
+                          {isSelected ? <IconCheck size={18} stroke={2.2} /> : <IconUsers size={18} stroke={1.7} />}
+                        </IconTile>
+                        <Stack gap={3}>
                           <Text size="sm" fw={500}>
                             عائلة {fam.familyName}
                           </Text>
                           <Group gap="xs">
                             {fam.fatherName && (
-                              <Text size="xs" c="dimmed">
+                              <Text size="xs" c="var(--app-text-muted)">
                                 الأب: {fam.fatherName}
                               </Text>
                             )}
                             {fam.motherName && (
-                              <Text size="xs" c="dimmed">
+                              <Text size="xs" c="var(--app-text-muted)">
                                 الأم: {fam.motherName}
                               </Text>
                             )}
                           </Group>
                           {fam.phone && (
-                            <Group gap={4} dir="ltr">
-                              <IconPhone size={12} color="var(--mantine-color-dimmed)" />
-                              <Text size="xs" c="dimmed">
+                            <Group gap={4} dir="ltr" c="var(--app-text-muted)">
+                              <IconPhone size={12} />
+                              <Text size="xs" c="inherit">
                                 {fam.phone}
                               </Text>
                             </Group>
@@ -156,12 +138,13 @@ export function Step1Family({ families, isLoadingFamilies }: Step1FamilyProps) {
                       </Group>
 
                       <Radio
+                        color="brand"
                         checked={isSelected}
                         onChange={() => setSelectedFamily(fam)}
                         aria-label={`اختيار عائلة ${fam.familyName}`}
                       />
                     </Group>
-                  </Card>
+                  </AppSurface>
                 );
               })}
             </SimpleGrid>

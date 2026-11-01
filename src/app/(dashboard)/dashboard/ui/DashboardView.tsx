@@ -15,15 +15,9 @@ import { dashboardActivityDatasets, dashboardCurriculumSegments } from '../stati
 export function DashboardView() {
   return (
     <AppModule variant="dashboard">
-      {/* 1. Header with Title and Quick Nav */}
+      {/* Title + actions only: branch and academic year already live in the top bar. */}
       <AppModule.Header
-        breadcrumbs={[
-          { label: 'الرئيسية' },
-          { label: 'لوحة التحكم' },
-        ]}
         title="لوحة التحكم"
-        description="متابعة مؤشرات الأداء الأكاديمي ونشاط الشعب والتقارير الأسبوعية"
-        badge={<StatusBadge tone="ink" variant="outline">العام الأكاديمي 2026/2027</StatusBadge>}
         actions={
           <Group gap="sm">
             <AppButton href="/sections" variant="outline" leftSection={<IconSchool size={16} stroke={1.7} />}>
@@ -40,7 +34,7 @@ export function DashboardView() {
         }
       />
 
-      {/* 2. KPI cards */}
+      {/* KPI cards */}
       <AppModule.Stats>
         <StatCard>
           <Group justify="space-between" align="center">
@@ -91,7 +85,7 @@ export function DashboardView() {
         </StatCard>
       </AppModule.Stats>
 
-      {/* 3. Interactive charts (demo data until the API exists) */}
+      {/* Interactive charts (demo data until the API exists) */}
       <AppModule.Charts ratio="main-side">
         <ChartCard
           title="ساعات الحضور والنشاط"

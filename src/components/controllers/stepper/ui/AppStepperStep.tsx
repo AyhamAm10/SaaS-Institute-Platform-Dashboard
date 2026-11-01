@@ -1,7 +1,7 @@
 'use client';
 
 import React, { Children, isValidElement, ReactNode, useEffect, useMemo } from 'react';
-import { Paper } from '@mantine/core';
+import { AppSurface } from '../../surface';
 import { useStepperMirror } from '../store/useStepperMirror';
 import { StepItemContext, StepItemContextValue } from './StepItemContext';
 import { AppStepperStepHeader } from './AppStepperStepHeader';
@@ -79,17 +79,17 @@ export function AppStepperStep({
 
   return (
     <StepItemContext.Provider value={contextValue}>
-      <Paper
-        radius="lg"
-        withBorder
+      {/* Open step = raised glass card with a soft orange ring; closed steps sit flat. */}
+      <AppSurface
+        level={isOpen ? 2 : 1}
+        radius="xl"
+        padding={0}
         style={{
-          backgroundColor: isOpen ? 'var(--app-glass-bg-strong)' : 'var(--app-glass-bg)',
-          borderColor: isOpen ? 'var(--app-brand-accent)' : 'var(--app-border)',
-          boxShadow: isOpen
-            ? 'var(--app-card-shadow)'
-            : 'none',
-          transition: 'border-color 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease',
           overflow: 'hidden',
+          boxShadow: isOpen
+            ? 'var(--app-card-shadow), 0 0 0 1px var(--app-brand-accent-ring), 0 18px 40px -20px rgba(241, 103, 38, 0.35)'
+            : 'var(--app-glass-highlight)',
+          transition: 'box-shadow 0.3s ease, background-color 0.3s ease',
         }}
       >
         {isCompoundMode ? (
@@ -100,7 +100,7 @@ export function AppStepperStep({
             <AppStepperStepContent>{children}</AppStepperStepContent>
           </>
         )}
-      </Paper>
+      </AppSurface>
     </StepItemContext.Provider>
   );
 }

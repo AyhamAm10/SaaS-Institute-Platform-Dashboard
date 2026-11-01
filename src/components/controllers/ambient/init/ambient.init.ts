@@ -45,14 +45,14 @@ const INTENSITY_SCALE: Record<AmbientIntensity, number> = {
 };
 
 const DASHBOARD_BLOBS: AmbientBlobConfig[] = [
-  { top: '-140px', right: '16%', size: 540, opacity: 1, morphDuration: 14, driftDuration: 26, drift: { x: -120, y: 90, rotate: 40 }, phase: 0 },
-  { bottom: '-160px', left: '6%', size: 460, opacity: 0.82, morphDuration: 18, driftDuration: 30, drift: { x: 140, y: -110, rotate: -35 }, phase: 2 },
-  { top: '42%', right: '50%', size: 300, opacity: 0.64, morphDuration: 11, driftDuration: 22, drift: { x: -90, y: -70, rotate: 60, scale: 1.15 }, phase: 3 },
+  { top: '-140px', right: '16%', size: 540, opacity: 1, morphDuration: 10, driftDuration: 19, drift: { x: -120, y: 90, rotate: 40 }, phase: 0 },
+  { bottom: '-160px', left: '6%', size: 460, opacity: 0.82, morphDuration: 13, driftDuration: 22, drift: { x: 140, y: -110, rotate: -35 }, phase: 2 },
+  { top: '42%', right: '50%', size: 300, opacity: 0.64, morphDuration: 8, driftDuration: 16, drift: { x: -90, y: -70, rotate: 60, scale: 1.15 }, phase: 3 },
 ];
 
 const LOGIN_BLOBS: AmbientBlobConfig[] = [
-  { top: '-120px', left: '-80px', size: 560, opacity: 1, morphDuration: 13, driftDuration: 24, drift: { x: 120, y: 80, rotate: 30 }, phase: 1 },
-  { bottom: '-180px', right: '-60px', size: 620, opacity: 0.85, morphDuration: 17, driftDuration: 28, drift: { x: -110, y: -90, rotate: -40 }, phase: 3 },
+  { top: '-120px', left: '-80px', size: 560, opacity: 1, morphDuration: 9, driftDuration: 18, drift: { x: 120, y: 80, rotate: 30 }, phase: 1 },
+  { bottom: '-180px', right: '-60px', size: 620, opacity: 0.85, morphDuration: 12, driftDuration: 21, drift: { x: -110, y: -90, rotate: -40 }, phase: 3 },
 ];
 
 export function resolveAmbientConfig(props: AppAmbientInitialProps): ResolvedAmbientConfig {

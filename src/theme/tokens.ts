@@ -60,6 +60,8 @@ export interface ThemeSemanticTokens {
   badgeText: string;
   buttonBg: string;
   buttonHover: string;
+  /** Small dot marking the active sidebar item (must contrast with the filled item). */
+  navActiveDot: string;
 
   // Semantic tones (text, soft background, border)
   successText: string;
@@ -71,6 +73,12 @@ export interface ThemeSemanticTokens {
   infoText: string;
   infoSoft: string;
   infoBorder: string;
+
+  // Tabs (recessed track + raised indicator)
+  tabsTrack: string;
+  tabsTrackShadow: string;
+  tabsIndicator: string;
+  tabsIndicatorShadow: string;
 
   // Glass
   glassBg: string;
@@ -139,6 +147,7 @@ export const lightTokens: ThemeSemanticTokens = {
   badgeText: '#A94215',
   buttonBg: '#141416',
   buttonHover: '#2E2D2C',
+  navActiveDot: '#F16726',
 
   successText: '#2F8F5B',
   successSoft: 'rgba(47, 143, 91, 0.08)',
@@ -149,6 +158,12 @@ export const lightTokens: ThemeSemanticTokens = {
   infoText: '#55524F',
   infoSoft: 'rgba(20, 20, 22, 0.04)',
   infoBorder: 'rgba(20, 20, 22, 0.12)',
+
+  tabsTrack: 'rgba(20, 20, 22, 0.05)',
+  tabsTrackShadow: 'inset 0 1px 3px rgba(20, 20, 22, 0.08)',
+  tabsIndicator: '#FFFFFF',
+  tabsIndicatorShadow:
+    'inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 1px 2px rgba(20, 20, 22, 0.08), 0 8px 16px -8px rgba(20, 20, 22, 0.3)',
 
   glassBg: 'rgba(255, 255, 255, 0.5)',
   glassBgStrong: 'rgba(255, 255, 255, 0.78)',
@@ -215,6 +230,7 @@ export const darkTokens: ThemeSemanticTokens = {
   badgeText: '#F9A272',
   buttonBg: '#F16726',
   buttonHover: '#D4541A',
+  navActiveDot: '#FFFFFF',
 
   successText: '#5FC08B',
   successSoft: 'rgba(95, 192, 139, 0.1)',
@@ -225,6 +241,12 @@ export const darkTokens: ThemeSemanticTokens = {
   infoText: '#B5B0AA',
   infoSoft: 'rgba(255, 255, 255, 0.05)',
   infoBorder: 'rgba(255, 255, 255, 0.12)',
+
+  tabsTrack: 'rgba(0, 0, 0, 0.3)',
+  tabsTrackShadow: 'inset 0 1px 3px rgba(0, 0, 0, 0.5)',
+  tabsIndicator: '#2C2C30',
+  tabsIndicatorShadow:
+    'inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 16px -8px rgba(0, 0, 0, 0.7)',
 
   glassBg: 'rgba(30, 30, 33, 0.55)',
   glassBgStrong: 'rgba(30, 30, 33, 0.82)',

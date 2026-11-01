@@ -260,23 +260,29 @@ export const defaultComponents: MantineThemeComponents = {
     },
   },
 
+  // Recessed track with a raised, glossy indicator that slides between options (3D switch).
   SegmentedControl: {
     defaultProps: {
       radius: 'xl',
+      transitionDuration: 320,
+      transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
     },
     styles: {
       root: {
-        backgroundColor: 'var(--app-glass-bg)',
-        border: '1px solid var(--app-border)',
+        backgroundColor: 'var(--app-tabs-track)',
+        boxShadow: 'var(--app-tabs-track-shadow)',
+        border: '1px solid var(--app-border-subtle)',
         padding: rem(4),
       },
       indicator: {
-        backgroundColor: 'var(--app-brand-primary)',
-        boxShadow: 'var(--app-elev-1)',
+        backgroundColor: 'var(--app-tabs-indicator)',
+        boxShadow: 'var(--app-tabs-indicator-shadow)',
       },
       label: {
         fontWeight: 400,
-        fontSize: rem(12.5),
+        fontSize: rem(13),
+        paddingBlock: rem(7),
+        paddingInline: rem(14),
       },
     },
   },

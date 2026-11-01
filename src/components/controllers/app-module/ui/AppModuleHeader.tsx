@@ -6,6 +6,7 @@ import { AppModuleBreadcrumbItem } from '../init/app-module.init';
 
 export interface AppModuleHeaderProps {
   breadcrumbs?: AppModuleBreadcrumbItem[];
+  withBreadcrumbs?: boolean;
   title?: ReactNode;
   description?: ReactNode;
   icon?: ReactNode;

@@ -1,8 +1,10 @@
 'use client';
 
 import { ReactNode } from 'react';
-import { Badge, Box, Group, rem, Stack, Text, UnstyledButton } from '@mantine/core';
+import { Box, Group, rem, Stack, Text, UnstyledButton } from '@mantine/core';
 import { IconCheck, IconChevronDown } from '@tabler/icons-react';
+import { StatusBadge } from '../../badge';
+import { IconTile } from '../../info-tile';
 import { useStepItemContext } from './StepItemContext';
 
 export interface AppStepperStepHeaderProps {
@@ -18,97 +20,90 @@ export function AppStepperStepHeader({ children }: AppStepperStepHeaderProps) {
       style={{
         display: 'block',
         width: '100%',
-        padding: `${rem(16)} ${rem(22)}`,
-        borderRadius: 0,
+        padding: `${rem(18)} ${rem(22)}`,
         userSelect: 'none',
-        backgroundColor: isOpen ? 'var(--app-subtle)' : 'transparent',
-        borderBottom: isOpen ? '1px solid var(--app-border)' : 'none',
-        transition: 'background-color 0.2s ease',
+        borderBottom: isOpen ? '1px solid var(--app-border-subtle)' : '1px solid transparent',
+        transition: 'border-color 0.2s ease',
       }}
     >
       {children ? (
         children
       ) : (
         <Group justify="space-between" align="center" wrap="nowrap">
-          {/* Right side in RTL: Indicator badge & step labels */}
-          <Group gap="sm" align="center" wrap="nowrap" style={{ flex: 1, minWidth: 0 }}>
-            {/* Small status circle */}
-            <Box
-              style={{
-                width: rem(26),
-                height: rem(26),
-                borderRadius: '50%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexShrink: 0,
-                backgroundColor: isCompleted
-                  ? 'var(--app-brand-accent)'
-                  : isCurrent
-                  ? 'var(--mantine-color-primary-filled)'
-                  : 'var(--app-subtle)',
-                color: isCompleted || isCurrent ? 'var(--app-text-on-brand)' : 'var(--app-text-secondary)',
-                border: isCompleted || isCurrent ? 'none' : '1px solid var(--app-border)',
-                transition: 'all 0.2s ease',
-              }}
-            >
-              {isCompleted ? (
-                <IconCheck size={14} stroke={2.5} />
-              ) : (
-                <Text size="xs" fw={500}>
+          <Group gap="md" align="center" wrap="nowrap" style={{ flex: 1, minWidth: 0 }}>
+            {/* Step marker: glossy orange when done, glossy ink when current, recessed when pending. */}
+            {isCompleted || isCurrent ? (
+              <IconTile tone={isCompleted ? 'brand' : 'ink'} size={36}>
+                {isCompleted ? (
+                  <IconCheck size={17} stroke={2.4} />
+                ) : (
+                  <Text fw={500} size="sm" c="inherit">
+                    {step + 1}
+                  </Text>
+                )}
+              </IconTile>
+            ) : (
+              <Box
+                style={{
+                  width: rem(36),
+                  height: rem(36),
+                  flexShrink: 0,
+                  borderRadius: rem(12),
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  backgroundColor: 'var(--app-tabs-track)',
+                  boxShadow: 'var(--app-tabs-track-shadow)',
+                  color: 'var(--app-text-muted)',
+                }}
+              >
+                <Text fw={500} size="sm" c="inherit">
                   {step + 1}
                 </Text>
-              )}
-            </Box>
+              </Box>
+            )}
 
-            <Stack gap={rem(2)} style={{ flex: 1, minWidth: 0 }}>
+            <Stack gap={rem(3)} style={{ flex: 1, minWidth: 0 }}>
               <Group gap="xs" align="center" wrap="nowrap">
                 <Text
-                  size="sm"
                   fw={500}
-                  c={isOpen ? 'var(--mantine-color-primary-filled)' : isCompleted ? 'var(--app-text-primary)' : 'var(--app-text-secondary)'}
                   lineClamp={1}
+                  style={{
+                    fontSize: rem(15),
+                    color: isOpen || isCompleted ? 'var(--app-text-primary)' : 'var(--app-text-secondary)',
+                  }}
                 >
                   {label}
                 </Text>
-
                 {isCompleted && (
-                  <Badge
-                    size="xs"
-                    radius="sm"
-                    style={{
-                      backgroundColor: 'var(--app-badge-bg)',
-                      color: 'var(--app-badge-text)',
-                      fontWeight: 500,
-                    }}
-                  >
+                  <StatusBadge tone="success" size="xs">
                     مكتمل
-                  </Badge>
+                  </StatusBadge>
                 )}
                 {isCurrent && (
-                  <Badge variant="light" color="primary" size="xs" radius="sm">
+                  <StatusBadge tone="brand" variant="dot" size="xs">
                     الخطوة الحالية
-                  </Badge>
+                  </StatusBadge>
                 )}
               </Group>
 
               {description && (
-                <Text size="xs" c="var(--app-text-muted)" lineClamp={1}>
+                <Text size="xs" fw={300} c="var(--app-text-muted)" lineClamp={1}>
                   {description}
                 </Text>
               )}
             </Stack>
           </Group>
 
-          {/* Left side in RTL: Chevron indicator */}
           <Box
             style={{
+              display: 'flex',
               color: 'var(--app-text-muted)',
               transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-              transition: 'transform 0.2s ease',
+              transition: 'transform 0.25s var(--app-ease-soft)',
             }}
           >
-            <IconChevronDown size={18} />
+            <IconChevronDown size={18} stroke={1.6} />
           </Box>
         </Group>
       )}
