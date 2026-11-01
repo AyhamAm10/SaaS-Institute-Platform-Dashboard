@@ -28,7 +28,7 @@ export function AppModuleHeader({
     <Box mb={rem(18)}>
       {/* Breadcrumbs */}
       {breadcrumbs && breadcrumbs.length > 0 && (
-        <Breadcrumbs separator="←" mb={rem(8)} style={{ fontSize: rem(12) }}>
+        <Breadcrumbs separator="←" mb={rem(8)} style={{ fontSize: 'var(--mantine-font-size-xs)' }}>
           {breadcrumbs.map((item, idx) => {
             const isLast = idx === breadcrumbs.length - 1;
             if (isLast || !item.href) {
@@ -66,9 +66,9 @@ export function AppModuleHeader({
             {title && (
               <Title
                 order={2}
-                fw={800}
+                fw={700}
                 style={{
-                  fontSize: rem(22),
+                  fontSize: 'var(--mantine-font-size-xl)',
                   color: 'var(--app-text-primary)',
                   letterSpacing: '-0.3px',
                 }}
@@ -83,7 +83,7 @@ export function AppModuleHeader({
             <Text
               size="xs"
               style={{
-                fontSize: rem(13),
+                fontSize: 'var(--mantine-font-size-sm)',
                 color: 'var(--app-text-secondary)',
                 lineHeight: 1.5,
               }}

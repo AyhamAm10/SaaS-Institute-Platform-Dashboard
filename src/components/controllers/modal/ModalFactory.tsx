@@ -54,7 +54,7 @@ export function DeleteConfirmationModal({
         <Stack gap="sm">
           {itemName && (
             <Text size="sm">
-              هل أنت متأكد من رغبتك في حذف <Text span fw={700} c="red.8">«{itemName}»</Text>؟
+              هل أنت متأكد من رغبتك في حذف <Text span fw={700} c="danger.8">«{itemName}»</Text>؟
             </Text>
           )}
 
@@ -72,7 +72,7 @@ export function DeleteConfirmationModal({
             {cancelLabel}
           </AppModal.Cancel>
           <AppModal.Confirm
-            color="red"
+            color="danger"
             loading={isLoading}
             onClick={async () => {
               await onConfirm();

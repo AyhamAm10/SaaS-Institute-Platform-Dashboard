@@ -60,7 +60,6 @@ export function DesktopSidebar() {
       p="md"
       visibleFrom="md"
       style={{
-        width: isCollapsed ? rem(88) : rem(270),
         transition: 'width 250ms ease, padding 250ms ease, background-color 200ms ease, border-color 200ms ease',
         overflow: 'hidden',
         borderLeft: '1px solid var(--app-border)',
@@ -76,8 +75,8 @@ export function DesktopSidebar() {
               radius="xl"
               style={{
                 backgroundColor: 'var(--app-brand-primary)',
-                color: '#fff9f3',
-                boxShadow: '0 6px 16px rgba(73, 29, 43, 0.16)',
+                color: 'var(--app-text-on-brand)',
+                boxShadow: 'var(--app-brand-shadow)',
               }}
             >
               <IconSchool size={24} />
@@ -98,10 +97,10 @@ export function DesktopSidebar() {
                   width: rem(58),
                   height: rem(58),
                   borderRadius: '50%',
-                  boxShadow: '0 6px 18px rgba(73, 29, 43, 0.18)',
+                  boxShadow: 'var(--app-brand-shadow)',
                 }}
               >
-                <IconSchool size={28} color="#fff9f3" stroke={1.8} />
+                <IconSchool size={28} color="var(--app-text-on-brand)" stroke={1.8} />
               </Paper>
               <Box
                 pos="absolute"
@@ -127,7 +126,7 @@ export function DesktopSidebar() {
                 style={{
                   backgroundColor: 'var(--app-badge-bg)',
                   color: 'var(--app-badge-text)',
-                  fontWeight: 600,
+                  fontWeight: 500,
                   border: '1px solid var(--app-border)',
                 }}
               >
@@ -147,7 +146,7 @@ export function DesktopSidebar() {
                 alignItems: 'center',
                 justifyContent: 'center',
                 padding: rem(6),
-                borderRadius: rem(8),
+                borderRadius: 'var(--mantine-radius-sm)',
                 color: 'var(--app-text-secondary)',
                 backgroundColor: 'var(--app-sidebar-subtle)',
                 transition: 'all 120ms ease',
@@ -175,11 +174,11 @@ export function DesktopSidebar() {
                 width: rem(46),
                 height: rem(46),
                 margin: '0 auto',
-                borderRadius: rem(12),
+                borderRadius: 'var(--mantine-radius-md)',
                 backgroundColor: isActive ? 'var(--app-brand-primary)' : 'transparent',
-                color: isActive ? '#fff9f3' : 'var(--app-text-secondary)',
+                color: isActive ? 'var(--app-text-on-brand)' : 'var(--app-text-secondary)',
                 transition: 'all 150ms ease',
-                boxShadow: isActive ? '0 6px 18px rgba(73, 29, 43, 0.18)' : 'none',
+                boxShadow: isActive ? 'var(--app-brand-shadow)' : 'none',
               };
 
               if (item.href) {
@@ -229,14 +228,7 @@ export function DesktopSidebar() {
                   key={item.key}
                   label={item.label}
                   leftSection={
-                    <ThemeIcon
-                      size={32}
-                      radius="md"
-                      style={{
-                        backgroundColor: isActive ? 'var(--app-brand-primary)' : 'var(--app-sidebar-subtle)',
-                        color: isActive ? '#fff9f3' : 'var(--app-brand-primary)',
-                      }}
-                    >
+                    <ThemeIcon size={32} radius="md" className="app-nav-link-icon">
                       <IconComponent size={17} stroke={1.8} />
                     </ThemeIcon>
                   }
@@ -244,21 +236,7 @@ export function DesktopSidebar() {
                   onChange={() => toggleSection(item.key)}
                   active={isActive}
                   variant="subtle"
-                  styles={{
-                    root: {
-                      borderRadius: rem(12),
-                      paddingTop: rem(9),
-                      paddingBottom: rem(9),
-                      paddingLeft: rem(12),
-                      paddingRight: rem(12),
-                      backgroundColor: isActive && !isSectionOpen ? 'var(--app-sidebar-subtle)' : undefined,
-                      color: isActive ? 'var(--app-brand-primary)' : 'var(--app-text-secondary)',
-                      fontWeight: isActive ? 600 : 500,
-                    },
-                    label: {
-                      color: isActive ? 'var(--app-brand-primary)' : 'var(--app-text-secondary)',
-                    },
-                  }}
+                  className="app-nav-link app-nav-link--group"
                 >
                   <Stack gap={3} pt={4}>
                     {item.subItems.map((sub: NavSubItem) => {
@@ -270,24 +248,7 @@ export function DesktopSidebar() {
                           href={sub.href}
                           label={sub.label}
                           active={isSubActive}
-                          styles={{
-                            root: {
-                              borderRadius: rem(10),
-                              paddingRight: rem(36),
-                              paddingTop: rem(8),
-                              paddingBottom: rem(8),
-                              backgroundColor: isSubActive
-                                ? 'var(--app-brand-primary)'
-                                : 'transparent',
-                              color: isSubActive
-                                ? '#fff9f3'
-                                : 'var(--app-text-secondary)',
-                              fontWeight: isSubActive ? 600 : 400,
-                              boxShadow: isSubActive
-                                ? '0 4px 12px rgba(73, 29, 43, 0.14)'
-                                : 'none',
-                            },
-                          }}
+                          className="app-nav-link app-nav-link--sub"
                         />
                       );
                     })}
@@ -303,38 +264,12 @@ export function DesktopSidebar() {
                 href={item.href || '/'}
                 label={item.label}
                 leftSection={
-                  <ThemeIcon
-                    size={32}
-                    radius="md"
-                    style={{
-                      backgroundColor: isActive ? 'transparent' : 'var(--app-sidebar-subtle)',
-                      color: isActive ? '#fff9f3' : 'var(--app-brand-primary)',
-                    }}
-                  >
+                  <ThemeIcon size={32} radius="md" className="app-nav-link-icon">
                     <IconComponent size={17} stroke={1.8} />
                   </ThemeIcon>
                 }
                 active={isActive}
-                styles={{
-                  root: {
-                    borderRadius: rem(12),
-                    paddingTop: rem(9),
-                    paddingBottom: rem(9),
-                    paddingLeft: rem(12),
-                    paddingRight: rem(12),
-                    backgroundColor: isActive ? 'var(--app-brand-primary)' : 'transparent',
-                    color: isActive ? '#fff9f3' : 'var(--app-text-secondary)',
-                    fontWeight: isActive ? 600 : 500,
-                    boxShadow: isActive ? '0 6px 16px rgba(73, 29, 43, 0.15)' : 'none',
-                    '&:hover': {
-                      backgroundColor: isActive ? 'var(--app-brand-primary)' : 'var(--app-sidebar-subtle)',
-                      color: isActive ? '#fff9f3' : 'var(--app-brand-primary)',
-                    },
-                  },
-                  label: {
-                    color: isActive ? '#fff9f3' : 'var(--app-text-secondary)',
-                  },
-                }}
+                className="app-nav-link"
               />
             );
           })}
@@ -354,7 +289,7 @@ export function DesktopSidebar() {
                 justifyContent: 'center',
                 width: '100%',
                 padding: rem(10),
-                borderRadius: rem(10),
+                borderRadius: 'var(--mantine-radius-md)',
                 color: 'var(--app-text-secondary)',
                 backgroundColor: 'var(--app-sidebar-subtle)',
               }}
@@ -373,8 +308,8 @@ export function DesktopSidebar() {
               justifyContent: 'space-between',
               width: '100%',
               padding: `${rem(10)} ${rem(14)}`,
-              borderRadius: rem(12),
-              color: '#9b4b51',
+              borderRadius: 'var(--mantine-radius-md)',
+              color: 'var(--mantine-color-danger-6)',
               backgroundColor: 'var(--app-sidebar-subtle)',
               transition: 'background-color 150ms ease',
               opacity: isLoggingOut ? 0.6 : 1,

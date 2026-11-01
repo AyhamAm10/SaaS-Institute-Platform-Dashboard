@@ -66,7 +66,7 @@ export function AppStepperSidebar({ children }: AppStepperSidebarProps) {
                       c={isCurrent ? 'var(--app-brand-primary)' : isCompleted ? 'var(--app-text-primary)' : 'var(--app-text-muted)'}
                       style={{
                         transition: 'color 0.2s ease',
-                        fontSize: rem(14.5),
+                        fontSize: 'var(--mantine-font-size-sm)',
                       }}
                     >
                       {s.label}
@@ -84,7 +84,7 @@ export function AppStepperSidebar({ children }: AppStepperSidebarProps) {
                         style={{
                           backgroundColor: 'var(--app-badge-bg)',
                           color: 'var(--app-badge-text)',
-                          fontWeight: 600,
+                          fontWeight: 500,
                         }}
                       >
                         مكتملة
@@ -100,7 +100,7 @@ export function AppStepperSidebar({ children }: AppStepperSidebarProps) {
                       style={{
                         lineHeight: 1.5,
                         opacity: isCurrent ? 0.95 : isCompleted ? 0.8 : 0.65,
-                        fontSize: rem(12),
+                        fontSize: 'var(--mantine-font-size-xs)',
                       }}
                     >
                       {s.description}
@@ -158,10 +158,10 @@ export function AppStepperSidebar({ children }: AppStepperSidebarProps) {
                           : '1.5px solid var(--app-border)',
                       color:
                         isCompleted || isCurrent
-                          ? '#ffffff'
+                          ? 'var(--app-text-on-brand)'
                           : 'var(--app-text-muted)',
                       boxShadow: isCurrent
-                        ? '0 6px 18px rgba(73, 29, 43, 0.25)'
+                        ? 'var(--app-brand-shadow)'
                         : 'none',
                     }}
                   >

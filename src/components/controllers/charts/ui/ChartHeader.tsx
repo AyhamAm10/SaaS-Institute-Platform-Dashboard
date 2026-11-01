@@ -16,12 +16,12 @@ export function ChartHeader({ title, subtitle, actions }: ChartHeaderProps) {
     <Group justify="space-between" align="center" mb={rem(14)} wrap="wrap" gap="xs">
       <Stack gap={2}>
         {title && (
-          <Title order={4} fw={700} style={{ fontSize: rem(15), color: 'var(--app-text-primary)' }}>
+          <Title order={4} fw={700} style={{ fontSize: 'var(--mantine-font-size-sm)', color: 'var(--app-text-primary)' }}>
             {title}
           </Title>
         )}
         {subtitle && (
-          <Text size="xs" c="dimmed" style={{ fontSize: rem(12) }}>
+          <Text size="xs" c="dimmed" style={{ fontSize: 'var(--mantine-font-size-xs)' }}>
             {subtitle}
           </Text>
         )}

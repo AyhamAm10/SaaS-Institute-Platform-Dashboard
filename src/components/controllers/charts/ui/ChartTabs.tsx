@@ -15,7 +15,7 @@ export function ChartTabs() {
       gap={4}
       style={{
         padding: rem(3),
-        borderRadius: rem(10),
+        borderRadius: 'var(--mantine-radius-md)',
         backgroundColor: 'var(--app-subtle)',
         border: '1px solid var(--app-border)',
       }}
@@ -28,8 +28,8 @@ export function ChartTabs() {
             onClick={() => setActivePeriod(p)}
             style={{
               padding: `${rem(4)} ${rem(10)}`,
-              borderRadius: rem(8),
-              fontSize: rem(12),
+              borderRadius: 'var(--mantine-radius-sm)',
+              fontSize: 'var(--mantine-font-size-xs)',
               fontWeight: isActive ? 600 : 500,
               backgroundColor: isActive ? 'var(--app-surface)' : 'transparent',
               color: isActive ? 'var(--app-text-primary)' : 'var(--app-text-secondary)',

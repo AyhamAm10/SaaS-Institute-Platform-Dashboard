@@ -1,6 +1,6 @@
 'use client';
 
-import { Paper, Stack, rem } from '@mantine/core';
+import { Paper, Stack } from '@mantine/core';
 import { ReactNode } from 'react';
 import { AppDrawerSectionHeader } from './AppDrawerSectionHeader';
 
@@ -30,7 +30,7 @@ export function AppDrawerSection({
       style={{
         backgroundColor: 'var(--app-surface)',
         borderColor: 'var(--app-border)',
-        borderRadius: rem(16),
+        borderRadius: 'var(--mantine-radius-lg)',
         boxShadow: 'var(--app-card-shadow)',
         transition: 'background-color 200ms ease, border-color 200ms ease',
       }}

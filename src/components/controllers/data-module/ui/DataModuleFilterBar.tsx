@@ -1,6 +1,6 @@
 'use client';
 
-import { Flex, Paper, rem } from '@mantine/core';
+import { Flex, Paper } from '@mantine/core';
 import { ReactNode } from 'react';
 
 export interface DataModuleFilterBarProps {
@@ -18,7 +18,7 @@ export function DataModuleFilterBar({ children }: DataModuleFilterBarProps) {
       style={{
         backgroundColor: 'var(--app-surface)',
         borderColor: 'var(--app-border)',
-        borderRadius: rem(14),
+        borderRadius: 'var(--mantine-radius-lg)',
         boxShadow: 'var(--app-card-shadow)',
         transition: 'background-color 200ms ease, border-color 200ms ease',
       }}

@@ -1,99 +1,132 @@
 import { MantineColorsTuple } from '@mantine/core';
-import { appTokens, darkTokens, lightTokens, ThemeSemanticTokens } from './tokens';
 
 /**
- * Primary Brand Color: Institutional Burgundy / Wine (#491d2b)
- * Warm, authoritative, and elegant educational institution color scheme.
+ * Color palette for the Admin Dashboard.
+ *
+ * Every color used in the UI must come from one of these named palettes:
+ *   primary   – Academic Wine: brand, primary actions, active navigation
+ *   secondary – Golden Ochre: brand accent, highlights, "current" markers
+ *   gray      – Warm neutrals: surfaces, borders, secondary text
+ *   success / warning / danger / info – semantic states only
+ *
+ * Semantic CSS variables (--app-*) live in `src/app/globals.css`.
  */
-export const academicWineColor: MantineColorsTuple = [
-  '#fdf7f7', // 0: ultra light porcelain pink
-  '#f5e6e8', // 1: soft wine badge background
-  '#e8c9ce', // 2: subtle focus ring / warm glow
-  '#d5a3ab', // 3: muted wine accent
-  '#b26a76', // 4: active warm border
-  '#803946', // 5: intermediate wine accent
-  '#491d2b', // 6: primary brand shade (high contrast WCAG AAA compliant)
-  '#3d1824', // 7: dark hover
-  '#30131d', // 8: deep plum wine
-  '#1f0a12', // 9: midnight wine
+
+/** Primary brand color: Academic Wine (#491d2b) */
+export const primaryColor: MantineColorsTuple = [
+  '#fdf7f7',
+  '#f5e6e8',
+  '#e8c9ce',
+  '#d5a3ab',
+  '#b26a76',
+  '#803946',
+  '#491d2b',
+  '#3d1824',
+  '#30131d',
+  '#1f0a12',
 ];
 
-/**
- * Secondary Accent Color: Golden Ochre / Camel Warmth (#c4a66b / #8b6a34)
- * Prestigious academic accent for indicators, badges, and progress states.
- */
-export const goldenOchreColor: MantineColorsTuple = [
-  '#fdfaf3', // 0: ultra light warm cream
-  '#f9f2e3', // 1: soft gold badge
-  '#f0e0be', // 2: subtle gold ring
-  '#e4cb93', // 3: warm camel accent
-  '#d6b468', // 4: golden accent
-  '#c4a66b', // 5: hero ochre gold
-  '#8b6a34', // 6: primary accent text shade (high contrast)
-  '#745729', // 7: dark gold hover
-  '#59421e', // 8: deep bronze
-  '#3e2d13', // 9: midnight bronze
+/** Brand accent: Golden Ochre (#c4a66b) */
+export const secondaryColor: MantineColorsTuple = [
+  '#fdfaf3',
+  '#f9f2e3',
+  '#f0e0be',
+  '#e4cb93',
+  '#d6b468',
+  '#c4a66b',
+  '#8b6a34',
+  '#745729',
+  '#59421e',
+  '#3e2d13',
 ];
 
-/**
- * Warm Neutral Scale (Parchment, Alabaster Cashmere, Warm Sand).
- * Zero yellowish/muddy cast - refined, high-end editorial surfaces.
- */
-export const warmSandNeutral: MantineColorsTuple = [
-  '#f6f3ee', // 0: warm canvas
-  '#fbf8f4', // 1: sidebar & header surface
-  '#fffdfa', // 2: card surface
-  '#eee6de', // 3: secondary container / subtle surface
-  '#e3d7cb', // 4: primary border
-  '#b8a5a2', // 5: muted icons & secondary text
-  '#9c8983', // 6: placeholder & captions
-  '#7a6663', // 7: secondary body text
-  '#4a333c', // 8: deep plum charcoal
-  '#351b25', // 9: headings & deep text
+/** Warm neutral scale replacing Mantine's cold blue-gray */
+export const grayColor: MantineColorsTuple = [
+  '#f6f3ee',
+  '#eee6de',
+  '#e3d7cb',
+  '#d6c9bc',
+  '#b8a5a2',
+  '#9c8983',
+  '#7a6663',
+  '#4a333c',
+  '#351b25',
+  '#1c1218',
 ];
 
-/**
- * Custom Warm Gray scale replacing Mantine's default cold blue-gray.
- * Ensures any Mantine component or utility referencing 'gray' inherits the warm aesthetic.
- */
-export const warmGrayScale: MantineColorsTuple = [
-  '#f6f3ee', // gray 0: subtle light surface
-  '#eee6de', // gray 1: soft container
-  '#e3d7cb', // gray 2: default border
-  '#d6c9bc', // gray 3: stronger border
-  '#b8a5a2', // gray 4: muted icons
-  '#9c8983', // gray 5: placeholder
-  '#7a6663', // gray 6: secondary text
-  '#4a333c', // gray 7: dark text
-  '#351b25', // gray 8: headings
-  '#1c1218', // gray 9: near black
+/** Warm dark scale for dark mode (Mantine's `dark` palette drives dark surfaces and text) */
+export const darkColor: MantineColorsTuple = [
+  '#ece3de',
+  '#c9bab4',
+  '#a8968f',
+  '#7f6d68',
+  '#58474b',
+  '#403037',
+  '#2a1f24',
+  '#1d1519',
+  '#181114',
+  '#0f0a0c',
 ];
 
-/**
- * Default assignments for Mantine core provider.
- */
-export const defaultPrimaryColor: MantineColorsTuple = academicWineColor;
-export const defaultSecondaryColor: MantineColorsTuple = goldenOchreColor;
-export const slateNeutral: MantineColorsTuple = warmSandNeutral;
-
-/**
- * Academic Royal Navy scale for buttons and crisp contrast in dark mode.
- */
-export const deepNavyColor: MantineColorsTuple = [
-  '#f0f5fa', // 0: ultra light ice blue
-  '#dbe7f4', // 1: soft navy tint
-  '#b8d2ec', // 2: subtle navy glow
-  '#8bb4df', // 3: muted navy accent
-  '#5991cc', // 4: intermediate blue
-  '#3573b7', // 5: vibrant royal blue
-  '#2563eb', // 6: primary bright navy
-  '#1e40af', // 7: academic deep royal navy (primary action)
-  '#1e3a8a', // 8: midnight navy hover
-  '#0f172a', // 9: deepest midnight navy
+/** Success: Sage green */
+export const successColor: MantineColorsTuple = [
+  '#f1f7f2',
+  '#dfeee2',
+  '#bddcc4',
+  '#97c7a3',
+  '#73b183',
+  '#559c69',
+  '#3f8556',
+  '#336b46',
+  '#285538',
+  '#1b3a26',
 ];
 
-export { appTokens, lightTokens, darkTokens };
-export type { ThemeSemanticTokens };
+/** Warning: Amber */
+export const warningColor: MantineColorsTuple = [
+  '#fff6eb',
+  '#fde8cc',
+  '#f9cf98',
+  '#f4b260',
+  '#ee9a37',
+  '#e0861f',
+  '#c06d14',
+  '#9a5611',
+  '#77420f',
+  '#4f2b09',
+];
+
+/** Danger: Brick red */
+export const dangerColor: MantineColorsTuple = [
+  '#fdf2f1',
+  '#f9e0de',
+  '#f1bdb8',
+  '#e7948d',
+  '#dc6c63',
+  '#cf4c42',
+  '#b83a31',
+  '#972f28',
+  '#752520',
+  '#4d1814',
+];
+
+/** Info: Dusty blue */
+export const infoColor: MantineColorsTuple = [
+  '#eff5f8',
+  '#dbe8ef',
+  '#b6d0de',
+  '#8db5ca',
+  '#679bb6',
+  '#4d84a2',
+  '#3d6d88',
+  '#32586e',
+  '#284555',
+  '#1a2e39',
+];
+
+/** Default brand colors, used as fallbacks for institutes without their own branding */
+export const DEFAULT_BRAND_PRIMARY = primaryColor[6];
+export const DEFAULT_BRAND_SECONDARY = secondaryColor[5];
 
 /**
  * Multi-Tenant White-Labeling Branding Configuration Interface.

@@ -24,7 +24,7 @@ export function DataModuleEmpty(props: DataModuleEmptyProps) {
         <ThemeIcon size={64} radius="xl" variant="light" color="gray">
           {props.icon ?? <IconDatabaseOff size={28} stroke={1.5} />}
         </ThemeIcon>
-        <Text fw={600} size="md" c="var(--mantine-color-text)">
+        <Text fw={500} size="md" c="var(--mantine-color-text)">
           {message}
         </Text>
         {description && (

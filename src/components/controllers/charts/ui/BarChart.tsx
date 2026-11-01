@@ -45,7 +45,7 @@ export function BarChart({
                 size="xs"
                 c="dimmed"
                 style={{
-                  fontSize: rem(11),
+                  fontSize: 'var(--mantine-font-size-xs)',
                   width: rem(26),
                   textAlign: 'left',
                   flexShrink: 0,
@@ -101,10 +101,10 @@ export function BarChart({
                       position: 'absolute',
                       top: `calc(${100 - heightPercent}% - ${rem(36)})`,
                       padding: `${rem(3)} ${rem(10)}`,
-                      backgroundColor: '#181b24',
-                      color: '#ffffff',
-                      borderRadius: rem(8),
-                      fontSize: rem(11),
+                      backgroundColor: 'var(--app-tooltip-bg)',
+                      color: 'var(--app-text-on-brand)',
+                      borderRadius: 'var(--mantine-radius-sm)',
+                      fontSize: 'var(--mantine-font-size-xs)',
                       fontWeight: 700,
                       whiteSpace: 'nowrap',
                       boxShadow: '0 4px 14px rgba(0, 0, 0, 0.25)',
@@ -122,12 +122,12 @@ export function BarChart({
                     width: '65%',
                     maxWidth: rem(48),
                     height: `${heightPercent}%`,
-                    borderRadius: rem(12),
+                    borderRadius: 'var(--mantine-radius-md)',
                     backgroundColor: isHighlight ? highlightColor : defaultBarColor,
                     backgroundImage: isHighlight
                       ? undefined
                       : 'repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(120,120,120,0.06) 5px, rgba(120,120,120,0.06) 10px)',
-                    boxShadow: isHighlight ? '0 8px 22px rgba(73, 29, 43, 0.28)' : 'none',
+                    boxShadow: isHighlight ? 'var(--app-brand-shadow)' : 'none',
                     transition: 'all 240ms cubic-bezier(0.16, 1, 0.3, 1)',
                     cursor: 'pointer',
                     border: isHighlight ? 'none' : '1px solid var(--app-border)',
@@ -155,7 +155,7 @@ export function BarChart({
             size="xs"
             fw={item.highlight ? 700 : 500}
             style={{
-              fontSize: rem(11.5),
+              fontSize: 'var(--mantine-font-size-xs)',
               color: item.highlight ? 'var(--app-text-primary)' : 'var(--app-text-secondary)',
               textAlign: 'center',
               flex: 1,

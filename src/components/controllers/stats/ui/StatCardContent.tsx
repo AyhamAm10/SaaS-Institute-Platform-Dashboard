@@ -12,9 +12,9 @@ export function StatCardContent({ children, subtitle }: StatCardContentProps) {
   return (
     <Box my={rem(6)}>
       <Text
-        fw={800}
+        fw={700}
         style={{
-          fontSize: rem(34),
+          fontSize: 'var(--mantine-h1-font-size)',
           lineHeight: 1.1,
           color: 'var(--app-text-primary)',
           letterSpacing: '-0.5px',

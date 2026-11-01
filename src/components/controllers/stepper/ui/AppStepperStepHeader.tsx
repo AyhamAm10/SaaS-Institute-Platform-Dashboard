@@ -47,7 +47,7 @@ export function AppStepperStepHeader({ children }: AppStepperStepHeaderProps) {
                   : isCurrent
                   ? 'var(--app-brand-primary)'
                   : 'var(--app-subtle)',
-                color: isCompleted || isCurrent ? '#ffffff' : 'var(--app-text-secondary)',
+                color: isCompleted || isCurrent ? 'var(--app-text-on-brand)' : 'var(--app-text-secondary)',
                 border: isCompleted || isCurrent ? 'none' : '1px solid var(--app-border)',
                 transition: 'all 0.2s ease',
               }}
@@ -79,7 +79,7 @@ export function AppStepperStepHeader({ children }: AppStepperStepHeaderProps) {
                     style={{
                       backgroundColor: 'var(--app-badge-bg)',
                       color: 'var(--app-badge-text)',
-                      fontWeight: 600,
+                      fontWeight: 500,
                     }}
                   >
                     مكتمل

@@ -56,7 +56,7 @@ export function LoginHeroPanel() {
           zIndex: 1,
           margin: 0,
           padding: 0,
-          filter: 'drop-shadow(0 14px 28px rgba(10, 25, 45, 0.08))',
+          filter: 'drop-shadow(0 14px 28px rgba(73, 29, 43, 0.08))',
         }}
       />
     </Box>

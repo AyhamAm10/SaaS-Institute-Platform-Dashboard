@@ -24,7 +24,7 @@ export function StatCardIcon({
         justifyContent: 'center',
         width: rem(32),
         height: rem(32),
-        borderRadius: rem(8),
+        borderRadius: 'var(--mantine-radius-sm)',
         border: '1px solid var(--app-border)',
         backgroundColor: bg,
         color: color,

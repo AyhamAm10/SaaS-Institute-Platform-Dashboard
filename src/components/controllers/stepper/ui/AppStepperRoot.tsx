@@ -67,7 +67,7 @@ export function AppStepperRoot({ children }: AppStepperRootProps) {
                       alignItems: 'center',
                       justifyContent: 'center',
                       backgroundColor: isCompleted
-                        ? 'var(--mantine-color-teal-6)'
+                        ? 'var(--mantine-color-success-6)'
                         : isCurrent
                         ? 'var(--mantine-color-primary-6)'
                         : 'var(--mantine-color-body)',
@@ -75,7 +75,7 @@ export function AppStepperRoot({ children }: AppStepperRootProps) {
                         isCompleted || isCurrent
                           ? 'none'
                           : '1.5px solid var(--mantine-color-gray-3)',
-                      color: isCompleted || isCurrent ? '#ffffff' : 'var(--mantine-color-gray-6)',
+                      color: isCompleted || isCurrent ? 'var(--app-text-on-brand)' : 'var(--mantine-color-gray-6)',
                       boxShadow: isCurrent
                         ? '0 2px 8px rgba(var(--mantine-color-primary-6-rgb), 0.35)'
                         : 'none',
@@ -98,7 +98,7 @@ export function AppStepperRoot({ children }: AppStepperRootProps) {
                       height: rem(2),
                       backgroundColor:
                         idx < active
-                          ? 'var(--mantine-color-teal-6)'
+                          ? 'var(--mantine-color-success-6)'
                           : 'var(--mantine-color-gray-2)',
                       transition: 'background-color 0.2s ease',
                     }}

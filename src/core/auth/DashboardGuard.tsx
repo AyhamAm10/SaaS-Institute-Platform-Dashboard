@@ -2,7 +2,7 @@
 
 import { ReactNode, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Center, Stack, Paper, Loader, Text, rem } from '@mantine/core';
+import { Center, Stack, Paper, Loader, Text } from '@mantine/core';
 import { useAuth } from './useAuth';
 
 export interface DashboardGuardProps {
@@ -50,7 +50,7 @@ export function DashboardGuard({ children }: DashboardGuardProps) {
         >
           <Stack align="center" gap="md">
             <Loader size="md" color="primary.6" />
-            <Text size="sm" fw={600} c="dimmed">
+            <Text size="sm" fw={500} c="dimmed">
               جاري التحقق من صلاحيات الدخول...
             </Text>
           </Stack>
@@ -73,8 +73,8 @@ export function DashboardGuard({ children }: DashboardGuardProps) {
           }}
         >
           <Stack align="center" gap="xs">
-            <Loader size="sm" color="red.6" />
-            <Text size="sm" fw={600} c="red.6">
+            <Loader size="sm" color="danger.6" />
+            <Text size="sm" fw={500} c="danger.6">
               غير مصرح بالدخول — جاري التحويل...
             </Text>
           </Stack>

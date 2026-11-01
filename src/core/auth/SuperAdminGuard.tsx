@@ -51,7 +51,7 @@ export function SuperAdminGuard({ children }: SuperAdminGuardProps) {
         >
           <Stack align="center" gap="md">
             <Loader size="md" color="primary.6" />
-            <Text size="sm" fw={600} c="dimmed">
+            <Text size="sm" fw={500} c="dimmed">
               جاري التحقق من صلاحيات المشرف العام...
             </Text>
           </Stack>
@@ -73,8 +73,8 @@ export function SuperAdminGuard({ children }: SuperAdminGuardProps) {
           }}
         >
           <Stack align="center" gap="xs">
-            <Loader size="sm" color="red.6" />
-            <Text size="sm" fw={600} c="red.6">
+            <Loader size="sm" color="danger.6" />
+            <Text size="sm" fw={500} c="danger.6">
               غير مصرح بالدخول لهذه الصفحة — جاري التحويل...
             </Text>
           </Stack>

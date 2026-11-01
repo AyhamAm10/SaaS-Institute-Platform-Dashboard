@@ -18,10 +18,10 @@ export interface AppModalConfirmProps {
 }
 
 const variantButtonColor: Record<ModalVariant, string> = {
-  danger: 'red',
-  warning: 'orange',
-  info: 'blue',
-  success: 'teal',
+  danger: 'danger',
+  warning: 'warning',
+  info: 'info',
+  success: 'success',
   default: 'primary',
 };
 

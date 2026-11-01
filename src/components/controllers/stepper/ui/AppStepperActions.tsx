@@ -79,7 +79,7 @@ export function AppStepperActions({
           leftSection={<IconArrowLeft size={16} />}
           disabled={disableNext || isSubmitting}
           style={{
-            boxShadow: '0 4px 14px rgba(73, 29, 43, 0.18)',
+            boxShadow: 'var(--app-brand-shadow)',
           }}
         >
           {nextLabel}
@@ -97,7 +97,7 @@ export function AppStepperActions({
           loading={isSubmitting}
           leftSection={<IconCheck size={16} />}
           style={{
-            boxShadow: '0 4px 14px rgba(73, 29, 43, 0.22)',
+            boxShadow: 'var(--app-brand-shadow)',
           }}
         >
           {submitLabel}

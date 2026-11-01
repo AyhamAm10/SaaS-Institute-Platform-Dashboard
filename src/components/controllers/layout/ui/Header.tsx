@@ -121,17 +121,17 @@ export function DashboardHeader() {
               w={4}
               h={28}
               style={{
-                borderRadius: rem(4),
+                borderRadius: 'var(--mantine-radius-sm)',
                 backgroundColor: isSuperAdmin
                   ? 'var(--app-brand-primary)'
                   : 'var(--app-brand-accent)',
               }}
             />
             <Stack gap={0}>
-              <Text size="xs" c="var(--app-text-secondary)" fw={600}>
+              <Text size="xs" c="var(--app-text-secondary)" fw={500}>
                 {isSuperAdmin ? 'إدارة المنصة المركزية' : 'إدارة المعهد'}
               </Text>
-              <Text size="sm" fw={800} c="var(--app-text-primary)" style={{ letterSpacing: '-0.2px' }}>
+              <Text size="sm" fw={700} c="var(--app-text-primary)" style={{ letterSpacing: '-0.2px' }}>
                 {isSuperAdmin ? 'لوحة تحكم المشرف العام' : 'لوحة التحكم'}
               </Text>
             </Stack>
@@ -254,18 +254,8 @@ export function DashboardHeader() {
             onChange={(e) => setSearchQuery(e.currentTarget.value)}
             styles={{
               input: {
-                backgroundColor: 'var(--app-input-bg)',
-                border: '1px solid var(--app-input-border)',
-                color: 'var(--app-text-primary)',
                 height: rem(40),
-                borderRadius: rem(9999),
                 paddingRight: rem(38),
-                transition: 'all 150ms ease',
-                '&:focus': {
-                  backgroundColor: 'var(--app-input-bg-focus)',
-                  borderColor: 'var(--app-input-focus-border)',
-                  boxShadow: 'var(--app-input-focus-ring)',
-                },
               },
             }}
           />
@@ -322,9 +312,9 @@ export function DashboardHeader() {
                     styles={{
                       placeholder: {
                         backgroundColor: 'var(--app-brand-primary)',
-                        color: '#fff9f3',
-                        fontWeight: 600,
-                        fontSize: rem(12),
+                        color: 'var(--app-text-on-brand)',
+                        fontWeight: 500,
+                        fontSize: 'var(--mantine-font-size-xs)',
                       },
                     }}
                   >
@@ -334,7 +324,7 @@ export function DashboardHeader() {
                     <Text size="xs" fw={700} c="var(--app-text-primary)" lineClamp={1}>
                       {user?.fullName || (isSuperAdmin ? 'المشرف العام' : 'مدير النظام')}
                     </Text>
-                    <Text size="10px" c="var(--app-text-secondary)">
+                    <Text size="xs" c="var(--app-text-secondary)">
                       {isSuperAdmin
                         ? 'المشرف العام للنظام'
                         : user?.institute?.name || 'الفرع الرئيسي'}
@@ -355,7 +345,7 @@ export function DashboardHeader() {
               </Menu.Item>
               <Menu.Divider />
               <Menu.Item
-                color="red"
+                color="danger"
                 leftSection={<IconLogout size={15} />}
                 onClick={() => logout()}
                 disabled={isLoggingOut}

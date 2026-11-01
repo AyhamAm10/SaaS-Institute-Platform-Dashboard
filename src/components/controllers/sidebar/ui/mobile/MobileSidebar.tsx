@@ -83,7 +83,7 @@ export function MobileSidebar() {
               height: rem(36),
             }}
           >
-            <IconSchool size={20} color="#fff9f3" />
+            <IconSchool size={20} color="var(--app-text-on-brand)" />
           </Paper>
           <Stack gap={0}>
             <Text fw={700} size="sm" c="var(--app-text-primary)">
@@ -95,7 +95,7 @@ export function MobileSidebar() {
               style={{
                 backgroundColor: 'var(--app-badge-bg)',
                 color: 'var(--app-badge-text)',
-                fontWeight: 600,
+                fontWeight: 500,
                 border: '1px solid var(--app-border)',
               }}
             >
@@ -118,14 +118,7 @@ export function MobileSidebar() {
                   key={item.key}
                   label={item.label}
                   leftSection={
-                    <ThemeIcon
-                      size={30}
-                      radius="md"
-                      style={{
-                        backgroundColor: isActive ? 'var(--app-brand-primary)' : 'var(--app-sidebar-subtle)',
-                        color: isActive ? '#fff9f3' : 'var(--app-brand-primary)',
-                      }}
-                    >
+                    <ThemeIcon size={30} radius="md" className="app-nav-link-icon">
                       <IconComponent size={16} stroke={1.8} />
                     </ThemeIcon>
                   }
@@ -133,21 +126,7 @@ export function MobileSidebar() {
                   onChange={() => toggleSection(item.key)}
                   active={isActive}
                   variant="subtle"
-                  styles={{
-                    root: {
-                      borderRadius: rem(12),
-                      paddingTop: rem(8),
-                      paddingBottom: rem(8),
-                      paddingLeft: rem(12),
-                      paddingRight: rem(12),
-                      backgroundColor: isActive && !isSectionOpen ? 'var(--app-sidebar-subtle)' : undefined,
-                      color: isActive ? 'var(--app-brand-primary)' : 'var(--app-text-secondary)',
-                      fontWeight: isActive ? 600 : 500,
-                    },
-                    label: {
-                      color: isActive ? 'var(--app-brand-primary)' : 'var(--app-text-secondary)',
-                    },
-                  }}
+                  className="app-nav-link app-nav-link--group"
                 >
                   <Stack gap={3} pt={4}>
                     {item.subItems.map((sub: NavSubItem) => {
@@ -159,21 +138,7 @@ export function MobileSidebar() {
                           href={sub.href}
                           label={sub.label}
                           active={isSubActive}
-                          styles={{
-                            root: {
-                              borderRadius: rem(10),
-                              paddingRight: rem(34),
-                              paddingTop: rem(7),
-                              paddingBottom: rem(7),
-                              backgroundColor: isSubActive
-                                ? 'var(--app-brand-primary)'
-                                : 'transparent',
-                              color: isSubActive
-                                ? '#fff9f3'
-                                : 'var(--app-text-secondary)',
-                              fontWeight: isSubActive ? 600 : 400,
-                            },
-                          }}
+                          className="app-nav-link app-nav-link--sub"
                           onClick={close}
                         />
                       );
@@ -190,34 +155,12 @@ export function MobileSidebar() {
                 href={item.href || '/'}
                 label={item.label}
                 leftSection={
-                  <ThemeIcon
-                    size={30}
-                    radius="md"
-                    style={{
-                      backgroundColor: isActive ? 'transparent' : 'var(--app-sidebar-subtle)',
-                      color: isActive ? '#fff9f3' : 'var(--app-brand-primary)',
-                    }}
-                  >
+                  <ThemeIcon size={30} radius="md" className="app-nav-link-icon">
                     <IconComponent size={16} stroke={1.8} />
                   </ThemeIcon>
                 }
                 active={isActive}
-                styles={{
-                  root: {
-                    borderRadius: rem(12),
-                    paddingTop: rem(8),
-                    paddingBottom: rem(8),
-                    paddingLeft: rem(12),
-                    paddingRight: rem(12),
-                    backgroundColor: isActive ? 'var(--app-brand-primary)' : 'transparent',
-                    color: isActive ? '#fff9f3' : 'var(--app-text-secondary)',
-                    fontWeight: isActive ? 600 : 500,
-                    boxShadow: isActive ? '0 4px 12px rgba(73, 29, 43, 0.14)' : 'none',
-                  },
-                  label: {
-                    color: isActive ? '#fff9f3' : 'var(--app-text-secondary)',
-                  },
-                }}
+                className="app-nav-link"
                 onClick={close}
               />
             );
@@ -239,8 +182,8 @@ export function MobileSidebar() {
             justifyContent: 'center',
             width: '100%',
             padding: rem(8),
-            borderRadius: rem(10),
-            color: '#9b4b51',
+            borderRadius: 'var(--mantine-radius-md)',
+            color: 'var(--mantine-color-danger-6)',
             backgroundColor: 'var(--app-sidebar-subtle)',
             opacity: isLoggingOut ? 0.6 : 1,
             cursor: isLoggingOut ? 'not-allowed' : 'pointer',

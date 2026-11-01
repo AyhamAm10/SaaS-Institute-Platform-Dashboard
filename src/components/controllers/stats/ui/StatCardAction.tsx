@@ -22,7 +22,7 @@ export function StatCardAction({
 
   const content = (
     <Group justify="space-between" align="center" w="100%">
-      <Text size="xs" fw={600} style={{ fontSize: rem(12), color: 'inherit' }}>
+      <Text size="xs" fw={500} style={{ fontSize: 'var(--mantine-font-size-xs)', color: 'inherit' }}>
         {children}
       </Text>
       {icon ?? <IconArrowLeft size={14} style={{ color: 'inherit' }} />}
@@ -33,7 +33,7 @@ export function StatCardAction({
     marginTop: 'auto',
     width: '100%',
     padding: `${rem(6)} ${rem(14)}`,
-    borderRadius: rem(10),
+    borderRadius: 'var(--mantine-radius-md)',
     border: '1px solid var(--app-border)',
     backgroundColor: 'transparent',
     color: 'var(--app-text-secondary)',

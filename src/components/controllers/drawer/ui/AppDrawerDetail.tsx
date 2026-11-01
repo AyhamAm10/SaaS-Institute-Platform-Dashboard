@@ -52,7 +52,7 @@ export function AppDrawerDetail({
 
       <Text
         size="sm"
-        fw={600}
+        fw={500}
         c={isValueEmpty ? 'dimmed' : 'var(--mantine-color-text)'}
         ta="left"
         style={{

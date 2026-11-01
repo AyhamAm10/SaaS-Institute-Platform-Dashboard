@@ -2,20 +2,20 @@
 @import "@mantine/dates/styles.css";
 
 /* ==========================================================================
-   Centralized Theme Semantic Variables (Single Source of Truth)
-   Light: Warm Academic Editorial (Porcelain Cashmere + Velvet Burgundy)
-   Dark: Midnight Velvet Mahogany & Amber Gold
+   Semantic Design Tokens — Single Source of Truth
+   Palettes (Mantine color tuples) live in src/theme/colors.ts.
+   Both modes share one identity: Academic Wine + Golden Ochre on warm neutrals.
    ========================================================================== */
 
 :root,
 :root[data-mantine-color-scheme="light"] {
-  --app-bg: #f4f6fb;
-  --app-surface: rgba(255, 255, 255, 0.85);
+  --app-bg: #f6f3ee;
+  --app-surface: rgba(255, 253, 250, 0.85);
   --app-subtle: #eee6de;
   --app-hover: rgba(255, 255, 255, 0.95);
-  --app-sidebar-bg: rgba(255, 255, 255, 0.65);
+  --app-sidebar-bg: rgba(255, 253, 250, 0.65);
   --app-sidebar-subtle: rgba(238, 230, 222, 0.5);
-  --app-header-bg: rgba(255, 255, 255, 0.65);
+  --app-header-bg: rgba(255, 253, 250, 0.65);
 
   --app-border: rgba(227, 215, 203, 0.6);
   --app-border-subtle: rgba(237, 228, 218, 0.5);
@@ -24,8 +24,9 @@
   --app-text-primary: #351b25;
   --app-text-secondary: #7a6663;
   --app-text-muted: #9c8983;
+  --app-text-on-brand: #fff9f3;
 
-  --app-input-bg: rgba(255, 255, 255, 0.8);
+  --app-input-bg: #fffdfa;
   --app-input-bg-hover: #ffffff;
   --app-input-bg-focus: #ffffff;
   --app-input-border: #ded2c5;
@@ -34,83 +35,229 @@
   --app-input-focus-ring: 0 0 0 3px rgba(73, 29, 43, 0.10);
   --app-input-placeholder: #9c8983;
 
-  --app-table-bg: rgba(255, 255, 255, 0.85);
+  --app-table-bg: rgba(255, 253, 250, 0.85);
   --app-table-header-bg: rgba(244, 237, 229, 0.7);
   --app-table-border: rgba(230, 222, 213, 0.6);
   --app-table-hover: #ffffff;
   --app-table-text: #351b25;
 
   --app-brand-primary: #491d2b;
+  --app-brand-primary-hover: #3d1824;
   --app-brand-accent: #c4a66b;
+  --app-brand-shadow: 0 6px 18px rgba(73, 29, 43, 0.18);
   --app-badge-bg: rgba(238, 230, 222, 0.7);
   --app-badge-text: #8b6a34;
 
-  --app-card-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
+  --app-card-shadow: 0 1px 2px rgba(53, 27, 37, 0.04), 0 8px 24px -8px rgba(53, 27, 37, 0.08);
   --app-dropdown-shadow: 0 16px 36px rgba(73, 29, 43, 0.12);
+  --app-tooltip-bg: #351b25;
 
-  /* Frosted Glassmorphism & Ambient Luminous Glow (Light Mode: Warm Velvet Burgundy & Cashmere Beige) */
+  /* Frosted glass & ambient glow (to be reworked in phase 2) */
   --app-glass-bg: rgba(255, 255, 255, 0.40);
-  --app-ambient-orb-1: rgba(92, 28, 48, 0.28);   /* Velvet Burgundy Deep / عنابي مخملي فاخر */
-  --app-ambient-orb-2: rgba(224, 200, 172, 0.65); /* Warm Cashmere Beige / بيج كشميري ناعم دافئ */
-  --app-ambient-orb-3: rgba(142, 38, 62, 0.24);  /* Wine Rosewood / عنابي خمري ناعم */
-  --app-ambient-orb-4: rgba(206, 168, 110, 0.35); /* Amber Golden Sand / بيج ذهبي رملي ملكي */
+  --app-ambient-orb-1: rgba(92, 28, 48, 0.28);
+  --app-ambient-orb-2: rgba(224, 200, 172, 0.65);
+  --app-ambient-orb-3: rgba(142, 38, 62, 0.24);
+  --app-ambient-orb-4: rgba(206, 168, 110, 0.35);
 }
 
 :root[data-mantine-color-scheme="dark"] {
-  --app-bg: #090c13;
-  --app-surface: rgba(18, 22, 34, 0.85);
-  --app-subtle: #1b1f2b;
-  --app-hover: rgba(28, 34, 52, 0.90);
-  --app-sidebar-bg: rgba(13, 17, 26, 0.70);
-  --app-sidebar-subtle: rgba(24, 28, 38, 0.6);
-  --app-header-bg: rgba(13, 17, 26, 0.70);
+  --app-bg: #181114;
+  --app-surface: rgba(32, 23, 27, 0.85);
+  --app-subtle: #2a1f24;
+  --app-hover: rgba(42, 31, 36, 0.9);
+  --app-sidebar-bg: rgba(24, 17, 20, 0.7);
+  --app-sidebar-subtle: rgba(42, 31, 36, 0.6);
+  --app-header-bg: rgba(24, 17, 20, 0.7);
 
-  --app-border: rgba(36, 41, 56, 0.8);
-  --app-border-subtle: rgba(27, 32, 44, 0.6);
-  --app-border-hover: rgba(55, 62, 84, 0.9);
+  --app-border: rgba(64, 48, 55, 0.8);
+  --app-border-subtle: rgba(52, 39, 45, 0.6);
+  --app-border-hover: rgba(88, 68, 76, 0.9);
 
-  --app-text-primary: #f8fafc;
-  --app-text-secondary: #94a3b8;
-  --app-text-muted: #64748b;
+  --app-text-primary: #f6efe9;
+  --app-text-secondary: #bfaea8;
+  --app-text-muted: #8f7d79;
+  --app-text-on-brand: #fff9f3;
 
-  --app-input-bg: rgba(16, 19, 26, 0.8);
-  --app-input-bg-hover: #141822;
-  --app-input-bg-focus: #141822;
-  --app-input-border: #272d3d;
-  --app-input-border-hover: #384157;
-  --app-input-focus-border: #2563eb;
-  --app-input-focus-ring: 0 0 0 3px rgba(37, 99, 235, 0.20);
-  --app-input-placeholder: #64748b;
+  --app-input-bg: #1d1519;
+  --app-input-bg-hover: #221a1e;
+  --app-input-bg-focus: #221a1e;
+  --app-input-border: #3d2e34;
+  --app-input-border-hover: #574249;
+  --app-input-focus-border: #b26a76;
+  --app-input-focus-ring: 0 0 0 3px rgba(178, 106, 118, 0.25);
+  --app-input-placeholder: #8f7d79;
 
-  --app-table-bg: rgba(21, 24, 33, 0.85);
-  --app-table-header-bg: rgba(27, 31, 43, 0.75);
-  --app-table-border: rgba(34, 39, 53, 0.7);
-  --app-table-hover: rgba(26, 31, 43, 0.95);
-  --app-table-text: #f8fafc;
+  --app-table-bg: rgba(32, 23, 27, 0.85);
+  --app-table-header-bg: rgba(42, 31, 36, 0.75);
+  --app-table-border: rgba(58, 44, 50, 0.7);
+  --app-table-hover: rgba(42, 31, 36, 0.95);
+  --app-table-text: #f6efe9;
 
-  --app-brand-primary: #1e40af;
-  --app-brand-accent: #d4a359;
-  --app-badge-bg: rgba(30, 64, 175, 0.20);
-  --app-badge-text: #93c5fd;
+  --app-brand-primary: #803946;
+  --app-brand-primary-hover: #91414f;
+  --app-brand-accent: #d6b468;
+  --app-brand-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+  --app-badge-bg: rgba(196, 166, 107, 0.14);
+  --app-badge-text: #e4cb93;
 
-  --app-button-bg: #1e40af;
-  --app-button-hover: #1d3899;
+  --app-card-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 10px 30px -8px rgba(0, 0, 0, 0.5);
+  --app-dropdown-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+  --app-tooltip-bg: #3d2e34;
 
-  --mantine-color-primary-filled: #1e40af;
-  --mantine-color-primary-filled-hover: #1d3899;
-  --mantine-color-primary-light: rgba(30, 64, 175, 0.16);
-  --mantine-color-primary-light-hover: rgba(30, 64, 175, 0.24);
-  --mantine-color-primary-light-color: #93c5fd;
+  --app-glass-bg: rgba(24, 17, 20, 0.45);
+  --app-ambient-orb-1: rgba(110, 30, 52, 0.38);
+  --app-ambient-orb-2: rgba(65, 26, 38, 0.45);
+  --app-ambient-orb-3: rgba(185, 140, 85, 0.22);
+  --app-ambient-orb-4: rgba(140, 40, 65, 0.30);
+}
 
-  --app-card-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.50);
-  --app-dropdown-shadow: 0 16px 40px rgba(0, 0, 0, 0.65);
+/* Map Mantine's own variables onto the app tokens
+   (html:root outranks the :root[data-mantine-color-scheme] block Mantine injects) */
+html:root[data-mantine-color-scheme] {
+  --mantine-color-body: var(--app-bg);
+  --mantine-color-text: var(--app-text-primary);
+  --mantine-color-dimmed: var(--app-text-secondary);
+  --mantine-color-placeholder: var(--app-input-placeholder);
+  --mantine-color-default-border: var(--app-border);
+}
 
-  /* Frosted Glassmorphism & Ambient Luminous Glow (Dark Mode: Midnight Velvet Burgundy & Antique Gold) */
-  --app-glass-bg: rgba(9, 12, 19, 0.45);
-  --app-ambient-orb-1: rgba(110, 30, 52, 0.38); /* Midnight Velvet Burgundy */
-  --app-ambient-orb-2: rgba(65, 26, 38, 0.45);  /* Deep Mahogany Wine */
-  --app-ambient-orb-3: rgba(185, 140, 85, 0.22); /* Antique Gold Sand */
-  --app-ambient-orb-4: rgba(140, 40, 65, 0.30); /* Royal Crimson */
+/* ==========================================================================
+   Component styling (states that inline `styles` objects cannot express)
+   ========================================================================== */
+
+/* Inputs: every Mantine input (TextInput, Select, NumberInput, DatePicker…) */
+:root .mantine-Input-wrapper[data-variant="default"] {
+  --input-height-sm: 38px;
+  --input-bg: var(--app-input-bg);
+  --input-bd: var(--app-input-border);
+  --input-bd-focus: var(--app-input-focus-border);
+  --input-color: var(--app-text-primary);
+}
+
+.mantine-Input-input {
+  transition: border-color 140ms ease, box-shadow 140ms ease, background-color 140ms ease;
+}
+
+.mantine-Input-input:hover:not(:focus):not([data-error]):not(:disabled) {
+  border-color: var(--app-input-border-hover);
+  background-color: var(--app-input-bg-hover);
+}
+
+.mantine-Input-input:focus,
+.mantine-Input-input:focus-within {
+  background-color: var(--app-input-bg-focus);
+  box-shadow: var(--app-input-focus-ring);
+}
+
+.mantine-InputWrapper-label {
+  color: var(--app-text-primary);
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.mantine-InputWrapper-description {
+  color: var(--app-text-muted);
+}
+
+/* Surfaces */
+.mantine-Paper-root,
+.mantine-Card-root {
+  border-color: var(--app-border);
+  background-color: var(--app-surface);
+  color: var(--app-text-primary);
+  box-shadow: var(--app-card-shadow);
+}
+
+.mantine-Modal-content,
+.mantine-Drawer-content {
+  background-color: var(--app-surface);
+  color: var(--app-text-primary);
+}
+
+.mantine-Modal-header,
+.mantine-Drawer-header {
+  background-color: var(--app-surface);
+  border-bottom: 1px solid var(--app-border);
+}
+
+.mantine-Modal-content {
+  border: 1px solid var(--app-border);
+  box-shadow: var(--app-dropdown-shadow);
+}
+
+.mantine-Drawer-content {
+  border-left: 1px solid var(--app-border);
+}
+
+/* Dropdowns */
+.mantine-Menu-dropdown,
+.mantine-Popover-dropdown,
+.mantine-Combobox-dropdown {
+  border: 1px solid var(--app-border);
+  background-color: var(--app-surface);
+  box-shadow: var(--app-dropdown-shadow);
+}
+
+.mantine-Menu-item,
+.mantine-Combobox-option {
+  border-radius: var(--mantine-radius-sm);
+  color: var(--app-text-primary);
+}
+
+.mantine-Menu-label {
+  color: var(--app-text-muted);
+}
+
+.mantine-Tooltip-tooltip {
+  background-color: var(--app-tooltip-bg);
+  color: var(--app-text-on-brand);
+}
+
+/* Sidebar navigation links (DesktopSidebar, MobileSidebar) */
+.mantine-NavLink-root.app-nav-link {
+  border-radius: var(--mantine-radius-md);
+  padding: 9px 12px;
+  color: var(--app-text-secondary);
+  font-weight: 500;
+  transition: background-color 140ms ease, color 140ms ease, box-shadow 140ms ease;
+}
+
+.mantine-NavLink-root.app-nav-link:hover {
+  background-color: var(--app-sidebar-subtle);
+  color: var(--app-brand-primary);
+}
+
+.mantine-NavLink-root.app-nav-link[data-active] {
+  background-color: var(--app-brand-primary);
+  color: var(--app-text-on-brand);
+  box-shadow: var(--app-brand-shadow);
+}
+
+.mantine-NavLink-root.app-nav-link--sub {
+  padding: 8px 36px 8px 12px;
+  font-weight: 400;
+}
+
+/* A group whose child is active: highlighted text, no filled pill */
+.mantine-NavLink-root.app-nav-link.app-nav-link--group[data-active] {
+  background-color: transparent;
+  color: var(--app-brand-primary);
+  box-shadow: none;
+}
+
+.app-nav-link-icon {
+  background-color: var(--app-sidebar-subtle);
+  color: var(--app-brand-primary);
+}
+
+.app-nav-link[data-active]:not(.app-nav-link--group) .app-nav-link-icon {
+  background-color: transparent;
+  color: var(--app-text-on-brand);
+}
+
+.app-nav-link--group[data-active] .app-nav-link-icon {
+  background-color: var(--app-brand-primary);
+  color: var(--app-text-on-brand);
 }
 
 /* Mantine AppShell Frosted Glass Overrides */
@@ -136,26 +283,6 @@
   border-left: 1px solid var(--app-border) !important;
 }
 
-:root[data-mantine-color-scheme="dark"] .mantine-Button-root[data-variant="filled"]:not([data-color="red"]):not([data-color="green"]):not([data-color="teal"]):not([data-color="orange"]) {
-  background-color: var(--app-button-bg) !important;
-  color: #ffffff !important;
-}
-
-:root[data-mantine-color-scheme="dark"] .mantine-Button-root[data-variant="filled"]:not([data-color="red"]):not([data-color="green"]):not([data-color="teal"]):not([data-color="orange"]):hover {
-  background-color: var(--app-button-hover) !important;
-}
-
-:root[data-mantine-color-scheme="dark"] .mantine-Button-root[data-variant="light"][data-color="gray"] {
-  background-color: #171a23 !important;
-  color: #94a3b8 !important;
-  border: 1px solid #242938;
-}
-
-:root[data-mantine-color-scheme="dark"] .mantine-Button-root[data-variant="light"][data-color="gray"]:hover {
-  background-color: #1f2330 !important;
-  color: #f8fafc !important;
-}
-
 html,
 body {
   height: 100%;
@@ -172,7 +299,7 @@ body {
   color: var(--app-brand-primary);
 }
 
-/* DataModule Modern Floating Strip Rows (Image 1 Style - Simona Lake Refined) */
+/* DataModule floating strip rows */
 .data-module-floating-row {
   transition: transform 240ms cubic-bezier(0.16, 1, 0.3, 1), filter 240ms ease, background-color 200ms ease !important;
   cursor: pointer;
@@ -186,7 +313,7 @@ body {
 }
 
 .data-module-floating-row:hover td {
-  background-color: #ffffff !important;
+  background-color: var(--app-table-hover) !important;
   border-top-color: rgba(196, 166, 107, 0.45) !important;
   border-bottom-color: rgba(196, 166, 107, 0.45) !important;
 }
@@ -204,11 +331,10 @@ body {
 }
 
 :root[data-mantine-color-scheme="dark"] .data-module-floating-row:hover td {
-  background-color: #1a1e2b !important;
   border-color: rgba(196, 166, 107, 0.35) !important;
 }
 
-/* Custom Scrollbars adhering to warm theme */
+/* Custom scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;

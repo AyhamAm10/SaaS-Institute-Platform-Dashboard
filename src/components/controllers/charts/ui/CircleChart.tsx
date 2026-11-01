@@ -13,9 +13,9 @@ export interface CircleChartProps {
 const DEFAULT_COLORS = [
   'var(--app-brand-primary)',
   'var(--app-brand-accent)',
-  '#10b981',
-  '#8b5cf6',
-  '#f59e0b',
+  'var(--mantine-color-success-6)',
+  'var(--mantine-color-info-6)',
+  'var(--mantine-color-warning-5)',
 ];
 
 export function CircleChart({
@@ -88,10 +88,10 @@ export function CircleChart({
             pointerEvents: 'none',
           }}
         >
-          <Text fw={800} style={{ fontSize: rem(22), color: 'var(--app-text-primary)' }}>
+          <Text fw={700} style={{ fontSize: 'var(--mantine-font-size-xl)', color: 'var(--app-text-primary)' }}>
             {totalValue}
           </Text>
-          <Text size="xs" c="dimmed" style={{ fontSize: rem(11) }}>
+          <Text size="xs" c="dimmed" style={{ fontSize: 'var(--mantine-font-size-xs)' }}>
             {totalLabel}
           </Text>
         </Stack>
@@ -113,10 +113,10 @@ export function CircleChart({
                   backgroundColor: color,
                 }}
               />
-              <Text size="xs" fw={500} style={{ fontSize: rem(12), color: 'var(--app-text-secondary)' }}>
+              <Text size="xs" fw={500} style={{ fontSize: 'var(--mantine-font-size-xs)', color: 'var(--app-text-secondary)' }}>
                 {seg.label}:
               </Text>
-              <Text size="xs" fw={700} style={{ fontSize: rem(12), color: 'var(--app-text-primary)' }}>
+              <Text size="xs" fw={700} style={{ fontSize: 'var(--mantine-font-size-xs)', color: 'var(--app-text-primary)' }}>
                 {seg.value} ({pct}%)
               </Text>
             </Group>

@@ -27,7 +27,7 @@ export function StatCard(props: StatCardProps) {
           flexDirection: 'column',
           backgroundColor: 'var(--app-surface)',
           borderColor: 'var(--app-border)',
-          borderRadius: rem(18),
+          borderRadius: 'var(--mantine-radius-lg)',
           boxShadow: 'var(--app-card-shadow)',
           transition: 'transform 180ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 180ms ease, border-color 180ms ease',
         }}

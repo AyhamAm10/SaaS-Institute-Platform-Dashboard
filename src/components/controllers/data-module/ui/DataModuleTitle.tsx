@@ -38,12 +38,12 @@ export function DataModuleTitle(props: DataModuleTitleProps) {
             color="primary"
             radius="sm"
             size="sm"
-            fw={600}
+            fw={500}
             style={{
               paddingLeft: rem(8),
               paddingRight: rem(8),
               height: rem(22),
-              fontSize: rem(11.5),
+              fontSize: 'var(--mantine-font-size-xs)',
             }}
           >
             {props.badgeLabel ? `${total} ${props.badgeLabel}` : total}

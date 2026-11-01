@@ -19,10 +19,10 @@ export function StatCardProgress({
   return (
     <Box mt="auto" pt={rem(4)}>
       <Group justify="space-between" align="center" mb={rem(6)}>
-        <Text size="xs" fw={700} style={{ fontSize: rem(12), color: 'var(--app-text-primary)' }}>
+        <Text size="xs" fw={700} style={{ fontSize: 'var(--mantine-font-size-xs)', color: 'var(--app-text-primary)' }}>
           {label}
         </Text>
-        <Text size="xs" fw={700} style={{ fontSize: rem(12), color: 'var(--app-text-primary)' }}>
+        <Text size="xs" fw={700} style={{ fontSize: 'var(--mantine-font-size-xs)', color: 'var(--app-text-primary)' }}>
           {clamped}%
         </Text>
       </Group>

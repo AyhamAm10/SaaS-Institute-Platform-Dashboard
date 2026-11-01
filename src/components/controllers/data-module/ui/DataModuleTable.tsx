@@ -93,8 +93,8 @@ export function DataModuleTable<T = Record<string, unknown>>(props: DataModuleTa
                   style={{
                     width: col.width,
                     textAlign: col.align ?? 'right',
-                    fontSize: rem(12.5),
-                    fontWeight: 600,
+                    fontSize: 'var(--mantine-font-size-xs)',
+                    fontWeight: 500,
                     color: 'var(--app-text-secondary)',
                     letterSpacing: '0.1px',
                     padding: `${rem(12)} ${rem(18)}`,
@@ -120,7 +120,7 @@ export function DataModuleTable<T = Record<string, unknown>>(props: DataModuleTa
                         color: 'inherit',
                       }}
                     >
-                      <Text size="xs" fw={600} style={{ fontSize: rem(12.5), color: 'inherit' }}>
+                      <Text size="xs" fw={500} style={{ fontSize: 'var(--mantine-font-size-xs)', color: 'inherit' }}>
                         {col.title}
                       </Text>
                       <ActionIcon size="xs" variant="transparent" color="gray">
@@ -179,7 +179,7 @@ export function DataModuleTable<T = Record<string, unknown>>(props: DataModuleTa
                         key={col.key}
                         style={{
                           textAlign: col.align ?? 'right',
-                          fontSize: rem(13),
+                          fontSize: 'var(--mantine-font-size-sm)',
                           fontWeight: 400,
                           padding: `${rem(13)} ${rem(18)}`,
                           color: 'var(--app-table-text)',

@@ -15,7 +15,7 @@ export function LoginView() {
       mih="100vh"
       h="100vh"
       style={{
-        background: 'linear-gradient(135deg, #f8fbfd 0%, #edf6fb 100%)',
+        backgroundColor: 'var(--app-bg)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',

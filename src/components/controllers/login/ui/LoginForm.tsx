@@ -35,14 +35,11 @@ export function LoginForm() {
   return (
     <Paper
       p={{ base: 'xl', sm: rem(40) }}
-      radius={28}
+      radius="lg"
       withBorder
       style={{
         width: '100%',
         maxWidth: rem(450),
-        borderColor: 'rgba(0, 0, 0, 0.06)',
-        boxShadow: '0 20px 50px rgba(11, 27, 46, 0.06), 0 1px 3px rgba(0, 0, 0, 0.02)',
-        backgroundColor: '#ffffff',
       }}
     >
       <form onSubmit={handleSubmit}>
@@ -51,9 +48,9 @@ export function LoginForm() {
           <Box ta="center" mb={rem(4)}>
             <Title
               order={1}
-              fw={800}
-              size={rem(28)}
-              style={{ color: '#0a1128', letterSpacing: '-0.5px' }}
+              fw={700}
+              size="h1"
+              c="var(--app-text-primary)"
             >
               تسجيل الدخول
             </Title>
@@ -67,7 +64,7 @@ export function LoginForm() {
             <Alert
               icon={<IconAlertCircle size={18} />}
               title="تنبيه"
-              color="red"
+              color="danger"
               radius="md"
               variant="light"
             >
@@ -119,12 +116,8 @@ export function LoginForm() {
             fullWidth
             style={{
               height: rem(48),
-              borderRadius: rem(14),
-              backgroundColor: '#0a1128',
-              color: '#ffffff',
               fontWeight: 700,
-              fontSize: rem(14.5),
-              boxShadow: '0 4px 14px rgba(10, 17, 40, 0.25)',
+              boxShadow: 'var(--app-brand-shadow)',
               transition: 'all 150ms ease',
             }}
           >
