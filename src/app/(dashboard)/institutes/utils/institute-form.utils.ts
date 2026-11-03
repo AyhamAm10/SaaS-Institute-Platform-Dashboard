@@ -37,6 +37,7 @@ export function toInstituteDetailsPayload(form: InstituteFormState) {
   return {
     name: form.name.trim(),
     code: form.code.trim().toUpperCase() || undefined,
+    timezone: form.timezone || undefined,
     logoUrl: form.logoUrl.trim() || undefined,
     primaryColor: form.primaryColor || undefined,
     secondaryColor: form.secondaryColor || undefined,

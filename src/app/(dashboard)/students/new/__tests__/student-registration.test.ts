@@ -87,7 +87,9 @@ describe('StudentRegistrationStore — Wizard Domain Logic & Validation', () => 
       },
     ];
 
-    it('fails when full name, birthDate, or branchId is missing', () => {
+    // Branch is not required in the wizard: it comes from the active branch
+    // (X-Branch-Id) and the backend falls back to the default branch.
+    it('fails when full name or birthDate is missing', () => {
       const store = createStudentRegistrationStore();
       store.getState().setActiveStep(1);
 
@@ -101,11 +103,6 @@ describe('StudentRegistrationStore — Wizard Domain Logic & Validation', () => 
       assert.strictEqual(store.getState().stepErrors[1], 'يرجى اختيار تاريخ ميلاد الطالب');
 
       store.getState().setStudentField('birthDate', '2010-05-15');
-      isValid = store.getState().validateCurrentStep([]);
-      assert.strictEqual(isValid, false);
-      assert.strictEqual(store.getState().stepErrors[1], 'يرجى اختيار الفرع الجغرافي المسجل به الطالب');
-
-      store.getState().setStudentField('branchId', 1);
       isValid = store.getState().validateCurrentStep([]);
       assert.strictEqual(isValid, true);
       assert.strictEqual(store.getState().stepErrors[1], null);

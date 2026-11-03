@@ -80,6 +80,9 @@ export function InstituteDetailsDrawer({ featuresSlot }: InstituteDetailsDrawerP
                   <StatusBadge tone="brand" variant="outline" size="sm">
                     {institutesLabels.detailsCode}: {selectedInstitute.code}
                   </StatusBadge>
+                  <StatusBadge tone="neutral" variant="outline" size="sm">
+                    {institutesLabels.detailsTimezone}: {selectedInstitute.timezone}
+                  </StatusBadge>
                 </Group>
               </Stack>
             </Group>

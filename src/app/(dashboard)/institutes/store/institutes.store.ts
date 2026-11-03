@@ -4,13 +4,17 @@ import { createContext, useContext } from 'react';
 import { createControllerStore } from '@/src/core/mirror';
 import { ControllerStoreApi } from '@/src/core/mirror/types';
 import { InstituteFormState, InstitutesState } from '../state/institutes.state';
-import { DEFAULT_INSTITUTE_COLORS } from '../static-data/institutes.data';
+import {
+  DEFAULT_INSTITUTE_COLORS,
+  DEFAULT_INSTITUTE_TIMEZONE,
+} from '../static-data/institutes.data';
 
 export type InstitutesStore = ControllerStoreApi<InstitutesState>;
 
 const defaultFormState: InstituteFormState = {
   name: '',
   code: '',
+  timezone: DEFAULT_INSTITUTE_TIMEZONE,
   logoUrl: '',
   primaryColor: DEFAULT_INSTITUTE_COLORS.primary,
   secondaryColor: DEFAULT_INSTITUTE_COLORS.secondary,
@@ -86,6 +90,7 @@ export function createInstitutesStore(): InstitutesStore {
           ...defaultFormState,
           name: institute.name,
           code: institute.code ?? '',
+          timezone: institute.timezone || DEFAULT_INSTITUTE_TIMEZONE,
           logoUrl: institute.logoUrl ?? '',
           primaryColor: institute.primaryColor || DEFAULT_INSTITUTE_COLORS.primary,
           secondaryColor: institute.secondaryColor || DEFAULT_INSTITUTE_COLORS.secondary,

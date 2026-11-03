@@ -2,9 +2,9 @@
 
 import { ColorInput, Group, SimpleGrid, Stack, Text } from '@mantine/core';
 import { IconSchool } from '@tabler/icons-react';
-import { AppInput } from '@/src/components/controllers';
+import { AppInput, AppSelect } from '@/src/components/controllers';
 import { useInstitutesMirror } from '../store/useInstitutesMirror';
-import { institutesLabels } from '../static-data/institutes.data';
+import { institutesLabels, TIMEZONE_OPTIONS } from '../static-data/institutes.data';
 
 /**
  * InstituteInfoFields
@@ -63,6 +63,15 @@ export function InstituteInfoFields() {
         onChange={(val) => setFormField('code', val)}
         error={formErrors['code']}
         required={isEdit}
+      />
+
+      <AppSelect
+        label={institutesLabels.instituteTimezone}
+        description={institutesLabels.instituteTimezoneHint}
+        data={TIMEZONE_OPTIONS}
+        value={form.timezone}
+        onChange={(val: string | null) => val && setFormField('timezone', val)}
+        required
       />
 
       <AppInput

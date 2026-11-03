@@ -6,6 +6,21 @@ export const DEFAULT_INSTITUTE_COLORS = {
   secondary: '#34a853',
 } as const;
 
+/** Time zone of a new institute (Syria). */
+export const DEFAULT_INSTITUTE_TIMEZONE = 'Asia/Damascus';
+
+/** Time zones offered in the institute form (IANA names, Arabic labels). */
+export const TIMEZONE_OPTIONS = [
+  { value: 'Asia/Damascus', label: 'دمشق (Asia/Damascus)' },
+  { value: 'Asia/Beirut', label: 'بيروت (Asia/Beirut)' },
+  { value: 'Asia/Amman', label: 'عمّان (Asia/Amman)' },
+  { value: 'Asia/Baghdad', label: 'بغداد (Asia/Baghdad)' },
+  { value: 'Asia/Riyadh', label: 'الرياض (Asia/Riyadh)' },
+  { value: 'Asia/Dubai', label: 'دبي (Asia/Dubai)' },
+  { value: 'Africa/Cairo', label: 'القاهرة (Africa/Cairo)' },
+  { value: 'Europe/Istanbul', label: 'إسطنبول (Europe/Istanbul)' },
+];
+
 /** Arabic titles of the optional modules (feature flags). */
 export const FEATURE_LABELS: Record<FeatureKey, { title: string; description: string }> = {
   SMS: { title: 'الرسائل النصية SMS', description: 'إرسال الرسائل والإشعارات النصية للأهالي' },
@@ -60,6 +75,9 @@ export const institutesLabels = {
   institutePhonePlaceholder: '+966500000000',
   instituteCode: 'كود المعهد (اختياري)',
   instituteCodePlaceholder: 'يُولَّد تلقائياً إذا تُرك فارغاً',
+  instituteTimezone: 'المنطقة الزمنية',
+  instituteTimezoneHint: 'تُحسب بها تواريخ الحضور واستحقاق الأقساط',
+  detailsTimezone: 'المنطقة الزمنية',
   instituteAddress: 'عنوان المعهد',
   instituteAddressPlaceholder: 'المدينة، الحي، الشارع',
   instituteLogoUrl: 'رابط شعار المعهد (اختياري)',

@@ -3,6 +3,7 @@ import { FeatureKey, FeatureStatus, Institute } from '@/src/core/api';
 export interface InstituteFormState {
   name: string;
   code: string;
+  timezone: string;
   logoUrl: string;
   primaryColor: string;
   secondaryColor: string;
