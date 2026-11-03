@@ -6,3 +6,7 @@ export * from './SectionDrawer';
 export * from './SectionFeeDrawer';
 export * from './SectionDetailsDrawer';
 export * from './AcademicBranchesDrawer';
+export * from './SectionSubjectsSummary';
+export * from './SectionSubjectAssignForm';
+export * from './SectionSubjectsPlanList';
+export * from './SectionInfoTab';

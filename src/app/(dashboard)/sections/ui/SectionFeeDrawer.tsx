@@ -4,7 +4,7 @@ import { Alert, Stack, Text } from '@mantine/core';
 import { IconAlertCircle, IconCoin } from '@tabler/icons-react';
 import { AppInput } from '@/src/components/controllers/input';
 import { AppModal } from '@/src/components/controllers';
-import { sectionFormLabels } from '../static-data/sections.data';
+import { sectionDetailsLabels, sectionFormLabels } from '../static-data/sections.data';
 import { useSectionsMirror } from '../store/useSectionsMirror';
 import { formatNumber } from '@/src/core/format';
 
@@ -73,7 +73,7 @@ export function SectionFeeModal({
             )}
 
             <Text size="xs" c="dimmed">
-              الرسوم السابقة: {formatNumber(feeSection?.feeAmount ?? 0)} ر.س
+              الرسوم السابقة: {formatNumber(feeSection?.feeAmount ?? 0)} {sectionDetailsLabels.currency}
             </Text>
 
             <AppInput

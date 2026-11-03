@@ -84,6 +84,27 @@ export interface CreateStudentPayload {
   customFields?: Record<string, any>;
 }
 
+export type UpdateFamilyPayload = Partial<CreateFamilyPayload>;
+
+export interface UpdateStudentPayload {
+  fullName?: string;
+  birthDate?: string;
+  gender?: string;
+  branchId?: number;
+  familyId?: number;
+  customFields?: Record<string, unknown>;
+}
+
+/** Records attached to a student — shown before a (soft) delete. */
+export interface StudentDeletionReport {
+  studentId: number;
+  enrollments: number;
+  examResults: number;
+  lessonAttendance: number;
+  subscriptions: number;
+  payments: number;
+}
+
 export interface StudentQueryParams {
   page?: number;
   limit?: number;
@@ -102,6 +123,7 @@ export const studentsKeys = {
   lists: () => [...studentsKeys.all, 'list'] as const,
   list: (params: StudentQueryParams) => [...studentsKeys.lists(), params] as const,
   detail: (id: number) => [...studentsKeys.all, 'detail', id] as const,
+  deletionReport: (id: number) => [...studentsKeys.all, 'deletion-report', id] as const,
   fields: (includeInactive?: boolean) => ['student-fields', { includeInactive }] as const,
   families: (search?: string) => ['families', { search }] as const,
 };
@@ -126,6 +148,25 @@ export async function getStudentById(id: number): Promise<Student> {
 
 export async function createStudent(payload: CreateStudentPayload): Promise<Student> {
   const { data } = await apiClient.post<Student>('/students', payload);
+  return data;
+}
+
+export async function updateStudent(
+  id: number,
+  payload: UpdateStudentPayload,
+): Promise<Student> {
+  const { data } = await apiClient.patch<Student>(`/students/${id}`, payload);
+  return data;
+}
+
+export async function deleteStudent(id: number): Promise<void> {
+  await apiClient.delete(`/students/${id}`);
+}
+
+export async function getStudentDeletionReport(id: number): Promise<StudentDeletionReport> {
+  const { data } = await apiClient.get<StudentDeletionReport>(
+    `/students/${id}/deletion-report`,
+  );
   return data;
 }
 
@@ -171,6 +212,18 @@ export async function createFamily(payload: CreateFamilyPayload): Promise<Family
   return data;
 }
 
+export async function updateFamily(
+  id: number,
+  payload: UpdateFamilyPayload,
+): Promise<Family> {
+  const { data } = await apiClient.patch<Family>(`/families/${id}`, payload);
+  return data;
+}
+
+export async function deleteFamily(id: number): Promise<void> {
+  await apiClient.delete(`/families/${id}`);
+}
+
 // ---------------------------------------------------------------------------
 // React Query Hooks
 // ---------------------------------------------------------------------------
@@ -199,6 +252,39 @@ export function useCreateStudentMutation() {
       queryClient.invalidateQueries({ queryKey: studentsKeys.lists() });
       queryClient.invalidateQueries({ queryKey: ['families'] });
     },
+  });
+}
+
+export function useUpdateStudentMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, payload }: { id: number; payload: UpdateStudentPayload }) =>
+      updateStudent(id, payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: studentsKeys.all });
+    },
+  });
+}
+
+export function useDeleteStudentMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: number) => deleteStudent(id),
+    onSuccess: (_data, id) => {
+      // The student is gone: drop its cached detail/report instead of refetching them (404)
+      queryClient.removeQueries({ queryKey: studentsKeys.detail(id) });
+      queryClient.removeQueries({ queryKey: studentsKeys.deletionReport(id) });
+      queryClient.invalidateQueries({ queryKey: studentsKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: ['families'] });
+    },
+  });
+}
+
+export function useStudentDeletionReportQuery(id: number | null) {
+  return useQuery({
+    queryKey: studentsKeys.deletionReport(id ?? 0),
+    queryFn: () => getStudentDeletionReport(id!),
+    enabled: Boolean(id),
   });
 }
 
@@ -239,11 +325,12 @@ export function useDeleteStudentFieldMutation() {
   });
 }
 
-export function useFamiliesSearchQuery(search?: string) {
+export function useFamiliesSearchQuery(search?: string, enabled = true) {
   return useQuery({
     queryKey: studentsKeys.families(search),
     queryFn: () => searchFamilies(search),
     staleTime: 30000,
+    enabled,
   });
 }
 
@@ -251,6 +338,28 @@ export function useCreateFamilyMutation() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: createFamily,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['families'] });
+    },
+  });
+}
+
+export function useUpdateFamilyMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, payload }: { id: number; payload: UpdateFamilyPayload }) =>
+      updateFamily(id, payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['families'] });
+      queryClient.invalidateQueries({ queryKey: studentsKeys.all });
+    },
+  });
+}
+
+export function useDeleteFamilyMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: number) => deleteFamily(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['families'] });
     },

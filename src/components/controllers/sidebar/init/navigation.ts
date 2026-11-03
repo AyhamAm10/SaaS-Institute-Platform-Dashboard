@@ -43,7 +43,18 @@ export const defaultNavigationConfig: NavItem[] = [
     key: 'students',
     label: 'الطلاب والعائلات',
     icon: IconUsers,
-    href: '/students',
+    subItems: [
+      {
+        key: 'students-list',
+        label: 'سجل الطلاب',
+        href: '/students',
+      },
+      {
+        key: 'families',
+        label: 'العائلات وأولياء الأمور',
+        href: '/families',
+      },
+    ],
   },
   {
     key: 'sections',

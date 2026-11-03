@@ -1,19 +1,21 @@
 'use client';
 
 import { useMemo } from 'react';
-import { ActionIcon, Button, Tooltip } from '@mantine/core';
 import { IconBuildingCommunity, IconPlus, IconRefresh } from '@tabler/icons-react';
 import { DataModuleController } from '@/src/components/controllers/data-module';
-import { Institute } from '@/src/core/api';
+import { AppButton, AppIconButton } from '@/src/components/controllers/button';
+import { FeatureKey, Institute } from '@/src/core/api';
 import { useInstitutesMirror } from '../store/useInstitutesMirror';
 import { institutesLabels } from '../static-data/institutes.data';
 import { getInstitutesColumns } from './InstitutesTable';
-import { CreateInstituteDrawer } from './CreateInstituteDrawer';
+import { InstituteFormDrawer } from './InstituteFormDrawer';
 import { InstituteDetailsDrawer } from './InstituteDetailsDrawer';
+import { InstituteFeaturesSection } from './InstituteFeaturesSection';
 
 export interface InstitutesViewProps {
   onRefresh?: () => void;
-  onCreateSubmit: () => Promise<void>;
+  onFormSubmit: () => Promise<void>;
+  onToggleFeature: (key: FeatureKey, enabled: boolean) => Promise<void>;
 }
 
 /**
@@ -23,7 +25,7 @@ export interface InstitutesViewProps {
  * Strictly adheres to DataModuleController compound pattern.
  * ZERO useState hooks. Layout is 100% controlled by DataModuleController.
  */
-export function InstitutesView({ onRefresh, onCreateSubmit }: InstitutesViewProps) {
+export function InstitutesView({ onRefresh, onFormSubmit, onToggleFeature }: InstitutesViewProps) {
   const data = useInstitutesMirror('data');
   const isLoading = useInstitutesMirror('isLoading');
   const isFetching = useInstitutesMirror('isFetching');
@@ -35,10 +37,11 @@ export function InstitutesView({ onRefresh, onCreateSubmit }: InstitutesViewProp
   const setSearch = useInstitutesMirror('setSearch');
   const openCreateDrawer = useInstitutesMirror('openCreateDrawer');
   const openDetailsDrawer = useInstitutesMirror('openDetailsDrawer');
+  const openEditDrawer = useInstitutesMirror('openEditDrawer');
 
   const columns = useMemo(
-    () => getInstitutesColumns(openDetailsDrawer),
-    [openDetailsDrawer],
+    () => getInstitutesColumns(openDetailsDrawer, openEditDrawer),
+    [openDetailsDrawer, openEditDrawer],
   );
 
   return (
@@ -67,14 +70,9 @@ export function InstitutesView({ onRefresh, onCreateSubmit }: InstitutesViewProp
             badgeLabel={institutesLabels.totalCountBadge}
           />
           <DataModuleController.Actions>
-            <Button
-              leftSection={<IconPlus size={16} />}
-              onClick={openCreateDrawer}
-              color="primary"
-              radius="md"
-            >
+            <AppButton leftSection={<IconPlus size={16} />} onClick={openCreateDrawer}>
               {institutesLabels.createNewButton}
-            </Button>
+            </AppButton>
           </DataModuleController.Actions>
         </DataModuleController.Header>
 
@@ -82,19 +80,14 @@ export function InstitutesView({ onRefresh, onCreateSubmit }: InstitutesViewProp
           <DataModuleController.SearchInput placeholder={institutesLabels.searchPlaceholder} />
           {onRefresh && (
             <DataModuleController.FilterSlot>
-              <Tooltip label={institutesLabels.refreshButton} withArrow position="top">
-                <ActionIcon
-                  variant="light"
-                  color="primary"
-                  size="md"
-                  radius="md"
-                  onClick={onRefresh}
-                  loading={isFetching}
-                  aria-label={institutesLabels.refreshButton}
-                >
-                  <IconRefresh size={16} />
-                </ActionIcon>
-              </Tooltip>
+              <AppIconButton
+                variant="brand"
+                label={institutesLabels.refreshButton}
+                onClick={onRefresh}
+                loading={isFetching}
+              >
+                <IconRefresh size={16} />
+              </AppIconButton>
             </DataModuleController.FilterSlot>
           )}
         </DataModuleController.FilterBar>
@@ -106,8 +99,10 @@ export function InstitutesView({ onRefresh, onCreateSubmit }: InstitutesViewProp
         <DataModuleController.Footer />
       </DataModuleController>
 
-      <CreateInstituteDrawer onSubmit={onCreateSubmit} />
-      <InstituteDetailsDrawer />
+      <InstituteFormDrawer onSubmit={onFormSubmit} />
+      <InstituteDetailsDrawer
+        featuresSlot={<InstituteFeaturesSection onToggle={onToggleFeature} />}
+      />
     </>
   );
 }

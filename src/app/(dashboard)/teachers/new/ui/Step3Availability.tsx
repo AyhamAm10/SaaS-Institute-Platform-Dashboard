@@ -27,13 +27,13 @@ import { AppInput, AppSelect } from '@/src/components/controllers';
 import { useTeacherRegistrationMirror } from '../store/useTeacherRegistrationMirror';
 
 const DAYS_OF_WEEK = [
+  { value: '6', label: 'السبت' },
   { value: '0', label: 'الأحد' },
   { value: '1', label: 'الإثنين' },
   { value: '2', label: 'الثلاثاء' },
   { value: '3', label: 'الأربعاء' },
   { value: '4', label: 'الخميس' },
   { value: '5', label: 'الجمعة' },
-  { value: '6', label: 'السبت' },
 ];
 
 const dayNameMap: Record<number, string> = {

@@ -24,6 +24,8 @@ export function LoginForm() {
   const setPhone = useLoginMirror('setPhone');
   const password = useLoginMirror('password');
   const setPassword = useLoginMirror('setPassword');
+  const instituteCode = useLoginMirror('instituteCode');
+  const setInstituteCode = useLoginMirror('setInstituteCode');
   const errorMessage = useLoginMirror('errorMessage');
   const isSubmitting = useLoginMirror('isSubmitting');
   const submit = useLoginMirror('submit');
@@ -94,6 +96,21 @@ export function LoginForm() {
               value={password}
               onChange={(e) =>
                 setPassword(
+                  typeof e === 'string'
+                    ? e
+                    : (e as React.ChangeEvent<HTMLInputElement>).currentTarget.value,
+                )
+              }
+              disabled={isSubmitting}
+            />
+
+            <AppInput
+              label="كود المعهد (اختياري)"
+              description="مطلوب فقط إذا كان رقمك مسجلاً في أكثر من معهد"
+              placeholder="INS0002"
+              value={instituteCode}
+              onChange={(e) =>
+                setInstituteCode(
                   typeof e === 'string'
                     ? e
                     : (e as React.ChangeEvent<HTMLInputElement>).currentTarget.value,

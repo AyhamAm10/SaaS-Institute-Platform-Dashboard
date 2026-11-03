@@ -20,6 +20,7 @@ import {
 } from '@tabler/icons-react';
 import { DataModuleColumn } from '@/src/components/controllers/data-module';
 import { Section } from '@/src/core/api';
+import { sectionDetailsLabels } from '../static-data/sections.data';
 
 /**
  * Hook that builds the column definitions for the Sections table.
@@ -102,7 +103,7 @@ export function useSectionsColumns(
         title: 'الرسوم الدراسية',
         render: (row: Section) => (
           <Text fw={500} size="sm" c="teal">
-            {formatNumber(row.feeAmount)} ر.س
+            {formatNumber(row.feeAmount)} {sectionDetailsLabels.currency}
           </Text>
         ),
       },

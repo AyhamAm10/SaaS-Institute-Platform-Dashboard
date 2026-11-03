@@ -1,3 +1,13 @@
+export const GENDER_OPTIONS = [
+  { value: 'MALE', label: 'ذكر' },
+  { value: 'FEMALE', label: 'أنثى' },
+];
+
+export const BOOLEAN_OPTIONS = [
+  { value: 'true', label: 'نعم' },
+  { value: 'false', label: 'لا' },
+];
+
 export const studentsLabels = {
   title: 'سجل الطلاب المقيدين',
   description: 'إدارة ومتابعة بيانات الطلاب، سجلات العائلات، والتسكين في الشعب الدراسية',
@@ -6,6 +16,39 @@ export const studentsLabels = {
   emptyMessage: 'لا يوجد طلاب مسجلون بعد',
   emptyDescription: 'ابدأ بقيد وتسجيل أول طالب في المعهد من خلال معالج التسجيل السريع',
   allBranches: 'جميع الفروع الجغرافية',
+
+  tableFullName: 'اسم الطالب',
+  tableFamily: 'العائلة والتواصل',
+  tableBranch: 'الفرع الجغرافي',
+  tableSection: 'الشعبة المسجل بها',
+  tableBirthDate: 'تاريخ الميلاد',
+  notEnrolled: 'غير مسكن بشعبة',
+  tableActions: 'الإجراءات',
+  editButton: 'تعديل',
+  deleteButton: 'حذف',
+  editTitle: 'تعديل بيانات الطالب',
+  editDescription: 'تعديل البيانات الأساسية والعائلة والحقول الإضافية للطالب',
+  sectionBasic: 'البيانات الأساسية',
+  sectionFamily: 'العائلة',
+  sectionFamilyDescription: 'ابحث عن عائلة أخرى لنقل الطالب إليها عند الحاجة',
+  sectionCustomFields: 'الحقول الإضافية الخاصة بالمعهد',
+  fieldFamilySearch: 'بحث عن عائلة',
+  fieldFamilySearchPlaceholder: 'كنية العائلة، اسم الأب، أو رقم الهاتف...',
+  fieldFamily: 'عائلة الطالب',
+  familiesLoading: 'جاري البحث...',
+  familiesEmpty: 'لا توجد عائلات مطابقة',
+  customFieldsEmpty: 'لا توجد حقول إضافية معرفة للمعهد. يمكن إضافتها من صفحة الحقول المخصصة للطلاب.',
+  fieldFullName: 'اسم الطالب الكامل',
+  fieldGender: 'الجنس',
+  fieldBirthDate: 'تاريخ الميلاد',
+  submitEdit: 'حفظ التعديلات',
+  cancel: 'إلغاء',
+  deleteModalTitle: 'حذف الطالب',
+  deleteConfirmPrompt: 'هل أنت متأكد من حذف الطالب',
+  deleteReportLoading: 'جاري التحقق من السجلات المرتبطة...',
+  deleteReportTitle: 'سجلات مرتبطة بالطالب (ستبقى محفوظة):',
+  deleteSoftNote: 'سيختفي الطالب من القوائم، مع الاحتفاظ بسجله التاريخي في النظام.',
+  confirmDelete: 'تأكيد الحذف',
 };
 
 /** Demo chart data (no API yet): attendance hours per period tab. */

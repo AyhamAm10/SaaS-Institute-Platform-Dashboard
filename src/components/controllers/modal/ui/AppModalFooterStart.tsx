@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Group } from '@mantine/core';
+import { Group } from '@mantine/core';
 import { ReactNode } from 'react';
 
 export interface AppModalFooterStartProps {
@@ -9,10 +9,11 @@ export interface AppModalFooterStartProps {
 }
 
 export function AppModalFooterStart({ children, className }: AppModalFooterStartProps) {
-  if (!children) return <Box />;
+  if (!children) return null;
 
   return (
-    <Group gap="sm" align="center" className={className} wrap="nowrap">
+    // marginInlineEnd: auto pushes the end-side actions away, keeping this group on the start side.
+    <Group gap="sm" align="center" className={className} wrap="nowrap" style={{ marginInlineEnd: 'auto' }}>
       {children}
     </Group>
   );

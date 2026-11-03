@@ -1,75 +1,64 @@
 'use client';
 
 import React from 'react';
-import { Box, Group, Stack, Text, Title, rem } from '@mantine/core';
-import { IconCalendarStats, IconSchool, IconUsers } from '@tabler/icons-react';
-import { BrandMark } from '../../sidebar/ui/shared/SidebarBrand';
-
-const HIGHLIGHTS = [
-  { icon: IconUsers, label: 'الطلاب والعائلات' },
-  { icon: IconSchool, label: 'الشعب والمواد' },
-  { icon: IconCalendarStats, label: 'الجدول الأسبوعي' },
-];
+import Image from 'next/image';
+import { Box } from '@mantine/core';
+import loginHeroImage from '@/src/assets/login-hero.png';
 
 /**
  * LoginHeroPanel
  *
- * Institute brand panel: the logo on its native black, the institute name
- * and the main areas of the dashboard. Hidden on small screens.
+ * Displays the hero illustration filling the full 100vh height
+ * without any margin or padding.
  */
 export function LoginHeroPanel() {
   return (
     <Box
       visibleFrom="md"
       style={{
+        flex: 1,
+        height: '100vh',
+        maxHeight: '100vh',
         width: '100%',
-        maxWidth: rem(440),
-        padding: rem(40),
-        borderRadius: 'var(--app-radius-xl)',
-        background: 'linear-gradient(160deg, rgba(28, 28, 30, 0.92), rgba(10, 10, 11, 0.96))',
-        border: '1px solid rgba(255, 255, 255, 0.08)',
-        boxShadow: '0 40px 80px -24px rgba(20, 20, 22, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.08)',
-        backdropFilter: 'blur(18px)',
-        WebkitBackdropFilter: 'blur(18px)',
-        color: '#FFFFFF',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'relative',
+        margin: 0,
+        padding: 0,
+        overflow: 'hidden',
       }}
     >
-      <Stack gap="xl">
-        <BrandMark size={96} />
+      {/* Ambient background glow */}
+      <Box
+        style={{
+          position: 'absolute',
+          width: '100%',
+          height: '100%',
+          background:
+            'radial-gradient(circle at center, var(--app-brand-accent-soft) 0%, transparent 70%)',
+          filter: 'blur(50px)',
+          zIndex: 0,
+          pointerEvents: 'none',
+        }}
+      />
 
-        <Stack gap={8}>
-          <Title order={2} fw={600} style={{ fontSize: rem(30), letterSpacing: '-0.01em', color: '#FFFFFF' }}>
-            معهد جيل السلام
-          </Title>
-          <Text fw={300} style={{ fontSize: rem(14.5), lineHeight: 1.7, color: 'rgba(255, 255, 255, 0.66)' }}>
-            لوحة إدارة واحدة للطلاب والشعب والكادر والجدول الأسبوعي.
-          </Text>
-        </Stack>
-
-        <Stack gap="sm">
-          {HIGHLIGHTS.map(({ icon: Icon, label }) => (
-            <Group key={label} gap="sm" wrap="nowrap">
-              <Box
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  width: rem(34),
-                  height: rem(34),
-                  borderRadius: 'var(--app-radius-sm)',
-                  backgroundColor: 'rgba(241, 103, 38, 0.14)',
-                  color: 'var(--mantine-color-brand-4)',
-                }}
-              >
-                <Icon size={18} stroke={1.6} />
-              </Box>
-              <Text fw={400} size="sm" style={{ color: 'rgba(255, 255, 255, 0.82)' }}>
-                {label}
-              </Text>
-            </Group>
-          ))}
-        </Stack>
-      </Stack>
+      <Image
+        src={loginHeroImage}
+        alt="SaaS Platform Educational Hero Illustration"
+        priority
+        style={{
+          width: '100%',
+          height: '100vh',
+          maxHeight: '100vh',
+          objectFit: 'contain',
+          position: 'relative',
+          zIndex: 1,
+          margin: 0,
+          padding: 0,
+          filter: 'drop-shadow(0 14px 28px rgba(10, 25, 45, 0.08))',
+        }}
+      />
     </Box>
   );
 }

@@ -13,7 +13,7 @@ export function AppModalClose({ size = 'md', className }: AppModalCloseProps) {
   const close = useModalMirror('close');
 
   return (
-    <Tooltip label="إغلاق" withArrow position="bottom">
+    <Tooltip label="إغلاق" position="bottom">
       <ActionIcon
         variant="subtle"
         color="gray"

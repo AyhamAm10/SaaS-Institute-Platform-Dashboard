@@ -2,22 +2,22 @@
 import { formatDate } from '@/src/core/format';
 
 import {
-  ActionIcon,
   Avatar,
-  Badge,
   ColorSwatch,
   Group,
   Stack,
   Text,
-  Tooltip,
 } from '@mantine/core';
 import {
+  IconEdit,
   IconEye,
   IconPhone,
   IconUser,
 } from '@tabler/icons-react';
 import { Institute } from '@/src/core/api';
 import { DataModuleColumn } from '@/src/components/controllers/data-module';
+import { AppIconButton } from '@/src/components/controllers/button';
+import { StatusBadge } from '@/src/components/controllers/badge';
 import { institutesLabels } from '../static-data/institutes.data';
 
 /**
@@ -28,6 +28,7 @@ import { institutesLabels } from '../static-data/institutes.data';
  */
 export function getInstitutesColumns(
   openDetailsDrawer: (institute: Institute) => void,
+  openEditDrawer: (institute: Institute) => void,
 ): DataModuleColumn<Institute>[] {
   return [
     {
@@ -50,7 +51,7 @@ export function getInstitutesColumns(
               {institute.name}
             </Text>
             <Text size="xs" c="dimmed" style={{ fontSize: '11px' }}>
-              معرف: #{institute.id}
+              معرف: #{institute.id} · كود: {institute.code}
             </Text>
           </Stack>
         </Group>
@@ -76,9 +77,9 @@ export function getInstitutesColumns(
             </Stack>
           </Group>
         ) : (
-          <Badge variant="light" color="gray" size="xs" radius="sm">
+          <StatusBadge tone="neutral" size="xs">
             {institutesLabels.noAdminAssigned}
-          </Badge>
+          </StatusBadge>
         );
       },
     },
@@ -138,18 +139,23 @@ export function getInstitutesColumns(
       align: 'center',
       render: (institute) => (
         <Group gap="xs" justify="center" wrap="nowrap">
-          <Tooltip label={institutesLabels.detailsButton} withArrow>
-            <ActionIcon
-              variant="subtle"
-              color="primary"
-              size="sm"
-              radius="md"
-              onClick={() => openDetailsDrawer(institute)}
-              aria-label={institutesLabels.detailsButton}
-            >
-              <IconEye size={15} />
-            </ActionIcon>
-          </Tooltip>
+          <AppIconButton
+            variant="ghost"
+            size="sm"
+            label={institutesLabels.detailsButton}
+            onClick={() => openDetailsDrawer(institute)}
+          >
+            <IconEye size={15} />
+          </AppIconButton>
+
+          <AppIconButton
+            variant="ghost"
+            size="sm"
+            label={institutesLabels.editButton}
+            onClick={() => openEditDrawer(institute)}
+          >
+            <IconEdit size={15} />
+          </AppIconButton>
         </Group>
       ),
     },

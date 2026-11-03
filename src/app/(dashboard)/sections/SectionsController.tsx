@@ -330,7 +330,10 @@ export function SectionsController() {
             teacherId: teacherId ?? undefined,
           },
         });
+        // Reset the whole assign form for the next subject
         store.getState().setAssignSubjectId(null);
+        store.getState().setAssignTeacherId(null);
+        store.getState().setAssignWeeklyPeriods(2);
       } catch (err: unknown) {
         store.getState().setAssignSubjectError(getErrorMessage(err, 'حدث خطأ أثناء إسناد المادة للشعبة'));
       } finally {

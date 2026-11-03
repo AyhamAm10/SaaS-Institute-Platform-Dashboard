@@ -1,33 +1,14 @@
 'use client';
+import { ReactNode } from 'react';
 import { formatLongDate } from '@/src/core/format';
 
-import {
-  Avatar,
-  Badge,
-  Button,
-  Card,
-  ColorSwatch,
-  Divider,
-  Group,
-  Paper,
-  SimpleGrid,
-  Stack,
-  Text,
-  ThemeIcon,
-  rem,
-} from '@mantine/core';
-import {
-  IconBuildingCommunity,
-  IconCalendar,
-  IconMapPin,
-  IconPhone,
-  IconSchool,
-  IconUser,
-  IconUserCheck,
-} from '@tabler/icons-react';
-import { AppDrawer } from '@/src/components/controllers';
+import { Avatar, Divider, Group, Paper, Stack, Text, ThemeIcon } from '@mantine/core';
+import { IconBuildingCommunity, IconCalendar, IconEdit } from '@tabler/icons-react';
+import { AppButton, AppDrawer, StatusBadge } from '@/src/components/controllers';
 import { useInstitutesMirror } from '../store/useInstitutesMirror';
-import { institutesLabels } from '../static-data/institutes.data';
+import { InstituteContactBranding } from './InstituteContactBranding';
+import { InstituteAdminCard } from './InstituteAdminCard';
+import { DEFAULT_INSTITUTE_COLORS, institutesLabels } from '../static-data/institutes.data';
 
 /**
  * InstituteDetailsDrawer
@@ -36,14 +17,19 @@ import { institutesLabels } from '../static-data/institutes.data';
  * Pure presentation layer adhering strictly to role.md.
  * ZERO useState hooks — reads selectedInstitute and actions from useInstitutesMirror.
  */
-export function InstituteDetailsDrawer() {
+export interface InstituteDetailsDrawerProps {
+  /** Feature flags section, composed by the view. */
+  featuresSlot?: ReactNode;
+}
+
+export function InstituteDetailsDrawer({ featuresSlot }: InstituteDetailsDrawerProps) {
   const opened = useInstitutesMirror('detailsDrawerOpened');
   const closeDetailsDrawer = useInstitutesMirror('closeDetailsDrawer');
   const selectedInstitute = useInstitutesMirror('selectedInstitute');
+  const openEditDrawer = useInstitutesMirror('openEditDrawer');
 
   if (!selectedInstitute) return null;
 
-  const adminUser = selectedInstitute.instituteAdmins?.[0]?.user;
   const formattedCreatedDate = formatLongDate(selectedInstitute.createdAt);
 
   return (
@@ -66,7 +52,7 @@ export function InstituteDetailsDrawer() {
             radius="xl"
             withBorder
             style={{
-              background: `linear-gradient(135deg, ${selectedInstitute.primaryColor || '#1a73e8'}15 0%, ${selectedInstitute.secondaryColor || '#34a853'}15 100%)`,
+              background: `linear-gradient(135deg, ${selectedInstitute.primaryColor || DEFAULT_INSTITUTE_COLORS.primary}15 0%, ${selectedInstitute.secondaryColor || DEFAULT_INSTITUTE_COLORS.secondary}15 100%)`,
               borderColor: 'var(--mantine-color-gray-2)',
             }}
           >
@@ -85,131 +71,32 @@ export function InstituteDetailsDrawer() {
                   {selectedInstitute.name}
                 </Text>
                 <Group gap="xs">
-                  <Badge variant="light" color="teal" size="sm" radius="xl">
+                  <StatusBadge tone="success" size="sm">
                     مؤسسة نشطة
-                  </Badge>
+                  </StatusBadge>
                   <Text size="xs" c="dimmed">
                     المعرف: #{selectedInstitute.id}
                   </Text>
+                  <StatusBadge tone="brand" variant="outline" size="sm">
+                    {institutesLabels.detailsCode}: {selectedInstitute.code}
+                  </StatusBadge>
                 </Group>
               </Stack>
             </Group>
           </Paper>
 
-          {/* Contact & Location Information */}
-          <Stack gap="sm">
-            <Text fw={500} size="sm" c="dimmed">
-              معلومات الاتصال والموقع:
-            </Text>
-
-            <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="sm">
-              <Card radius="lg" withBorder p="sm">
-                <Group gap="xs">
-                  <ThemeIcon size="md" radius="xl" color="blue" variant="light">
-                    <IconPhone size={16} />
-                  </ThemeIcon>
-                  <Stack gap={0}>
-                    <Text size="xs" c="dimmed">
-                      رقم الهاتف
-                    </Text>
-                    <Text size="sm" fw={500} dir="ltr">
-                      {selectedInstitute.phone || '—'}
-                    </Text>
-                  </Stack>
-                </Group>
-              </Card>
-
-              <Card radius="lg" withBorder p="sm">
-                <Group gap="xs">
-                  <ThemeIcon size="md" radius="xl" color="orange" variant="light">
-                    <IconMapPin size={16} />
-                  </ThemeIcon>
-                  <Stack gap={0}>
-                    <Text size="xs" c="dimmed">
-                      العنوان
-                    </Text>
-                    <Text size="sm" fw={500} lineClamp={1}>
-                      {selectedInstitute.address || '—'}
-                    </Text>
-                  </Stack>
-                </Group>
-              </Card>
-            </SimpleGrid>
-          </Stack>
-
-          {/* Brand Palette */}
-          <Stack gap="xs">
-            <Text fw={500} size="sm" c="dimmed">
-              الهوية البصرية والألوان:
-            </Text>
-            <Group gap="md">
-              <Group gap="xs">
-                <ColorSwatch color={selectedInstitute.primaryColor || '#1a73e8'} size={24} radius="md" />
-                <Stack gap={0}>
-                  <Text size="xs" c="dimmed">
-                    اللون الأساسي
-                  </Text>
-                  <Text size="xs" fw={500} dir="ltr">
-                    {selectedInstitute.primaryColor || '#1a73e8'}
-                  </Text>
-                </Stack>
-              </Group>
-
-              <Divider orientation="vertical" />
-
-              <Group gap="xs">
-                <ColorSwatch color={selectedInstitute.secondaryColor || '#34a853'} size={24} radius="md" />
-                <Stack gap={0}>
-                  <Text size="xs" c="dimmed">
-                    اللون الثانوي
-                  </Text>
-                  <Text size="xs" fw={500} dir="ltr">
-                    {selectedInstitute.secondaryColor || '#34a853'}
-                  </Text>
-                </Stack>
-              </Group>
-            </Group>
-          </Stack>
+          <InstituteContactBranding />
 
           <Divider />
 
-          {/* Responsible Administrator Card */}
-          <Stack gap="xs">
-            <Text fw={500} size="sm" c="dimmed">
-              المدير المسؤول عن المعهد:
-            </Text>
+          <InstituteAdminCard />
 
-            {adminUser ? (
-              <Card radius="lg" withBorder p="md" bg="var(--mantine-color-gray-0)">
-                <Group justify="space-between" align="center">
-                  <Group gap="md">
-                    <Avatar color="teal" size="md" radius="xl">
-                      <IconUserCheck size={20} />
-                    </Avatar>
-                    <Stack gap={2}>
-                      <Text size="sm" fw={500}>
-                        {adminUser.fullName}
-                      </Text>
-                      <Group gap="xs">
-                        <Text size="xs" c="dimmed" dir="ltr">
-                          {adminUser.phone}
-                        </Text>
-                        <Badge size="xs" color="teal" variant="light" radius="xl">
-                          مدير المعهد
-                        </Badge>
-                      </Group>
-                    </Stack>
-                  </Group>
-                </Group>
-              </Card>
-            ) : (
-              <Paper p="md" radius="lg" withBorder>
-                <Text size="sm" c="dimmed">
-                  {institutesLabels.noAdminAssigned}
-                </Text>
-              </Paper>
-            )}
-          </Stack>
+          {featuresSlot && (
+            <>
+              <Divider />
+              {featuresSlot}
+            </>
+          )}
 
           {/* Registration Date */}
           <Group gap="xs" mt="md">
@@ -225,9 +112,16 @@ export function InstituteDetailsDrawer() {
 
       <AppDrawer.Footer>
         <Group justify="flex-end" w="100%">
-          <Button variant="default" radius="xl" onClick={closeDetailsDrawer}>
+          <AppButton variant="outline" radius="xl" onClick={closeDetailsDrawer}>
             إغلاق النافذة
-          </Button>
+          </AppButton>
+          <AppButton
+            radius="xl"
+            leftSection={<IconEdit size={16} />}
+            onClick={() => openEditDrawer(selectedInstitute)}
+          >
+            {institutesLabels.editButton}
+          </AppButton>
         </Group>
       </AppDrawer.Footer>
     </AppDrawer>

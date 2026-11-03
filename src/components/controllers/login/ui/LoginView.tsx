@@ -2,37 +2,64 @@
 
 import React from 'react';
 import { Box, Flex, rem } from '@mantine/core';
-import { AppAmbient } from '../../ambient';
 import { LoginForm } from './LoginForm';
 import { LoginHeroPanel } from './LoginHeroPanel';
+import { AppAmbient } from '../../ambient';
 
 /**
- * Pure presentation layout assembling the Login view:
- * living orange blobs behind a glass sign-in card and the institute brand panel.
+ * Pure presentation layout assembling the Login view.
+ * Displays the Login Card alongside the full-height Hero Vector Illustration.
  */
 export function LoginView() {
   return (
     <Box
-      mih="100dvh"
+      mih="100vh"
+      h="100vh"
       style={{
         position: 'relative',
         backgroundColor: 'var(--app-bg)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        margin: 0,
+        padding: 0,
         overflow: 'hidden',
       }}
     >
+      {/* Living background: orange liquid blobs behind the glass card */}
       <AppAmbient variant="login" />
 
       <Flex
         direction={{ base: 'column', md: 'row' }}
         align="center"
         justify="center"
-        gap={{ base: 'xl', md: rem(64) }}
-        mih="100dvh"
-        px={{ base: 'md', sm: 'xl' }}
-        py="xl"
-        style={{ position: 'relative', zIndex: 1 }}
+        w="100%"
+        h="100vh"
+        style={{
+          position: 'relative',
+          zIndex: 1,
+          margin: 0,
+          padding: 0,
+        }}
       >
-        <LoginForm />
+        {/* Form Container centered in its section, shifted gently to the left */}
+        <Box
+          style={{
+            flex: 1,
+            height: '100vh',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: rem(32),
+            paddingRight: rem(72),
+            paddingLeft: rem(24),
+            zIndex: 2,
+          }}
+        >
+          <LoginForm />
+        </Box>
+
+        {/* Hero Illustration touching full screen height */}
         <LoginHeroPanel />
       </Flex>
     </Box>

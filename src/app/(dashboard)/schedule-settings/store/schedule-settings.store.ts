@@ -11,7 +11,7 @@ import {
 export type ScheduleSettingsStore = ControllerStoreApi<ScheduleSettingsState>;
 
 const defaultFormState: ScheduleSettingsFormState = {
-  workingDays: [0, 1, 2, 3, 4],
+  workingDays: [6, 0, 1, 2, 3, 4],
   dayStartTime: '08:00',
   dayEndTime: '14:00',
   periodDurationMinutes: 45,

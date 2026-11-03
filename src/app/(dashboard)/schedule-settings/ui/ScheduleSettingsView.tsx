@@ -31,15 +31,16 @@ import {
 } from '@tabler/icons-react';
 import { AppInput } from '@/src/components/controllers';
 import { useScheduleSettingsMirror } from '../store/useScheduleSettingsMirror';
+import { sortWeekDays } from '@/src/core/format';
 
 const DAYS_OF_WEEK = [
+  { value: 6, label: 'السبت' },
   { value: 0, label: 'الأحد' },
   { value: 1, label: 'الإثنين' },
   { value: 2, label: 'الثلاثاء' },
   { value: 3, label: 'الأربعاء' },
   { value: 4, label: 'الخميس' },
   { value: 5, label: 'الجمعة' },
-  { value: 6, label: 'السبت' },
 ];
 
 interface ScheduleSettingsViewProps {
@@ -81,7 +82,7 @@ export function ScheduleSettingsView({
     if (form.workingDays.includes(dayVal)) {
       setWorkingDays(form.workingDays.filter((d) => d !== dayVal));
     } else {
-      setWorkingDays([...form.workingDays, dayVal].sort());
+      setWorkingDays(sortWeekDays([...form.workingDays, dayVal]));
     }
   };
 

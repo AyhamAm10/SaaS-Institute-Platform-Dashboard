@@ -48,6 +48,8 @@ export interface UserProfile extends SafeUser {
 export interface LoginCredentials {
   phone: string;
   password: string;
+  /** Needed only when the same phone + password exist in several institutes. */
+  instituteCode?: string;
 }
 
 /**

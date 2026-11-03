@@ -19,9 +19,16 @@ import {
   studentsLabels,
 } from '../static-data/students.data';
 import { getStudentsColumns } from './StudentsTable';
+import { StudentEditDrawer } from './StudentEditDrawer';
+import { StudentDeleteModal } from './StudentDeleteModal';
 import { Student } from '@/src/core/api';
 
-export function StudentsView() {
+export interface StudentsViewProps {
+  onSubmitEdit: () => Promise<void>;
+  onConfirmDelete: (student: Student) => Promise<void>;
+}
+
+export function StudentsView({ onSubmitEdit, onConfirmDelete }: StudentsViewProps) {
   const students = useStudentsMirror('students');
   const total = useStudentsMirror('total');
   const totalPages = useStudentsMirror('totalPages');
@@ -30,8 +37,13 @@ export function StudentsView() {
   const isLoading = useStudentsMirror('isLoading');
   const setPage = useStudentsMirror('setPage');
   const setSearch = useStudentsMirror('setSearch');
+  const openEditDrawer = useStudentsMirror('openEditDrawer');
+  const openDeleteModal = useStudentsMirror('openDeleteModal');
 
-  const columns = useMemo(() => getStudentsColumns(), []);
+  const columns = useMemo(
+    () => getStudentsColumns(openEditDrawer, openDeleteModal),
+    [openEditDrawer, openDeleteModal],
+  );
 
   return (
     <AppModule variant="table">
@@ -133,6 +145,9 @@ export function StudentsView() {
           <DataModuleController.Footer />
         </DataModuleController>
       </AppModule.Table>
+
+      <StudentEditDrawer onSubmit={onSubmitEdit} />
+      <StudentDeleteModal onConfirmDelete={onConfirmDelete} />
     </AppModule>
   );
 }

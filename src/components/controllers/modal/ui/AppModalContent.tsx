@@ -17,7 +17,7 @@ export function AppModalContent({
   children,
   loading,
   loadingText = 'جاري التحميل...',
-  padding = 'xl',
+  padding,
   maxHeight = '70vh',
   className,
 }: AppModalContentProps) {
@@ -32,7 +32,8 @@ export function AppModalContent({
         scrollbarSize={6}
         className={className}
       >
-        <Box p={padding}>
+        {/* Default: tight top/bottom so header, body and actions read as one card. */}
+        <Box {...(padding !== undefined ? { p: padding } : { px: 'xl', py: 'sm' })}>
           {isLoading ? (
             <Center py={40}>
               <Stack align="center" gap="sm">

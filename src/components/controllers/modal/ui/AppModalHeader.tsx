@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Flex, Group, Stack } from '@mantine/core';
+import { Box, Group, Stack, rem } from '@mantine/core';
 import { Children, isValidElement, ReactNode } from 'react';
 import { AppModalClose } from './AppModalClose';
 import { AppModalTitle } from './AppModalTitle';
@@ -14,6 +14,14 @@ export interface AppModalHeaderProps {
   className?: string;
 }
 
+const isType = (child: ReactNode, type: unknown, displayName: string) =>
+  isValidElement(child) &&
+  (child.type === type || (child.type as { displayName?: string })?.displayName === displayName);
+
+/**
+ * Modal header: icon tile on the start side, title + description stacked next to it,
+ * close button on the end side. Never wraps, so the icon always sits beside the title.
+ */
 export function AppModalHeader({
   children,
   withCloseButton,
@@ -22,55 +30,32 @@ export function AppModalHeader({
   const config = useModalMirror('config');
   const showClose = withCloseButton ?? config.withCloseButton;
 
-  if (children) {
-    const filteredChildren = Children.toArray(children).filter((child) => {
-      if (!isValidElement(child)) return true;
-      return (
-        child.type !== AppModalClose &&
-        (child.type as any)?.displayName !== 'AppModalClose'
-      );
-    });
+  let icon: ReactNode = <AppModalIcon />;
+  let text: ReactNode = (
+    <>
+      <AppModalTitle />
+      <AppModalDescription />
+    </>
+  );
 
-    return (
-      <Box
-        px="xl"
-        py="lg"
-        className={className}
-        style={{
-          borderBottom: '1px solid var(--app-border-subtle)',
-          flexShrink: 0,
-        }}
-      >
-        <Flex justify="space-between" align="center" gap="md">
-          <Group gap="sm" align="center" style={{ flex: 1, minWidth: 0 }}>
-            {filteredChildren}
-          </Group>
-          {showClose && <AppModalClose />}
-        </Flex>
-      </Box>
-    );
+  if (children) {
+    const items = Children.toArray(children).filter((child) => !isType(child, AppModalClose, 'AppModalClose'));
+    const iconItems = items.filter((child) => isType(child, AppModalIcon, 'AppModalIcon'));
+    icon = iconItems.length > 0 ? iconItems : null;
+    text = items.filter((child) => !isType(child, AppModalIcon, 'AppModalIcon'));
   }
 
   return (
-    <Box
-      px="xl"
-      py="lg"
-      className={className}
-      style={{
-        borderBottom: '1px solid var(--app-border-subtle)',
-        flexShrink: 0,
-      }}
-    >
-      <Flex justify="space-between" align="center" gap="md">
-        <Group gap="sm" align="center" style={{ flex: 1, minWidth: 0 }}>
-          <AppModalIcon />
-          <Stack gap={2} style={{ flex: 1, minWidth: 0 }}>
-            <AppModalTitle />
-            <AppModalDescription />
+    <Box px="xl" pt="xl" pb="sm" className={className} style={{ flexShrink: 0 }}>
+      <Group justify="space-between" align="flex-start" gap="md" wrap="nowrap">
+        <Group gap="md" align="center" wrap="nowrap" style={{ flex: 1, minWidth: 0 }}>
+          {icon}
+          <Stack gap={rem(4)} style={{ flex: 1, minWidth: 0 }}>
+            {text}
           </Stack>
         </Group>
         {showClose && <AppModalClose />}
-      </Flex>
+      </Group>
     </Box>
   );
 }

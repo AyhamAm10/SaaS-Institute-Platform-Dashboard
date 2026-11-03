@@ -1,26 +1,38 @@
 'use client';
 
-import { ActionIcon, Badge, Group, Text, Tooltip } from '@mantine/core';
-import { IconBuildingCommunity, IconEye, IconPhone, IconUser, IconUsers } from '@tabler/icons-react';
+import { Group, Text, ThemeIcon } from '@mantine/core';
+import { IconBuildingCommunity, IconEdit, IconTrash, IconUser } from '@tabler/icons-react';
 import { Student } from '@/src/core/api';
 import { DataModuleColumn } from '@/src/components/controllers/data-module';
+import { AppIconButton } from '@/src/components/controllers/button';
+import { StatusBadge } from '@/src/components/controllers/badge';
+import { studentsLabels } from '../static-data/students.data';
 
-export function getStudentsColumns(onView?: (student: Student) => void): DataModuleColumn<Student>[] {
+/**
+ * getStudentsColumns
+ *
+ * Column definitions for the Students table.
+ * Strictly adheres to DataModuleController compound pattern.
+ */
+export function getStudentsColumns(
+  onEdit: (student: Student) => void,
+  onDelete: (student: Student) => void,
+): DataModuleColumn<Student>[] {
   return [
     {
       key: 'fullName',
-      title: 'اسم الطالب',
+      title: studentsLabels.tableFullName,
       sortable: true,
       render: (student) => (
         <Group gap="sm" wrap="nowrap">
-          <ActionIcon
+          <ThemeIcon
             size="sm"
             radius="md"
             variant="light"
             color={student.gender === 'MALE' ? 'blue' : 'pink'}
           >
             <IconUser size={15} />
-          </ActionIcon>
+          </ThemeIcon>
           <Text fw={500} size="xs" style={{ fontSize: '13px' }}>
             {student.fullName}
           </Text>
@@ -29,12 +41,12 @@ export function getStudentsColumns(onView?: (student: Student) => void): DataMod
     },
     {
       key: 'family',
-      title: 'العائلة والتواصل',
+      title: studentsLabels.tableFamily,
       render: (student) => (
         <Group gap="xs" wrap="nowrap">
-          <Badge variant="light" color="teal" radius="sm" size="sm">
+          <StatusBadge tone="info" size="sm">
             عائلة {student.family?.familyName || '—'}
-          </Badge>
+          </StatusBadge>
           {student.family?.fatherName && (
             <Text size="xs" c="dimmed">
               (الأب: {student.family.fatherName})
@@ -50,7 +62,7 @@ export function getStudentsColumns(onView?: (student: Student) => void): DataMod
     },
     {
       key: 'branch',
-      title: 'الفرع الجغرافي',
+      title: studentsLabels.tableBranch,
       render: (student) =>
         student.branch ? (
           <Group gap={6} wrap="nowrap">
@@ -67,30 +79,55 @@ export function getStudentsColumns(onView?: (student: Student) => void): DataMod
     },
     {
       key: 'section',
-      title: 'الشعبة المسجل بها',
+      title: studentsLabels.tableSection,
       render: (student) => {
         const enrollment = student.studentEnrollments?.[0];
         if (!enrollment?.section) {
           return (
-            <Badge variant="outline" color="gray" radius="sm" size="xs">
-              غير مسكن بشعبة
-            </Badge>
+            <StatusBadge tone="neutral" variant="outline" size="xs">
+              {studentsLabels.notEnrolled}
+            </StatusBadge>
           );
         }
         return (
-          <Badge variant="light" color="primary" radius="sm" size="sm">
+          <StatusBadge tone="brand" size="sm">
             {enrollment.section.name} {enrollment.section.grade ? `(${enrollment.section.grade})` : ''}
-          </Badge>
+          </StatusBadge>
         );
       },
     },
     {
       key: 'birthDate',
-      title: 'تاريخ الميلاد',
+      title: studentsLabels.tableBirthDate,
       render: (student) => (
         <Text size="xs" c="dimmed" dir="ltr" ta="right">
           {student.birthDate ? String(student.birthDate).split('T')[0] : '—'}
         </Text>
+      ),
+    },
+    {
+      key: 'actions',
+      title: studentsLabels.tableActions,
+      align: 'center',
+      render: (student) => (
+        <Group gap="xs" justify="center" wrap="nowrap">
+          <AppIconButton
+            variant="ghost"
+            size="sm"
+            label={studentsLabels.editButton}
+            onClick={() => onEdit(student)}
+          >
+            <IconEdit size={15} />
+          </AppIconButton>
+          <AppIconButton
+            variant="danger"
+            size="sm"
+            label={studentsLabels.deleteButton}
+            onClick={() => onDelete(student)}
+          >
+            <IconTrash size={15} />
+          </AppIconButton>
+        </Group>
       ),
     },
   ];

@@ -10,40 +10,23 @@ export interface AppModalFooterProps {
   className?: string;
 }
 
+/** Action row: actions sit at the end side; a FooterStart (if any) takes the start side. */
 export function AppModalFooter({ children, className }: AppModalFooterProps) {
-  if (children) {
-    return (
-      <Box
-        px="xl"
-        py="md"
-        className={className}
-        style={{
-          borderTop: '1px solid var(--app-border-subtle)',
-          backgroundColor: 'var(--app-glass-bg)',
-          flexShrink: 0,
-        }}
-      >
-        <Flex justify="space-between" align="center" gap="sm" wrap="wrap">
-          {children}
-        </Flex>
-      </Box>
-    );
-  }
-
   return (
     <Box
       px="xl"
-      py="md"
+      pt="sm"
+      pb="xl"
       className={className}
-      style={{
-        borderTop: '1px solid var(--app-border-subtle)',
-        backgroundColor: 'var(--app-glass-bg)',
-        flexShrink: 0,
-      }}
+      style={{ flexShrink: 0 }}
     >
-      <Flex justify="flex-end" align="center" gap="sm">
-        <AppModalCancel />
-        <AppModalConfirm />
+      <Flex justify="flex-end" align="center" gap="sm" wrap="wrap">
+        {children ?? (
+          <>
+            <AppModalCancel />
+            <AppModalConfirm />
+          </>
+        )}
       </Flex>
     </Box>
   );

@@ -15,15 +15,17 @@ export function createLoginStore(props?: LoginInitialProps): LoginStore {
   return createControllerStore<LoginState>((set, get) => ({
     phone: '',
     password: '',
+    instituteCode: '',
     errorMessage: props?.initialError ?? null,
     isSubmitting: false,
 
     setPhone: (phone: string) => set({ phone }),
     setPassword: (password: string) => set({ password }),
+    setInstituteCode: (instituteCode: string) => set({ instituteCode }),
     setErrorMessage: (errorMessage: string | null) => set({ errorMessage }),
 
     submit: async () => {
-      const { phone, password, isSubmitting } = get();
+      const { phone, password, instituteCode, isSubmitting } = get();
       if (isSubmitting) return;
 
       if (!phone || phone.trim().length === 0) {
@@ -42,6 +44,7 @@ export function createLoginStore(props?: LoginInitialProps): LoginStore {
         await authApi.login({
           phone: phone.trim(),
           password,
+          ...(instituteCode.trim() && { instituteCode: instituteCode.trim() }),
         });
 
         if (props?.onSuccess) {
@@ -52,8 +55,13 @@ export function createLoginStore(props?: LoginInitialProps): LoginStore {
           err as { response?: { data?: { message?: string | string[] } } }
         )?.response?.data?.message;
 
+        const hasResponse = Boolean((err as { response?: unknown })?.response);
+
         let msg = 'فشل تسجيل الدخول. يرجى التحقق من صحة رقم الجوال وكلمة المرور.';
-        if (typeof responseMessage === 'string') {
+        if (!hasResponse) {
+          // Network error: the API server could not be reached at all
+          msg = 'تعذر الاتصال بالخادم. يرجى التأكد من تشغيل الخادم والمحاولة مجدداً.';
+        } else if (typeof responseMessage === 'string') {
           msg = responseMessage;
         } else if (Array.isArray(responseMessage) && responseMessage.length > 0) {
           msg = responseMessage[0];

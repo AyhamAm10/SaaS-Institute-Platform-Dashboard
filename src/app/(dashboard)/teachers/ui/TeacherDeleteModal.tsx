@@ -3,7 +3,6 @@
 import {
   Alert,
   Badge,
-  Button,
   Group,
   Stack,
   Text,
@@ -13,7 +12,7 @@ import {
   IconAlertTriangle,
   IconTrash,
 } from '@tabler/icons-react';
-import { AppModal } from '@/src/components/controllers';
+import { AppButton, AppModal } from '@/src/components/controllers';
 import { Teacher } from '@/src/core/api';
 import { useTeachersMirror } from '../store/useTeachersMirror';
 
@@ -105,16 +104,14 @@ export function TeacherDeleteModal({ onConfirmDelete }: TeacherDeleteModalProps)
         <AppModal.FooterEnd>
           <AppModal.Cancel>إلغاء</AppModal.Cancel>
           {!hasLinkedEntries && (
-            <Button
-              color="red"
-              variant="filled"
-              radius="xl"
+            <AppButton
+              variant="dangerSolid"
               onClick={handleConfirm}
               loading={isDeleting}
               leftSection={<IconTrash size={16} />}
             >
               تأكيد الحذف
-            </Button>
+            </AppButton>
           )}
         </AppModal.FooterEnd>
       </AppModal.Footer>

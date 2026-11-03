@@ -3,18 +3,17 @@
 import { createContext, useContext } from 'react';
 import { createControllerStore } from '@/src/core/mirror';
 import { ControllerStoreApi } from '@/src/core/mirror/types';
-import {
-  CreateInstituteFormState,
-  InstitutesState,
-} from '../state/institutes.state';
+import { InstituteFormState, InstitutesState } from '../state/institutes.state';
+import { DEFAULT_INSTITUTE_COLORS } from '../static-data/institutes.data';
 
 export type InstitutesStore = ControllerStoreApi<InstitutesState>;
 
-const defaultFormState: CreateInstituteFormState = {
+const defaultFormState: InstituteFormState = {
   name: '',
+  code: '',
   logoUrl: '',
-  primaryColor: '#1a73e8',
-  secondaryColor: '#34a853',
+  primaryColor: DEFAULT_INSTITUTE_COLORS.primary,
+  secondaryColor: DEFAULT_INSTITUTE_COLORS.secondary,
   phone: '',
   address: '',
   adminFullName: '',
@@ -24,7 +23,7 @@ const defaultFormState: CreateInstituteFormState = {
 
 /**
  * Creates an isolated per-instance Zustand store for the Institutes Controller.
- * All UI state (pagination, filters, drawers, creation form, errors) lives here.
+ * All UI state (pagination, filters, drawers, forms, feature flags, errors) lives here.
  */
 export function createInstitutesStore(): InstitutesStore {
   return createControllerStore<InstitutesState>((set) => ({
@@ -40,8 +39,10 @@ export function createInstitutesStore(): InstitutesStore {
     isLoading: true,
     isFetching: false,
 
-    // ── Form State ──
-    createDrawerOpened: false,
+    // ── Form Drawer State ──
+    formDrawerOpened: false,
+    drawerMode: 'create',
+    editingInstitute: null,
     form: { ...defaultFormState },
     formErrors: {},
     generalError: null,
@@ -52,21 +53,51 @@ export function createInstitutesStore(): InstitutesStore {
     detailsDrawerOpened: false,
     selectedInstitute: null,
 
+    // ── Feature Flags ──
+    features: [],
+    isLoadingFeatures: false,
+    featureSavingKey: null,
+    featuresError: null,
+
     // ── Actions: Pagination & Filters ──
     setPage: (page: number) => set({ page }),
     setLimit: (limit: number) => set({ limit, page: 1 }),
     setSearch: (search: string) => set({ search, page: 1 }),
 
-    // ── Actions: Create Drawer & Form ──
+    // ── Actions: Form Drawer ──
     openCreateDrawer: () =>
       set({
-        createDrawerOpened: true,
+        formDrawerOpened: true,
+        drawerMode: 'create',
+        editingInstitute: null,
         form: { ...defaultFormState },
         formErrors: {},
         generalError: null,
         generalSuccess: null,
       }),
-    closeCreateDrawer: () => set({ createDrawerOpened: false }),
+
+    openEditDrawer: (institute) =>
+      set({
+        formDrawerOpened: true,
+        drawerMode: 'edit',
+        editingInstitute: institute,
+        detailsDrawerOpened: false,
+        form: {
+          ...defaultFormState,
+          name: institute.name,
+          code: institute.code ?? '',
+          logoUrl: institute.logoUrl ?? '',
+          primaryColor: institute.primaryColor || DEFAULT_INSTITUTE_COLORS.primary,
+          secondaryColor: institute.secondaryColor || DEFAULT_INSTITUTE_COLORS.secondary,
+          phone: institute.phone,
+          address: institute.address,
+        },
+        formErrors: {},
+        generalError: null,
+        generalSuccess: null,
+      }),
+
+    closeFormDrawer: () => set({ formDrawerOpened: false }),
 
     setFormField: (field, value) =>
       set((state) => ({
@@ -105,18 +136,30 @@ export function createInstitutesStore(): InstitutesStore {
       set({
         selectedInstitute: institute,
         detailsDrawerOpened: true,
+        featuresError: null,
       }),
     closeDetailsDrawer: () => set({ detailsDrawerOpened: false }),
 
+    // ── Actions: Feature Flags ──
+    setFeatureSavingKey: (featureSavingKey) => set({ featureSavingKey }),
+    setFeaturesError: (featuresError) => set({ featuresError }),
+    syncFeatures: ({ features, isLoading }) =>
+      set({ features, isLoadingFeatures: isLoading }),
+
     // ── Actions: Query Sync ──
     syncQueryData: (payload) =>
-      set({
+      set((state) => ({
         data: payload.data,
         total: payload.total,
         totalPages: payload.totalPages,
         isLoading: payload.isLoading,
         isFetching: payload.isFetching,
-      }),
+        // Keep the open details drawer in sync after edits
+        selectedInstitute: state.selectedInstitute
+          ? (payload.data.find((i) => i.id === state.selectedInstitute!.id) ??
+            state.selectedInstitute)
+          : null,
+      })),
   }));
 }
 

@@ -4,15 +4,26 @@ import { useCallback, useEffect, useState } from 'react';
 import { useStore } from 'zustand';
 import { useQueryClient } from '@tanstack/react-query';
 import {
+  FeatureKey,
   INSTITUTES_QUERY_KEYS,
   useCreateInstituteMutation,
+  useInstituteFeaturesQuery,
   useInstitutesQuery,
+  useUpdateInstituteFeaturesMutation,
+  useUpdateInstituteMutation,
 } from '@/src/core/api';
 import {
   createInstitutesStore,
   InstitutesContext,
 } from './store/institutes.store';
 import { InstitutesView } from './ui/InstitutesView';
+import {
+  extractApiError,
+  toInstituteDetailsPayload,
+  validateInstituteForm,
+} from './utils/institute-form.utils';
+
+type Store = ReturnType<typeof createInstitutesStore>;
 
 /**
  * QuerySync
@@ -21,11 +32,7 @@ import { InstitutesView } from './ui/InstitutesView';
  * Keeps the store synchronized with server data without the UI layer needing
  * to know about React Query.
  */
-function QuerySync({
-  store,
-}: {
-  store: ReturnType<typeof createInstitutesStore>;
-}) {
+function QuerySync({ store }: { store: Store }) {
   const page = useStore(store, (s) => s.page);
   const limit = useStore(store, (s) => s.limit);
   const search = useStore(store, (s) => s.search);
@@ -51,91 +58,113 @@ function QuerySync({
 }
 
 /**
+ * FeaturesSync
+ *
+ * Loads the feature flags of the institute open in the details drawer.
+ */
+function FeaturesSync({ store }: { store: Store }) {
+  const instituteId = useStore(store, (s) =>
+    s.detailsDrawerOpened ? (s.selectedInstitute?.id ?? null) : null,
+  );
+  const syncFeatures = useStore(store, (s) => s.syncFeatures);
+
+  const { data, isLoading } = useInstituteFeaturesQuery(instituteId);
+
+  useEffect(() => {
+    syncFeatures({
+      features: instituteId ? (data ?? []) : [],
+      isLoading: Boolean(instituteId) && isLoading,
+    });
+  }, [instituteId, data, isLoading, syncFeatures]);
+
+  return null;
+}
+
+/**
  * InstitutesController
  *
  * Root entry point for the Institutes management module.
- * Owns the Zustand store instance, query synchronization, and creation mutation orchestration.
+ * Owns the Zustand store instance, query synchronization, and the create / edit /
+ * feature-flag mutation orchestration.
  * Strictly adheres to the Controller Component Pattern (role.md).
  */
 export function InstitutesController() {
   const [store] = useState(() => createInstitutesStore());
   const queryClient = useQueryClient();
   const createMutation = useCreateInstituteMutation();
+  const updateMutation = useUpdateInstituteMutation();
+  const featuresMutation = useUpdateInstituteFeaturesMutation();
 
   const handleRefetch = useCallback(() => {
     queryClient.invalidateQueries({ queryKey: INSTITUTES_QUERY_KEYS.all });
   }, [queryClient]);
 
-  const handleCreateSubmit = useCallback(async () => {
-    const { form } = store.getState();
+  const handleFormSubmit = useCallback(async () => {
+    const { form, drawerMode, editingInstitute } = store.getState();
     store.getState().setGeneralError(null);
     store.getState().setGeneralSuccess(null);
 
     // ── Client-side validation ──
-    let hasError = false;
-
-    if (!form.name.trim()) {
-      store.getState().setFieldError('name', 'يرجى إدخال اسم المعهد التعليمي');
-      hasError = true;
-    }
-    if (!form.phone.trim()) {
-      store.getState().setFieldError('phone', 'يرجى إدخال هاتف المعهد');
-      hasError = true;
-    }
-    if (!form.address.trim()) {
-      store.getState().setFieldError('address', 'يرجى إدخال عنوان المعهد');
-      hasError = true;
-    }
-    if (!form.adminFullName.trim()) {
-      store.getState().setFieldError('adminFullName', 'يرجى إدخال اسم مدير المعهد');
-      hasError = true;
-    }
-    if (!form.adminPhone.trim()) {
-      store.getState().setFieldError('adminPhone', 'يرجى إدخال رقم هاتف المدير');
-      hasError = true;
-    }
-    if (!form.adminPassword.trim() || form.adminPassword.length < 6) {
-      store
-        .getState()
-        .setFieldError('adminPassword', 'كلمة المرور يجب أن لا تقل عن 6 خانات');
-      hasError = true;
-    }
-
-    if (hasError) return;
+    const errors = validateInstituteForm(form, drawerMode);
+    Object.entries(errors).forEach(([field, msg]) => store.getState().setFieldError(field, msg));
+    if (Object.keys(errors).length > 0) return;
 
     store.getState().setIsSubmitting(true);
     try {
-      await createMutation.mutateAsync({
-        name: form.name.trim(),
-        logoUrl: form.logoUrl.trim() || undefined,
-        primaryColor: form.primaryColor || '#1a73e8',
-        secondaryColor: form.secondaryColor || '#34a853',
-        phone: form.phone.trim(),
-        address: form.address.trim(),
-        adminFullName: form.adminFullName.trim(),
-        adminPhone: form.adminPhone.trim(),
-        adminPassword: form.adminPassword.trim(),
-      });
+      const details = toInstituteDetailsPayload(form);
+      if (drawerMode === 'edit' && editingInstitute) {
+        await updateMutation.mutateAsync({ id: editingInstitute.id, payload: details });
+      } else {
+        await createMutation.mutateAsync({
+          ...details,
+          adminFullName: form.adminFullName.trim(),
+          adminPhone: form.adminPhone.trim(),
+          adminPassword: form.adminPassword.trim(),
+        });
+      }
 
-      store.getState().closeCreateDrawer();
+      store.getState().closeFormDrawer();
       store.getState().resetForm();
-    } catch (err: any) {
-      const msg =
-        err?.response?.data?.message ||
-        err?.message ||
-        'حدث خطأ أثناء إنشاء المعهد التعليمي وتعيين المدير';
-      store.getState().setGeneralError(Array.isArray(msg) ? msg.join(', ') : msg);
+    } catch (err: unknown) {
+      store
+        .getState()
+        .setGeneralError(extractApiError(err, 'حدث خطأ أثناء حفظ بيانات المعهد التعليمي'));
     } finally {
       store.getState().setIsSubmitting(false);
     }
-  }, [store, createMutation]);
+  }, [store, createMutation, updateMutation]);
+
+  const handleToggleFeature = useCallback(
+    async (key: FeatureKey, enabled: boolean) => {
+      const { selectedInstitute } = store.getState();
+      if (!selectedInstitute) return;
+
+      store.getState().setFeaturesError(null);
+      store.getState().setFeatureSavingKey(key);
+      try {
+        await featuresMutation.mutateAsync({
+          id: selectedInstitute.id,
+          features: [{ key, enabled }],
+        });
+      } catch (err: unknown) {
+        store
+          .getState()
+          .setFeaturesError(extractApiError(err, 'تعذر تحديث حالة الميزة'));
+      } finally {
+        store.getState().setFeatureSavingKey(null);
+      }
+    },
+    [store, featuresMutation],
+  );
 
   return (
     <InstitutesContext.Provider value={store}>
       <QuerySync store={store} />
+      <FeaturesSync store={store} />
       <InstitutesView
         onRefresh={handleRefetch}
-        onCreateSubmit={handleCreateSubmit}
+        onFormSubmit={handleFormSubmit}
+        onToggleFeature={handleToggleFeature}
       />
     </InstitutesContext.Provider>
   );

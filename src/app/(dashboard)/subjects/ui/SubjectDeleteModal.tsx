@@ -3,7 +3,6 @@
 import {
   Alert,
   Badge,
-  Button,
   Group,
   Stack,
   Text,
@@ -13,7 +12,7 @@ import {
   IconAlertTriangle,
   IconTrash,
 } from '@tabler/icons-react';
-import { AppModal } from '@/src/components/controllers';
+import { AppButton, AppModal } from '@/src/components/controllers';
 import { useSubjectsMirror } from '../store/useSubjectsMirror';
 import { subjectsLabels } from '../static-data/subjects.data';
 import { Subject } from '@/src/core/api';
@@ -102,7 +101,7 @@ export function SubjectDeleteModal({ onConfirmDelete }: SubjectDeleteModalProps)
               </Stack>
             </Alert>
           ) : (
-            <Text size="xs" c="dimmed">
+            <Text size="xs" fw={300} c="var(--app-text-muted)">
               هذا الإجراء سيقوم بحذف المادة نهائيا من قائمة مواد المعهد.
             </Text>
           )}
@@ -113,16 +112,14 @@ export function SubjectDeleteModal({ onConfirmDelete }: SubjectDeleteModalProps)
         <AppModal.FooterEnd>
           <AppModal.Cancel>{subjectsLabels.cancel}</AppModal.Cancel>
           {!hasLinkedSections && (
-            <Button
-              color="red"
-              variant="filled"
-              radius="xl"
+            <AppButton
+              variant="dangerSolid"
               onClick={handleConfirm}
               loading={isDeleting}
               leftSection={<IconTrash size={16} />}
             >
               {subjectsLabels.confirmDelete}
-            </Button>
+            </AppButton>
           )}
         </AppModal.FooterEnd>
       </AppModal.Footer>

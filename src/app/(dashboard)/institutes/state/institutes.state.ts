@@ -1,16 +1,20 @@
-import { Institute } from '@/src/core/api';
+import { FeatureKey, FeatureStatus, Institute } from '@/src/core/api';
 
-export interface CreateInstituteFormState {
+export interface InstituteFormState {
   name: string;
+  code: string;
   logoUrl: string;
   primaryColor: string;
   secondaryColor: string;
   phone: string;
   address: string;
+  // Creation-only (initial administrator account)
   adminFullName: string;
   adminPhone: string;
   adminPassword: string;
 }
+
+export type InstituteDrawerMode = 'create' | 'edit';
 
 /**
  * InstitutesState
@@ -31,9 +35,11 @@ export interface InstitutesState {
   isLoading: boolean;
   isFetching: boolean;
 
-  // ── Form State (Creation Drawer) ──
-  createDrawerOpened: boolean;
-  form: CreateInstituteFormState;
+  // ── Form Drawer State (Create / Edit) ──
+  formDrawerOpened: boolean;
+  drawerMode: InstituteDrawerMode;
+  editingInstitute: Institute | null;
+  form: InstituteFormState;
   formErrors: Record<string, string>;
   generalError: string | null;
   generalSuccess: string | null;
@@ -43,15 +49,22 @@ export interface InstitutesState {
   detailsDrawerOpened: boolean;
   selectedInstitute: Institute | null;
 
+  // ── Feature Flags (of the selected institute) ──
+  features: FeatureStatus[];
+  isLoadingFeatures: boolean;
+  featureSavingKey: FeatureKey | null;
+  featuresError: string | null;
+
   // ── Actions: Pagination & Filters ──
   setPage: (page: number) => void;
   setLimit: (limit: number) => void;
   setSearch: (search: string) => void;
 
-  // ── Actions: Create Drawer & Form ──
+  // ── Actions: Form Drawer ──
   openCreateDrawer: () => void;
-  closeCreateDrawer: () => void;
-  setFormField: (field: keyof CreateInstituteFormState, value: string) => void;
+  openEditDrawer: (institute: Institute) => void;
+  closeFormDrawer: () => void;
+  setFormField: (field: keyof InstituteFormState, value: string) => void;
   resetForm: () => void;
   setFieldError: (field: string, error: string | null) => void;
   setGeneralError: (error: string | null) => void;
@@ -62,6 +75,11 @@ export interface InstitutesState {
   openDetailsDrawer: (institute: Institute) => void;
   closeDetailsDrawer: () => void;
 
+  // ── Actions: Feature Flags ──
+  setFeatureSavingKey: (key: FeatureKey | null) => void;
+  setFeaturesError: (error: string | null) => void;
+  syncFeatures: (payload: { features: FeatureStatus[]; isLoading: boolean }) => void;
+
   // ── Actions: Query Sync ──
   syncQueryData: (payload: {
     data: Institute[];
@@ -71,5 +89,3 @@ export interface InstitutesState {
     isFetching: boolean;
   }) => void;
 }
-
-export interface InstitutesInitialProps {}

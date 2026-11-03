@@ -12,6 +12,7 @@ import {
 } from '@mantine/core';
 import { IconCalendarOff } from '@tabler/icons-react';
 import { TimetableEntry } from '@/src/core/api';
+import { sortWeekDays } from '@/src/core/format';
 import { useTimetableMirror } from '../store/useTimetableMirror';
 import { TimetableCell } from './TimetableCell';
 
@@ -69,7 +70,7 @@ export function TimetableGrid({ onToggleLock, onDeleteEntry }: TimetableGridProp
     );
   }
 
-  const workingDays = scheduleConfig?.workingDays || [0, 1, 2, 3, 4];
+  const workingDays = sortWeekDays(scheduleConfig?.workingDays || [6, 0, 1, 2, 3, 4]);
   const slots = scheduleConfig?.slots || [];
   const entries = timetable?.entries || [];
 
