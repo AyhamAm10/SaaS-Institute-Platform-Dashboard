@@ -32,7 +32,7 @@ export function createStudentsStore(): StudentsStore {
     total: 0,
     totalPages: 1,
     page: 1,
-    limit: 20,
+    limit: 10,
     search: '',
     selectedBranchId: null,
     filters: { statusId: null, busId: null, cityId: null, unassignedYearId: null },

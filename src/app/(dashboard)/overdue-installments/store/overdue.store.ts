@@ -12,7 +12,7 @@ export type OverdueStore = ControllerStoreApi<OverdueState>;
 export function createOverdueStore(): OverdueStore {
   return createControllerStore<OverdueState>((set) => ({
     page: 1,
-    limit: 20,
+    limit: 10,
     search: '',
     currency: null,
     data: [],

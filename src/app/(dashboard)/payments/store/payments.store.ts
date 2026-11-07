@@ -21,7 +21,7 @@ export const EMPTY_PAYMENT_FILTERS: PaymentFilters = {
 export function createPaymentsStore(): PaymentsStore {
   return createControllerStore<PaymentsState>((set) => ({
     page: 1,
-    limit: 20,
+    limit: 10,
     search: '',
     filters: EMPTY_PAYMENT_FILTERS,
     data: [],

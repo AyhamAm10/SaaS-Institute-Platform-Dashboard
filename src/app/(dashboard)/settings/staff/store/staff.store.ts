@@ -16,7 +16,7 @@ const closedModal = { modal: null, target: null, newPassword: '', modalError: nu
 export function createStaffStore(): StaffStore {
   return createControllerStore<StaffState>((set) => ({
     page: 1,
-    limit: 20,
+    limit: 10,
     search: '',
     roleFilter: null,
     data: [],

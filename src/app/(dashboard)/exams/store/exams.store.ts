@@ -15,7 +15,7 @@ const freshDrawer = { formErrors: {}, generalError: null, isSubmitting: false };
 export function createExamsStore(): ExamsStore {
   return createControllerStore<ExamsState>((set) => ({
     page: 1,
-    limit: 20,
+    limit: 10,
     search: '',
     filters: { sectionId: null, examTypeId: null, from: null, to: null },
     data: [],

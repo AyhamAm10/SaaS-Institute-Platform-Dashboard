@@ -14,7 +14,7 @@ export function createLookupStore(config: LookupConfig): LookupStore {
   return createControllerStore<LookupState>((set) => ({
     config,
     page: 1,
-    limit: 20,
+    limit: 10,
     search: '',
     data: [],
     total: 0,

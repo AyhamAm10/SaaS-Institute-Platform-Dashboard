@@ -93,14 +93,14 @@ export function TeachersView({ access, onRefresh, ...modalProps }: TeachersViewP
           <DataModuleController.FilterBar>
             <DataModuleController.SearchInput placeholder="البحث بالاسم أو رقم الهاتف..." />
             <DataModuleController.FilterSlot>
-              {props.onRefresh && (
+              {onRefresh && (
                 <Tooltip label="تحديث البيانات">
                   <ActionIcon
                     variant="subtle"
                     color="gray"
                     size="md"
                     radius="md"
-                    onClick={props.onRefresh}
+                    onClick={onRefresh}
                     loading={isFetching}
                     aria-label="تحديث البيانات"
                   >
