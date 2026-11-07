@@ -1,48 +1,38 @@
 'use client';
 
-import {
-  ActionIcon,
-  Badge,
-  Group,
-  Text,
-  ThemeIcon,
-  Tooltip,
-} from '@mantine/core';
+import { Badge, Group, Text, ThemeIcon } from '@mantine/core';
 import {
   IconBuildingCommunity,
-  IconEdit,
-  IconEye,
   IconFlask,
   IconSchool,
-  IconTrash,
   IconUsers,
 } from '@tabler/icons-react';
 import { Room } from '@/src/core/api';
 import { DataModuleColumn } from '@/src/components/controllers/data-module';
+import { RoomActionsCell } from './RoomActionsCell';
 
-const roomTypeLabels: Record<string, { label: string; color: string; icon: any }> = {
+type RoomTypeIcon = React.ComponentType<{ size?: number | string }>;
+
+const roomTypeLabels: Record<string, { label: string; color: string; icon: RoomTypeIcon }> = {
   CLASSROOM: { label: 'صف دراسي', color: 'blue', icon: IconSchool },
   LAB: { label: 'مختبر علمي', color: 'teal', icon: IconFlask },
   HALL: { label: 'مدرج / قاعة', color: 'purple', icon: IconBuildingCommunity },
   ACTIVITY: { label: 'قاعة أنشطة', color: 'orange', icon: IconUsers },
 };
 
-/**
- * getRoomsColumns
- *
- * Column definitions for Rooms table.
- * Strictly adheres to DataModuleController compound pattern.
- */
 export function getRoomsColumns(
   openDetailsDrawer: (room: Room) => void,
   openEditDrawer: (room: Room) => void,
   openDeleteModal: (room: Room) => void,
+  access = { canManage: true },
 ): DataModuleColumn<Room>[] {
-  return [
+  const cols: DataModuleColumn<Room>[] = [
     {
       key: 'name',
       title: 'اسم القاعة',
       sortable: true,
+      exportValue: (r) => r.name,
+      exportKind: 'text',
       render: (room) => {
         const meta = roomTypeLabels[room.type] || {
           label: room.type,
@@ -65,6 +55,8 @@ export function getRoomsColumns(
     {
       key: 'type',
       title: 'نوع القاعة',
+      exportValue: (r) => roomTypeLabels[r.type]?.label || r.type,
+      exportKind: 'text',
       render: (room) => {
         const meta = roomTypeLabels[room.type] || {
           label: room.type,
@@ -81,6 +73,8 @@ export function getRoomsColumns(
       key: 'capacity',
       title: 'السعة الاستيعابية',
       sortable: true,
+      exportValue: (r) => r.capacity,
+      exportKind: 'number',
       render: (room) => (
         <Group gap={4} wrap="nowrap">
           <IconUsers size={14} color="var(--mantine-color-dimmed)" />
@@ -93,9 +87,11 @@ export function getRoomsColumns(
     {
       key: 'branch',
       title: 'الفرع',
+      exportValue: (r) => r.branch?.name ?? 'كافة الفروع',
+      exportKind: 'text',
       render: (room) =>
         room.branch ? (
-          <Badge variant="outline" color="gray" radius="sm" size="xs">
+          <Badge variant="outline" color="gray" radius="sm" size="sm">
             {room.branch.name}
           </Badge>
         ) : (
@@ -107,6 +103,8 @@ export function getRoomsColumns(
     {
       key: 'timetableEntries',
       title: 'الحصص المجدولة',
+      exportValue: (r) => r._count?.timetableEntries ?? 0,
+      exportKind: 'number',
       render: (room) => (
         <Badge variant="light" color="blue" radius="sm" size="xs">
           {room._count?.timetableEntries ?? 0} حصة
@@ -118,42 +116,16 @@ export function getRoomsColumns(
       title: 'الإجراءات',
       align: 'center',
       render: (room) => (
-        <Group gap="xs" justify="center" wrap="nowrap">
-          <Tooltip label="التفاصيل وتوافر القاعة" withArrow>
-            <ActionIcon
-              variant="subtle"
-              color="blue"
-              radius="md"
-              size="sm"
-              onClick={() => openDetailsDrawer(room)}
-            >
-              <IconEye size={15} />
-            </ActionIcon>
-          </Tooltip>
-          <Tooltip label="تعديل القاعة" withArrow>
-            <ActionIcon
-              variant="subtle"
-              color="yellow"
-              radius="md"
-              size="sm"
-              onClick={() => openEditDrawer(room)}
-            >
-              <IconEdit size={15} />
-            </ActionIcon>
-          </Tooltip>
-          <Tooltip label="حذف القاعة" withArrow>
-            <ActionIcon
-              variant="subtle"
-              color="red"
-              radius="md"
-              size="sm"
-              onClick={() => openDeleteModal(room)}
-            >
-              <IconTrash size={15} />
-            </ActionIcon>
-          </Tooltip>
-        </Group>
+        <RoomActionsCell
+          room={room}
+          canManage={access.canManage}
+          onOpenDetails={openDetailsDrawer}
+          onOpenEdit={openEditDrawer}
+          onOpenDelete={openDeleteModal}
+        />
       ),
     },
   ];
+
+  return cols;
 }

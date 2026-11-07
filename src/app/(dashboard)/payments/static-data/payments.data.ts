@@ -1,0 +1,37 @@
+/** Labels of the payments page (E10). */
+export const paymentsLabels = {
+  title: 'الدفعات',
+  description: 'سجل الإيصالات بكل العملات، مع الإلغاء والطباعة',
+  searchPlaceholder: 'ابحث باسم الطالب...',
+  emptyMessage: 'لا توجد دفعات',
+  emptyDescription: 'تُسجَّل الدفعات من الملف المالي للطالب (سجل الطلاب ← المالية)',
+  receiptPlaceholder: 'رقم الإيصال',
+  fromPlaceholder: 'من تاريخ',
+  toPlaceholder: 'إلى تاريخ',
+  currencyPlaceholder: 'كل العملات',
+  methodPlaceholder: 'كل الطرق',
+  statusPlaceholder: 'كل الحالات',
+  colReceipt: 'الإيصال',
+  colStudent: 'الطالب',
+  colAmount: 'المبلغ',
+  colDate: 'التاريخ',
+  colMethod: 'الطريقة',
+  colStatus: 'الحالة',
+  colActions: 'إجراءات',
+  print: 'طباعة الإيصال',
+  cancel: 'إلغاء الدفعة',
+  cancelTitle: 'إلغاء الدفعة',
+  cancelHint: 'لا تُحذف الدفعة: تُلغى مع السبب، ويعود مبلغها على الأقساط، ويبقى رقم الإيصال محفوظاً.',
+  cancelReason: 'سبب الإلغاء',
+  cancelReasonRequired: 'سبب الإلغاء مطلوب',
+  confirmCancel: 'تأكيد الإلغاء',
+  cancelError: 'تعذّر إلغاء الدفعة',
+  close: 'إغلاق',
+  active: 'فعّالة',
+  cancelled: 'ملغاة',
+} as const;
+
+export const PAYMENT_STATUS_OPTIONS = [
+  { value: 'ACTIVE', label: paymentsLabels.active },
+  { value: 'CANCELLED', label: paymentsLabels.cancelled },
+];

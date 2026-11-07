@@ -4,6 +4,7 @@ import { createContext, useContext } from 'react';
 import { createStore, StoreApi } from 'zustand';
 import { StudentRegistrationState, NewFamilyForm } from '../state/student-registration.state';
 import { StudentField } from '@/src/core/api';
+import { EMPTY_STUDENT_REFERENCES } from '../../utils/student-references.utils';
 
 export type StudentRegistrationStore = StoreApi<StudentRegistrationState>;
 
@@ -31,6 +32,7 @@ export function createStudentRegistrationStore(): StudentRegistrationStore {
     branchId: null,
     sectionId: null,
     academicYearId: null,
+    references: { ...EMPTY_STUDENT_REFERENCES },
 
     customFields: {},
 
@@ -61,6 +63,9 @@ export function createStudentRegistrationStore(): StudentRegistrationStore {
         customFields: { ...s.customFields, [fieldName]: value },
         stepErrors: { ...s.stepErrors, 2: null },
       })),
+
+    setReference: (field, value) =>
+      set((s) => ({ references: { ...s.references, [field]: value } })),
 
     setSubmitting: (isSubmitting) => set({ isSubmitting }),
 
@@ -138,6 +143,7 @@ export function createStudentRegistrationStore(): StudentRegistrationStore {
         branchId: null,
         sectionId: null,
         academicYearId: null,
+        references: { ...EMPTY_STUDENT_REFERENCES },
         customFields: {},
       }),
   }));

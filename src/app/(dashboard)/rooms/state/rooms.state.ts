@@ -1,6 +1,5 @@
 import {
   Room,
-  RoomAvailability,
   RoomAvailabilityWindowPayload,
   RoomType,
 } from '@/src/core/api';

@@ -1,8 +1,6 @@
 import {
   AvailabilityWindowPayload,
   Teacher,
-  TeacherAssignment,
-  TeacherAvailability,
 } from '@/src/core/api';
 
 export interface TeacherFormState {
@@ -59,6 +57,13 @@ export interface TeachersState {
   deleteError: string | null;
   isDeleting: boolean;
 
+  // ── Password Modal State ──
+  passwordModalOpened: boolean;
+  passwordTarget: Teacher | null;
+  newPassword: string;
+  passwordModalError: string | null;
+  isPasswordSubmitting: boolean;
+
   // ── Actions: Filters ──
   setPage: (page: number) => void;
   setLimit: (limit: number) => void;
@@ -100,6 +105,13 @@ export interface TeachersState {
   closeDeleteModal: () => void;
   setDeleteError: (error: string | null) => void;
   setIsDeleting: (deleting: boolean) => void;
+
+  // ── Actions: Password Modal ──
+  openPasswordModal: (teacher: Teacher) => void;
+  closePasswordModal: () => void;
+  setNewPassword: (password: string) => void;
+  setPasswordModalError: (error: string | null) => void;
+  setIsPasswordSubmitting: (submitting: boolean) => void;
 
   // ── Query Synchronization ──
   syncQueryData: (payload: {

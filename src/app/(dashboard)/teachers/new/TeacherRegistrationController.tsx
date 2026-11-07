@@ -7,6 +7,7 @@ import {
   useAcademicBranchesQuery,
   useCreateTeacherMutation,
   useSubjectsQuery,
+  getApiErrorMessage,
 } from '@/src/core/api';
 import { useOperationalContext } from '@/src/core/context';
 import {
@@ -89,11 +90,12 @@ export function TeacherRegistrationController() {
 
       await createTeacherMutation.mutateAsync(payload);
       router.push('/teachers');
-    } catch (err: any) {
-      const msg =
-        err?.response?.data?.message ||
-        'حدث خطأ أثناء حفظ بيانات المعلم. يرجى المحاولة مرة أخرى.';
-      state.setStepError(3, Array.isArray(msg) ? msg.join(', ') : msg);
+    } catch (err: unknown) {
+      const msg = getApiErrorMessage(
+        err,
+        'حدث خطأ أثناء حفظ بيانات المعلم. يرجى المحاولة مرة أخرى.',
+      );
+      state.setStepError(3, msg);
     } finally {
       state.setSubmitting(false);
     }

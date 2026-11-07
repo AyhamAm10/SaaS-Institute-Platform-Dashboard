@@ -1,16 +1,21 @@
 'use client';
 
-import { ActionIcon, Badge, Group, Text, Tooltip, rem } from '@mantine/core';
+import { ActionIcon, Group, Text, Tooltip } from '@mantine/core';
 import { IconBuildingCommunity, IconEdit, IconMapPin, IconPhone } from '@tabler/icons-react';
 import { Branch } from '@/src/core/api';
 import { DataModuleColumn } from '@/src/components/controllers/data-module';
 
-export function getBranchesColumns(onEdit: (branch: Branch) => void): DataModuleColumn<Branch>[] {
-  return [
+export function getBranchesColumns(
+  onEdit: (branch: Branch) => void,
+  access = { canManage: true },
+): DataModuleColumn<Branch>[] {
+  const cols: DataModuleColumn<Branch>[] = [
     {
       key: 'name',
       title: 'اسم الفرع',
       sortable: true,
+      exportValue: (branch) => branch.name,
+      exportKind: 'text',
       render: (branch) => (
         <Group gap="sm" wrap="nowrap">
           <ActionIcon size="md" radius="xl" variant="light" color="teal">
@@ -25,6 +30,8 @@ export function getBranchesColumns(onEdit: (branch: Branch) => void): DataModule
     {
       key: 'phone',
       title: 'هاتف التواصل',
+      exportValue: (branch) => branch.phone ?? '—',
+      exportKind: 'text',
       render: (branch) =>
         branch.phone ? (
           <Group gap={6} wrap="nowrap" dir="ltr" justify="flex-end">
@@ -42,6 +49,8 @@ export function getBranchesColumns(onEdit: (branch: Branch) => void): DataModule
     {
       key: 'address',
       title: 'العنوان الجغرافي',
+      exportValue: (branch) => branch.address ?? '—',
+      exportKind: 'text',
       render: (branch) =>
         branch.address ? (
           <Group gap={6} wrap="nowrap">
@@ -56,7 +65,10 @@ export function getBranchesColumns(onEdit: (branch: Branch) => void): DataModule
           </Text>
         ),
     },
-    {
+  ];
+
+  if (access.canManage) {
+    cols.push({
       key: 'actions',
       title: 'الإجراءات',
       align: 'center',
@@ -73,6 +85,8 @@ export function getBranchesColumns(onEdit: (branch: Branch) => void): DataModule
           </ActionIcon>
         </Tooltip>
       ),
-    },
-  ];
+    });
+  }
+
+  return cols;
 }

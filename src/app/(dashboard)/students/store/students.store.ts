@@ -4,6 +4,12 @@ import { createContext, useContext } from 'react';
 import { createControllerStore } from '@/src/core/mirror';
 import { ControllerStoreApi } from '@/src/core/mirror/types';
 import { CustomFieldValue, StudentEditFormState, StudentsState } from '../state/students.state';
+import {
+  EMPTY_REFERENCE_OPTIONS,
+  EMPTY_STUDENT_REFERENCES,
+  studentReferencesFrom,
+} from '../utils/student-references.utils';
+import { financeStudentFrom } from '../finance/utils/student-finance.utils';
 
 export type StudentsStore = ControllerStoreApi<StudentsState>;
 
@@ -13,6 +19,7 @@ const defaultFormState: StudentEditFormState = {
   gender: 'MALE',
   familyId: null,
   customFields: {},
+  references: { ...EMPTY_STUDENT_REFERENCES },
 };
 
 /**
@@ -28,7 +35,10 @@ export function createStudentsStore(): StudentsStore {
     limit: 20,
     search: '',
     selectedBranchId: null,
+    filters: { statusId: null, busId: null, cityId: null, unassignedYearId: null },
     isLoading: true,
+    referenceOptions: EMPTY_REFERENCE_OPTIONS,
+    yearOptions: [],
 
     // ── Edit Drawer State ──
     editDrawerOpened: false,
@@ -55,6 +65,10 @@ export function createStudentsStore(): StudentsStore {
     setPage: (page) => set({ page }),
     setSearch: (search) => set({ search, page: 1 }),
     setSelectedBranchId: (selectedBranchId) => set({ selectedBranchId, page: 1 }),
+    setFilter: (field, value) =>
+      set((state) => ({ filters: { ...state.filters, [field]: value }, page: 1 })),
+    syncReferenceOptions: (referenceOptions) => set({ referenceOptions }),
+    syncYearOptions: (yearOptions) => set({ yearOptions }),
 
     syncQueryData: ({ data, total, totalPages, isLoading }) =>
       set({
@@ -75,6 +89,7 @@ export function createStudentsStore(): StudentsStore {
           gender: student.gender === 'FEMALE' ? 'FEMALE' : 'MALE',
           familyId: student.familyId,
           customFields: { ...((student.customFields ?? {}) as Record<string, CustomFieldValue>) },
+          references: studentReferencesFrom(student),
         },
         familySearch: '',
         formErrors: {},
@@ -93,6 +108,11 @@ export function createStudentsStore(): StudentsStore {
       set((state) => ({
         form: { ...state.form, customFields: { ...state.form.customFields, [name]: value } },
         formErrors: { ...state.formErrors, [`custom.${name}`]: '' },
+      })),
+
+    setReference: (field, value) =>
+      set((state) => ({
+        form: { ...state.form, references: { ...state.form.references, [field]: value } },
       })),
 
     setFamilySearch: (familySearch) => set({ familySearch }),
@@ -115,6 +135,11 @@ export function createStudentsStore(): StudentsStore {
       }),
 
     // ── Actions: Delete Modal ──
+    financeStudent: null,
+    overview: null,
+    syncOverview: (overview) => set({ overview }),
+    openFinance: (student) => set({ financeStudent: financeStudentFrom(student) }),
+    closeFinance: () => set({ financeStudent: null }),
     openDeleteModal: (student) =>
       set({
         deleteModalOpened: true,

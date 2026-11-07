@@ -19,7 +19,7 @@ import {
   AppModalTitle,
 } from './ui';
 
-export interface AppModalProps extends AppModalInitialProps {}
+export type AppModalProps = AppModalInitialProps;
 
 /**
  * AppModal
@@ -75,12 +75,12 @@ export function AppModal(props: AppModalProps) {
   const hasCompoundHeader = childrenArray.some(
     (child) =>
       isValidElement(child) &&
-      (child.type === AppModalHeader || (child.type as any)?.displayName === 'AppModalHeader'),
+      (child.type === AppModalHeader || (child.type as { displayName?: string })?.displayName === 'AppModalHeader'),
   );
   const hasCompoundContent = childrenArray.some(
     (child) =>
       isValidElement(child) &&
-      (child.type === AppModalContent || (child.type as any)?.displayName === 'AppModalContent'),
+      (child.type === AppModalContent || (child.type as { displayName?: string })?.displayName === 'AppModalContent'),
   );
 
   const isCompoundMode = hasCompoundHeader || hasCompoundContent;

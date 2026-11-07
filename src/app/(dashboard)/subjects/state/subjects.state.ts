@@ -71,4 +71,4 @@ export interface SubjectsState {
   }) => void;
 }
 
-export interface SubjectsInitialProps {}
+export type SubjectsInitialProps = Record<string, never>;

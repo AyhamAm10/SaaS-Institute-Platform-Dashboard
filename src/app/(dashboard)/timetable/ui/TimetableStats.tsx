@@ -9,7 +9,6 @@ import {
   Stack,
   Text,
 } from '@mantine/core';
-import { IconCheck, IconClock, IconExclamationMark } from '@tabler/icons-react';
 import { useSectionSubjectsQuery } from '@/src/core/api';
 import { useTimetableMirror } from '../store/useTimetableMirror';
 

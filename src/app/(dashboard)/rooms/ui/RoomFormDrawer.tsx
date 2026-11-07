@@ -83,7 +83,7 @@ export function RoomFormDrawer({ onSubmit }: RoomFormDrawerProps) {
           placeholder="اختر نوع القاعة"
           data={ROOM_TYPES}
           value={form.type}
-          onChange={(val: any) => setFormField('type', val || 'CLASSROOM')}
+          onChange={(val: string | null) => setFormField('type', val || 'CLASSROOM')}
           required
         />
 
@@ -92,7 +92,7 @@ export function RoomFormDrawer({ onSubmit }: RoomFormDrawerProps) {
           placeholder="30"
           type="number"
           value={String(form.capacity)}
-          onChange={(val: any) => setFormField('capacity', Number(val) || 1)}
+          onChange={(val: unknown) => setFormField('capacity', Number(val) || 1)}
           error={formErrors.capacity}
           required
         />

@@ -7,6 +7,7 @@ import {
   useCreateBranchMutation,
   useUpdateBranchMutation,
 } from '@/src/core/api';
+import { PERMISSIONS, useAuth } from '@/src/core/auth';
 import { createBranchesStore, BranchesContext } from './store/branches.store';
 import { BranchesView } from './ui/BranchesView';
 
@@ -39,6 +40,8 @@ function QuerySync({
  */
 export function BranchesController() {
   const [store] = useState(() => createBranchesStore());
+  const { can } = useAuth();
+  const canManage = can(PERMISSIONS.academicManage);
   const createMutation = useCreateBranchMutation();
   const updateMutation = useUpdateBranchMutation();
 
@@ -76,7 +79,7 @@ export function BranchesController() {
   return (
     <BranchesContext.Provider value={store}>
       <QuerySync store={store} />
-      <BranchesView onSubmit={handleSubmit} />
+      <BranchesView onSubmit={handleSubmit} canManage={canManage} />
     </BranchesContext.Provider>
   );
 }

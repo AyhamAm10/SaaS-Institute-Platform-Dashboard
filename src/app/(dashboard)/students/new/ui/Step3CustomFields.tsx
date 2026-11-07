@@ -36,8 +36,8 @@ export function Step3CustomFields({ fields }: Step3CustomFieldsProps) {
               لا توجد حقول إضافية معرفة حاليا في نظام المعهد.
             </Text>
             <Text size="xs" c="dimmed" maw={450}>
-              يمكنك متابعة التسجيل مباشرة بالضغط على "التالي"، أو إضافة حقول مخصصة جديدة من خلال صفحة
-              "الحقول المخصصة للطلاب" في الإعدادات.
+              يمكنك متابعة التسجيل مباشرة بالضغط على &quot;التالي&quot;، أو إضافة حقول مخصصة جديدة من خلال صفحة
+              &quot;الحقول المخصصة للطلاب&quot; في الإعدادات.
             </Text>
           </Stack>
         </Card>
@@ -92,7 +92,7 @@ export function Step3CustomFields({ fields }: Step3CustomFieldsProps) {
                   key={field.name}
                   label={field.label}
                   placeholder={`اختر ${field.label}`}
-                  value={currentValue}
+                  value={typeof currentValue === 'string' ? currentValue : ''}
                   onChange={(val: string | null) => setCustomFieldValue(field.name, val)}
                   required={field.isRequired}
                 />
@@ -122,7 +122,7 @@ export function Step3CustomFields({ fields }: Step3CustomFieldsProps) {
                 type={field.type === 'NUMBER' ? 'number' : 'text'}
                 label={field.label}
                 placeholder={`أدخل ${field.label}`}
-                value={currentValue}
+                value={currentValue != null ? String(currentValue) : ''}
                 onChange={(e) =>
                   setCustomFieldValue(
                     field.name,

@@ -67,7 +67,7 @@ export function TeacherFormDrawer({ onSubmit }: TeacherFormDrawerProps) {
           label="الاسم الكامل"
           placeholder="مثال: أحمد عبد الله"
           value={form.fullName}
-          onChange={(val: any) => setFormField('fullName', val)}
+          onChange={(val: unknown) => setFormField('fullName', typeof val === 'string' ? val : '')}
           error={formErrors.fullName}
           required
         />
@@ -77,26 +77,28 @@ export function TeacherFormDrawer({ onSubmit }: TeacherFormDrawerProps) {
           placeholder="0912345678"
           type="tel"
           value={form.phone}
-          onChange={(val: any) => setFormField('phone', val)}
+          onChange={(val: unknown) => setFormField('phone', typeof val === 'string' ? val : '')}
           error={formErrors.phone}
           required
         />
 
-        <AppInput
-          label={isEdit ? 'كلمة المرور (اتركها فارغة لعدم التغيير)' : 'كلمة المرور'}
-          placeholder="******"
-          type="password"
-          value={form.password || ''}
-          onChange={(val: any) => setFormField('password', val)}
-          error={formErrors.password}
-          required={!isEdit}
-        />
+        {!isEdit && (
+          <AppInput
+            label="كلمة المرور"
+            placeholder="8 محارف على الأقل"
+            type="password"
+            value={form.password || ''}
+            onChange={(val: unknown) => setFormField('password', typeof val === 'string' ? val : '')}
+            error={formErrors.password}
+            required
+          />
+        )}
 
         <AppInput
           label="التخصص الأكاديمي"
           placeholder="مثال: لغة عربية، رياضيات، فيزياء..."
           value={form.specialization}
-          onChange={(val: any) => setFormField('specialization', val)}
+          onChange={(val: unknown) => setFormField('specialization', typeof val === 'string' ? val : '')}
         />
 
         <Switch

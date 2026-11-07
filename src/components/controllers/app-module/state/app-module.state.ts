@@ -1,15 +1,32 @@
 import { ControllerState } from '@/src/core/mirror';
-import { AppModuleInitialProps, resolveAppModuleConfig } from '../init/app-module.init';
+import { AppModuleInitialProps, SelectionExportColumn } from '../init/app-module.init';
 
 export interface AppModuleState extends ControllerState {
-  variant: 'dashboard' | 'table' | 'form' | 'default';
   rawProps: AppModuleInitialProps;
+  exportTitle?: string;
+  selection: {
+    rows: unknown[];
+    columns: SelectionExportColumn[];
+  };
+  isExporting: boolean;
+  exportError: string | null;
+  setSelection: (rows: unknown[], columns: SelectionExportColumn[]) => void;
+  setExporting: (isExporting: boolean) => void;
+  setExportError: (error: string | null) => void;
 }
 
-export function createInitialAppModuleState(props: AppModuleInitialProps): AppModuleState {
-  const config = resolveAppModuleConfig(props);
+export function createInitialAppModuleState(props: AppModuleInitialProps): Omit<
+  AppModuleState,
+  'setSelection' | 'setExporting' | 'setExportError'
+> {
   return {
-    variant: config.variant,
     rawProps: props,
+    exportTitle: props.exportTitle,
+    selection: {
+      rows: [],
+      columns: [],
+    },
+    isExporting: false,
+    exportError: null,
   };
 }

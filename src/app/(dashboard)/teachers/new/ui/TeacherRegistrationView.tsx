@@ -47,7 +47,7 @@ export function TeacherRegistrationView({
           title="إضافة معلم جديد"
           description="المؤهلات والمواد المعتمدة وأوقات الدوام الأسبوعي"
           actions={
-            <AppButton href="C:/Program Files/Git/teachers" variant="outline" leftSection={<IconArrowRight size={16} stroke={1.7} />}>
+            <AppButton href="/teachers" variant="outline" leftSection={<IconArrowRight size={16} stroke={1.7} />}>
               العودة للكادر
             </AppButton>
           }

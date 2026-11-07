@@ -2,19 +2,14 @@
 
 import { useMemo } from 'react';
 import { ActionIcon, Button, Tooltip } from '@mantine/core';
-import {
-  IconBuildingCommunity,
-  IconPlus,
-  IconRefresh,
-} from '@tabler/icons-react';
+import { IconBuildingCommunity, IconPlus, IconRefresh } from '@tabler/icons-react';
+import { AppModule } from '@/src/components/controllers';
 import { DataModuleController } from '@/src/components/controllers/data-module';
 import { AppSelect } from '@/src/components/controllers/input';
 import { Room } from '@/src/core/api';
 import { useRoomsMirror } from '../store/useRoomsMirror';
 import { getRoomsColumns } from './RoomsTable';
-import { RoomFormDrawer } from './RoomFormDrawer';
-import { RoomDetailsDrawer } from './RoomDetailsDrawer';
-import { RoomDeleteModal } from './RoomDeleteModal';
+import { RoomsDrawers, RoomsDrawersProps } from './RoomsDrawers';
 
 const ROOM_TYPE_FILTER_OPTIONS = [
   { value: 'all', label: 'كافة أنواع القاعات' },
@@ -24,35 +19,13 @@ const ROOM_TYPE_FILTER_OPTIONS = [
   { value: 'ACTIVITY', label: 'قاعة أنشطة وورش عمل' },
 ];
 
-interface RoomsViewProps {
+export interface RoomsViewProps extends RoomsDrawersProps {
   onRefresh?: () => void;
-  onSubmit: () => void;
-  onConfirmDelete: (room: Room) => Promise<void>;
-  onSaveAvailabilities: () => Promise<void>;
-  newAvailDay: string;
-  setNewAvailDay: (v: string) => void;
-  newAvailStart: string;
-  setNewAvailStart: (v: string) => void;
-  newAvailEnd: string;
-  setNewAvailEnd: (v: string) => void;
-  onAddAvailabilityWindow: () => void;
 }
 
-export function RoomsView({
-  onRefresh,
-  onSubmit,
-  onConfirmDelete,
-  onSaveAvailabilities,
-  newAvailDay,
-  setNewAvailDay,
-  newAvailStart,
-  setNewAvailStart,
-  newAvailEnd,
-  setNewAvailEnd,
-  onAddAvailabilityWindow,
-}: RoomsViewProps) {
+export function RoomsView({ onRefresh, ...drawerProps }: RoomsViewProps) {
+  const { canManage = true } = drawerProps;
   const data = useRoomsMirror('data');
-  const search = useRoomsMirror('search');
   const type = useRoomsMirror('type');
   const isFetching = useRoomsMirror('isFetching');
   const isLoading = useRoomsMirror('isLoading');
@@ -69,95 +42,88 @@ export function RoomsView({
   const openDeleteModal = useRoomsMirror('openDeleteModal');
 
   const columns = useMemo(
-    () => getRoomsColumns(openDetailsDrawer, openEditDrawer, openDeleteModal),
-    [openDetailsDrawer, openEditDrawer, openDeleteModal],
+    () => getRoomsColumns(openDetailsDrawer, openEditDrawer, openDeleteModal, { canManage }),
+    [openDetailsDrawer, openEditDrawer, openDeleteModal, canManage],
   );
 
   return (
-    <>
-      <DataModuleController
-        title="القاعات والمختبرات"
-        description="إدارة القاعات الدراسية، المختبرات، السعة الاستيعابية، وتحديد فترات التوافر"
-        data={data}
-        columns={columns}
-        total={total}
-        page={page}
-        limit={limit}
-        totalPages={totalPages}
-        isLoading={isLoading}
-        isFetching={isFetching}
-        emptyMessage="لا توجد قاعات دراسية مسجلة"
-        emptyDescription="يمكنك إضافة قاعة جديدة بالنقر على زر إضافة قاعة في الأعلى"
-        searchPlaceholder="البحث باسم القاعة..."
-        keyExtractor={(item: Room) => item.id}
-        onPageChange={setPage}
-        onSearchChange={setSearch}
-      >
-        <DataModuleController.Header>
-          <DataModuleController.Title
-            icon={<IconBuildingCommunity size={18} />}
-            badgeLabel="قاعة"
-          />
-          <DataModuleController.Actions>
-            <Button
-              leftSection={<IconPlus size={16} />}
-              onClick={openCreateDrawer}
-              color="primary"
-              radius="md"
-            >
-              إضافة قاعة
-            </Button>
-          </DataModuleController.Actions>
-        </DataModuleController.Header>
-
-        <DataModuleController.FilterBar>
-          <DataModuleController.SearchInput placeholder="البحث باسم القاعة..." />
-          <DataModuleController.FilterSlot>
-            <AppSelect
-              placeholder="تصفية حسب نوع القاعة"
-              data={ROOM_TYPE_FILTER_OPTIONS}
-              value={type || 'all'}
-              onChange={(val: any) => setType(val && val !== 'all' ? val : undefined)}
-              clearable
+    <AppModule exportTitle="القاعات">
+      <AppModule.Table>
+        <DataModuleController
+          selectable
+          title="القاعات والمختبرات"
+          description="إدارة القاعات الصفية، المختبرات العلمية، الطاقة الاستيعابية وأوقات التفرغ الأسبوعية"
+          data={data}
+          columns={columns}
+          total={total}
+          page={page}
+          limit={limit}
+          totalPages={totalPages}
+          isLoading={isLoading}
+          isFetching={isFetching}
+          emptyMessage="لا توجد قاعات مطابقة للبحث"
+          emptyDescription="يمكنك إضافة قاعة جديدة أو تعديل معايير التصفية والبحث"
+          searchPlaceholder="البحث باسم القاعة..."
+          keyExtractor={(item: Room) => item.id}
+          onPageChange={setPage}
+          onSearchChange={setSearch}
+        >
+          <DataModuleController.Header>
+            <DataModuleController.Title
+              icon={<IconBuildingCommunity size={18} />}
+              badgeLabel="قاعة"
             />
-            {onRefresh && (
-              <Tooltip label="تحديث البيانات" withArrow position="top">
-                <ActionIcon
-                  variant="light"
+            {canManage && (
+              <DataModuleController.Actions>
+                <Button
+                  leftSection={<IconPlus size={16} />}
+                  onClick={openCreateDrawer}
                   color="primary"
-                  size="md"
                   radius="md"
-                  onClick={onRefresh}
-                  loading={isFetching}
-                  aria-label="تحديث البيانات"
                 >
-                  <IconRefresh size={16} />
-                </ActionIcon>
-              </Tooltip>
+                  إضافة قاعة جديدة
+                </Button>
+              </DataModuleController.Actions>
             )}
-          </DataModuleController.FilterSlot>
-        </DataModuleController.FilterBar>
+          </DataModuleController.Header>
 
-        <DataModuleController.Content>
-          <DataModuleController.Table />
-        </DataModuleController.Content>
+          <DataModuleController.FilterBar>
+            <DataModuleController.SearchInput placeholder="البحث باسم القاعة..." />
+            <DataModuleController.FilterSlot>
+              <AppSelect
+                data={ROOM_TYPE_FILTER_OPTIONS}
+                value={type || 'all'}
+                onChange={(val: string | null) => setType(val === 'all' ? '' : val || '')}
+                placeholder="تصفية حسب نوع القاعة"
+                style={{ width: 190 }}
+              />
+              {onRefresh && (
+                <Tooltip label="تحديث البيانات">
+                  <ActionIcon
+                    variant="subtle"
+                    color="gray"
+                    size="md"
+                    radius="md"
+                    onClick={onRefresh}
+                    loading={isFetching}
+                    aria-label="تحديث البيانات"
+                  >
+                    <IconRefresh size={16} />
+                  </ActionIcon>
+                </Tooltip>
+              )}
+            </DataModuleController.FilterSlot>
+          </DataModuleController.FilterBar>
 
-        <DataModuleController.Footer />
-      </DataModuleController>
+          <DataModuleController.Content>
+            <DataModuleController.Table />
+          </DataModuleController.Content>
 
-      {/* Drawers & Modals */}
-      <RoomFormDrawer onSubmit={onSubmit} />
-      <RoomDetailsDrawer
-        onSaveAvailabilities={onSaveAvailabilities}
-        newAvailDay={newAvailDay}
-        setNewAvailDay={setNewAvailDay}
-        newAvailStart={newAvailStart}
-        setNewAvailStart={setNewAvailStart}
-        newAvailEnd={newAvailEnd}
-        setNewAvailEnd={setNewAvailEnd}
-        onAddAvailabilityWindow={onAddAvailabilityWindow}
-      />
-      <RoomDeleteModal onConfirmDelete={onConfirmDelete} />
-    </>
+          <DataModuleController.Footer />
+        </DataModuleController>
+      </AppModule.Table>
+
+      <RoomsDrawers {...drawerProps} />
+    </AppModule>
   );
 }

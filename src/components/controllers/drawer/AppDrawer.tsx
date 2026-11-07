@@ -24,7 +24,7 @@ import {
   AppDrawerToolbar,
 } from './ui';
 
-export interface AppDrawerProps extends AppDrawerInitialProps {}
+export type AppDrawerProps = AppDrawerInitialProps;
 
 /**
  * AppDrawer
@@ -75,10 +75,16 @@ export function AppDrawer(props: AppDrawerProps) {
   // Determine if consumer passed compound components or raw simple children
   const childrenArray = Children.toArray(props.children);
   const hasCompoundHeader = childrenArray.some(
-    (child) => isValidElement(child) && (child.type === AppDrawerHeader || (child.type as any)?.displayName === 'AppDrawerHeader'),
+    (child) =>
+      isValidElement(child) &&
+      (child.type === AppDrawerHeader ||
+        (child.type as { displayName?: string })?.displayName === 'AppDrawerHeader'),
   );
   const hasCompoundContent = childrenArray.some(
-    (child) => isValidElement(child) && (child.type === AppDrawerContent || (child.type as any)?.displayName === 'AppDrawerContent'),
+    (child) =>
+      isValidElement(child) &&
+      (child.type === AppDrawerContent ||
+        (child.type as { displayName?: string })?.displayName === 'AppDrawerContent'),
   );
 
   const isCompoundMode = hasCompoundHeader || hasCompoundContent;

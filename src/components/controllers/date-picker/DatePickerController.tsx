@@ -5,7 +5,7 @@ import { DatePickerProps } from './init/date-picker.init';
 import { createDatePickerStore, DatePickerContext } from './store/date-picker.store';
 import { DatePickerView } from './ui/DatePickerView';
 
-export interface DatePickerControllerProps extends DatePickerProps {}
+export type DatePickerControllerProps = DatePickerProps;
 
 /**
  * DatePickerController (AppDatePicker)

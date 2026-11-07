@@ -6,22 +6,18 @@ import {
   Badge,
   Button,
   Center,
-  Divider,
   Drawer,
-  Grid,
   Group,
   Paper,
   SimpleGrid,
   Stack,
   Table,
   Text,
-  ThemeIcon,
 } from '@mantine/core';
 import { AppTabs } from '@/src/components/controllers/tabs';
 import {
   IconBuildingCommunity,
   IconCalendarTime,
-  IconClock,
   IconDeviceFloppy,
   IconPlus,
   IconTrash,
@@ -184,7 +180,7 @@ export function RoomDetailsDrawer({
                   placeholder="اختر اليوم"
                   data={DAYS_OF_WEEK}
                   value={newAvailDay}
-                  onChange={(val: any) => setNewAvailDay(val || '0')}
+                  onChange={(val: string | null) => setNewAvailDay(val || '0')}
                 />
                 <AppInput
                   placeholder="من (08:00)"

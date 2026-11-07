@@ -4,6 +4,7 @@ import { Button } from '@mantine/core';
 import { IconPlus } from '@tabler/icons-react';
 import { useMemo } from 'react';
 import { Branch } from '@/src/core/api';
+import { AppModule } from '@/src/components/controllers/app-module';
 import { DataModuleController } from '@/src/components/controllers/data-module';
 import { useBranchesMirror } from '../store/useBranchesMirror';
 import { branchesLabels } from '../static-data/branches.data';
@@ -12,9 +13,10 @@ import { BranchDrawer } from './BranchDrawer';
 
 export interface BranchesViewProps {
   onSubmit: () => Promise<void>;
+  canManage?: boolean;
 }
 
-export function BranchesView({ onSubmit }: BranchesViewProps) {
+export function BranchesView({ onSubmit, canManage = true }: BranchesViewProps) {
   const branches = useBranchesMirror('branches');
   const isLoading = useBranchesMirror('isLoading');
   const search = useBranchesMirror('search');
@@ -33,52 +35,57 @@ export function BranchesView({ onSubmit }: BranchesViewProps) {
     );
   }, [branches, search]);
 
-  const columns = useMemo(() => getBranchesColumns(openEditDrawer), [openEditDrawer]);
+  const columns = useMemo(() => getBranchesColumns(openEditDrawer, { canManage }), [openEditDrawer, canManage]);
 
   return (
-    <>
-      <DataModuleController
-        title={branchesLabels.title}
-        description={branchesLabels.description}
-        data={filteredBranches}
-        columns={columns}
-        total={filteredBranches.length}
-        page={1}
-        limit={50}
-        totalPages={1}
-        isLoading={isLoading}
-        emptyMessage={branchesLabels.emptyMessage}
-        emptyDescription={branchesLabels.emptyDescription}
-        searchPlaceholder={branchesLabels.searchPlaceholder}
-        keyExtractor={(item: Branch) => item.id}
-        onSearchChange={setSearch}
-      >
-        <DataModuleController.Header>
-          <DataModuleController.Title />
-          <DataModuleController.Actions>
-            <Button
-              leftSection={<IconPlus size={16} />}
-              onClick={openCreateDrawer}
-              color="teal"
-              radius="md"
-            >
-              {branchesLabels.createAction}
-            </Button>
-          </DataModuleController.Actions>
-        </DataModuleController.Header>
+    <AppModule exportTitle="الفروع">
+      <AppModule.Table>
+        <DataModuleController
+          title={branchesLabels.title}
+          description={branchesLabels.description}
+          data={filteredBranches}
+          columns={columns}
+          total={filteredBranches.length}
+          page={1}
+          limit={50}
+          totalPages={1}
+          isLoading={isLoading}
+          emptyMessage={branchesLabels.emptyMessage}
+          emptyDescription={branchesLabels.emptyDescription}
+          searchPlaceholder={branchesLabels.searchPlaceholder}
+          keyExtractor={(item: Branch) => item.id}
+          onSearchChange={setSearch}
+          selectable
+        >
+          <DataModuleController.Header>
+            <DataModuleController.Title />
+            {canManage && (
+              <DataModuleController.Actions>
+                <Button
+                  leftSection={<IconPlus size={16} />}
+                  onClick={openCreateDrawer}
+                  color="teal"
+                  radius="md"
+                >
+                  {branchesLabels.createAction}
+                </Button>
+              </DataModuleController.Actions>
+            )}
+          </DataModuleController.Header>
 
-        <DataModuleController.FilterBar>
-          <DataModuleController.SearchInput placeholder={branchesLabels.searchPlaceholder} />
-        </DataModuleController.FilterBar>
+          <DataModuleController.FilterBar>
+            <DataModuleController.SearchInput placeholder={branchesLabels.searchPlaceholder} />
+          </DataModuleController.FilterBar>
 
-        <DataModuleController.Content>
-          <DataModuleController.Table />
-        </DataModuleController.Content>
+          <DataModuleController.Content>
+            <DataModuleController.Table />
+          </DataModuleController.Content>
 
-        <DataModuleController.Footer />
-      </DataModuleController>
+          <DataModuleController.Footer />
+        </DataModuleController>
+      </AppModule.Table>
 
-      <BranchDrawer onSubmit={onSubmit} />
-    </>
+      {canManage && <BranchDrawer onSubmit={onSubmit} />}
+    </AppModule>
   );
 }

@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { MantineSize } from '@mantine/core';
 
 export type DrawerSize = MantineSize | (string & {}) | number;

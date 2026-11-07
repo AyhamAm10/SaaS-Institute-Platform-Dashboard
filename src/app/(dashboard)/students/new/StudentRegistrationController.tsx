@@ -8,6 +8,7 @@ import {
   useStudentFieldsQuery,
   useCreateStudentMutation,
   CreateStudentPayload,
+  getApiErrorMessage,
 } from '@/src/core/api';
 import { useOperationalContext } from '@/src/core/context';
 import {
@@ -15,6 +16,8 @@ import {
   StudentRegistrationContext,
 } from './store/student-registration.store';
 import { StudentRegistrationView } from './ui/StudentRegistrationView';
+import { toReferencePayload } from '../utils/student-references.utils';
+import { useStudentReferenceOptions } from '../utils/useStudentReferenceOptions';
 
 export function StudentRegistrationController() {
   const router = useRouter();
@@ -33,6 +36,7 @@ export function StudentRegistrationController() {
   });
   const { data: families = [], isLoading: isLoadingFamilies } = useFamiliesSearchQuery();
   const { data: fields = [] } = useStudentFieldsQuery(false);
+  const referenceOptions = useStudentReferenceOptions();
 
   const createStudentMutation = useCreateStudentMutation();
 
@@ -87,6 +91,7 @@ export function StudentRegistrationController() {
         branchId: activeBranchId || undefined,
         sectionId: state.sectionId || undefined,
         customFields: state.customFields,
+        ...toReferencePayload(state.references),
       };
 
       if (state.familyMode === 'search' && state.selectedFamily) {
@@ -102,8 +107,11 @@ export function StudentRegistrationController() {
 
       await createStudentMutation.mutateAsync(payload);
       router.push('/students');
-    } catch {
-      state.setStepError(2, 'حدث خطأ أثناء حفظ بيانات الطالب. يرجى المحاولة مرة أخرى.');
+    } catch (err: unknown) {
+      state.setStepError(
+        2,
+        getApiErrorMessage(err, 'حدث خطأ أثناء حفظ بيانات الطالب. يرجى المحاولة مرة أخرى.'),
+      );
     } finally {
       state.setSubmitting(false);
     }
@@ -115,6 +123,7 @@ export function StudentRegistrationController() {
         sections={sectionsData?.data || []}
         families={families}
         fields={fields}
+        referenceOptions={referenceOptions}
         isLoadingFamilies={isLoadingFamilies}
         onPrev={handlePrev}
         onNext={handleNext}

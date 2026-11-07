@@ -14,6 +14,7 @@ import {
   useRoomsQuery,
   useTimetableQuery,
   TimetableEntry,
+  getApiErrorMessage,
 } from '@/src/core/api';
 import {
   createTimetableStore,
@@ -30,6 +31,7 @@ import {
   TimetableStats,
   TimetableToolbar,
 } from './ui';
+import { PERMISSIONS, useAuth } from '@/src/core/auth';
 import { Stack } from '@mantine/core';
 
 function QuerySync({
@@ -86,6 +88,8 @@ function QuerySync({
 
 export function TimetableController() {
   const [store] = useState(() => createTimetableStore());
+  const { can } = useAuth();
+  const canManage = can(PERMISSIONS.academicManage);
   const queryClient = useQueryClient();
 
   const saveEntryMutation = useSaveTimetableEntryMutation();
@@ -123,14 +127,9 @@ export function TimetableController() {
         },
       });
       store.getState().closeEntryModal();
-    } catch (err: any) {
-      const msg =
-        err?.response?.data?.message ||
-        err?.message ||
-        'حدث خطأ أثناء حفظ الحصة الدراسية';
-      store
-        .getState()
-        .setEntryFormError(Array.isArray(msg) ? msg.join(', ') : msg);
+    } catch (err: unknown) {
+      const msg = getApiErrorMessage(err, 'حدث خطأ أثناء حفظ الحصة الدراسية');
+      store.getState().setEntryFormError(msg);
     } finally {
       store.getState().setIsSavingEntry(false);
     }
@@ -147,7 +146,7 @@ export function TimetableController() {
           sectionId,
           entryId: entry.id,
         });
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error('Failed to delete entry', err);
       }
     },
@@ -175,7 +174,7 @@ export function TimetableController() {
             isLocked: !entry.isLocked,
           },
         });
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error('Failed to toggle lock', err);
       }
     },
@@ -205,14 +204,9 @@ export function TimetableController() {
         },
       });
       store.getState().setGenerateResult(result);
-    } catch (err: any) {
-      const msg =
-        err?.response?.data?.message ||
-        err?.message ||
-        'حدث خطأ أثناء التوليد الآلي للجدول';
-      store
-        .getState()
-        .setGenerateError(Array.isArray(msg) ? msg.join(', ') : msg);
+    } catch (err: unknown) {
+      const msg = getApiErrorMessage(err, 'حدث خطأ أثناء التوليد الآلي للجدول');
+      store.getState().setGenerateError(msg);
     } finally {
       store.getState().setIsGenerating(false);
     }
@@ -223,15 +217,20 @@ export function TimetableController() {
       <QuerySync store={store} />
       <Stack gap="lg">
         <TimetableController.Header />
-        <TimetableController.Toolbar onRefresh={handleRefresh} />
+        <TimetableController.Toolbar onRefresh={handleRefresh} canManage={canManage} />
         <TimetableController.ConflictBanner />
         <TimetableController.Stats />
         <TimetableController.Grid
           onToggleLock={handleToggleLock}
           onDeleteEntry={handleDeleteEntry}
+          canManage={canManage}
         />
-        <TimetableController.EntryModal onSave={handleSaveEntry} />
-        <TimetableController.GenerateModal onGenerate={handleGenerate} />
+        {canManage && (
+          <>
+            <TimetableController.EntryModal onSave={handleSaveEntry} />
+            <TimetableController.GenerateModal onGenerate={handleGenerate} />
+          </>
+        )}
       </Stack>
     </TimetableContext.Provider>
   );

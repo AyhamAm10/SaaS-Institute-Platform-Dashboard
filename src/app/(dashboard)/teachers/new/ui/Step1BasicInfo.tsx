@@ -71,7 +71,7 @@ export function Step1BasicInfo() {
 
           <AppInput
             label="كلمة المرور"
-            placeholder="أدخل كلمة مرور قوية (6 خانات على الأقل)"
+            placeholder="أدخل كلمة مرور قوية (8 محارف على الأقل)"
             type="password"
             value={password}
             onChange={(val) =>

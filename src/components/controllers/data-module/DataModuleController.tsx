@@ -2,8 +2,15 @@
 
 import { Box } from '@mantine/core';
 import { ReactNode, useEffect, useState } from 'react';
-import { DataModuleInitialProps } from './init/data-module.init';
-import { DataModuleContext, createDataModuleStore } from './store/data-module.store';
+import { DataModuleColumn, DataModuleInitialProps } from './init/data-module.init';
+import {
+  DataModuleContext,
+  createDataModuleStore,
+  selectSelectedRows,
+  type DataModuleStore,
+} from './store/data-module.store';
+import { useOptionalAppModuleStore } from '../app-module/store/app-module.store';
+import type { SelectionExportColumn } from '../app-module/init/app-module.init';
 import {
   DataModuleActions,
   DataModuleContent,
@@ -39,6 +46,40 @@ export function DataModuleController<T = unknown>({
   ...props
 }: DataModuleControllerProps<T>) {
   const [store] = useState(() => createDataModuleStore<T>(props));
+  const appModuleStore = useOptionalAppModuleStore();
+
+  useEffect(() => {
+    if (!props.selectable || !appModuleStore) return;
+
+    const getExportColumns = (cols: DataModuleColumn<T>[] = []): SelectionExportColumn[] => {
+      return cols
+        .filter((c) => typeof c.exportValue === 'function')
+        .map((c) => ({
+          key: c.key,
+          title: c.title,
+          kind: c.exportKind ?? 'text',
+          value: (row: unknown) => c.exportValue!(row as T),
+        }));
+    };
+
+    const updateAppModule = () => {
+      const state = store.getState();
+      const exportColumns = getExportColumns(state.columns);
+      const selectedRows = selectSelectedRows(state);
+      appModuleStore.getState().setSelection(selectedRows, exportColumns);
+    };
+
+    updateAppModule();
+
+    const unsubscribe = store.subscribe(() => {
+      updateAppModule();
+    });
+
+    return () => {
+      unsubscribe();
+      appModuleStore.getState().setSelection([], []);
+    };
+  }, [props.selectable, appModuleStore, store]);
 
   // Sync external reactive updates into the isolated store
   useEffect(() => {
@@ -59,6 +100,8 @@ export function DataModuleController<T = unknown>({
     props.emptyMessage,
     props.emptyDescription,
     props.keyExtractor,
+    props.selectable,
+    props.onSelect,
     props.onPageChange,
     props.onLimitChange,
     props.onSearchChange,
@@ -84,7 +127,7 @@ export function DataModuleController<T = unknown>({
   );
 
   return (
-    <DataModuleContext.Provider value={store}>
+    <DataModuleContext.Provider value={store as unknown as DataModuleStore<unknown>}>
       <Box w="100%">
         {children ?? defaultContent}
       </Box>

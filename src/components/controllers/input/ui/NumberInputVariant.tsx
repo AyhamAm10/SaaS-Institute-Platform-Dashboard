@@ -39,6 +39,7 @@ export function NumberInputVariant() {
   return (
     <NumberInput
       {...mantineProps}
+      dir={config.direction === 'auto' ? 'auto' : undefined}
       min={min}
       max={max}
       step={step}

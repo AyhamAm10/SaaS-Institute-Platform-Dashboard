@@ -18,7 +18,7 @@ export interface TimetableConflict {
   type: ConflictType | string;
   severity: ConflictSeverity;
   message: string;
-  details?: Record<string, any>;
+  details?: Record<string, unknown>;
 }
 
 export interface TimetableEntry {

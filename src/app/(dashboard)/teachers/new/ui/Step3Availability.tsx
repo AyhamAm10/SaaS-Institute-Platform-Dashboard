@@ -102,7 +102,7 @@ export function Step3Availability() {
               placeholder="اختر اليوم..."
               data={DAYS_OF_WEEK}
               value={stagedDayOfWeek}
-              onChange={(val: any) => setStagedDayOfWeek(val || '0')}
+              onChange={(val: string | null) => setStagedDayOfWeek(val || '0')}
             />
 
             <AppInput

@@ -10,7 +10,9 @@ import {
   useDeleteSubjectMutation,
   useSubjectsQuery,
   useUpdateSubjectMutation,
+  getApiErrorMessage,
 } from '@/src/core/api';
+import { PERMISSIONS, useAuth } from '@/src/core/auth';
 import {
   createSubjectsStore,
   SubjectsContext,
@@ -61,6 +63,8 @@ function QuerySync({
  */
 export function SubjectsController() {
   const [store] = useState(() => createSubjectsStore());
+  const { can } = useAuth();
+  const canManage = can(PERMISSIONS.academicManage);
   const queryClient = useQueryClient();
   const createMutation = useCreateSubjectMutation();
   const updateMutation = useUpdateSubjectMutation();
@@ -102,12 +106,9 @@ export function SubjectsController() {
 
       store.getState().closeDrawer();
       store.getState().resetForm();
-    } catch (err: any) {
-      const msg =
-        err?.response?.data?.message ||
-        err?.message ||
-        'حدث خطأ أثناء حفظ بيانات المادة الدراسية';
-      store.getState().setGeneralError(Array.isArray(msg) ? msg.join(', ') : msg);
+    } catch (err: unknown) {
+      const msg = getApiErrorMessage(err, 'حدث خطأ أثناء حفظ بيانات المادة الدراسية');
+      store.getState().setGeneralError(msg);
     } finally {
       store.getState().setIsSubmitting(false);
     }
@@ -121,12 +122,9 @@ export function SubjectsController() {
       try {
         await deleteMutation.mutateAsync(subject.id);
         store.getState().closeDeleteModal();
-      } catch (err: any) {
-        const msg =
-          err?.response?.data?.message ||
-          err?.message ||
-          'حدث خطأ أثناء حذف المادة الدراسية';
-        store.getState().setDeleteError(Array.isArray(msg) ? msg.join(', ') : msg);
+      } catch (err: unknown) {
+        const msg = getApiErrorMessage(err, 'حدث خطأ أثناء حذف المادة الدراسية');
+        store.getState().setDeleteError(msg);
       } finally {
         store.getState().setIsDeleting(false);
       }
@@ -141,6 +139,7 @@ export function SubjectsController() {
         onRefresh={handleRefetch}
         onSubmit={handleSubmit}
         onConfirmDelete={handleConfirmDelete}
+        canManage={canManage}
       />
     </SubjectsContext.Provider>
   );

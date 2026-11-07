@@ -5,6 +5,14 @@ import { IconEdit, IconListDetails } from '@tabler/icons-react';
 import { StudentField } from '@/src/core/api';
 import { DataModuleColumn } from '@/src/components/controllers/data-module';
 
+const TYPE_NAMES: Record<StudentField['type'], string> = {
+  TEXT: 'نصي',
+  NUMBER: 'رقمي',
+  DATE: 'تاريخ',
+  SELECT: 'قائمة منسدلة',
+  BOOLEAN: 'نعم / لا',
+};
+
 function getFieldTypeBadge(type: StudentField['type']) {
   switch (type) {
     case 'TEXT':
@@ -22,12 +30,15 @@ function getFieldTypeBadge(type: StudentField['type']) {
 
 export function getStudentFieldsColumns(
   onEdit: (field: StudentField) => void,
+  access = { canManage: true },
 ): DataModuleColumn<StudentField>[] {
-  return [
+  const cols: DataModuleColumn<StudentField>[] = [
     {
       key: 'label',
       title: 'تسمية الحقل',
       sortable: true,
+      exportValue: (field) => field.label,
+      exportKind: 'text',
       render: (field) => (
         <Group gap="sm" wrap="nowrap">
           <ActionIcon size="md" radius="xl" variant="light" color="primary">
@@ -42,11 +53,15 @@ export function getStudentFieldsColumns(
     {
       key: 'type',
       title: 'نوع الحقل',
+      exportValue: (field) => TYPE_NAMES[field.type] ?? field.type,
+      exportKind: 'text',
       render: (field) => getFieldTypeBadge(field.type),
     },
     {
       key: 'isRequired',
       title: 'إلزامية الحقل',
+      exportValue: (field) => (field.isRequired ? 'إجباري' : 'اختياري'),
+      exportKind: 'text',
       render: (field) => (
         <Badge
           color={field.isRequired ? 'red' : 'gray'}
@@ -61,6 +76,8 @@ export function getStudentFieldsColumns(
     {
       key: 'displayInReport',
       title: 'الظهور في البطاقة والتقارير',
+      exportValue: (field) => (field.displayInReport ? 'يظهر بالتقرير' : 'داخلي فقط'),
+      exportKind: 'text',
       render: (field) => (
         <Badge
           color={field.displayInReport ? 'teal' : 'gray'}
@@ -72,7 +89,10 @@ export function getStudentFieldsColumns(
         </Badge>
       ),
     },
-    {
+  ];
+
+  if (access.canManage) {
+    cols.push({
       key: 'actions',
       title: 'الإجراءات',
       align: 'center',
@@ -89,6 +109,8 @@ export function getStudentFieldsColumns(
           </ActionIcon>
         </Tooltip>
       ),
-    },
-  ];
+    });
+  }
+
+  return cols;
 }

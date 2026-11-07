@@ -41,6 +41,14 @@ export function DatePickerView() {
     dropdownType = 'popover',
     ...mantineProps
   } = rawProps;
+  void _val;
+  void _defVal;
+  void _onChange;
+  void _onFocus;
+  void _onBlur;
+  void _err;
+  void _size;
+  void _radius;
 
   const minDate = parseDateValue(rawMinDate);
   const maxDate = parseDateValue(rawMaxDate);
@@ -72,15 +80,15 @@ export function DatePickerView() {
   const unifiedStyles = getUnifiedDatePickerStyles(
     isFocused,
     Boolean(error),
-    customStyles,
+    customStyles as Record<string, Record<string, unknown>> | undefined,
   );
 
   return (
     <DatePickerInput
       {...mantineProps}
       value={value}
-      onChange={(val: any) => {
-        const nextDate = val ? (val instanceof Date ? val : new Date(val)) : null;
+      onChange={(val: unknown) => {
+        const nextDate = val ? (val instanceof Date ? val : new Date(String(val))) : null;
         setValue(nextDate && !isNaN(nextDate.getTime()) ? nextDate : null);
       }}
       label={label}
@@ -108,15 +116,15 @@ export function DatePickerView() {
         shadow: 'md',
         radius: 'md',
         offset: 6,
-        ...rawProps.popoverProps,
+        ...(rawProps.popoverProps as object | undefined),
       }}
       onFocus={(e) => {
         setFocused(true);
-        rawProps.onFocus?.(e as any);
+        (rawProps.onFocus as ((event: unknown) => void) | undefined)?.(e);
       }}
       onBlur={(e) => {
         setFocused(false);
-        rawProps.onBlur?.(e as any);
+        (rawProps.onBlur as ((event: unknown) => void) | undefined)?.(e);
       }}
     />
   );

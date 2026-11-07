@@ -1,6 +1,6 @@
 'use client';
 
-import { Group, Skeleton, Stack, Text, ThemeIcon } from '@mantine/core';
+import { Group, Skeleton, Text, ThemeIcon } from '@mantine/core';
 import { ReactNode } from 'react';
 
 export interface AppDrawerDetailProps {

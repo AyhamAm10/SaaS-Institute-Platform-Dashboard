@@ -13,7 +13,9 @@ import {
   useUpdateRoomMutation,
   getRoomById,
   useOperationalContext,
+  getApiErrorMessage,
 } from '@/src/core/api';
+import { PERMISSIONS, useAuth } from '@/src/core/auth';
 import {
   createRoomsStore,
   RoomsContext,
@@ -55,6 +57,8 @@ function QuerySync({
 
 export function RoomsController() {
   const [store] = useState(() => createRoomsStore());
+  const { can } = useAuth();
+  const canManage = can(PERMISSIONS.academicManage);
   const queryClient = useQueryClient();
 
   const createMutation = useCreateRoomMutation();
@@ -124,12 +128,9 @@ export function RoomsController() {
 
       store.getState().closeDrawer();
       store.getState().resetForm();
-    } catch (err: any) {
-      const msg =
-        err?.response?.data?.message ||
-        err?.message ||
-        'حدث خطأ أثناء حفظ بيانات القاعة';
-      store.getState().setGeneralError(Array.isArray(msg) ? msg.join(', ') : msg);
+    } catch (err: unknown) {
+      const msg = getApiErrorMessage(err, 'حدث خطأ أثناء حفظ بيانات القاعة');
+      store.getState().setGeneralError(msg);
     } finally {
       store.getState().setIsSubmitting(false);
     }
@@ -142,12 +143,9 @@ export function RoomsController() {
       try {
         await deleteMutation.mutateAsync(room.id);
         store.getState().closeDeleteModal();
-      } catch (err: any) {
-        const msg =
-          err?.response?.data?.message ||
-          err?.message ||
-          'حدث خطأ أثناء حذف القاعة';
-        store.getState().setDeleteError(Array.isArray(msg) ? msg.join(', ') : msg);
+      } catch (err: unknown) {
+        const msg = getApiErrorMessage(err, 'حدث خطأ أثناء حذف القاعة');
+        store.getState().setDeleteError(msg);
       } finally {
         store.getState().setIsDeleting(false);
       }
@@ -168,7 +166,7 @@ export function RoomsController() {
       });
       const updated = await getRoomById(current.id);
       store.getState().setSelectedRoomDetails(updated);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Failed to save room availabilities', err);
     } finally {
       store.getState().setIsSavingAvailabilities(false);
@@ -183,6 +181,7 @@ export function RoomsController() {
         onSubmit={handleSubmit}
         onConfirmDelete={handleConfirmDelete}
         onSaveAvailabilities={handleSaveAvailabilities}
+        canManage={canManage}
         newAvailDay={newAvailDay}
         setNewAvailDay={setNewAvailDay}
         newAvailStart={newAvailStart}

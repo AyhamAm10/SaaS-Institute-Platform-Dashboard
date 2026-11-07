@@ -21,12 +21,14 @@ export interface DataModuleState<T = unknown> {
   searchPlaceholder: string;
   sort: SortState;
   selectedIds: (string | number)[];
+  selectable: boolean;
   filters: Record<string, unknown>;
   emptyMessage: string;
   emptyDescription?: string;
   keyExtractor: (item: T) => string | number;
 
   // External callback refs
+  onSelect?: (rows: T[]) => void;
   onPageChange?: (page: number) => void;
   onLimitChange?: (limit: number) => void;
   onSearchChange?: (search: string) => void;

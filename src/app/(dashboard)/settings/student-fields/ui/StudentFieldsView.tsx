@@ -3,6 +3,7 @@
 import { useMemo } from 'react';
 import { Button } from '@mantine/core';
 import { IconPlus } from '@tabler/icons-react';
+import { AppModule } from '@/src/components/controllers/app-module';
 import { DataModuleController } from '@/src/components/controllers/data-module';
 import { useStudentFieldsMirror } from '../store/useStudentFieldsMirror';
 import { studentFieldsLabels } from '../static-data/student-fields.data';
@@ -12,9 +13,10 @@ import { StudentField } from '@/src/core/api';
 
 export interface StudentFieldsViewProps {
   onSubmit: () => Promise<void>;
+  canManage?: boolean;
 }
 
-export function StudentFieldsView({ onSubmit }: StudentFieldsViewProps) {
+export function StudentFieldsView({ onSubmit, canManage = true }: StudentFieldsViewProps) {
   const fields = useStudentFieldsMirror('fields');
   const isLoading = useStudentFieldsMirror('isLoading');
   const search = useStudentFieldsMirror('search');
@@ -33,52 +35,57 @@ export function StudentFieldsView({ onSubmit }: StudentFieldsViewProps) {
     );
   }, [fields, search]);
 
-  const columns = useMemo(() => getStudentFieldsColumns(openEditDrawer), [openEditDrawer]);
+  const columns = useMemo(() => getStudentFieldsColumns(openEditDrawer, { canManage }), [openEditDrawer, canManage]);
 
   return (
-    <>
-      <DataModuleController
-        title={studentFieldsLabels.title}
-        description={studentFieldsLabels.description}
-        data={filteredFields}
-        columns={columns}
-        total={filteredFields.length}
-        page={1}
-        limit={50}
-        totalPages={1}
-        isLoading={isLoading}
-        emptyMessage={studentFieldsLabels.emptyMessage}
-        emptyDescription={studentFieldsLabels.emptyDescription}
-        searchPlaceholder={studentFieldsLabels.searchPlaceholder}
-        keyExtractor={(item: StudentField) => item.id}
-        onSearchChange={setSearch}
-      >
-        <DataModuleController.Header>
-          <DataModuleController.Title />
-          <DataModuleController.Actions>
-            <Button
-              leftSection={<IconPlus size={16} />}
-              onClick={openCreateDrawer}
-              color="primary"
-              radius="md"
-            >
-              {studentFieldsLabels.createAction}
-            </Button>
-          </DataModuleController.Actions>
-        </DataModuleController.Header>
+    <AppModule exportTitle="الحقول المخصصة">
+      <AppModule.Table>
+        <DataModuleController
+          title={studentFieldsLabels.title}
+          description={studentFieldsLabels.description}
+          data={filteredFields}
+          columns={columns}
+          total={filteredFields.length}
+          page={1}
+          limit={50}
+          totalPages={1}
+          isLoading={isLoading}
+          emptyMessage={studentFieldsLabels.emptyMessage}
+          emptyDescription={studentFieldsLabels.emptyDescription}
+          searchPlaceholder={studentFieldsLabels.searchPlaceholder}
+          keyExtractor={(item: StudentField) => item.id}
+          onSearchChange={setSearch}
+          selectable
+        >
+          <DataModuleController.Header>
+            <DataModuleController.Title />
+            {canManage && (
+              <DataModuleController.Actions>
+                <Button
+                  leftSection={<IconPlus size={16} />}
+                  onClick={openCreateDrawer}
+                  color="primary"
+                  radius="md"
+                >
+                  {studentFieldsLabels.createAction}
+                </Button>
+              </DataModuleController.Actions>
+            )}
+          </DataModuleController.Header>
 
-        <DataModuleController.FilterBar>
-          <DataModuleController.SearchInput placeholder={studentFieldsLabels.searchPlaceholder} />
-        </DataModuleController.FilterBar>
+          <DataModuleController.FilterBar>
+            <DataModuleController.SearchInput placeholder={studentFieldsLabels.searchPlaceholder} />
+          </DataModuleController.FilterBar>
 
-        <DataModuleController.Content>
-          <DataModuleController.Table />
-        </DataModuleController.Content>
+          <DataModuleController.Content>
+            <DataModuleController.Table />
+          </DataModuleController.Content>
 
-        <DataModuleController.Footer />
-      </DataModuleController>
+          <DataModuleController.Footer />
+        </DataModuleController>
+      </AppModule.Table>
 
-      <StudentFieldDrawer onSubmit={onSubmit} />
-    </>
+      {canManage && <StudentFieldDrawer onSubmit={onSubmit} />}
+    </AppModule>
   );
 }

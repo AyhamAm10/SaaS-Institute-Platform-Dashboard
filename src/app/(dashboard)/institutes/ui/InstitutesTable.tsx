@@ -1,31 +1,14 @@
 'use client';
-import { formatDate } from '@/src/core/format';
 
-import {
-  Avatar,
-  ColorSwatch,
-  Group,
-  Stack,
-  Text,
-} from '@mantine/core';
-import {
-  IconEdit,
-  IconEye,
-  IconPhone,
-  IconUser,
-} from '@tabler/icons-react';
+import { Avatar, ColorSwatch, Group, Stack, Text } from '@mantine/core';
+import { IconPhone, IconUser } from '@tabler/icons-react';
+import { formatDate } from '@/src/core/format';
 import { Institute } from '@/src/core/api';
 import { DataModuleColumn } from '@/src/components/controllers/data-module';
-import { AppIconButton } from '@/src/components/controllers/button';
 import { StatusBadge } from '@/src/components/controllers/badge';
 import { institutesLabels } from '../static-data/institutes.data';
+import { InstituteActionsCell } from './InstituteActionsCell';
 
-/**
- * getInstitutesColumns
- *
- * Column definitions for Institutes table.
- * Strictly adheres to DataModuleController compound pattern.
- */
 export function getInstitutesColumns(
   openDetailsDrawer: (institute: Institute) => void,
   openEditDrawer: (institute: Institute) => void,
@@ -35,6 +18,8 @@ export function getInstitutesColumns(
       key: 'name',
       title: institutesLabels.tableName,
       sortable: true,
+      exportValue: (inst) => `${inst.name} (${inst.code})`,
+      exportKind: 'text',
       render: (institute) => (
         <Group gap="sm" wrap="nowrap">
           <Avatar
@@ -60,6 +45,8 @@ export function getInstitutesColumns(
     {
       key: 'admin',
       title: institutesLabels.tableAdmin,
+      exportValue: (inst) => inst.instituteAdmins?.[0]?.user?.fullName ?? institutesLabels.noAdminAssigned,
+      exportKind: 'text',
       render: (institute) => {
         const adminUser = institute.instituteAdmins?.[0]?.user;
         return adminUser ? (
@@ -86,6 +73,8 @@ export function getInstitutesColumns(
     {
       key: 'phone',
       title: institutesLabels.tablePhone,
+      exportValue: (inst) => inst.phone || '—',
+      exportKind: 'text',
       render: (institute) => (
         <Group gap={6} wrap="nowrap">
           <IconPhone size={14} color="var(--mantine-color-dimmed)" />
@@ -98,6 +87,8 @@ export function getInstitutesColumns(
     {
       key: 'address',
       title: institutesLabels.tableAddress,
+      exportValue: (inst) => inst.address || '—',
+      exportKind: 'text',
       render: (institute) => (
         <Text size="xs" c="dimmed" lineClamp={1}>
           {institute.address || '—'}
@@ -109,14 +100,8 @@ export function getInstitutesColumns(
       title: institutesLabels.tableColors,
       render: (institute) => (
         <Group gap={6} wrap="nowrap">
-          <ColorSwatch
-            color={institute.primaryColor || '#1E4E8C'}
-            size={16}
-          />
-          <ColorSwatch
-            color={institute.secondaryColor || '#0FA4AF'}
-            size={16}
-          />
+          <ColorSwatch color={institute.primaryColor || '#1E4E8C'} size={16} />
+          <ColorSwatch color={institute.secondaryColor || '#0FA4AF'} size={16} />
         </Group>
       ),
     },
@@ -124,39 +109,24 @@ export function getInstitutesColumns(
       key: 'createdAt',
       title: institutesLabels.tableCreatedAt,
       sortable: true,
-      render: (institute) => {
-        const formattedDate = formatDate(institute.createdAt);
-        return (
-          <Text size="xs" c="dimmed">
-            {formattedDate}
-          </Text>
-        );
-      },
+      exportValue: (inst) => formatDate(inst.createdAt),
+      exportKind: 'date',
+      render: (institute) => (
+        <Text size="xs" c="dimmed">
+          {formatDate(institute.createdAt)}
+        </Text>
+      ),
     },
     {
       key: 'actions',
       title: institutesLabels.tableActions,
       align: 'center',
       render: (institute) => (
-        <Group gap="xs" justify="center" wrap="nowrap">
-          <AppIconButton
-            variant="ghost"
-            size="sm"
-            label={institutesLabels.detailsButton}
-            onClick={() => openDetailsDrawer(institute)}
-          >
-            <IconEye size={15} />
-          </AppIconButton>
-
-          <AppIconButton
-            variant="ghost"
-            size="sm"
-            label={institutesLabels.editButton}
-            onClick={() => openEditDrawer(institute)}
-          >
-            <IconEdit size={15} />
-          </AppIconButton>
-        </Group>
+        <InstituteActionsCell
+          institute={institute}
+          onDetails={openDetailsDrawer}
+          onEdit={openEditDrawer}
+        />
       ),
     },
   ];

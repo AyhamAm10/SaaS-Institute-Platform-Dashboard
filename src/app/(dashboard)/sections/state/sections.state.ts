@@ -50,6 +50,7 @@ export interface SectionsState {
   feeModalOpened: boolean;
   feeSection: Section | null;
   feeFormAmount: string;
+  feeFormCurrency: 'SYP' | 'USD';
   feeError: string | null;
 
   // ── Details Drawer State ──
@@ -115,6 +116,7 @@ export interface SectionsState {
   openFeeModal: (section: Section) => void;
   closeFeeModal: () => void;
   setFeeFormAmount: (amount: string) => void;
+  setFeeFormCurrency: (currency: 'SYP' | 'USD') => void;
   setFeeError: (error: string | null) => void;
 
   // ── Actions: Details Drawer ──

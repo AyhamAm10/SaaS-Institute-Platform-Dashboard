@@ -8,21 +8,18 @@ import { AppIconButton } from '@/src/components/controllers/button';
 import { StatusBadge } from '@/src/components/controllers/badge';
 import { familiesLabels } from '../static-data/families.data';
 
-/**
- * getFamiliesColumns
- *
- * Column definitions for the Families table.
- * Strictly adheres to DataModuleController compound pattern.
- */
 export function getFamiliesColumns(
   openEditDrawer: (family: Family) => void,
   openDeleteModal: (family: Family) => void,
+  access = { canManage: true },
 ): DataModuleColumn<Family>[] {
-  return [
+  const cols: DataModuleColumn<Family>[] = [
     {
       key: 'familyName',
       title: familiesLabels.tableFamilyName,
       sortable: true,
+      exportValue: (f) => f.familyName,
+      exportKind: 'text',
       render: (family) => (
         <Group gap="sm" wrap="nowrap">
           <Avatar color="primary" radius="md" size="sm" variant="light">
@@ -37,6 +34,8 @@ export function getFamiliesColumns(
     {
       key: 'parents',
       title: familiesLabels.tableParents,
+      exportValue: (f) => `الأب: ${f.fatherName || '—'} / الأم: ${f.motherName || '—'}`,
+      exportKind: 'text',
       render: (family) => (
         <Stack gap={0}>
           <Text size="xs">الأب: {family.fatherName || '—'}</Text>
@@ -49,6 +48,8 @@ export function getFamiliesColumns(
     {
       key: 'phone',
       title: familiesLabels.tablePhone,
+      exportValue: (f) => f.phone || null,
+      exportKind: 'phone',
       render: (family) => (
         <Group gap={6} wrap="nowrap">
           <IconPhone size={14} color="var(--mantine-color-dimmed)" />
@@ -61,6 +62,8 @@ export function getFamiliesColumns(
     {
       key: 'students',
       title: familiesLabels.tableStudents,
+      exportValue: (f) => f._count?.students ?? 0,
+      exportKind: 'number',
       render: (family) => {
         const count = family._count?.students ?? 0;
         return (
@@ -70,7 +73,10 @@ export function getFamiliesColumns(
         );
       },
     },
-    {
+  ];
+
+  if (access.canManage) {
+    cols.push({
       key: 'actions',
       title: familiesLabels.tableActions,
       align: 'center',
@@ -94,6 +100,8 @@ export function getFamiliesColumns(
           </AppIconButton>
         </Group>
       ),
-    },
-  ];
+    });
+  }
+
+  return cols;
 }

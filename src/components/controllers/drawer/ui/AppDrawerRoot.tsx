@@ -3,8 +3,6 @@
 import { Box, Drawer } from '@mantine/core';
 import { ReactNode } from 'react';
 import { useDrawerMirror } from '../store/useDrawerMirror';
-import { AppDrawerHeader } from './AppDrawerHeader';
-import { AppDrawerContent } from './AppDrawerContent';
 
 export interface AppDrawerRootProps {
   children?: ReactNode;
@@ -15,7 +13,6 @@ export interface AppDrawerRootProps {
 export function AppDrawerRoot({ children, zIndex = 300, className }: AppDrawerRootProps) {
   const opened = useDrawerMirror('opened');
   const close = useDrawerMirror('close');
-  const title = useDrawerMirror('title');
   const config = useDrawerMirror('config');
 
   // If children are provided, we check if they are compound components or simple content

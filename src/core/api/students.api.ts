@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from './client';
 import { PaginatedResponse } from './types';
+import type { StatusTone } from './reference-data.api';
 
 // ---------------------------------------------------------------------------
 // Types & Models
@@ -48,7 +49,21 @@ export interface StudentEnrollmentItem {
   };
 }
 
-export interface Student {
+/** Reference-data links of a student; `null` clears a link (except the status). */
+export interface StudentReferenceIds {
+  cityId?: number | null;
+  schoolId?: number | null;
+  busId?: number | null;
+  knowWayId?: number | null;
+  statusId?: number | null;
+}
+
+interface NamedRef {
+  id: number;
+  name: string;
+}
+
+export interface Student extends StudentReferenceIds {
   id: number;
   instituteId: number;
   branchId?: number | null;
@@ -56,7 +71,7 @@ export interface Student {
   fullName: string;
   birthDate: string;
   gender: string;
-  customFields?: Record<string, any>;
+  customFields?: Record<string, unknown>;
   createdAt: string;
   family?: Family;
   branch?: {
@@ -64,6 +79,11 @@ export interface Student {
     name: string;
   } | null;
   studentEnrollments?: StudentEnrollmentItem[];
+  city?: NamedRef | null;
+  school?: NamedRef | null;
+  bus?: NamedRef | null;
+  knowWay?: NamedRef | null;
+  status?: (NamedRef & { tone: StatusTone }) | null;
 }
 
 export interface CreateFamilyPayload {
@@ -73,7 +93,7 @@ export interface CreateFamilyPayload {
   phone?: string;
 }
 
-export interface CreateStudentPayload {
+export interface CreateStudentPayload extends StudentReferenceIds {
   fullName: string;
   birthDate: string;
   gender: string;
@@ -81,12 +101,12 @@ export interface CreateStudentPayload {
   familyId?: number;
   newFamily?: CreateFamilyPayload;
   sectionId?: number;
-  customFields?: Record<string, any>;
+  customFields?: Record<string, unknown>;
 }
 
 export type UpdateFamilyPayload = Partial<CreateFamilyPayload>;
 
-export interface UpdateStudentPayload {
+export interface UpdateStudentPayload extends StudentReferenceIds {
   fullName?: string;
   birthDate?: string;
   gender?: string;
@@ -112,6 +132,12 @@ export interface StudentQueryParams {
   branchId?: number;
   sectionId?: number;
   familyId?: number;
+  statusId?: number;
+  busId?: number;
+  cityId?: number;
+  schoolId?: number;
+  /** Only students without an enrollment in this academic year. */
+  unassignedYearId?: number;
 }
 
 // ---------------------------------------------------------------------------

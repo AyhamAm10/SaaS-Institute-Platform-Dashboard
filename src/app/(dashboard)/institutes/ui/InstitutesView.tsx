@@ -2,6 +2,7 @@
 
 import { useMemo } from 'react';
 import { IconBuildingCommunity, IconPlus, IconRefresh } from '@tabler/icons-react';
+import { AppModule } from '@/src/components/controllers/app-module';
 import { DataModuleController } from '@/src/components/controllers/data-module';
 import { AppButton, AppIconButton } from '@/src/components/controllers/button';
 import { FeatureKey, Institute } from '@/src/core/api';
@@ -45,64 +46,67 @@ export function InstitutesView({ onRefresh, onFormSubmit, onToggleFeature }: Ins
   );
 
   return (
-    <>
-      <DataModuleController
-        title={institutesLabels.title}
-        description={institutesLabels.subtitle}
-        data={data}
-        columns={columns}
-        total={total}
-        page={page}
-        limit={limit}
-        totalPages={totalPages}
-        isLoading={isLoading}
-        isFetching={isFetching}
-        emptyMessage={institutesLabels.emptyState}
-        emptyDescription="يمكنك إضافة أول معهد في النظام بالضغط على زر إضافة معهد جديد."
-        searchPlaceholder={institutesLabels.searchPlaceholder}
-        keyExtractor={(item: Institute) => item.id}
-        onPageChange={setPage}
-        onSearchChange={setSearch}
-      >
-        <DataModuleController.Header>
-          <DataModuleController.Title
-            icon={<IconBuildingCommunity size={18} />}
-            badgeLabel={institutesLabels.totalCountBadge}
-          />
-          <DataModuleController.Actions>
-            <AppButton leftSection={<IconPlus size={16} />} onClick={openCreateDrawer}>
-              {institutesLabels.createNewButton}
-            </AppButton>
-          </DataModuleController.Actions>
-        </DataModuleController.Header>
+    <AppModule exportTitle="المعاهد">
+      <AppModule.Table>
+        <DataModuleController
+          title={institutesLabels.title}
+          description={institutesLabels.subtitle}
+          data={data}
+          columns={columns}
+          total={total}
+          page={page}
+          limit={limit}
+          totalPages={totalPages}
+          isLoading={isLoading}
+          isFetching={isFetching}
+          emptyMessage={institutesLabels.emptyState}
+          emptyDescription="يمكنك إضافة أول معهد في النظام بالضغط على زر إضافة معهد جديد."
+          searchPlaceholder={institutesLabels.searchPlaceholder}
+          keyExtractor={(item: Institute) => item.id}
+          onPageChange={setPage}
+          onSearchChange={setSearch}
+          selectable
+        >
+          <DataModuleController.Header>
+            <DataModuleController.Title
+              icon={<IconBuildingCommunity size={18} />}
+              badgeLabel={institutesLabels.totalCountBadge}
+            />
+            <DataModuleController.Actions>
+              <AppButton leftSection={<IconPlus size={16} />} onClick={openCreateDrawer}>
+                {institutesLabels.createNewButton}
+              </AppButton>
+            </DataModuleController.Actions>
+          </DataModuleController.Header>
 
-        <DataModuleController.FilterBar>
-          <DataModuleController.SearchInput placeholder={institutesLabels.searchPlaceholder} />
-          {onRefresh && (
-            <DataModuleController.FilterSlot>
-              <AppIconButton
-                variant="brand"
-                label={institutesLabels.refreshButton}
-                onClick={onRefresh}
-                loading={isFetching}
-              >
-                <IconRefresh size={16} />
-              </AppIconButton>
-            </DataModuleController.FilterSlot>
-          )}
-        </DataModuleController.FilterBar>
+          <DataModuleController.FilterBar>
+            <DataModuleController.SearchInput placeholder={institutesLabels.searchPlaceholder} />
+            {onRefresh && (
+              <DataModuleController.FilterSlot>
+                <AppIconButton
+                  variant="brand"
+                  label={institutesLabels.refreshButton}
+                  onClick={onRefresh}
+                  loading={isFetching}
+                >
+                  <IconRefresh size={16} />
+                </AppIconButton>
+              </DataModuleController.FilterSlot>
+            )}
+          </DataModuleController.FilterBar>
 
-        <DataModuleController.Content>
-          <DataModuleController.Table />
-        </DataModuleController.Content>
+          <DataModuleController.Content>
+            <DataModuleController.Table />
+          </DataModuleController.Content>
 
-        <DataModuleController.Footer />
-      </DataModuleController>
+          <DataModuleController.Footer />
+        </DataModuleController>
+      </AppModule.Table>
 
       <InstituteFormDrawer onSubmit={onFormSubmit} />
       <InstituteDetailsDrawer
         featuresSlot={<InstituteFeaturesSection onToggle={onToggleFeature} />}
       />
-    </>
+    </AppModule>
   );
 }

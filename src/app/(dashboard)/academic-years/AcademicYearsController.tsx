@@ -8,6 +8,7 @@ import {
   useSetCurrentAcademicYearMutation,
   useUpdateAcademicYearMutation,
 } from '@/src/core/api';
+import { PERMISSIONS, useAuth } from '@/src/core/auth';
 import { createAcademicYearsStore, AcademicYearsContext } from './store/academicYears.store';
 import { AcademicYearsView } from './ui/AcademicYearsView';
 import { useStore } from 'zustand';
@@ -53,6 +54,8 @@ function QuerySync({ store }: { store: ReturnType<typeof createAcademicYearsStor
  */
 export function AcademicYearsController() {
   const [store] = useState(() => createAcademicYearsStore());
+  const { can } = useAuth();
+  const canManage = can(PERMISSIONS.academicManage);
 
   // ── Mutations ──
   const createMutation = useCreateAcademicYearMutation();
@@ -106,6 +109,7 @@ export function AcademicYearsController() {
       <AcademicYearsView
         onFormSubmit={handleFormSubmit}
         onSetCurrent={handleSetCurrent}
+        canManage={canManage}
       />
     </AcademicYearsContext.Provider>
   );

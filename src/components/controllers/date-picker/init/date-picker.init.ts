@@ -32,8 +32,8 @@ export interface DatePickerProps {
   valueFormat?: string;
   className?: string;
   style?: React.CSSProperties;
-  styles?: Record<string, any>;
-  [key: string]: any;
+  styles?: Record<string, unknown>;
+  [key: string]: unknown;
 }
 
 export interface ResolvedDatePickerConfig {

@@ -1,5 +1,6 @@
 import { Student, StudentField, UpdateStudentPayload } from '@/src/core/api';
 import { StudentEditFormState } from '../state/students.state';
+import { toReferencePayload } from './student-references.utils';
 
 /**
  * Client-side validation of the student edit form, including the institute's
@@ -38,6 +39,7 @@ export function toUpdateStudentPayload(
     gender: form.gender,
     ...(form.familyId && form.familyId !== student.familyId && { familyId: form.familyId }),
     customFields: form.customFields,
+    ...toReferencePayload(form.references),
   };
 }
 

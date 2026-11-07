@@ -60,6 +60,13 @@ export function createTeachersStore(): TeachersStore {
     deleteError: null,
     isDeleting: false,
 
+    // Password Modal
+    passwordModalOpened: false,
+    passwordTarget: null,
+    newPassword: '',
+    passwordModalError: null,
+    isPasswordSubmitting: false,
+
     // Actions: Filters
     setPage: (page) => set({ page }),
     setLimit: (limit) => set({ limit, page: 1 }),
@@ -195,6 +202,28 @@ export function createTeachersStore(): TeachersStore {
 
     setDeleteError: (error) => set({ deleteError: error }),
     setIsDeleting: (deleting) => set({ isDeleting: deleting }),
+
+    // Actions: Password Modal
+    openPasswordModal: (teacher) =>
+      set({
+        passwordModalOpened: true,
+        passwordTarget: teacher,
+        newPassword: '',
+        passwordModalError: null,
+      }),
+
+    closePasswordModal: () =>
+      set({
+        passwordModalOpened: false,
+        passwordTarget: null,
+        newPassword: '',
+        passwordModalError: null,
+      }),
+
+    setNewPassword: (newPassword) => set({ newPassword }),
+    setPasswordModalError: (passwordModalError) => set({ passwordModalError }),
+    setIsPasswordSubmitting: (isPasswordSubmitting) =>
+      set({ isPasswordSubmitting }),
 
     // Actions: Sync
     syncQueryData: (payload) =>

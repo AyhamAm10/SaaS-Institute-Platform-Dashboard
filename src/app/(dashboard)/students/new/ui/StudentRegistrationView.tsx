@@ -9,11 +9,13 @@ import { Step1Family } from './Step1Family';
 import { Step2BasicInfo } from './Step2BasicInfo';
 import { Step4Review } from './Step4Review';
 import { Family, Section, StudentField } from '@/src/core/api';
+import type { StudentReferenceOptions } from '../../utils/student-references.utils';
 
 export interface StudentRegistrationViewProps {
   sections: Section[];
   families: Family[];
   fields: StudentField[];
+  referenceOptions: StudentReferenceOptions;
   isLoadingFamilies?: boolean;
   onPrev: () => void;
   onNext: () => void;
@@ -26,6 +28,7 @@ export function StudentRegistrationView({
   sections,
   families,
   fields,
+  referenceOptions,
   isLoadingFamilies,
   onPrev,
   onNext,
@@ -44,7 +47,7 @@ export function StudentRegistrationView({
           title="تسجيل طالب جديد"
           description="ربط الطالب بعائلته وإدخال بياناته الأكاديمية والشخصية"
           actions={
-            <AppButton href="C:/Program Files/Git/students" variant="outline" leftSection={<IconArrowRight size={16} stroke={1.7} />}>
+            <AppButton href="/students" variant="outline" leftSection={<IconArrowRight size={16} stroke={1.7} />}>
               العودة للطلاب
             </AppButton>
           }
@@ -72,7 +75,11 @@ export function StudentRegistrationView({
           >
             <AppStepper.Step.Header />
             <AppStepper.Step.Content>
-              <Step2BasicInfo sections={sections} fields={fields} />
+              <Step2BasicInfo
+                sections={sections}
+                fields={fields}
+                referenceOptions={referenceOptions}
+              />
             </AppStepper.Step.Content>
           </AppStepper.Step>
 

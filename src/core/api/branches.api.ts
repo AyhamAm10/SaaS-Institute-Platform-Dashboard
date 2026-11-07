@@ -16,7 +16,7 @@ export interface CreateBranchDto {
   address?: string;
 }
 
-export interface UpdateBranchDto extends Partial<CreateBranchDto> {}
+export type UpdateBranchDto = Partial<CreateBranchDto>;
 
 export async function getBranches(): Promise<Branch[]> {
   try {

@@ -3,6 +3,8 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useStore } from 'zustand';
 import {
+  useAcademicYearsQuery,
+  useDashboardOverviewQuery,
   Student,
   useDeleteStudentMutation,
   useFamiliesSearchQuery,
@@ -14,6 +16,8 @@ import {
 import { useOperationalContext } from '@/src/core/context';
 import { createStudentsStore, StudentsContext } from './store/students.store';
 import { StudentsView } from './ui/StudentsView';
+import { PERMISSIONS, useAuth } from '@/src/core/auth';
+import { useStudentReferenceOptions } from './utils/useStudentReferenceOptions';
 import {
   extractErrorMessage,
   toUpdateStudentPayload,
@@ -33,6 +37,7 @@ function QuerySync({ store }: { store: Store }) {
   const page = useStore(store, (s) => s.page);
   const limit = useStore(store, (s) => s.limit);
   const search = useStore(store, (s) => s.search);
+  const filters = useStore(store, (s) => s.filters);
   const syncQueryData = useStore(store, (s) => s.syncQueryData);
 
   const { data: paginatedData, isLoading } = useStudentsQuery({
@@ -40,6 +45,10 @@ function QuerySync({ store }: { store: Store }) {
     limit,
     search: search.trim() ? search.trim() : undefined,
     branchId: activeBranchId || undefined,
+    statusId: filters.statusId ?? undefined,
+    busId: filters.busId ?? undefined,
+    cityId: filters.cityId ?? undefined,
+    unassignedYearId: filters.unassignedYearId ?? undefined,
   });
 
   useEffect(() => {
@@ -83,6 +92,42 @@ function EditLookupsSync({ store }: { store: Store }) {
 }
 
 /**
+ * ReferenceOptionsSync
+ *
+ * Loads the reference tables (statuses, cities, schools, buses, know-ways)
+ * and the academic years (unassigned filter)
+ * used by the list filters and the edit drawer into the store.
+ */
+function ReferenceOptionsSync({ store }: { store: Store }) {
+  const syncReferenceOptions = useStore(store, (s) => s.syncReferenceOptions);
+  const syncYearOptions = useStore(store, (s) => s.syncYearOptions);
+  const options = useStudentReferenceOptions();
+  const { data: years } = useAcademicYearsQuery({ limit: 100 });
+
+  useEffect(() => {
+    syncReferenceOptions(options);
+  }, [options, syncReferenceOptions]);
+
+  useEffect(() => {
+    syncYearOptions((years?.data ?? []).map((y) => ({ value: String(y.id), label: y.name })));
+  }, [years, syncYearOptions]);
+
+  return null;
+}
+
+/** Real KPIs of the cards above the table (same numbers as the dashboard home). */
+function OverviewSync({ store }: { store: Store }) {
+  const syncOverview = useStore(store, (s) => s.syncOverview);
+  const { data } = useDashboardOverviewQuery();
+
+  useEffect(() => {
+    syncOverview(data ?? null);
+  }, [data, syncOverview]);
+
+  return null;
+}
+
+/**
  * DeletionReportSync
  *
  * Loads what is attached to the student selected for deletion into the store.
@@ -111,6 +156,12 @@ function DeletionReportSync({ store }: { store: Store }) {
  */
 export function StudentsController() {
   const [store] = useState(() => createStudentsStore());
+  const { can } = useAuth();
+  // Buttons follow the role; the server enforces the same rules (role.md §8.6)
+  const access = {
+    canManage: can(PERMISSIONS.studentsManage),
+    canSeeFees: can(PERMISSIONS.feesView),
+  };
   const updateMutation = useUpdateStudentMutation();
   const deleteMutation = useDeleteStudentMutation();
 
@@ -160,8 +211,10 @@ export function StudentsController() {
     <StudentsContext.Provider value={store}>
       <QuerySync store={store} />
       <EditLookupsSync store={store} />
+      <ReferenceOptionsSync store={store} />
       <DeletionReportSync store={store} />
-      <StudentsView onSubmitEdit={handleSubmitEdit} onConfirmDelete={handleConfirmDelete} />
+      <OverviewSync store={store} />
+      <StudentsView access={access} onSubmitEdit={handleSubmitEdit} onConfirmDelete={handleConfirmDelete} />
     </StudentsContext.Provider>
   );
 }

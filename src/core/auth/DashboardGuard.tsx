@@ -2,7 +2,7 @@
 
 import { ReactNode, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Center, Stack, Paper, Loader, Text, rem } from '@mantine/core';
+import { Center, Stack, Paper, Loader, Text } from '@mantine/core';
 import { useAuth } from './useAuth';
 
 export interface DashboardGuardProps {
@@ -17,7 +17,7 @@ export interface DashboardGuardProps {
  */
 export function DashboardGuard({ children }: DashboardGuardProps) {
   const router = useRouter();
-  const { user, isLoading, isAuthenticated, isAdmin, logout } = useAuth();
+  const { isLoading, isAuthenticated, canUseDashboard: isAdmin, logout } = useAuth();
 
   useEffect(() => {
     if (isLoading) return;

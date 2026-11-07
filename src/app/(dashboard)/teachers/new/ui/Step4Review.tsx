@@ -16,7 +16,6 @@ import {
   IconAlertCircle,
   IconBriefcase,
   IconCalendarTime,
-  IconCheck,
   IconClock,
   IconUser,
 } from '@tabler/icons-react';

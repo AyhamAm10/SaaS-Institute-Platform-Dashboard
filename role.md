@@ -267,6 +267,31 @@ import { AppDatePicker } from '@/src/components/controllers';
 </DataModuleController>
 ```
 
+#### 3. Multi-Row Selection & Document Export (`selectable`, `onSelect`, `exportValue`)
+- **Row Selection (`selectable`):** When `selectable={true}` is set on `<DataModuleController />`:
+  - A checkbox column is added automatically as the first column.
+  - The table header contains an indeterminate "Select All" checkbox for all currently loaded rows on the page.
+  - Row clicks on interactive targets (`<a>`, `<button>`, `input`) do not toggle selection (handled via `stopPropagation`).
+  - Selection automatically clears on page change, search query change, filter update, limit change, or dataset change.
+  - Selection state syncs seamlessly with `<AppModule />` when embedded inside `<AppModule.Table>`.
+- **Exportable Columns (`exportValue`, `exportKind`):**
+  - Table columns declare `exportValue: (row: T) => ReportCell` and `exportKind: ReportColumnKind` to define their representation in printed reports and exported Excel spreadsheets.
+  - Non-data and UI-only columns (e.g. actions) omit `exportValue` and are automatically excluded from exports.
+  - Numbers, monetary amounts (`{ amount, currency }`), dates, badges, and plain text retain their semantic typing for accurate formatting and totals.
+
+#### 4. Unified AppModule Architecture & Floating Selection Bar
+- **`<AppModule exportTitle="...">`:** Provides contextual report metadata, statistics (`<AppModule.Stats>`), charts (`<AppModule.Charts>`), and table embedding (`<AppModule.Table>`).
+- **Floating Selection Bar (`AppModuleSelectionBar`):**
+  - Appears automatically at the bottom of the screen when 1 or more rows are selected.
+  - Displays selected row count, a "Deselect All" button, a "Print" button, and an "Excel Export" button.
+  - **Print Flow:** Generates a unified `ReportDocument` via `buildSelectionDocument()`, saves it under a secure one-time session key in `localStorage`, and opens `/reports/selection/print?key=...`.
+  - **Excel Flow:** Calls backend `POST /reports/render/excel` and triggers direct `.xlsx` file download.
+  - **Zero Mixed Currencies:** Totals in selection documents are calculated strictly per currency without mixing.
+
+#### 5. Strict Server-Side Statistics Rule ("الإحصائيات من السيرفر فقط")
+- **PROHIBITED:** Computing KPI summary cards or chart datasets on the frontend by aggregating paginated table slices (`data.length`, `data.reduce(...)`) is **STRICTLY FORBIDDEN**. A paginated slice never represents the full institute dataset.
+- **MANDATORY:** All statistics, KPI counters, and chart datasets must come directly from dedicated server overview endpoints (e.g. `GET /dashboard/overview`, `GET /fees/overdue/summary`).
+
 ---
 
 ## 6. Centralized Theme & Multi-Tenant Branding
@@ -394,6 +419,43 @@ src/app/(dashboard)/[featureName]/
 ├── page.tsx                           # Pure Server Component
 └── index.ts                           # Public API export
 ```
+
+### G. Config-Driven Generic Controllers (Reference Data)
+
+When several screens differ only in data (labels, form fields, extra columns), build **one** generic page-level Controller driven by a config object instead of copying a Controller per screen. The canonical example is `settings/reference-data/`:
+
+- `lookup/lookup.config.ts` defines `LookupConfig` (API resource, labels, `fields`, `columns`); `static-data/reference-data.data.ts` holds one config per table (`LOOKUP_CONFIGS`).
+- `LookupController` creates an **isolated store per instance** (`createLookupStore(config)`), owns QuerySync and mutations, and is mounted once per `AppTabs.Panel`.
+- API access goes through `createLookupResource<T>(path)` in `core/api/reference-data.api.ts` (keys + `useList` / `useCreate` / `useUpdate` / `useDelete`). Add a new table by adding a resource and a config entry, not new components.
+- Server error messages (e.g. "in use, cannot delete") are shown as-is via `getApiErrorMessage`.
+
+Features that link to reference data (students) load options in their Controller (`useStudentReferenceOptions` inside a QuerySync component) and render them with the props-only `StudentReferenceFields`; `ui/` never fetches.
+
+### H. Nested Feature Controllers Inside a Drawer
+
+When a drawer tab is a feature of its own (e.g. the section's **Students** tab), do not grow the page store. Mount a child Controller in the tab with its own isolated store, keyed by the entity (`<SectionStudentsController key={section.id} section={...} />` in `sections/enrollments/`):
+
+- The child owns its QuerySync components; syncs needed only by a modal are **mounted only while that modal is open** (candidates, transfer targets).
+- Mutation orchestration that does not fit in the Controller file goes in a controller-level hook (`useEnrollmentActions`), never in `ui/`.
+- Mutations invalidate every list they affect (section counts, rosters, students list) in the API module.
+
+The student **finance drawer** (`students/finance/`) follows the same pattern: `StudentFinanceSlot` mounts `<StudentFinanceController key={student.id} />`, and `useFinanceActions` orchestrates the contract / payment modals.
+
+### I. Money and Floating Layers
+
+- Show amounts only with `formatMoney(value, currency)` from `core/format` (SYP without fractions, USD with two decimals). Never add amounts of different currencies.
+- Client-side money previews (`convertAmount`, `previewAllocation`) only explain what the server will do; the server stays the source of truth and its error message is shown as-is.
+- Read text inputs with `inputText(e)` from `core/format` (handles values, numbers and events).
+- Dropdowns, date pickers and menus use `FLOATING_Z_INDEX` (400) from the theme, above `AppDrawer` (300) and `AppModal` (350). Do not override `zIndex` per component.
+- Times of day that belong to the institute (attendance) are shown and entered in the **institute time zone** (`user.institute.timezone`), never the browser's: see `attendance/utils/attendance.utils.ts` (`toTime`, `toInstant`, `localToday`).
+- `AppInput` / `AppSelect` keep their previous `error` when the prop becomes `undefined`: clear a field error with `''` (or `null`), never `undefined`.
+- **Dashboard numbers** come from `GET /dashboard/overview` (`useDashboardOverviewQuery`, refreshed every minute). The home page and the students page KPIs both read it; map it to chart models with the pure helpers in `dashboard/utils/dashboard-overview.utils.ts`. Never show demo numbers next to real ones.
+- **Charts**: `BarChart` keys bars by period + label, so labels must be unique (e.g. `الخميس 5`, not `الخميس`). `ChartCard` opens on the 2nd period by default; pass `activePeriod` when the first tab must be active. Leave zero values out of `CircleChart` segments (`nonEmptySegments`): a zero-length round-capped arc still draws a dot.
+- **Status colours in charts** use the semantic palette (`success`, `brand`, `danger`, `info`), not `yellow` / `blue`, which this theme maps to the brand orange and slate.
+- **Permissions (D2)**: the server decides (`user.permissions` from `/auth/me`); the UI only hides what the user cannot do. Use `useAuth().can(PERMISSIONS.x)` in the **controller** and pass booleans down (`access` props, or a `canManage` field in the store) — never call `useAuth` in `ui/`. Every sidebar entry carries its `permission`; `filterNavigation` hides entries and `requiredPermissionFor` gates the page (`NoPermissionView`), with `ROUTE_OVERRIDES` for sub-pages that need more (e.g. `/students/new` → `students.manage`, `/teachers/new` → `academic.manage`). A new page MUST add its permission to `navigation.ts`.
+- **Shared Password Validation**: Password constraints and error formatting are centralized in `src/core/auth/password.ts` (`USER_PASSWORD_MIN = 8`, `STAFF_PASSWORD_MIN = 8`, and `passwordError(password: string): string | null`), re-exported from `@/src/core/auth`. Used uniformly across staff management (`settings/staff`) and teacher management (`teachers/new`, `TeacherFormDrawer`, and `TeacherPasswordModal`).
+- Print pages live in the `(print)` route group (authenticated, no sidebar), e.g. `/payments/:id/receipt` (A5).
+- **Reports (D3)**: the server builds every report into one `ReportDocument`; the dashboard never computes a report. Render it with the `AppReport` compound controller (`components/controllers/report`: `AppReport.Paper / Header / Meta / Body / Footer`, one block component per block type, fixed paper palette `REPORT_PAPER` so a report prints the same in both themes, brand = institute color). Pages: reports center `/reports` (catalog from `GET /reports/catalog`), workspace `/reports/[key]` (parameters → preview → print / Excel), print page `(print)/reports/[key]/print` (A4, opens the print dialog with `autoprint=1`), public `/verify/[token]` (QR check, no sign-in). Link a page to its reports with `<ReportMenu keys={[...]} params={{ ... }} />` (it hides what the user may not open); never hand-build a report URL (use `reportLink`).
 
 ---
 

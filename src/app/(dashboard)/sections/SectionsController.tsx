@@ -18,6 +18,7 @@ import {
   useUpdateSectionMutation,
   useOperationalContext,
 } from '@/src/core/api';
+import { PERMISSIONS, useAuth } from '@/src/core/auth';
 import { createSectionsStore, SectionsContext } from './store/sections.store';
 import { SectionsView } from './ui/SectionsView';
 import { useStore } from 'zustand';
@@ -176,6 +177,8 @@ function getErrorMessage(err: unknown, fallback: string): string {
  */
 export function SectionsController() {
   const [store] = useState(() => createSectionsStore());
+  const { can } = useAuth();
+  const canManage = can(PERMISSIONS.academicManage);
   const { activeBranchId, activeAcademicYearId } = useOperationalContext();
 
   // ── Mutations ──
@@ -243,7 +246,7 @@ export function SectionsController() {
 
   // ── Fee Submit Handler ──
   const handleFeeSubmit = useCallback(async () => {
-    const { feeSection, feeFormAmount } = store.getState();
+    const { feeSection, feeFormAmount, feeFormCurrency } = store.getState();
     if (!feeSection) return;
     store.getState().setFeeError(null);
 
@@ -257,7 +260,7 @@ export function SectionsController() {
     try {
       await updateFeeMutation.mutateAsync({
         id: feeSection.id,
-        payload: { feeAmount: numFee },
+        payload: { feeAmount: numFee, feeCurrency: feeFormCurrency },
       });
       store.getState().closeFeeModal();
     } catch (err: unknown) {
@@ -371,6 +374,7 @@ export function SectionsController() {
         onBranchDelete={handleBranchDelete}
         onAssignSubject={handleAssignSubject}
         onRemoveSubject={handleRemoveSubject}
+        canManage={canManage}
       />
     </SectionsContext.Provider>
   );

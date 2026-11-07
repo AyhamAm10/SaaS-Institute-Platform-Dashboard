@@ -4,7 +4,8 @@ import { Alert, Checkbox, Stack } from '@mantine/core';
 import { IconAlertCircle, IconCalendar, IconCalendarPlus } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { AppDatePicker, AppDrawer, AppInput } from '@/src/components/controllers';
-import { AcademicYear } from '@/src/core/api';
+import { AcademicYear, getApiErrorMessage } from '@/src/core/api';
+import { inputText } from '@/src/core/format';
 import { academicYearFormLabels } from '../static-data/academic-years.data';
 
 export interface AcademicYearDrawerProps {
@@ -89,14 +90,8 @@ export function AcademicYearDrawer({
         isCurrent,
       });
       onClose();
-    } catch (err: any) {
-      let msg =
-        err?.response?.data?.message ||
-        err?.message ||
-        'حدث خطأ أثناء حفظ السنة الدراسية';
-      if (Array.isArray(msg)) {
-        msg = msg.join(', ');
-      }
+    } catch (err: unknown) {
+      let msg = getApiErrorMessage(err, 'حدث خطأ أثناء حفظ السنة الدراسية');
       if (typeof msg === 'string' && (msg.includes('overlap') || msg.includes('تتداخل'))) {
         msg = 'تواريخ السنة الدراسية تتداخل مع سنة دراسية أخرى موجودة مسبقا، يرجى اختيار تاريخ بداية ونهاية لا يتقاطعان مع السنوات السابقة';
       }
@@ -152,7 +147,7 @@ export function AcademicYearDrawer({
                 label={academicYearFormLabels.name}
                 placeholder={academicYearFormLabels.namePlaceholder}
                 value={name}
-                onChange={(e) => setName(typeof e === 'string' ? e : (e as any)?.target?.value ?? '')}
+                onChange={(e: unknown) => setName(inputText(e))}
                 required
               />
 

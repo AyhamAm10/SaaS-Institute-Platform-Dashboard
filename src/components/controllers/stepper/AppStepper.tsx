@@ -12,7 +12,7 @@ import {
   AppStepperStepHeader,
 } from './ui';
 
-export interface AppStepperProps extends AppStepperInitialProps {}
+export type AppStepperProps = AppStepperInitialProps;
 
 /**
  * AppStepper Controller

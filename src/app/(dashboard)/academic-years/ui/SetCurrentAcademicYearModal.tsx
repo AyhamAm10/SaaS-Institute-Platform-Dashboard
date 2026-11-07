@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Box, Card, Group, Stack, Text, ThemeIcon } from '@mantine/core';
+import { Alert, Box, Group, Stack, Text } from '@mantine/core';
 import {
   IconAlertCircle,
   IconCalendarCheck,
@@ -10,7 +10,7 @@ import {
 } from '@tabler/icons-react';
 import { useState } from 'react';
 import { AppModal } from '@/src/components/controllers';
-import { AcademicYear } from '@/src/core/api';
+import { AcademicYear, getApiErrorMessage } from '@/src/core/api';
 import { AcademicYearStatusBadge } from './AcademicYearStatusBadge';
 
 export interface SetCurrentAcademicYearModalProps {
@@ -44,12 +44,9 @@ export function SetCurrentAcademicYearModal({
     try {
       await onConfirm(targetYear);
       onClose();
-    } catch (err: any) {
-      const msg =
-        err?.response?.data?.message ||
-        err?.message ||
-        'حدث خطأ أثناء تعيين السنة الدراسية كنشطة';
-      setError(Array.isArray(msg) ? msg.join(', ') : msg);
+    } catch (err: unknown) {
+      const msg = getApiErrorMessage(err, 'حدث خطأ أثناء تعيين السنة الدراسية كنشطة');
+      setError(msg);
     }
   };
 

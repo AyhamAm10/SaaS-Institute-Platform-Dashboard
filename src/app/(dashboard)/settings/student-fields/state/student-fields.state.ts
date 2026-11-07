@@ -23,7 +23,7 @@ export interface StudentFieldsState {
   openCreateDrawer: () => void;
   openEditDrawer: (field: StudentField) => void;
   closeDrawer: () => void;
-  setFormField: (field: string, value: any) => void;
+  setFormField: (field: string, value: unknown) => void;
   addOption: (option: string) => void;
   removeOption: (index: number) => void;
   setSubmitting: (isSubmitting: boolean) => void;

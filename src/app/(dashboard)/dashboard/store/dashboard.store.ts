@@ -8,6 +8,10 @@ export type DashboardStore = StoreApi<DashboardState>;
 
 export function createDashboardStore(): DashboardStore {
   return createStore<DashboardState>((set) => ({
+    overview: null,
+    isLoading: true,
+    syncOverview: (overview, isLoading) => set({ overview, isLoading }),
+
     selectedPeriod: 'semester',
     setSelectedPeriod: (selectedPeriod: DashboardPeriod) => set({ selectedPeriod }),
 

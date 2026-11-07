@@ -73,7 +73,7 @@ export interface TeachersQueryParams {
 export interface CreateTeacherPayload {
   fullName: string;
   phone: string;
-  password?: string;
+  password: string;
   branchIds: number[];
   specialization?: string;
   isActive?: boolean;
@@ -91,7 +91,6 @@ export interface CreateTeacherPayload {
 export interface UpdateTeacherPayload {
   fullName?: string;
   phone?: string;
-  password?: string;
   branchIds?: number[];
   specialization?: string;
   isActive?: boolean;
@@ -170,6 +169,17 @@ export async function setTeacherAvailabilities(
   const { data } = await apiClient.post<TeacherAvailability[]>(
     `/teachers/${teacherId}/availability`,
     { availabilities: windows },
+  );
+  return data;
+}
+
+export async function resetTeacherPassword(
+  id: number,
+  password: string,
+): Promise<{ updated: boolean }> {
+  const { data } = await apiClient.post<{ updated: boolean }>(
+    `/teachers/${id}/reset-password`,
+    { password },
   );
   return data;
 }
@@ -287,3 +297,11 @@ export function useSetTeacherAvailabilitiesMutation() {
     },
   });
 }
+
+export function useResetTeacherPasswordMutation() {
+  return useMutation({
+    mutationFn: ({ id, password }: { id: number; password: string }) =>
+      resetTeacherPassword(id, password),
+  });
+}
+

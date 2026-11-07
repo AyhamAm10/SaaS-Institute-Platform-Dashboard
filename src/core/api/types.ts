@@ -4,6 +4,8 @@
 export enum UserRole {
   SUPER_ADMIN = 'SUPER_ADMIN',
   INSTITUTE_ADMIN = 'INSTITUTE_ADMIN',
+  REGISTRAR = 'REGISTRAR',
+  ACCOUNTANT = 'ACCOUNTANT',
   TEACHER = 'TEACHER',
   FAMILY = 'FAMILY',
   STUDENT = 'STUDENT',
@@ -33,6 +35,8 @@ export interface InstituteInfo {
   secondaryColor?: string | null;
   phone?: string | null;
   address?: string | null;
+  /** IANA time zone of the institute ("today", attendance times). */
+  timezone?: string | null;
 }
 
 /**
@@ -40,6 +44,8 @@ export interface InstituteInfo {
  */
 export interface UserProfile extends SafeUser {
   institute: InstituteInfo;
+  /** Permissions of the role, decided by the server (role.md §8.6). */
+  permissions?: string[];
 }
 
 /**

@@ -8,7 +8,6 @@ import {
   Text,
   ThemeIcon,
   Title,
-  rem,
 } from '@mantine/core';
 import {
   IconArrowLeft,

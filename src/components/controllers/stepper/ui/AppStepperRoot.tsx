@@ -25,14 +25,14 @@ export function AppStepperRoot({ children }: AppStepperRootProps) {
     (child) =>
       isValidElement(child) &&
       (child.type === AppStepperActions ||
-        (child.type as any)?.displayName === 'AppStepper.Actions'),
+        (child.type as { displayName?: string })?.displayName === 'AppStepper.Actions'),
   );
   const stepChildren = childrenArray.filter(
     (child) =>
       !(
         isValidElement(child) &&
         (child.type === AppStepperActions ||
-          (child.type as any)?.displayName === 'AppStepper.Actions')
+          (child.type as { displayName?: string })?.displayName === 'AppStepper.Actions')
       ),
   );
 

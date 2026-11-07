@@ -46,6 +46,7 @@ export function TextareaVariant() {
   return (
     <Textarea
       {...mantineProps}
+      dir={config.direction === 'auto' ? 'auto' : undefined}
       rows={rows}
       minRows={minRows}
       maxRows={maxRows}

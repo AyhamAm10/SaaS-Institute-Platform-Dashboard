@@ -58,6 +58,7 @@ export function SelectVariant() {
   return (
     <Select
       {...mantineProps}
+      dir={config.direction === 'auto' ? 'auto' : undefined}
       data={data}
       searchable={searchable}
       clearable={clearable}

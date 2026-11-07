@@ -2,6 +2,7 @@
 
 import { useMemo } from 'react';
 import { IconHome, IconPlus, IconRefresh } from '@tabler/icons-react';
+import { AppModule } from '@/src/components/controllers';
 import { DataModuleController } from '@/src/components/controllers/data-module';
 import { AppButton, AppIconButton } from '@/src/components/controllers/button';
 import { Family } from '@/src/core/api';
@@ -15,16 +16,10 @@ export interface FamiliesViewProps {
   onRefresh: () => void;
   onSubmit: () => Promise<void>;
   onConfirmDelete: (family: Family) => Promise<void>;
+  canManage?: boolean;
 }
 
-/**
- * FamiliesView
- *
- * Presentation container layout for the Families page.
- * The search endpoint returns up to 50 matches, shown as a single page.
- * ZERO useState hooks. Layout is 100% controlled by DataModuleController.
- */
-export function FamiliesView({ onRefresh, onSubmit, onConfirmDelete }: FamiliesViewProps) {
+export function FamiliesView({ onRefresh, onSubmit, onConfirmDelete, canManage = true }: FamiliesViewProps) {
   const data = useFamiliesMirror('data');
   const isLoading = useFamiliesMirror('isLoading');
   const isFetching = useFamiliesMirror('isFetching');
@@ -34,65 +29,74 @@ export function FamiliesView({ onRefresh, onSubmit, onConfirmDelete }: FamiliesV
   const openDeleteModal = useFamiliesMirror('openDeleteModal');
 
   const columns = useMemo(
-    () => getFamiliesColumns(openEditDrawer, openDeleteModal),
-    [openEditDrawer, openDeleteModal],
+    () => getFamiliesColumns(openEditDrawer, openDeleteModal, { canManage }),
+    [openEditDrawer, openDeleteModal, canManage],
   );
 
   return (
-    <>
-      <DataModuleController
-        title={familiesLabels.title}
-        description={familiesLabels.searchLimitHint}
-        data={data}
-        columns={columns}
-        total={data.length}
-        page={1}
-        limit={Math.max(data.length, 1)}
-        totalPages={1}
-        isLoading={isLoading}
-        isFetching={isFetching}
-        emptyMessage={familiesLabels.emptyState}
-        emptyDescription={familiesLabels.emptyStateDesc}
-        searchPlaceholder={familiesLabels.searchPlaceholder}
-        keyExtractor={(item: Family) => item.id}
-        onPageChange={() => undefined}
-        onSearchChange={setSearch}
-      >
-        <DataModuleController.Header>
-          <DataModuleController.Title
-            icon={<IconHome size={18} />}
-            badgeLabel={familiesLabels.totalCountBadge}
-          />
-          <DataModuleController.Actions>
-            <AppButton leftSection={<IconPlus size={16} />} onClick={openCreateDrawer}>
-              {familiesLabels.createNewButton}
-            </AppButton>
-          </DataModuleController.Actions>
-        </DataModuleController.Header>
+    <AppModule exportTitle="العائلات">
+      <AppModule.Table>
+        <DataModuleController
+          selectable
+          title={familiesLabels.title}
+          description={familiesLabels.searchLimitHint}
+          data={data}
+          columns={columns}
+          total={data.length}
+          page={1}
+          limit={Math.max(data.length, 1)}
+          totalPages={1}
+          isLoading={isLoading}
+          isFetching={isFetching}
+          emptyMessage={familiesLabels.emptyState}
+          emptyDescription={familiesLabels.emptyStateDesc}
+          searchPlaceholder={familiesLabels.searchPlaceholder}
+          keyExtractor={(item: Family) => item.id}
+          onPageChange={() => undefined}
+          onSearchChange={setSearch}
+        >
+          <DataModuleController.Header>
+            <DataModuleController.Title
+              icon={<IconHome size={18} />}
+              badgeLabel={familiesLabels.totalCountBadge}
+            />
+            {canManage && (
+              <DataModuleController.Actions>
+                <AppButton leftSection={<IconPlus size={16} />} onClick={openCreateDrawer}>
+                  {familiesLabels.createNewButton}
+                </AppButton>
+              </DataModuleController.Actions>
+            )}
+          </DataModuleController.Header>
 
-        <DataModuleController.FilterBar>
-          <DataModuleController.SearchInput placeholder={familiesLabels.searchPlaceholder} />
-          <DataModuleController.FilterSlot>
-            <AppIconButton
-              variant="brand"
-              label={familiesLabels.refreshButton}
-              onClick={onRefresh}
-              loading={isFetching}
-            >
-              <IconRefresh size={16} />
-            </AppIconButton>
-          </DataModuleController.FilterSlot>
-        </DataModuleController.FilterBar>
+          <DataModuleController.FilterBar>
+            <DataModuleController.SearchInput placeholder={familiesLabels.searchPlaceholder} />
+            <DataModuleController.FilterSlot>
+              <AppIconButton
+                variant="brand"
+                label={familiesLabels.refreshButton}
+                onClick={onRefresh}
+                loading={isFetching}
+              >
+                <IconRefresh size={16} />
+              </AppIconButton>
+            </DataModuleController.FilterSlot>
+          </DataModuleController.FilterBar>
 
-        <DataModuleController.Content>
-          <DataModuleController.Table />
-        </DataModuleController.Content>
+          <DataModuleController.Content>
+            <DataModuleController.Table />
+          </DataModuleController.Content>
 
-        <DataModuleController.Footer />
-      </DataModuleController>
+          <DataModuleController.Footer />
+        </DataModuleController>
+      </AppModule.Table>
 
-      <FamilyDrawer onSubmit={onSubmit} />
-      <FamilyDeleteModal onConfirmDelete={onConfirmDelete} />
-    </>
+      {canManage && (
+        <>
+          <FamilyDrawer onSubmit={onSubmit} />
+          <FamilyDeleteModal onConfirmDelete={onConfirmDelete} />
+        </>
+      )}
+    </AppModule>
   );
 }

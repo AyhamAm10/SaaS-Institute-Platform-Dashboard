@@ -66,13 +66,13 @@ export function AppStepperStep({
     (child) =>
       isValidElement(child) &&
       (child.type === AppStepperStepHeader ||
-        (child.type as any)?.displayName === 'AppStepperStep.Header'),
+        (child.type as { displayName?: string })?.displayName === 'AppStepperStep.Header'),
   );
   const hasCompoundContent = childrenArray.some(
     (child) =>
       isValidElement(child) &&
       (child.type === AppStepperStepContent ||
-        (child.type as any)?.displayName === 'AppStepperStep.Content'),
+        (child.type as { displayName?: string })?.displayName === 'AppStepperStep.Content'),
   );
 
   const isCompoundMode = hasCompoundHeader || hasCompoundContent;

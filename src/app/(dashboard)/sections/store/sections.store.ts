@@ -48,6 +48,7 @@ export function createSectionsStore(): SectionsStore {
     feeModalOpened: false,
     feeSection: null,
     feeFormAmount: '0',
+    feeFormCurrency: 'SYP',
     feeError: null,
 
     // ── Details Drawer State ──
@@ -155,10 +156,12 @@ export function createSectionsStore(): SectionsStore {
         feeSection: section,
         feeModalOpened: true,
         feeFormAmount: String(section.feeAmount),
+        feeFormCurrency: section.feeCurrency ?? 'SYP',
         feeError: null,
       }),
     closeFeeModal: () => set({ feeModalOpened: false }),
     setFeeFormAmount: (amount) => set({ feeFormAmount: amount, feeError: null }),
+    setFeeFormCurrency: (feeFormCurrency) => set({ feeFormCurrency, feeError: null }),
     setFeeError: (error) => set({ feeError: error }),
 
     // ── Actions: Details Drawer ──

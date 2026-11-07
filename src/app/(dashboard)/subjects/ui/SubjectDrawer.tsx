@@ -3,10 +3,7 @@
 import {
   Alert,
   Button,
-  Divider,
-  Group,
   Stack,
-  Text,
 } from '@mantine/core';
 import {
   IconAlertCircle,

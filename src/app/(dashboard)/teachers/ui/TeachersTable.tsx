@@ -1,39 +1,30 @@
 'use client';
 
-import {
-  ActionIcon,
-  Avatar,
-  Badge,
-  Group,
-  Stack,
-  Text,
-  Tooltip,
-} from '@mantine/core';
-import {
-  IconEdit,
-  IconEye,
-  IconTrash,
-  IconUser,
-} from '@tabler/icons-react';
+import { Avatar, Badge, Group, Stack, Text } from '@mantine/core';
+import { IconUser } from '@tabler/icons-react';
 import { Teacher } from '@/src/core/api';
 import { DataModuleColumn } from '@/src/components/controllers/data-module';
+import { TeacherActionsCell } from './TeacherActionsCell';
 
-/**
- * getTeachersColumns
- *
- * Column definitions for Teachers table.
- * Strictly adheres to DataModuleController compound pattern.
- */
+export interface TeachersColumnsAccess {
+  canManage?: boolean;
+}
+
 export function getTeachersColumns(
   openDetailsDrawer: (teacher: Teacher) => void,
   openEditDrawer: (teacher: Teacher) => void,
   openDeleteModal: (teacher: Teacher) => void,
+  openPasswordModal?: (teacher: Teacher) => void,
+  access: TeachersColumnsAccess = { canManage: true },
 ): DataModuleColumn<Teacher>[] {
+  const canManage = access.canManage ?? true;
   return [
     {
       key: 'user',
       title: 'المعلم',
       sortable: true,
+      exportValue: (t) => t.user.fullName,
+      exportKind: 'text',
       render: (teacher) => (
         <Group gap="sm" wrap="nowrap">
           <Avatar radius="md" color="blue" variant="light" size="sm">
@@ -53,6 +44,8 @@ export function getTeachersColumns(
     {
       key: 'phone',
       title: 'رقم الهاتف',
+      exportValue: (t) => t.user.phone || null,
+      exportKind: 'phone',
       render: (teacher) => (
         <Text size="xs" dir="ltr" ta="right" c="dimmed">
           {teacher.user.phone || '—'}
@@ -62,6 +55,8 @@ export function getTeachersColumns(
     {
       key: 'specialization',
       title: 'التخصص',
+      exportValue: (t) => t.specialization || 'غير محدد',
+      exportKind: 'text',
       render: (teacher) =>
         teacher.specialization ? (
           <Badge variant="light" color="indigo" radius="sm" size="sm">
@@ -76,17 +71,16 @@ export function getTeachersColumns(
     {
       key: 'branches',
       title: 'الفروع التابعة',
+      exportValue: (t) =>
+        t.teacherBranches && t.teacherBranches.length > 0
+          ? t.teacherBranches.map((tb) => tb.branch?.name || `فرع ${tb.branchId}`).join('، ')
+          : 'كافة الفروع',
+      exportKind: 'text',
       render: (teacher) => (
         <Group gap={4} wrap="nowrap">
           {teacher.teacherBranches && teacher.teacherBranches.length > 0 ? (
             teacher.teacherBranches.map((tb) => (
-              <Badge
-                key={tb.branchId}
-                variant="outline"
-                color="gray"
-                size="xs"
-                radius="sm"
-              >
+              <Badge key={tb.branchId} variant="outline" color="gray" size="xs" radius="sm">
                 {tb.branch?.name || `فرع ${tb.branchId}`}
               </Badge>
             ))
@@ -101,14 +95,19 @@ export function getTeachersColumns(
     {
       key: 'isActive',
       title: 'الحالة',
+      exportValue: (t) => ({
+        text: t.isActive ? 'نشط' : 'معطل',
+        tone: t.isActive ? 'success' : 'neutral',
+      }),
+      exportKind: 'badge',
       render: (teacher) => (
         <Badge
           variant="dot"
-          color={teacher.isActive ? 'teal' : 'red'}
+          color={teacher.isActive ? 'teal' : 'gray'}
           radius="sm"
           size="sm"
         >
-          {teacher.isActive ? 'نشط' : 'غير نشط'}
+          {teacher.isActive ? 'نشط' : 'معطل'}
         </Badge>
       ),
     },
@@ -117,41 +116,14 @@ export function getTeachersColumns(
       title: 'الإجراءات',
       align: 'center',
       render: (teacher) => (
-        <Group gap="xs" justify="center" wrap="nowrap">
-          <Tooltip label="التفاصيل والمؤهلات والدوام" withArrow>
-            <ActionIcon
-              variant="subtle"
-              color="blue"
-              radius="md"
-              size="sm"
-              onClick={() => openDetailsDrawer(teacher)}
-            >
-              <IconEye size={15} />
-            </ActionIcon>
-          </Tooltip>
-          <Tooltip label="تعديل البيانات" withArrow>
-            <ActionIcon
-              variant="subtle"
-              color="yellow"
-              radius="md"
-              size="sm"
-              onClick={() => openEditDrawer(teacher)}
-            >
-              <IconEdit size={15} />
-            </ActionIcon>
-          </Tooltip>
-          <Tooltip label="حذف المعلم" withArrow>
-            <ActionIcon
-              variant="subtle"
-              color="red"
-              radius="md"
-              size="sm"
-              onClick={() => openDeleteModal(teacher)}
-            >
-              <IconTrash size={15} />
-            </ActionIcon>
-          </Tooltip>
-        </Group>
+        <TeacherActionsCell
+          teacher={teacher}
+          canManage={canManage}
+          openDetailsDrawer={openDetailsDrawer}
+          openEditDrawer={openEditDrawer}
+          openDeleteModal={openDeleteModal}
+          openPasswordModal={openPasswordModal}
+        />
       ),
     },
   ];

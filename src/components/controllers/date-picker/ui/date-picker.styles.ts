@@ -5,7 +5,11 @@ import { rem } from '@mantine/core';
  * (42px fields, soft borders, ink border + orange ring on focus).
  * Uses centralized CSS variables (--app-*) for unified light and dark support.
  */
-export function getUnifiedDatePickerStyles(isFocused: boolean, hasError: boolean, customStyles?: Record<string, any>) {
+export function getUnifiedDatePickerStyles(
+  isFocused: boolean,
+  hasError: boolean,
+  customStyles?: Record<string, Record<string, unknown>>,
+) {
   return {
     root: {
       width: '100%',

@@ -5,15 +5,10 @@ import {
   ActionIcon,
   Badge,
   Button,
-  Card,
   Center,
-  Divider,
   Drawer,
-  Grid,
   Group,
-  Loader,
   Paper,
-  Select,
   SimpleGrid,
   Stack,
   Table,
@@ -25,11 +20,8 @@ import { AppTabs } from '@/src/components/controllers/tabs';
 import {
   IconBriefcase,
   IconCalendarTime,
-  IconCheck,
-  IconClock,
   IconDeviceFloppy,
   IconPlus,
-  IconSchool,
   IconTrash,
   IconUser,
 } from '@tabler/icons-react';
@@ -88,7 +80,6 @@ export function TeacherDetailsDrawer({
   const detailsDrawerOpened = useTeachersMirror('detailsDrawerOpened');
   const activeDetailsTab = useTeachersMirror('activeDetailsTab');
   const selectedTeacherDetails = useTeachersMirror('selectedTeacherDetails');
-  const isDetailsLoading = useTeachersMirror('isDetailsLoading');
   const isAssigningQualification = useTeachersMirror('isAssigningQualification');
   const stagedAvailabilities = useTeachersMirror('stagedAvailabilities');
   const isSavingAvailabilities = useTeachersMirror('isSavingAvailabilities');
@@ -106,7 +97,7 @@ export function TeacherDetailsDrawer({
   const { data: branchesData } = useAcademicBranchesQuery();
   const { data: subjectsData } = useSubjectsQuery({ limit: 100 });
 
-  const academicBranchOptions = (branchesData?.data || []).map((ab: any) => ({
+  const academicBranchOptions = (branchesData?.data || []).map((ab) => ({
     value: String(ab.id),
     label: ab.name,
   }));
@@ -208,7 +199,7 @@ export function TeacherDetailsDrawer({
               </Text>
               <Group gap="xs">
                 {selectedTeacherDetails.teacherBranches &&
-                selectedTeacherDetails.teacherBranches.length > 0 ? (
+                  selectedTeacherDetails.teacherBranches.length > 0 ? (
                   selectedTeacherDetails.teacherBranches.map((tb) => (
                     <Badge key={tb.branchId} variant="light" color="blue" radius="xl">
                       {tb.branch?.name || `فرع ${tb.branchId}`}
@@ -238,13 +229,13 @@ export function TeacherDetailsDrawer({
                   placeholder="اختر الفرع الأكاديمي"
                   data={academicBranchOptions}
                   value={newAcademicBranchId ? String(newAcademicBranchId) : null}
-                  onChange={(val: any) => setNewAcademicBranchId(val ? Number(val) : undefined)}
+                  onChange={(val: string | null) => setNewAcademicBranchId(val ? Number(val) : undefined)}
                 />
                 <AppSelect
                   placeholder="اختر المادة الدراسية"
                   data={subjectOptions}
                   value={newSubjectId ? String(newSubjectId) : null}
-                  onChange={(val: any) => setNewSubjectId(val ? Number(val) : undefined)}
+                  onChange={(val: string | null) => setNewSubjectId(val ? Number(val) : undefined)}
                 />
                 <Button
                   leftSection={<IconPlus size={16} />}
@@ -320,17 +311,17 @@ export function TeacherDetailsDrawer({
                   placeholder="اختر اليوم"
                   data={DAYS_OF_WEEK}
                   value={newAvailDay}
-                  onChange={(val: any) => setNewAvailDay(val || '0')}
+                  onChange={(val: string | null) => setNewAvailDay(val || '0')}
                 />
                 <AppInput
                   placeholder="من (08:00)"
                   value={newAvailStart}
-                  onChange={(val: any) => setNewAvailStart(val)}
+                  onChange={(val: unknown) => setNewAvailStart(typeof val === 'string' ? val : '')}
                 />
                 <AppInput
                   placeholder="إلى (12:00)"
                   value={newAvailEnd}
-                  onChange={(val: any) => setNewAvailEnd(val)}
+                  onChange={(val: unknown) => setNewAvailEnd(typeof val === 'string' ? val : '')}
                 />
                 <Button
                   leftSection={<IconPlus size={16} />}

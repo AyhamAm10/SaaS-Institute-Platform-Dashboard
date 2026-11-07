@@ -69,7 +69,7 @@ export function RoomDeleteModal({ onConfirmDelete }: RoomDeleteModalProps) {
           <Text size="sm">
             هل أنت متأكد من رغبتك في حذف القاعة{' '}
             <Text fw={500} span>
-              "{roomToDelete.name}"
+              &quot;{roomToDelete.name}&quot;
             </Text>
             ؟
           </Text>

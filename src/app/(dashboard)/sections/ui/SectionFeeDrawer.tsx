@@ -3,10 +3,10 @@
 import { Alert, Stack, Text } from '@mantine/core';
 import { IconAlertCircle, IconCoin } from '@tabler/icons-react';
 import { AppInput } from '@/src/components/controllers/input';
-import { AppModal } from '@/src/components/controllers';
-import { sectionDetailsLabels, sectionFormLabels } from '../static-data/sections.data';
+import { AppModal, AppSelect } from '@/src/components/controllers';
+import { sectionFormLabels } from '../static-data/sections.data';
 import { useSectionsMirror } from '../store/useSectionsMirror';
-import { formatNumber } from '@/src/core/format';
+import { CURRENCY_OPTIONS, formatMoney } from '@/src/core/format';
 
 export interface SectionFeeModalProps {
   opened: boolean;
@@ -28,6 +28,8 @@ export function SectionFeeModal({
   const feeSection = useSectionsMirror('feeSection');
   const feeFormAmount = useSectionsMirror('feeFormAmount');
   const setFeeFormAmount = useSectionsMirror('setFeeFormAmount');
+  const feeFormCurrency = useSectionsMirror('feeFormCurrency');
+  const setFeeFormCurrency = useSectionsMirror('setFeeFormCurrency');
   const feeError = useSectionsMirror('feeError');
   const feeSubmitting = useSectionsMirror('feeSubmitting');
 
@@ -73,7 +75,7 @@ export function SectionFeeModal({
             )}
 
             <Text size="xs" c="dimmed">
-              الرسوم السابقة: {formatNumber(feeSection?.feeAmount ?? 0)} {sectionDetailsLabels.currency}
+              الرسوم السابقة: {formatMoney(feeSection?.feeAmount ?? 0, feeSection?.feeCurrency ?? 'SYP')}
             </Text>
 
             <AppInput
@@ -94,6 +96,12 @@ export function SectionFeeModal({
                 )
               }
               required
+            />
+            <AppSelect
+              label="العملة"
+              data={CURRENCY_OPTIONS}
+              value={feeFormCurrency}
+              onChange={(v: string | null) => setFeeFormCurrency(v === 'USD' ? 'USD' : 'SYP')}
             />
           </Stack>
         </form>

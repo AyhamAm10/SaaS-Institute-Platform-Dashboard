@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Group, Stack } from '@mantine/core';
+import { Button, Stack } from '@mantine/core';
 import { IconBuildingCommunity } from '@tabler/icons-react';
 import { AppDrawer } from '@/src/components/controllers/drawer';
 import { AppInput } from '@/src/components/controllers/input';

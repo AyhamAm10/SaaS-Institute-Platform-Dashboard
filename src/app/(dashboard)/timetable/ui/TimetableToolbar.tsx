@@ -16,9 +16,10 @@ import { useTimetableMirror } from '../store/useTimetableMirror';
 
 interface TimetableToolbarProps {
   onRefresh: () => void;
+  canManage?: boolean;
 }
 
-export function TimetableToolbar({ onRefresh }: TimetableToolbarProps) {
+export function TimetableToolbar({ onRefresh, canManage = true }: TimetableToolbarProps) {
   const academicYearId = useTimetableMirror('academicYearId');
   const sectionId = useTimetableMirror('sectionId');
   const isFetching = useTimetableMirror('isFetching');
@@ -32,12 +33,12 @@ export function TimetableToolbar({ onRefresh }: TimetableToolbarProps) {
     limit: 100,
   });
 
-  const yearOptions = (years?.data || []).map((y: any) => ({
+  const yearOptions = (years?.data || []).map((y) => ({
     value: String(y.id),
     label: `${y.name} ${y.isCurrent ? '(الحالية)' : ''}`,
   }));
 
-  const sectionOptions = (sectionsData?.data || []).map((s: any) => ({
+  const sectionOptions = (sectionsData?.data || []).map((s) => ({
     value: String(s.id),
     label: `${s.name} - ${s.academicBranch?.name || s.grade}`,
   }));
@@ -50,7 +51,7 @@ export function TimetableToolbar({ onRefresh }: TimetableToolbarProps) {
             placeholder="اختر السنة الدراسية"
             data={yearOptions}
             value={academicYearId ? String(academicYearId) : null}
-            onChange={(val: any) => {
+            onChange={(val: string | null) => {
               setAcademicYearId(val ? Number(val) : null);
               setSectionId(null);
             }}
@@ -59,7 +60,7 @@ export function TimetableToolbar({ onRefresh }: TimetableToolbarProps) {
             placeholder="اختر الشعبة الدراسية"
             data={sectionOptions}
             value={sectionId ? String(sectionId) : null}
-            onChange={(val: any) => setSectionId(val ? Number(val) : null)}
+            onChange={(val: string | null) => setSectionId(val ? Number(val) : null)}
             disabled={!academicYearId}
           />
         </SimpleGrid>
@@ -75,15 +76,17 @@ export function TimetableToolbar({ onRefresh }: TimetableToolbarProps) {
           >
             تحديث
           </Button>
-          <Button
-            leftSection={<IconWand size={18} />}
-            radius="xl"
-            color="indigo"
-            onClick={openGenerateModal}
-            disabled={!academicYearId}
-          >
-            توليد الجدول آليا
-          </Button>
+          {canManage && (
+            <Button
+              leftSection={<IconWand size={18} />}
+              radius="xl"
+              color="indigo"
+              onClick={openGenerateModal}
+              disabled={!academicYearId}
+            >
+              توليد الجدول آليا
+            </Button>
+          )}
         </Group>
       </Group>
     </Paper>

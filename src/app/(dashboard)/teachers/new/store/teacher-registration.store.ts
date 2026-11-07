@@ -2,6 +2,7 @@
 
 import { createContext, useContext } from 'react';
 import { createStore, StoreApi } from 'zustand';
+import { passwordError } from '@/src/core/auth';
 import {
   AddedAvailability,
   AddedQualification,
@@ -201,9 +202,10 @@ export function createTeacherRegistrationStore(): TeacherRegistrationStore {
           }));
           return false;
         }
-        if (!state.password || state.password.length < 6) {
+        const pwdErr = passwordError(state.password);
+        if (pwdErr) {
           set((s) => ({
-            stepErrors: { ...s.stepErrors, 0: 'كلمة المرور يجب أن لا تقل عن 6 خانات' },
+            stepErrors: { ...s.stepErrors, 0: pwdErr },
           }));
           return false;
         }

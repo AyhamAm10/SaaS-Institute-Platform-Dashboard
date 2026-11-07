@@ -6,6 +6,10 @@ export interface ScheduleSettingsFormState {
   dayEndTime: string;
   periodDurationMinutes: number;
   breaks: BreakConfig[];
+  /** Attendance (E8): minutes of tolerance before LATE. */
+  lateAfterMinutes: number;
+  /** Attendance (E8): HH:mm, '' = end of the working day. */
+  attendanceCloseTime: string;
 }
 
 export interface ScheduleSettingsState {
@@ -25,6 +29,8 @@ export interface ScheduleSettingsState {
   setDayStartTime: (time: string) => void;
   setDayEndTime: (time: string) => void;
   setPeriodDurationMinutes: (minutes: number) => void;
+  setLateAfterMinutes: (minutes: number) => void;
+  setAttendanceCloseTime: (time: string) => void;
   addBreak: (item: BreakConfig) => void;
   removeBreak: (index: number) => void;
   updateBreak: (index: number, item: BreakConfig) => void;
@@ -40,6 +46,8 @@ export interface ScheduleSettingsState {
     dayEndTime: string;
     periodDurationMinutes: number;
     breaks: BreakConfig[];
+    lateAfterMinutes: number;
+    attendanceCloseTime: string;
     slots: ScheduleSlot[];
     isLoading: boolean;
   }) => void;

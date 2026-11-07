@@ -7,6 +7,8 @@ export * from './DataModuleFilterSlot';
 export * from './DataModuleResetButton';
 export * from './DataModuleContent';
 export * from './DataModuleTable';
+export * from './DataModuleTableHeader';
+export * from './DataModuleTableRow';
 export * from './DataModuleFooter';
 export * from './DataModulePagination';
 export * from './DataModuleEmpty';

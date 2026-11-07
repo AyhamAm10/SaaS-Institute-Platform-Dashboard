@@ -9,7 +9,7 @@ import { createLoginStore, LoginContext } from './store/login.store';
 import { LoginView } from './ui/LoginView';
 import { useAuth, AUTH_QUERY_KEY } from '@/src/core/auth';
 
-export interface LoginControllerProps extends LoginInitialProps {}
+export type LoginControllerProps = LoginInitialProps;
 
 /**
  * LoginController
@@ -20,7 +20,8 @@ export interface LoginControllerProps extends LoginInitialProps {}
 export function LoginController(props: LoginControllerProps) {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { isAuthenticated, isAdmin, isLoading } = useAuth();
+  // Staff and teachers may enter (pages are filtered by permissions)
+  const { isAuthenticated, canUseDashboard: isAdmin, isLoading } = useAuth();
 
   const [store] = useState(() =>
     createLoginStore({

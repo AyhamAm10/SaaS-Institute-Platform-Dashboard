@@ -5,7 +5,9 @@ import { useStore } from 'zustand';
 import {
   useScheduleConfigQuery,
   useUpdateScheduleConfigMutation,
+  getApiErrorMessage,
 } from '@/src/core/api';
+import { PERMISSIONS, useAuth } from '@/src/core/auth';
 import {
   createScheduleSettingsStore,
   ScheduleSettingsContext,
@@ -28,6 +30,8 @@ function QuerySync({
         dayEndTime: config.dayEndTime || '14:00',
         periodDurationMinutes: config.periodDurationMinutes || 45,
         breaks: config.breaks || [],
+        lateAfterMinutes: config.lateAfterMinutes ?? 15,
+        attendanceCloseTime: config.attendanceCloseTime ?? '',
         slots: config.slots || [],
         isLoading,
       });
@@ -39,6 +43,8 @@ function QuerySync({
 
 export function ScheduleSettingsController() {
   const [store] = useState(() => createScheduleSettingsStore());
+  const { can } = useAuth();
+  const canManage = can(PERMISSIONS.settingsManage);
   const updateMutation = useUpdateScheduleConfigMutation();
 
   // Local controller states for the "add break" mini-inputs
@@ -76,6 +82,12 @@ export function ScheduleSettingsController() {
       return;
     }
 
+    const closeTime = form.attendanceCloseTime.trim();
+    if (closeTime && !/^([01]\d|2[0-3]):[0-5]\d$/.test(closeTime)) {
+      store.getState().setFieldError('attendanceCloseTime', 'الوقت بصيغة HH:mm (مثال 14:00)');
+      return;
+    }
+
     store.getState().setIsSubmitting(true);
     try {
       const updated = await updateMutation.mutateAsync({
@@ -84,6 +96,8 @@ export function ScheduleSettingsController() {
         dayEndTime: form.dayEndTime,
         periodDurationMinutes: Number(form.periodDurationMinutes),
         breaks: form.breaks,
+        lateAfterMinutes: Number(form.lateAfterMinutes) || 0,
+        attendanceCloseTime: closeTime || null,
       });
 
       store.getState().syncConfigData({
@@ -92,17 +106,16 @@ export function ScheduleSettingsController() {
         dayEndTime: updated.dayEndTime,
         periodDurationMinutes: updated.periodDurationMinutes,
         breaks: updated.breaks,
+        lateAfterMinutes: updated.lateAfterMinutes,
+        attendanceCloseTime: updated.attendanceCloseTime ?? '',
         slots: updated.slots,
         isLoading: false,
       });
 
       store.getState().setGeneralSuccess('تم تحديث إعدادات الجدول والدوام واحتساب الحصص بنجاح');
-    } catch (err: any) {
-      const msg =
-        err?.response?.data?.message ||
-        err?.message ||
-        'حدث خطأ أثناء حفظ إعدادات الجدول';
-      store.getState().setGeneralError(Array.isArray(msg) ? msg.join(', ') : msg);
+    } catch (err: unknown) {
+      const msg = getApiErrorMessage(err, 'حدث خطأ أثناء حفظ إعدادات الجدول');
+      store.getState().setGeneralError(msg);
     } finally {
       store.getState().setIsSubmitting(false);
     }
@@ -113,6 +126,7 @@ export function ScheduleSettingsController() {
       <QuerySync store={store} />
       <ScheduleSettingsView
         onSave={handleSave}
+        canManage={canManage}
         newBreakName={newBreakName}
         setNewBreakName={setNewBreakName}
         newBreakStart={newBreakStart}

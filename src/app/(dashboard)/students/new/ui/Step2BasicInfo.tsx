@@ -5,14 +5,17 @@ import { Alert, Divider, SimpleGrid, Stack, Text } from '@mantine/core';
 import { IconAlertCircle } from '@tabler/icons-react';
 import { AppDatePicker, AppInput, AppSelect } from '@/src/components/controllers';
 import { useStudentRegistrationMirror } from '../store/useStudentRegistrationMirror';
-import { Branch, Section, StudentField } from '@/src/core/api';
+import { Section, StudentField } from '@/src/core/api';
+import type { StudentReferenceOptions } from '../../utils/student-references.utils';
+import { StudentReferenceFields } from '../../ui/StudentReferenceFields';
 
 export interface Step2BasicInfoProps {
   sections: Section[];
   fields?: StudentField[];
+  referenceOptions: StudentReferenceOptions;
 }
 
-export function Step2BasicInfo({ sections, fields = [] }: Step2BasicInfoProps) {
+export function Step2BasicInfo({ sections, fields = [], referenceOptions }: Step2BasicInfoProps) {
   const fullName = useStudentRegistrationMirror('fullName');
   const birthDate = useStudentRegistrationMirror('birthDate');
   const gender = useStudentRegistrationMirror('gender');
@@ -20,6 +23,8 @@ export function Step2BasicInfo({ sections, fields = [] }: Step2BasicInfoProps) {
   const customFields = useStudentRegistrationMirror('customFields');
   const setStudentField = useStudentRegistrationMirror('setStudentField');
   const setCustomFieldValue = useStudentRegistrationMirror('setCustomFieldValue');
+  const references = useStudentRegistrationMirror('references');
+  const setReference = useStudentRegistrationMirror('setReference');
   const stepErrors = useStudentRegistrationMirror('stepErrors');
 
   const error = stepErrors[1];
@@ -101,6 +106,13 @@ export function Step2BasicInfo({ sections, fields = [] }: Step2BasicInfoProps) {
           />
         </SimpleGrid>
 
+        <Divider my="xs" label="الحالة والسكن والنقل" labelPosition="center" />
+        <StudentReferenceFields
+          values={references}
+          options={referenceOptions}
+          onChange={setReference}
+        />
+
         {fields.length > 0 && (
           <Stack gap="lg" mt="xs">
             <Divider my="md" label="الحقول والبيانات الإضافية الخاصة بالمعهد" labelPosition="center" />
@@ -133,7 +145,7 @@ export function Step2BasicInfo({ sections, fields = [] }: Step2BasicInfoProps) {
                       key={field.name}
                       label={field.label}
                       placeholder={`اختر ${field.label}`}
-                      value={currentValue}
+                      value={typeof currentValue === 'string' ? currentValue : ''}
                       onChange={(val: string | null) => setCustomFieldValue(field.name, val)}
                       required={field.isRequired}
                     />
@@ -167,7 +179,7 @@ export function Step2BasicInfo({ sections, fields = [] }: Step2BasicInfoProps) {
                       type="number"
                       label={field.label}
                       placeholder={`أدخل ${field.label}`}
-                      value={currentValue}
+                      value={currentValue != null ? String(currentValue) : ''}
                       onChange={(e) =>
                         setCustomFieldValue(
                           field.name,
@@ -184,7 +196,7 @@ export function Step2BasicInfo({ sections, fields = [] }: Step2BasicInfoProps) {
                     key={field.name}
                     label={field.label}
                     placeholder={`أدخل ${field.label}`}
-                    value={currentValue}
+                    value={currentValue != null ? String(currentValue) : ''}
                     onChange={(e) =>
                       setCustomFieldValue(
                         field.name,

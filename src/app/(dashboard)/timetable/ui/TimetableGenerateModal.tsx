@@ -2,7 +2,6 @@
 
 import {
   Alert,
-  Badge,
   Button,
   Checkbox,
   Divider,

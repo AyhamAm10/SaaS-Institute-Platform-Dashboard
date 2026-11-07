@@ -38,6 +38,7 @@ export function PasswordInputVariant() {
   return (
     <PasswordInput
       {...mantineProps}
+      dir={config.direction === 'auto' ? 'auto' : undefined}
       size={config.size}
       radius={config.radius}
       value={value ?? ''}

@@ -5,7 +5,6 @@ import {
   Card,
   Center,
   Loader,
-  Paper,
   Stack,
   Table,
   Text,
@@ -29,9 +28,10 @@ const dayNames: Record<number, string> = {
 interface TimetableGridProps {
   onToggleLock: (entry: TimetableEntry) => void;
   onDeleteEntry: (entry: TimetableEntry) => void;
+  canManage?: boolean;
 }
 
-export function TimetableGrid({ onToggleLock, onDeleteEntry }: TimetableGridProps) {
+export function TimetableGrid({ onToggleLock, onDeleteEntry, canManage = true }: TimetableGridProps) {
   const sectionId = useTimetableMirror('sectionId');
   const timetable = useTimetableMirror('timetable');
   const scheduleConfig = useTimetableMirror('scheduleConfig');
@@ -133,6 +133,7 @@ export function TimetableGrid({ onToggleLock, onDeleteEntry }: TimetableGridProp
                           entry={matchingEntry}
                           onToggleLock={onToggleLock}
                           onDeleteEntry={onDeleteEntry}
+                          canManage={canManage}
                         />
                       </Table.Td>
                     );

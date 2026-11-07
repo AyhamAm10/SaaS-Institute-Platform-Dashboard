@@ -1,13 +1,12 @@
 'use client';
 
+import { AppModule } from '@/src/components/controllers';
 import { DataModuleController } from '@/src/components/controllers/data-module';
 import { sectionsPageMetadata } from '../static-data/sections.data';
-import { SectionDrawer } from './SectionDrawer';
-import { SectionFeeDrawer } from './SectionFeeDrawer';
-import { SectionDetailsDrawer } from './SectionDetailsDrawer';
-import { AcademicBranchesDrawer } from './AcademicBranchesDrawer';
 import { SectionsActions } from './SectionsActions';
 import { SectionsFilters } from './SectionsFilters';
+import { SectionsOverview } from './SectionsOverview';
+import { SectionsDrawers } from './SectionsDrawers';
 import { useSectionsColumns } from './SectionsTable';
 import { useSectionsMirror } from '../store/useSectionsMirror';
 
@@ -23,14 +22,9 @@ interface SectionsViewProps {
     teacherId?: number | null,
   ) => Promise<void>;
   onRemoveSubject: (sectionId: number, subjectId: number) => Promise<void>;
+  canManage?: boolean;
 }
 
-/**
- * SectionsView
- *
- * Pure presentation layout assembling the Sections page.
- * Reads ALL state via useMirror hooks — contains ZERO useState.
- */
 export function SectionsView({
   onFormSubmit,
   onFeeSubmit,
@@ -38,8 +32,8 @@ export function SectionsView({
   onBranchDelete,
   onAssignSubject,
   onRemoveSubject,
+  canManage = true,
 }: SectionsViewProps) {
-  // ── Pagination & Query data via mirror ──
   const data = useSectionsMirror('data');
   const total = useSectionsMirror('total');
   const page = useSectionsMirror('page');
@@ -50,104 +44,87 @@ export function SectionsView({
   const setPage = useSectionsMirror('setPage');
   const setSearch = useSectionsMirror('setSearch');
 
-  // ── Form Drawer state via mirror ──
   const formModalOpened = useSectionsMirror('formModalOpened');
   const closeFormModal = useSectionsMirror('closeFormModal');
-
-  // ── Fee Drawer state via mirror ──
   const feeModalOpened = useSectionsMirror('feeModalOpened');
   const closeFeeModal = useSectionsMirror('closeFeeModal');
-
-  // ── Details Drawer state via mirror ──
   const drawerOpened = useSectionsMirror('drawerOpened');
   const detailSectionId = useSectionsMirror('detailSectionId');
   const closeDrawer = useSectionsMirror('closeDrawer');
-
-  // ── Branches Drawer state via mirror ──
   const branchesModalOpened = useSectionsMirror('branchesModalOpened');
   const closeBranchesModal = useSectionsMirror('closeBranchesModal');
   const academicBranches = useSectionsMirror('academicBranches');
-
-  // ── Actions for table ──
   const openEdit = useSectionsMirror('openEdit');
   const openFeeModal = useSectionsMirror('openFeeModal');
   const openDetails = useSectionsMirror('openDetails');
 
-  // ── Column definitions ──
-  const columns = useSectionsColumns(openEdit, openFeeModal, openDetails);
+  const columns = useSectionsColumns(openEdit, openFeeModal, openDetails, { canManage });
 
   return (
-    <>
-      <DataModuleController
-        title={sectionsPageMetadata.title}
-        description={sectionsPageMetadata.description}
-        data={data}
-        columns={columns}
-        total={total}
-        page={page}
-        limit={limit}
-        totalPages={totalPages}
-        isLoading={isLoading}
-        isFetching={isFetching}
-        searchPlaceholder={sectionsPageMetadata.searchPlaceholder}
-        emptyMessage={sectionsPageMetadata.emptyMessage}
-        emptyDescription={sectionsPageMetadata.emptyDescription}
-        onPageChange={setPage}
-        onSearchChange={setSearch}
-      >
-        <DataModuleController.Header>
-          <DataModuleController.Title />
-          <DataModuleController.Actions>
-            <SectionsActions />
-          </DataModuleController.Actions>
-        </DataModuleController.Header>
+    <AppModule exportTitle="الشعب">
+      <SectionsOverview />
 
-        <DataModuleController.FilterBar>
-          <DataModuleController.SearchInput />
-          <DataModuleController.FilterSlot>
-            <SectionsFilters />
-          </DataModuleController.FilterSlot>
-          <DataModuleController.ResetButton />
-        </DataModuleController.FilterBar>
+      <AppModule.Table>
+        <DataModuleController
+          selectable
+          title={sectionsPageMetadata.title}
+          description={sectionsPageMetadata.description}
+          data={data}
+          columns={columns}
+          total={total}
+          page={page}
+          limit={limit}
+          totalPages={totalPages}
+          isLoading={isLoading}
+          isFetching={isFetching}
+          searchPlaceholder={sectionsPageMetadata.searchPlaceholder}
+          emptyMessage={sectionsPageMetadata.emptyMessage}
+          emptyDescription={sectionsPageMetadata.emptyDescription}
+          onPageChange={setPage}
+          onSearchChange={setSearch}
+        >
+          <DataModuleController.Header>
+            <DataModuleController.Title />
+            <DataModuleController.Actions>
+              <SectionsActions canManage={canManage} />
+            </DataModuleController.Actions>
+          </DataModuleController.Header>
 
-        <DataModuleController.Content>
-          <DataModuleController.Table />
-        </DataModuleController.Content>
+          <DataModuleController.FilterBar>
+            <DataModuleController.SearchInput />
+            <DataModuleController.FilterSlot>
+              <SectionsFilters />
+            </DataModuleController.FilterSlot>
+            <DataModuleController.ResetButton />
+          </DataModuleController.FilterBar>
 
-        <DataModuleController.Footer />
-      </DataModuleController>
+          <DataModuleController.Content>
+            <DataModuleController.Table />
+          </DataModuleController.Content>
 
-      {/* Create / Edit Section Drawer */}
-      <SectionDrawer
-        opened={formModalOpened}
-        onClose={closeFormModal}
-        onSubmit={onFormSubmit}
-      />
+          <DataModuleController.Footer />
+        </DataModuleController>
+      </AppModule.Table>
 
-      {/* Update Section Fee Modal */}
-      <SectionFeeDrawer
-        opened={feeModalOpened}
-        onClose={closeFeeModal}
-        onSubmit={onFeeSubmit}
-      />
-
-      {/* View Section Details Drawer */}
-      <SectionDetailsDrawer
-        opened={drawerOpened}
-        onClose={closeDrawer}
-        sectionId={detailSectionId}
+      <SectionsDrawers
+        canManage={canManage}
+        formModalOpened={formModalOpened}
+        closeFormModal={closeFormModal}
+        onFormSubmit={onFormSubmit}
+        feeModalOpened={feeModalOpened}
+        closeFeeModal={closeFeeModal}
+        onFeeSubmit={onFeeSubmit}
+        drawerOpened={drawerOpened}
+        closeDrawer={closeDrawer}
+        detailSectionId={detailSectionId}
         onAssignSubject={onAssignSubject}
         onRemoveSubject={onRemoveSubject}
+        branchesModalOpened={branchesModalOpened}
+        closeBranchesModal={closeBranchesModal}
+        academicBranches={academicBranches}
+        onBranchCreate={onBranchCreate}
+        onBranchDelete={onBranchDelete}
       />
-
-      {/* Manage Academic Branches Drawer */}
-      <AcademicBranchesDrawer
-        opened={branchesModalOpened}
-        onClose={closeBranchesModal}
-        branches={academicBranches}
-        onCreate={onBranchCreate}
-        onDelete={onBranchDelete}
-      />
-    </>
+    </AppModule>
   );
 }

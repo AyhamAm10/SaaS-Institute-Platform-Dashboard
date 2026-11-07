@@ -69,7 +69,7 @@ export function TeacherDeleteModal({ onConfirmDelete }: TeacherDeleteModalProps)
           <Text size="sm">
             هل أنت متأكد من رغبتك في حذف حساب المعلم{' '}
             <Text fw={500} span>
-              "{teacherToDelete.user.fullName}"
+              &quot;{teacherToDelete.user.fullName}&quot;
             </Text>
             ؟
           </Text>

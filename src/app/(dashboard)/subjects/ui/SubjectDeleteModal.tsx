@@ -77,7 +77,7 @@ export function SubjectDeleteModal({ onConfirmDelete }: SubjectDeleteModalProps)
           <Text size="sm">
             {subjectsLabels.deleteConfirmPrompt}{' '}
             <Text fw={500} span>
-              "{subjectToDelete.name}"
+              &quot;{subjectToDelete.name}&quot;
             </Text>
             ؟
           </Text>

@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react';
 import { rem } from '@mantine/core';
 import { ResolvedInputConfig } from '../init/input.init';
 
@@ -6,7 +7,14 @@ import { ResolvedInputConfig } from '../init/input.init';
  * Relies on centralized CSS variables (--app-*) for unified light and dark themes.
  * Hover / placeholder states are handled in globals.css (`.mantine-Input-input`).
  */
-export function getUnifiedInputStyles(config: ResolvedInputConfig, isFocused: boolean, customStyles?: Record<string, any>) {
+/** Styles per Mantine input part (root, label, input, ...). */
+export type UnifiedInputStyles = Record<string, CSSProperties>;
+
+export function getUnifiedInputStyles(
+  config: ResolvedInputConfig,
+  isFocused: boolean,
+  customStyles?: Record<string, CSSProperties>,
+): UnifiedInputStyles {
   return {
     root: {
       ...customStyles?.root,
@@ -26,7 +34,8 @@ export function getUnifiedInputStyles(config: ResolvedInputConfig, isFocused: bo
       ...customStyles?.description,
     },
     input: {
-      direction: config.direction,
+      // 'auto' is not a CSS direction: it goes on the dir attribute instead
+      direction: config.direction === 'auto' ? undefined : config.direction,
       textAlign: config.textAlign,
       fontSize: rem(13.5),
       fontWeight: 400,

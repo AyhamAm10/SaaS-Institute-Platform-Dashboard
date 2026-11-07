@@ -10,9 +10,15 @@ import { useSectionsMirror } from '../store/useSectionsMirror';
  * Header action buttons for the Sections page.
  * Pure presentation — reads actions from the mirror.
  */
-export function SectionsActions() {
+interface SectionsActionsProps {
+  canManage?: boolean;
+}
+
+export function SectionsActions({ canManage = true }: SectionsActionsProps) {
   const openCreate = useSectionsMirror('openCreate');
   const openBranchesModal = useSectionsMirror('openBranchesModal');
+
+  if (!canManage) return null;
 
   return (
     <Group gap="sm">

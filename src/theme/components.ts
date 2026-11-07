@@ -1,5 +1,8 @@
 import { MantineThemeComponents, rem } from '@mantine/core';
 
+/** Above AppDrawer (300) and AppModal (350). */
+const FLOATING_Z_INDEX = 400;
+
 /**
  * Component default overrides.
  * Base looks only — interactive states (hover / focus / active) live in globals.css,
@@ -194,6 +197,7 @@ export const defaultComponents: MantineThemeComponents = {
 
   Menu: {
     defaultProps: {
+      zIndex: FLOATING_Z_INDEX,
       radius: 'md',
       shadow: 'md',
     },
@@ -212,7 +216,10 @@ export const defaultComponents: MantineThemeComponents = {
     },
   },
 
+  // Floating layers sit above drawers (300) and modals (350), so selects,
+  // date pickers and menus opened inside an AppModal are not hidden behind it.
   Popover: {
+    defaultProps: { zIndex: FLOATING_Z_INDEX },
     styles: {
       dropdown: floatingDropdown,
     },
@@ -304,13 +311,14 @@ export const defaultComponents: MantineThemeComponents = {
   PasswordInput: { defaultProps: { radius: 'md', size: 'sm' }, styles: inputStyles },
   Textarea: { defaultProps: { radius: 'md', size: 'sm' }, styles: inputStyles },
   NumberInput: { defaultProps: { radius: 'md', size: 'sm', hideControls: true }, styles: inputStyles },
-  MultiSelect: { defaultProps: { radius: 'md', size: 'sm' }, styles: { ...inputStyles, dropdown: floatingDropdown } },
+  MultiSelect: { defaultProps: { radius: 'md', size: 'sm', comboboxProps: { zIndex: FLOATING_Z_INDEX } }, styles: { ...inputStyles, dropdown: floatingDropdown } },
 
   Select: {
     defaultProps: {
       radius: 'md',
       size: 'sm',
       checkIconPosition: 'right',
+      comboboxProps: { zIndex: FLOATING_Z_INDEX },
     },
     styles: {
       ...inputStyles,

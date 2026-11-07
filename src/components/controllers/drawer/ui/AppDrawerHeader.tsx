@@ -29,7 +29,7 @@ export function AppDrawerHeader({
       if (!isValidElement(child)) return true;
       return (
         child.type !== AppDrawerClose &&
-        (child.type as any)?.displayName !== 'AppDrawerClose'
+        (child.type as { displayName?: string })?.displayName !== 'AppDrawerClose'
       );
     });
 

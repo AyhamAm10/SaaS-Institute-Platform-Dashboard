@@ -63,4 +63,4 @@ export interface AcademicYearsState {
  * Initial props for the Academic Years controller.
  * Currently empty — reserved for server-side params if needed in the future.
  */
-export interface AcademicYearsInitialProps {}
+export type AcademicYearsInitialProps = Record<string, never>;

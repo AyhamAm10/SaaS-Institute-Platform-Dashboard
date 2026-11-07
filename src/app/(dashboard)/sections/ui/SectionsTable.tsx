@@ -1,194 +1,129 @@
 'use client';
-import { formatNumber } from '@/src/core/format';
 
 import { useMemo } from 'react';
-import {
-  ActionIcon,
-  Badge,
-  Group,
-  Menu,
-  Text,
-  Tooltip,
-} from '@mantine/core';
-import {
-  IconBook,
-  IconCoin,
-  IconDotsVertical,
-  IconEdit,
-  IconEye,
-  IconPlus,
-} from '@tabler/icons-react';
+import { Badge, Text } from '@mantine/core';
+import { IconBook, IconPlus } from '@tabler/icons-react';
+import { formatMoney } from '@/src/core/format';
 import { DataModuleColumn } from '@/src/components/controllers/data-module';
 import { Section } from '@/src/core/api';
-import { sectionDetailsLabels } from '../static-data/sections.data';
+import { SectionsActionsCell } from './SectionsActionsCell';
 
-/**
- * Hook that builds the column definitions for the Sections table.
- * All action callbacks are injected from the parent — the hook itself has zero business logic.
- */
 export function useSectionsColumns(
   onEdit: (section: Section) => void,
   onOpenFee: (section: Section) => void,
   onOpenDetails: (section: Section, tab?: string) => void,
+  access = { canManage: true },
 ): DataModuleColumn<Section>[] {
   return useMemo(
-    () => [
-      {
-        key: 'name',
-        title: 'اسم الشعبة',
-        sortable: true,
-        render: (row: Section) => (
-          <Text
-            fw={500}
-            size="sm"
-            style={{ cursor: 'pointer' }}
-            onClick={() => onOpenDetails(row, 'subjects')}
-          >
-            {row.name}
-          </Text>
-        ),
-      },
-      {
-        key: 'academicBranch',
-        title: 'الفرع الأكاديمي',
-        render: (row: Section) => (
-          <Badge variant="light" color="teal" radius="xl" size="sm">
-            {row.academicBranch?.name ?? row.grade}
-          </Badge>
-        ),
-      },
-      {
-        key: 'academicYear',
-        title: 'السنة الدراسية',
-        render: (row: Section) => (
-          <Text size="sm" c="dimmed">
-            {row.academicYear?.name ?? '—'}
-          </Text>
-        ),
-      },
-      {
-        key: 'subjects',
-        title: 'المواد المقررة',
-        render: (row: Section) => {
-          const count = row._count?.sectionSubjects ?? 0;
-          return count > 0 ? (
-            <Badge
-              variant="light"
-              color="indigo"
-              radius="xl"
+    () => {
+      const cols: DataModuleColumn<Section>[] = [
+        {
+          key: 'name',
+          title: 'اسم الشعبة',
+          sortable: true,
+          exportValue: (s) => s.name,
+          exportKind: 'text',
+          render: (row: Section) => (
+            <Text
+              fw={500}
               size="sm"
               style={{ cursor: 'pointer' }}
               onClick={() => onOpenDetails(row, 'subjects')}
-              leftSection={<IconBook size={13} />}
             >
-              {count} مواد مسندة
-            </Badge>
-          ) : (
-            <Badge
-              variant="outline"
-              color="orange"
-              radius="xl"
-              size="sm"
-              style={{ cursor: 'pointer' }}
-              onClick={() => onOpenDetails(row, 'subjects')}
-              leftSection={<IconPlus size={13} />}
-            >
-              + إسناد المواد
-            </Badge>
-          );
+              {row.name}
+            </Text>
+          ),
         },
-      },
-      {
-        key: 'feeAmount',
-        title: 'الرسوم الدراسية',
-        render: (row: Section) => (
-          <Text fw={500} size="sm" c="teal">
-            {formatNumber(row.feeAmount)} {sectionDetailsLabels.currency}
-          </Text>
-        ),
-      },
-      {
-        key: 'actions',
-        title: 'الإجراءات',
-        align: 'center' as const,
-        render: (row: Section) => (
-          <Group gap={6} justify="center">
-            <Tooltip label="إسناد المواد المقررة والخطة">
-              <ActionIcon
-                size="sm"
+        {
+          key: 'academicBranch',
+          title: 'الفرع الأكاديمي',
+          exportValue: (s) => s.academicBranch?.name ?? s.grade ?? '—',
+          exportKind: 'text',
+          render: (row: Section) => (
+            <Badge variant="light" color="teal" radius="xl" size="sm">
+              {row.academicBranch?.name ?? row.grade}
+            </Badge>
+          ),
+        },
+        {
+          key: 'academicYear',
+          title: 'السنة الدراسية',
+          exportValue: (s) => s.academicYear?.name ?? '—',
+          exportKind: 'text',
+          render: (row: Section) => (
+            <Text size="sm" c="dimmed">
+              {row.academicYear?.name ?? '—'}
+            </Text>
+          ),
+        },
+        {
+          key: 'subjects',
+          title: 'المواد المقررة',
+          exportValue: (s) => s._count?.sectionSubjects ?? 0,
+          exportKind: 'number',
+          render: (row: Section) => {
+            const count = row._count?.sectionSubjects ?? 0;
+            return count > 0 ? (
+              <Badge
                 variant="light"
                 color="indigo"
                 radius="xl"
+                size="sm"
+                style={{ cursor: 'pointer' }}
                 onClick={() => onOpenDetails(row, 'subjects')}
+                leftSection={<IconBook size={13} />}
               >
-                <IconBook size={16} />
-              </ActionIcon>
-            </Tooltip>
-
-            <Tooltip label="عرض تفاصيل الشعبة">
-              <ActionIcon
-                size="sm"
-                variant="light"
-                color="blue"
+                {count} مواد مسندة
+              </Badge>
+            ) : access.canManage ? (
+              <Badge
+                variant="outline"
+                color="orange"
                 radius="xl"
-                onClick={() => onOpenDetails(row, 'info')}
-              >
-                <IconEye size={16} />
-              </ActionIcon>
-            </Tooltip>
-
-            <Tooltip label="تعديل الرسوم">
-              <ActionIcon
                 size="sm"
-                variant="light"
-                color="teal"
-                radius="xl"
-                onClick={() => onOpenFee(row)}
+                style={{ cursor: 'pointer' }}
+                onClick={() => onOpenDetails(row, 'subjects')}
+                leftSection={<IconPlus size={13} />}
               >
-                <IconCoin size={16} />
-              </ActionIcon>
-            </Tooltip>
+                + إسناد المواد
+              </Badge>
+            ) : (
+              <Text size="xs" c="dimmed">لا توجد مواد</Text>
+            );
+          },
+        },
+        {
+          key: 'feeAmount',
+          title: 'الرسوم الدراسية',
+          exportValue: (s) => ({
+            amount: Number(s.feeAmount ?? 0),
+            currency: (s.feeCurrency as 'SYP' | 'USD') ?? 'SYP',
+          }),
+          exportKind: 'money',
+          render: (row: Section) => (
+            <Text fw={500} size="sm" c="teal">
+              {formatMoney(row.feeAmount, (row.feeCurrency as 'SYP' | 'USD') ?? 'SYP')}
+            </Text>
+          ),
+        },
+        {
+          key: 'actions',
+          title: 'الإجراءات',
+          align: 'center',
+          render: (row: Section) => (
+            <SectionsActionsCell
+              row={row}
+              canManage={access.canManage}
+              onEdit={onEdit}
+              onOpenFee={onOpenFee}
+              onOpenDetails={onOpenDetails}
+            />
+          ),
+        },
+      ];
 
-            <Menu shadow="md" width={180} position="bottom-end" radius="md">
-              <Menu.Target>
-                <ActionIcon size="sm" variant="subtle" color="gray" radius="xl">
-                  <IconDotsVertical size={16} />
-                </ActionIcon>
-              </Menu.Target>
-              <Menu.Dropdown>
-                <Menu.Item
-                  leftSection={<IconBook size={14} />}
-                  color="indigo"
-                  onClick={() => onOpenDetails(row, 'subjects')}
-                >
-                  إسناد المواد المقررة
-                </Menu.Item>
-                <Menu.Item
-                  leftSection={<IconEdit size={14} />}
-                  onClick={() => onEdit(row)}
-                >
-                  تعديل البيانات
-                </Menu.Item>
-                <Menu.Item
-                  leftSection={<IconCoin size={14} />}
-                  color="teal"
-                  onClick={() => onOpenFee(row)}
-                >
-                  تعديل الرسوم
-                </Menu.Item>
-                <Menu.Item
-                  leftSection={<IconEye size={14} />}
-                  color="blue"
-                  onClick={() => onOpenDetails(row, 'info')}
-                >
-                  عرض كامل التفاصيل
-                </Menu.Item>
-              </Menu.Dropdown>
-            </Menu>
-          </Group>
-        ),
-      },
-    ],
-    [onEdit, onOpenFee, onOpenDetails],
+      return cols;
+    },
+    [onEdit, onOpenFee, onOpenDetails, access.canManage],
   );
 }

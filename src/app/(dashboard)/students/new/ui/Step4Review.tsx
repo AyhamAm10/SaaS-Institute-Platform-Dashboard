@@ -1,9 +1,9 @@
 'use client';
 
-import { Badge, Card, Divider, Group, SimpleGrid, Stack, Text, ThemeIcon } from '@mantine/core';
-import { IconCheck, IconSchool, IconUser, IconUsers } from '@tabler/icons-react';
+import { Card, Divider, Group, SimpleGrid, Stack, Text, ThemeIcon } from '@mantine/core';
+import { IconUser, IconUsers } from '@tabler/icons-react';
 import { useStudentRegistrationMirror } from '../store/useStudentRegistrationMirror';
-import { Branch, Section, StudentField } from '@/src/core/api';
+import { Section, StudentField } from '@/src/core/api';
 
 export interface Step4ReviewProps {
   sections: Section[];

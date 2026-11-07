@@ -29,6 +29,7 @@ interface TimetableCellProps {
   entry?: TimetableEntry;
   onToggleLock: (entry: TimetableEntry) => void;
   onDeleteEntry: (entry: TimetableEntry) => void;
+  canManage?: boolean;
 }
 
 export function TimetableCell({
@@ -37,6 +38,7 @@ export function TimetableCell({
   entry,
   onToggleLock,
   onDeleteEntry,
+  canManage = true,
 }: TimetableCellProps) {
   const openCreateEntryModal = useTimetableMirror('openCreateEntryModal');
   const openEditEntryModal = useTimetableMirror('openEditEntryModal');
@@ -102,16 +104,22 @@ export function TimetableCell({
               </Text>
             </Group>
 
-            <Tooltip label={entry.isLocked ? 'حصة مثبتة (محمية من التوليد الآلي)' : 'تثبيت الحصة'}>
-              <ActionIcon
-                size="xs"
-                variant="subtle"
-                color={entry.isLocked ? 'indigo' : 'gray'}
-                onClick={() => onToggleLock(entry)}
-              >
-                {entry.isLocked ? <IconLock size={14} /> : <IconLockOpen size={14} />}
-              </ActionIcon>
-            </Tooltip>
+            {canManage ? (
+              <Tooltip label={entry.isLocked ? 'حصة مثبتة (محمية من التوليد الآلي)' : 'تثبيت الحصة'}>
+                <ActionIcon
+                  size="xs"
+                  variant="subtle"
+                  color={entry.isLocked ? 'indigo' : 'gray'}
+                  onClick={() => onToggleLock(entry)}
+                >
+                  {entry.isLocked ? <IconLock size={14} /> : <IconLockOpen size={14} />}
+                </ActionIcon>
+              </Tooltip>
+            ) : entry.isLocked ? (
+              <ThemeIcon size="xs" variant="subtle" color="indigo">
+                <IconLock size={14} />
+              </ThemeIcon>
+            ) : null}
           </Group>
 
           {/* Middle Details: Teacher & Room */}
@@ -134,29 +142,53 @@ export function TimetableCell({
           </Stack>
 
           {/* Bottom Actions Bar */}
-          <Group justify="flex-end" gap={4}>
-            <Tooltip label="تعديل الحصة">
-              <ActionIcon
-                size="xs"
-                variant="subtle"
-                color="blue"
-                onClick={() => openEditEntryModal(entry)}
-              >
-                <IconEdit size={12} />
-              </ActionIcon>
-            </Tooltip>
-            <Tooltip label="حذف الحصة">
-              <ActionIcon
-                size="xs"
-                variant="subtle"
-                color="red"
-                onClick={() => onDeleteEntry(entry)}
-              >
-                <IconTrash size={12} />
-              </ActionIcon>
-            </Tooltip>
-          </Group>
+          {canManage && (
+            <Group justify="flex-end" gap={4}>
+              <Tooltip label="تعديل الحصة">
+                <ActionIcon
+                  size="xs"
+                  variant="subtle"
+                  color="blue"
+                  onClick={() => openEditEntryModal(entry)}
+                >
+                  <IconEdit size={12} />
+                </ActionIcon>
+              </Tooltip>
+              <Tooltip label="حذف الحصة">
+                <ActionIcon
+                  size="xs"
+                  variant="subtle"
+                  color="red"
+                  onClick={() => onDeleteEntry(entry)}
+                >
+                  <IconTrash size={12} />
+                </ActionIcon>
+              </Tooltip>
+            </Group>
+          )}
         </Stack>
+      </Card>
+    );
+  }
+
+  if (!canManage) {
+    return (
+      <Card
+        p="xs"
+        radius="md"
+        withBorder
+        h="100%"
+        style={{
+          minHeight: 90,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          borderStyle: 'dashed',
+          borderColor: 'var(--app-border)',
+          backgroundColor: 'var(--app-subtle)',
+        }}
+      >
+        <Text size="xs" c="dimmed">—</Text>
       </Card>
     );
   }

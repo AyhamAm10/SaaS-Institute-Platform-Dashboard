@@ -52,19 +52,19 @@ export function TimetableEntryModal({ onSave }: TimetableEntryModalProps) {
   const { data: teachersData } = useTeachersQuery({ limit: 100 });
   const { data: roomsData } = useRoomsQuery({ limit: 100 });
 
-  const subjectOptions = (sectionSubjects || []).map((ss: any) => ({
+  const subjectOptions = (sectionSubjects || []).map((ss) => ({
     value: String(ss.subjectId),
     label: `${ss.subject.name} (${ss.weeklyPeriods || 1} حصص أسبوعيا)`,
   }));
 
-  const teacherOptions = (teachersData?.data || []).map((t: any) => ({
+  const teacherOptions = (teachersData?.data || []).map((t) => ({
     value: String(t.id),
     label: `${t.user.fullName} ${t.specialization ? `(${t.specialization})` : ''}`,
   }));
 
   const roomOptions = [
     { value: '', label: 'بدون قاعة محددة (افتراضية)' },
-    ...(roomsData?.data || []).map((r: any) => ({
+    ...(roomsData?.data || []).map((r) => ({
       value: String(r.id),
       label: `${r.name} (${r.capacity} مقعد)`,
     })),
@@ -116,11 +116,11 @@ export function TimetableEntryModal({ onSave }: TimetableEntryModalProps) {
           placeholder="اختر المادة المقررة للشعبة"
           data={subjectOptions}
           value={entryForm.subjectId ? String(entryForm.subjectId) : null}
-          onChange={(val: any) => {
+          onChange={(val: string | null) => {
             const sId = val ? Number(val) : null;
             setEntryFormField('subjectId', sId);
             // Pre-select default teacher if assigned in section subject
-            const matchingSubject = sectionSubjects?.find((s: any) => s.subjectId === sId);
+            const matchingSubject = sectionSubjects?.find((s) => s.subjectId === sId);
             if (matchingSubject?.teacherId) {
               setEntryFormField('teacherId', matchingSubject.teacherId);
             }
@@ -133,7 +133,7 @@ export function TimetableEntryModal({ onSave }: TimetableEntryModalProps) {
           placeholder="اختر المعلم"
           data={teacherOptions}
           value={entryForm.teacherId ? String(entryForm.teacherId) : null}
-          onChange={(val: any) =>
+          onChange={(val: string | null) =>
             setEntryFormField('teacherId', val ? Number(val) : null)
           }
           required
@@ -144,7 +144,7 @@ export function TimetableEntryModal({ onSave }: TimetableEntryModalProps) {
           placeholder="اختر القاعة (اختياري)"
           data={roomOptions}
           value={entryForm.roomId ? String(entryForm.roomId) : ''}
-          onChange={(val: any) =>
+          onChange={(val: string | null) =>
             setEntryFormField('roomId', val ? Number(val) : null)
           }
         />

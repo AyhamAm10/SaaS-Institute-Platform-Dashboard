@@ -8,6 +8,7 @@ import { studentsLabels } from '../static-data/students.data';
 import { StudentBasicFields } from './StudentBasicFields';
 import { StudentFamilyField } from './StudentFamilyField';
 import { StudentCustomFieldsEditor } from './StudentCustomFieldsEditor';
+import { StudentReferencesSection } from './StudentReferencesSection';
 
 export interface StudentEditDrawerProps {
   onSubmit: () => Promise<void>;
@@ -67,6 +68,13 @@ export function StudentEditDrawer({ onSubmit }: StudentEditDrawerProps) {
               description={studentsLabels.sectionFamilyDescription}
             >
               <StudentFamilyField />
+            </AppDrawer.Section>
+
+            <AppDrawer.Section
+              title={studentsLabels.sectionReferences}
+              description={studentsLabels.sectionReferencesDescription}
+            >
+              <StudentReferencesSection />
             </AppDrawer.Section>
 
             <AppDrawer.Section title={studentsLabels.sectionCustomFields}>

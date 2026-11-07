@@ -1,22 +1,21 @@
 import { ReactNode } from 'react';
+import type { ReportCell, ReportColumnKind } from '@/src/core/api';
 
 export interface AppModuleBreadcrumbItem {
   label: string;
   href?: string;
 }
 
+export interface SelectionExportColumn {
+  key: string;
+  title: string;
+  kind: ReportColumnKind;
+  value: (row: unknown) => ReportCell;
+}
+
 export interface AppModuleInitialProps {
   children?: ReactNode;
-  variant?: 'dashboard' | 'table' | 'form' | 'default';
   className?: string;
-}
-
-export interface ResolvedAppModuleConfig {
-  variant: 'dashboard' | 'table' | 'form' | 'default';
-}
-
-export function resolveAppModuleConfig(props: AppModuleInitialProps): ResolvedAppModuleConfig {
-  return {
-    variant: props.variant ?? 'default',
-  };
+  /** Title of the printed / exported selection (e.g. "قائمة الطلاب"). */
+  exportTitle?: string;
 }

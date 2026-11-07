@@ -1,16 +1,27 @@
+'use client';
+
 import { createContext, useContext } from 'react';
 import { createControllerStore } from '@/src/core/mirror';
 import { ControllerStoreApi } from '@/src/core/mirror/types';
 import { AppModuleState, createInitialAppModuleState } from '../state/app-module.state';
-import { AppModuleInitialProps } from '../init/app-module.init';
+import { AppModuleInitialProps, SelectionExportColumn } from '../init/app-module.init';
 
 export type AppModuleStore = ControllerStoreApi<AppModuleState>;
 
 export function createAppModuleStore(props: AppModuleInitialProps): AppModuleStore {
   const initial = createInitialAppModuleState(props);
 
-  return createControllerStore<AppModuleState>(() => ({
+  return createControllerStore<AppModuleState>((set) => ({
     ...initial,
+    setSelection: (rows: unknown[], columns: SelectionExportColumn[]) => {
+      set({ selection: { rows, columns }, exportError: null });
+    },
+    setExporting: (isExporting: boolean) => {
+      set({ isExporting });
+    },
+    setExportError: (exportError: string | null) => {
+      set({ exportError });
+    },
   }));
 }
 
@@ -22,4 +33,8 @@ export function useAppModuleStoreContext(): AppModuleStore {
     throw new Error('AppModule subcomponents must be rendered within an <AppModule> provider');
   }
   return context;
+}
+
+export function useOptionalAppModuleStore(): AppModuleStore | null {
+  return useContext(AppModuleContext);
 }

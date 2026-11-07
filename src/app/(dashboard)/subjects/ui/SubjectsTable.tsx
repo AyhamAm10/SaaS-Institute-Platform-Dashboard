@@ -1,40 +1,24 @@
 'use client';
-import { formatDate } from '@/src/core/format';
 
-import {
-  ActionIcon,
-  Avatar,
-  Badge,
-  Group,
-  Stack,
-  Text,
-  Tooltip,
-} from '@mantine/core';
-import {
-  IconBook,
-  IconEdit,
-  IconLayoutGrid,
-  IconTrash,
-} from '@tabler/icons-react';
+import { ActionIcon, Avatar, Group, Text, Tooltip } from '@mantine/core';
+import { IconBook, IconEdit, IconLayoutGrid, IconTrash } from '@tabler/icons-react';
+import { formatDate } from '@/src/core/format';
 import { Subject } from '@/src/core/api';
 import { DataModuleColumn } from '@/src/components/controllers/data-module';
 import { subjectsLabels } from '../static-data/subjects.data';
 
-/**
- * getSubjectsColumns
- *
- * Column definitions for Subjects table.
- * Strictly adheres to DataModuleController compound pattern.
- */
 export function getSubjectsColumns(
   openEditDrawer: (subject: Subject) => void,
   openDeleteModal: (subject: Subject) => void,
+  access = { canManage: true },
 ): DataModuleColumn<Subject>[] {
-  return [
+  const cols: DataModuleColumn<Subject>[] = [
     {
       key: 'name',
       title: subjectsLabels.tableName,
       sortable: true,
+      exportValue: (s) => s.name,
+      exportKind: 'text',
       render: (subject) => (
         <Group gap="sm" wrap="nowrap">
           <Avatar color="primary" radius="md" size="sm" variant="light">
@@ -49,6 +33,8 @@ export function getSubjectsColumns(
     {
       key: 'sections',
       title: subjectsLabels.tableSectionsCount,
+      exportValue: (s) => s._count?.sectionSubjects ?? 0,
+      exportKind: 'number',
       render: (subject) => {
         const sectionsCount = subject._count?.sectionSubjects ?? 0;
         return (
@@ -65,16 +51,18 @@ export function getSubjectsColumns(
       key: 'createdAt',
       title: subjectsLabels.tableCreatedAt,
       sortable: true,
-      render: (subject) => {
-        const formattedDate = formatDate(subject.createdAt);
-        return (
-          <Text size="xs" c="dimmed">
-            {formattedDate}
-          </Text>
-        );
-      },
+      exportValue: (s) => (s.createdAt ? String(s.createdAt).split('T')[0] : null),
+      exportKind: 'date',
+      render: (subject) => (
+        <Text size="xs" c="dimmed">
+          {formatDate(subject.createdAt)}
+        </Text>
+      ),
     },
-    {
+  ];
+
+  if (access.canManage) {
+    cols.push({
       key: 'actions',
       title: subjectsLabels.tableActions,
       align: 'center',
@@ -107,6 +95,8 @@ export function getSubjectsColumns(
           </Tooltip>
         </Group>
       ),
-    },
-  ];
+    });
+  }
+
+  return cols;
 }

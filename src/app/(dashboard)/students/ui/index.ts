@@ -5,3 +5,6 @@ export * from './StudentDeleteModal';
 export * from './StudentBasicFields';
 export * from './StudentFamilyField';
 export * from './StudentCustomFieldsEditor';
+export * from './StudentReferenceFields';
+export * from './StudentReferencesSection';
+export * from './StudentsFilters';

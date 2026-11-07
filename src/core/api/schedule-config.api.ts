@@ -27,6 +27,10 @@ export interface ScheduleConfig {
   periodDurationMinutes: number;
   breaks: BreakConfig[];
   slots: ScheduleSlot[];
+  /** Check-in after dayStartTime + this many minutes is LATE (E8). */
+  lateAfterMinutes: number;
+  /** HH:mm when absences are marked; null = dayEndTime. */
+  attendanceCloseTime: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -37,6 +41,8 @@ export interface UpdateScheduleConfigPayload {
   dayEndTime?: string;
   periodDurationMinutes?: number;
   breaks?: BreakConfig[];
+  lateAfterMinutes?: number;
+  attendanceCloseTime?: string | null;
 }
 
 // --------------------------------------------------------------------------

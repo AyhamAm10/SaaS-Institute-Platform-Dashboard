@@ -15,6 +15,8 @@ const defaultFormState: ScheduleSettingsFormState = {
   dayStartTime: '08:00',
   dayEndTime: '14:00',
   periodDurationMinutes: 45,
+  lateAfterMinutes: 15,
+  attendanceCloseTime: '',
   breaks: [],
 };
 
@@ -82,6 +84,16 @@ export function createScheduleSettingsStore(): ScheduleSettingsStore {
     setGeneralError: (error) => set({ generalError: error }),
     setGeneralSuccess: (success) => set({ generalSuccess: success }),
     setIsSubmitting: (submitting) => set({ isSubmitting: submitting }),
+    setLateAfterMinutes: (minutes) =>
+      set((state) => ({
+        form: { ...state.form, lateAfterMinutes: minutes },
+        formErrors: { ...state.formErrors, lateAfterMinutes: '' },
+      })),
+    setAttendanceCloseTime: (time) =>
+      set((state) => ({
+        form: { ...state.form, attendanceCloseTime: time },
+        formErrors: { ...state.formErrors, attendanceCloseTime: '' },
+      })),
 
     syncConfigData: (payload) =>
       set((state) => {
@@ -97,6 +109,8 @@ export function createScheduleSettingsStore(): ScheduleSettingsStore {
                 dayEndTime: payload.dayEndTime,
                 periodDurationMinutes: payload.periodDurationMinutes,
                 breaks: payload.breaks,
+                lateAfterMinutes: payload.lateAfterMinutes,
+                attendanceCloseTime: payload.attendanceCloseTime,
               }
             : state.form,
         };

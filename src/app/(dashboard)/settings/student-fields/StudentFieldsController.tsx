@@ -7,6 +7,7 @@ import {
   useCreateStudentFieldMutation,
   useUpdateStudentFieldMutation,
 } from '@/src/core/api';
+import { PERMISSIONS, useAuth } from '@/src/core/auth';
 import { createStudentFieldsStore, StudentFieldsContext } from './store/student-fields.store';
 import { StudentFieldsView } from './ui/StudentFieldsView';
 
@@ -35,6 +36,8 @@ function QuerySync({ store }: { store: ReturnType<typeof createStudentFieldsStor
  */
 export function StudentFieldsController() {
   const [store] = useState(() => createStudentFieldsStore());
+  const { can } = useAuth();
+  const canManage = can(PERMISSIONS.settingsManage);
   const createMutation = useCreateStudentFieldMutation();
   const updateMutation = useUpdateStudentFieldMutation();
 
@@ -113,7 +116,7 @@ export function StudentFieldsController() {
   return (
     <StudentFieldsContext.Provider value={store}>
       <QuerySync store={store} />
-      <StudentFieldsView onSubmit={handleSubmit} />
+      <StudentFieldsView onSubmit={handleSubmit} canManage={canManage} />
     </StudentFieldsContext.Provider>
   );
 }

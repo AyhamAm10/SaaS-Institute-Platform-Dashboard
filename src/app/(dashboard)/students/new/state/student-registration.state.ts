@@ -1,4 +1,8 @@
 import { Family, StudentField } from '@/src/core/api';
+import type {
+  StudentReferenceField,
+  StudentReferenceValues,
+} from '../../utils/student-references.utils';
 
 export interface NewFamilyForm {
   familyName: string;
@@ -26,6 +30,7 @@ export interface StudentRegistrationState {
   branchId: number | null;
   sectionId: number | null;
   academicYearId: number | null;
+  references: StudentReferenceValues;
 
   // Step 3: Dynamic Custom Fields
   customFields: Record<string, any>;
@@ -38,9 +43,10 @@ export interface StudentRegistrationState {
   setNewFamilyField: (field: keyof NewFamilyForm, value: string) => void;
   setStudentField: (
     field: 'fullName' | 'birthDate' | 'gender' | 'branchId' | 'sectionId' | 'academicYearId',
-    value: any,
+    value: string | number | null,
   ) => void;
-  setCustomFieldValue: (fieldName: string, value: any) => void;
+  setCustomFieldValue: (fieldName: string, value: unknown) => void;
+  setReference: (field: StudentReferenceField, value: number | null) => void;
   setSubmitting: (isSubmitting: boolean) => void;
   setStepError: (step: number, error: string | null) => void;
   validateCurrentStep: (configuredFields?: StudentField[]) => boolean;

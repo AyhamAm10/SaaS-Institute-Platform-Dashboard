@@ -111,7 +111,7 @@ export function Step2Qualifications({
               placeholder="اختر الفرع الأكاديمي..."
               data={academicBranchOptions}
               value={stagedAcademicBranchId ? String(stagedAcademicBranchId) : null}
-              onChange={(val: any) =>
+              onChange={(val: string | null) =>
                 setStagedAcademicBranchId(val ? Number(val) : undefined)
               }
               searchable
@@ -123,7 +123,7 @@ export function Step2Qualifications({
               placeholder="اختر المادة من القائمة..."
               data={subjectOptions}
               value={stagedSubjectId ? String(stagedSubjectId) : null}
-              onChange={(val: any) => setStagedSubjectId(val ? Number(val) : undefined)}
+              onChange={(val: string | null) => setStagedSubjectId(val ? Number(val) : undefined)}
               searchable
               clearable
             />

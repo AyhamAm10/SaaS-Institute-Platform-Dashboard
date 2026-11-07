@@ -4,6 +4,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { authApi } from '../api/auth.api';
 import { LoginCredentials, UserProfile, UserRole } from '../api/types';
+import { canUseDashboard, hasPermission, Permission } from './permissions';
 
 export const AUTH_QUERY_KEY = ['auth', 'me'] as const;
 
@@ -62,6 +63,7 @@ export function useAuth() {
   });
 
   const adminStatus = isUserAdmin(user);
+  const can = (permission: Permission) => hasPermission(user, permission);
 
   return {
     user: user ?? null,
@@ -70,6 +72,9 @@ export function useAuth() {
     error,
     isAuthenticated: Boolean(user),
     isAdmin: adminStatus,
+    /** Staff and teachers: may use the admin dashboard (pages filtered by `can`). */
+    canUseDashboard: canUseDashboard(user),
+    can,
     login: loginMutation.mutateAsync,
     logout: logoutMutation.mutateAsync,
     isLoggingIn: loginMutation.isPending,

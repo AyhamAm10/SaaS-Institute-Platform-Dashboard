@@ -29,6 +29,8 @@ export interface Section {
   name: string;
   grade: string;
   feeAmount: number;
+  /** Currency of the fee; contracts default to it (E10). */
+  feeCurrency?: 'SYP' | 'USD';
   createdAt: string;
   updatedAt: string;
   branch?: SectionBranchSummary;
@@ -84,6 +86,7 @@ export interface UpdateSectionPayload {
 
 export interface UpdateSectionFeePayload {
   feeAmount: number;
+  feeCurrency?: 'SYP' | 'USD';
 }
 
 export interface SectionSubjectItem {

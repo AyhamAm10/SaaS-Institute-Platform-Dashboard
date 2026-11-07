@@ -38,6 +38,8 @@ export const sectionFormLabels = {
 export const sectionDetailsLabels = {
   tabSubjects: 'المواد والخطة',
   tabInfo: 'بيانات الشعبة',
+  tabStudents: 'الطلاب',
+  studentsDescription: 'تسجيل الطلاب بالشعبة، النقل، الانسحاب وتخصيص المواد',
   subjectsDescription: 'المواد المقررة والمعلمون المكلفون وعدد الحصص الأسبوعية',
   infoDescription: 'المعلومات الأساسية وإحصائيات التسجيل والرسوم',
 

@@ -8,7 +8,6 @@ import {
   Button,
   Card,
   Divider,
-  Grid,
   Group,
   Paper,
   SimpleGrid,
@@ -31,6 +30,7 @@ import {
 } from '@tabler/icons-react';
 import { AppInput } from '@/src/components/controllers';
 import { useScheduleSettingsMirror } from '../store/useScheduleSettingsMirror';
+import { AttendanceRulesSection } from './AttendanceRulesSection';
 import { sortWeekDays } from '@/src/core/format';
 
 const DAYS_OF_WEEK = [
@@ -45,6 +45,7 @@ const DAYS_OF_WEEK = [
 
 interface ScheduleSettingsViewProps {
   onSave: () => void;
+  canManage?: boolean;
   newBreakName: string;
   setNewBreakName: (v: string) => void;
   newBreakStart: string;
@@ -56,6 +57,7 @@ interface ScheduleSettingsViewProps {
 
 export function ScheduleSettingsView({
   onSave,
+  canManage = true,
   newBreakName,
   setNewBreakName,
   newBreakStart,
@@ -114,15 +116,17 @@ export function ScheduleSettingsView({
               </Text>
             </Stack>
           </Group>
-          <Button
-            leftSection={<IconDeviceFloppy size={18} />}
-            radius="xl"
-            size="md"
-            loading={isSubmitting}
-            onClick={onSave}
-          >
-            حفظ التغييرات
-          </Button>
+          {canManage && (
+            <Button
+              leftSection={<IconDeviceFloppy size={18} />}
+              radius="xl"
+              size="md"
+              loading={isSubmitting}
+              onClick={onSave}
+            >
+              حفظ التغييرات
+            </Button>
+          )}
         </Group>
       </Paper>
 
@@ -236,6 +240,8 @@ export function ScheduleSettingsView({
               </Stack>
             </Paper>
 
+            <AttendanceRulesSection />
+
             {/* Breaks Manager */}
             <Paper p="lg" radius="xl" withBorder>
               <Stack gap="md">
@@ -348,7 +354,7 @@ export function ScheduleSettingsView({
 
               {slots.length === 0 ? (
                 <Text size="sm" c="dimmed" ta="center" py="xl">
-                  اضغط على "حفظ التغييرات" لاحتساب الفترات
+                  اضغط على &quot;حفظ التغييرات&quot; لاحتساب الفترات
                 </Text>
               ) : (
                 <Stack gap="xs">
