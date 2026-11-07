@@ -32,7 +32,6 @@ export function StudentRegistrationController() {
 
   const { data: sectionsData } = useSectionsQuery({
     limit: 100,
-    branchId: activeBranchId || undefined,
   });
   const { data: families = [], isLoading: isLoadingFamilies } = useFamiliesSearchQuery();
   const { data: fields = [] } = useStudentFieldsQuery(false);

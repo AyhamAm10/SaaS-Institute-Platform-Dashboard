@@ -43,7 +43,6 @@ export interface RoomsQueryParams {
   limit?: number;
   search?: string;
   type?: string;
-  branchId?: number;
 }
 
 export interface CreateRoomPayload {

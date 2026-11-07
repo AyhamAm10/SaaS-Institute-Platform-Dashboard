@@ -85,7 +85,7 @@ export function getStudentsColumns(
       title: studentsLabels.tableSection,
       exportValue: (s) => {
         const e = s.studentEnrollments?.[0];
-        return e?.section ? `${e.section.name}${e.section.grade ? ` (${e.section.grade})` : ''}` : 'غير مسجل';
+        return e?.section ? `${e.section.name}${e.section.grade ? ` (${e.section.grade})` : ''}` : studentsLabels.notEnrolled;
       },
       exportKind: 'text',
       render: (student) => {

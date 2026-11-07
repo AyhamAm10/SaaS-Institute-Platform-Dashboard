@@ -44,9 +44,11 @@ function QuerySync({
   const sectionId = useStore(store, (s) => s.sectionId);
   const syncTimetableData = useStore(store, (s) => s.syncTimetableData);
 
+  // The year is the header context only; a new year clears the chosen section
   useEffect(() => {
-    if (activeAcademicYearId && !academicYearId) {
+    if (activeAcademicYearId !== academicYearId) {
       store.getState().setAcademicYearId(activeAcademicYearId);
+      store.getState().setSectionId(null);
     }
   }, [activeAcademicYearId, academicYearId, store]);
 
@@ -55,10 +57,7 @@ function QuerySync({
     sectionId ?? 0,
   );
   const { data: scheduleConfig } = useScheduleConfigQuery();
-  const { data: sectionsData } = useSectionsQuery({
-    academicYearId: academicYearId ?? undefined,
-    limit: 100,
-  });
+  const { data: sectionsData } = useSectionsQuery({ limit: 100 });
   const { data: teachersData } = useTeachersQuery({ limit: 100 });
   const { data: roomsData } = useRoomsQuery({ limit: 100 });
 

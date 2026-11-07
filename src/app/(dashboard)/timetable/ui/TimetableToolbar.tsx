@@ -11,7 +11,7 @@ import {
   IconWand,
 } from '@tabler/icons-react';
 import { AppSelect } from '@/src/components/controllers';
-import { useAcademicYearsQuery, useSectionsQuery } from '@/src/core/api';
+import { useSectionsQuery } from '@/src/core/api';
 import { useTimetableMirror } from '../store/useTimetableMirror';
 
 interface TimetableToolbarProps {
@@ -23,20 +23,11 @@ export function TimetableToolbar({ onRefresh, canManage = true }: TimetableToolb
   const academicYearId = useTimetableMirror('academicYearId');
   const sectionId = useTimetableMirror('sectionId');
   const isFetching = useTimetableMirror('isFetching');
-  const setAcademicYearId = useTimetableMirror('setAcademicYearId');
   const setSectionId = useTimetableMirror('setSectionId');
   const openGenerateModal = useTimetableMirror('openGenerateModal');
 
-  const { data: years } = useAcademicYearsQuery();
-  const { data: sectionsData } = useSectionsQuery({
-    academicYearId: academicYearId ?? undefined,
-    limit: 100,
-  });
-
-  const yearOptions = (years?.data || []).map((y) => ({
-    value: String(y.id),
-    label: `${y.name} ${y.isCurrent ? '(الحالية)' : ''}`,
-  }));
+  // Sections of the header year (the year is never chosen on this page)
+  const { data: sectionsData } = useSectionsQuery({ limit: 100 });
 
   const sectionOptions = (sectionsData?.data || []).map((s) => ({
     value: String(s.id),
@@ -46,16 +37,7 @@ export function TimetableToolbar({ onRefresh, canManage = true }: TimetableToolb
   return (
     <Paper p="md" radius="xl" withBorder>
       <Group justify="space-between" align="center" wrap="wrap">
-        <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="md" style={{ flex: 1, maxWidth: 600 }}>
-          <AppSelect
-            placeholder="اختر السنة الدراسية"
-            data={yearOptions}
-            value={academicYearId ? String(academicYearId) : null}
-            onChange={(val: string | null) => {
-              setAcademicYearId(val ? Number(val) : null);
-              setSectionId(null);
-            }}
-          />
+        <SimpleGrid cols={1} spacing="md" style={{ flex: 1, maxWidth: 320 }}>
           <AppSelect
             placeholder="اختر الشعبة الدراسية"
             data={sectionOptions}

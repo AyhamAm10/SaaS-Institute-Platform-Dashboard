@@ -49,13 +49,12 @@ function RosterSync({ store }: SyncProps) {
 
 /** Unassigned students of the section's branch (mounted while the add modal is open). */
 function CandidatesSync({ store }: SyncProps) {
-  const section = useStore(store, (s) => s.section);
   const search = useStore(store, (s) => s.candidateSearch);
   const syncCandidates = useStore(store, (s) => s.syncCandidates);
   const [debounced] = useDebouncedValue(search.trim(), 300);
   const { data, isFetching } = useStudentsQuery({
-    unassignedYearId: section.academicYearId,
-    branchId: section.branchId,
+    // Not enrolled in the header year (= this section's year); header branch
+    unassigned: true,
     search: debounced || undefined,
     limit: 50,
   });
@@ -79,8 +78,6 @@ function TransferOptionsSync({ store }: SyncProps) {
   const section = useStore(store, (s) => s.section);
   const syncTransferOptions = useStore(store, (s) => s.syncTransferOptions);
   const { data } = useSectionsQuery({
-    academicYearId: section.academicYearId,
-    branchId: section.branchId,
     limit: 100,
   });
 

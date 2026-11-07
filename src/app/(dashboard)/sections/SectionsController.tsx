@@ -37,7 +37,6 @@ function QuerySync({ store }: { store: ReturnType<typeof createSectionsStore> })
   const page = useStore(store, (s) => s.page);
   const limit = useStore(store, (s) => s.limit);
   const search = useStore(store, (s) => s.search);
-  const selectedYearId = useStore(store, (s) => s.selectedYearId);
   const selectedBranchId = useStore(store, (s) => s.selectedBranchId);
   const syncQueryData = useStore(store, (s) => s.syncQueryData);
 
@@ -56,16 +55,13 @@ function QuerySync({ store }: { store: ReturnType<typeof createSectionsStore> })
   const syncInstituteSubjects = useStore(store, (s) => s.syncInstituteSubjects);
   const syncTeachers = useStore(store, (s) => s.syncTeachers);
 
-  const { activeBranchId } = useOperationalContext();
-
   // 1. Sections query (Main table list — always enabled)
   const { data: paginatedData, isLoading, isFetching } = useSectionsQuery({
     page,
     limit,
     search: search.trim() ? search.trim() : undefined,
-    academicYearId: selectedYearId ? Number(selectedYearId) : undefined,
     academicBranchId: selectedBranchId ? Number(selectedBranchId) : undefined,
-    branchId: activeBranchId ?? undefined,
+    // Branch / year: header context only (role.md dashboard §9.J)
   });
 
   useEffect(() => {
@@ -204,7 +200,8 @@ export function SectionsController() {
       store.getState().setSectionFormError('يرجى اختيار الفرع الأكاديمي');
       return;
     }
-    const targetYearId = sectionForm.academicYearId || activeAcademicYearId;
+    // A new section always belongs to the header year
+    const targetYearId = activeAcademicYearId;
     if (!selectedSection && !targetYearId) {
       store.getState().setSectionFormError('يرجى اختيار السنة الدراسية');
       return;
@@ -242,7 +239,7 @@ export function SectionsController() {
     } finally {
       store.getState().setFormSubmitting(false);
     }
-  }, [store, createMutation, updateMutation]);
+  }, [store, createMutation, updateMutation, activeAcademicYearId, activeBranchId]);
 
   // ── Fee Submit Handler ──
   const handleFeeSubmit = useCallback(async () => {

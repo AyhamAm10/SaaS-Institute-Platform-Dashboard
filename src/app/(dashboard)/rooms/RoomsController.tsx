@@ -32,14 +32,12 @@ function QuerySync({
   const search = useStore(store, (s) => s.search);
   const type = useStore(store, (s) => s.type);
   const syncQueryData = useStore(store, (s) => s.syncQueryData);
-  const { activeBranchId } = useOperationalContext();
 
   const { data: paginated, isLoading, isFetching } = useRoomsQuery({
     page,
     limit,
     search: search.trim() ? search.trim() : undefined,
     type,
-    branchId: activeBranchId ?? undefined,
   });
 
   useEffect(() => {
@@ -134,7 +132,7 @@ export function RoomsController() {
     } finally {
       store.getState().setIsSubmitting(false);
     }
-  }, [store, createMutation, updateMutation]);
+  }, [store, createMutation, updateMutation, activeBranchId]);
 
   const handleConfirmDelete = useCallback(
     async (room: Room) => {

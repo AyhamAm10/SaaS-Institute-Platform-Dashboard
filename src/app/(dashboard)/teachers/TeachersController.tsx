@@ -30,7 +30,6 @@ function QuerySync({
 }: {
   store: ReturnType<typeof createTeachersStore>;
 }) {
-  const { activeBranchId } = useOperationalContext();
   const page = useStore(store, (s) => s.page);
   const limit = useStore(store, (s) => s.limit);
   const search = useStore(store, (s) => s.search);
@@ -40,7 +39,6 @@ function QuerySync({
     page,
     limit,
     search: search.trim() ? search.trim() : undefined,
-    branchId: activeBranchId ?? undefined,
   });
 
   useEffect(() => {

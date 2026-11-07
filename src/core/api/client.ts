@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { tokenRefreshHandler } from './refresh';
-import { getActiveAcademicYearId, getActiveBranchId } from '../context/operational-context';
+import { getActiveAcademicYearId, getActiveBranchId, useOperationalContextStore } from '../context/operational-context';
 
 export const API_BASE_URL =
   process.env['NEXT_PUBLIC_API_URL'] || 'http://localhost:4000/api';
@@ -44,6 +44,8 @@ async function performTokenRefresh(): Promise<AxiosResponse> {
 
 // Attach request interceptor for central operational dimension injection (X-Branch-Id, X-Academic-Year-Id)
 apiClient.interceptors.request.use((config) => {
+  // Headers only once the context is resolved: a stale id would be refused (400)
+  if (!useOperationalContextStore.getState().resolved) return config;
   const branchId = getActiveBranchId();
   const academicYearId = getActiveAcademicYearId();
 

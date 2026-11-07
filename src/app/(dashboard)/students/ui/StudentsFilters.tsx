@@ -3,7 +3,6 @@
 import { Group } from '@mantine/core';
 import { AppSelect } from '@/src/components/controllers';
 import { useStudentsMirror } from '../store/useStudentsMirror';
-import { StudentListFilters } from '../state/students.state';
 import { studentsLabels } from '../static-data/students.data';
 
 const toValue = (id: number | null) => (id ? String(id) : null);
@@ -17,10 +16,9 @@ const toValue = (id: number | null) => (id ? String(id) : null);
 export function StudentsFilters() {
   const filters = useStudentsMirror('filters');
   const options = useStudentsMirror('referenceOptions');
-  const yearOptions = useStudentsMirror('yearOptions');
   const setFilter = useStudentsMirror('setFilter');
 
-  const select = (field: keyof StudentListFilters) => (val: string | null) =>
+  const select = (field: 'statusId' | 'busId' | 'cityId') => (val: string | null) =>
     setFilter(field, val ? Number(val) : null);
 
   return (
@@ -52,15 +50,6 @@ export function StudentsFilters() {
         clearable
         size="sm"
         w={150}
-      />
-      <AppSelect
-        placeholder={studentsLabels.filterUnassigned}
-        data={yearOptions}
-        value={toValue(filters.unassignedYearId)}
-        onChange={select('unassignedYearId')}
-        clearable
-        size="sm"
-        w={210}
       />
     </Group>
   );

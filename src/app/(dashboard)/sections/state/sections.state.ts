@@ -20,7 +20,6 @@ export interface SectionsState {
   page: number;
   limit: number;
   search: string;
-  selectedYearId: string | null;
   selectedBranchId: string | null;
   filterOptionsRequested: boolean;
 
@@ -97,7 +96,6 @@ export interface SectionsState {
   // ── Actions: Pagination & Filters ──
   setPage: (page: number) => void;
   setSearch: (search: string) => void;
-  setSelectedYearId: (yearId: string | null) => void;
   setSelectedBranchId: (branchId: string | null) => void;
   requestFilterOptions: () => void;
 

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { authApi } from '../api/auth.api';
 import { LoginCredentials, UserProfile, UserRole } from '../api/types';
 import { canUseDashboard, hasPermission, Permission } from './permissions';
+import { useOperationalContextStore } from '../context/operational-context';
 
 export const AUTH_QUERY_KEY = ['auth', 'me'] as const;
 
@@ -53,11 +54,13 @@ export function useAuth() {
     mutationFn: () => authApi.logout(),
     onSuccess: () => {
       queryClient.clear();
+      useOperationalContextStore.getState().resetContext();
       router.replace('/login');
     },
     onError: () => {
       // Even if backend fails, clear client state
       queryClient.clear();
+      useOperationalContextStore.getState().resetContext();
       router.replace('/login');
     },
   });

@@ -35,10 +35,9 @@ export function createStudentsStore(): StudentsStore {
     limit: 10,
     search: '',
     selectedBranchId: null,
-    filters: { statusId: null, busId: null, cityId: null, unassignedYearId: null },
+    filters: { statusId: null, busId: null, cityId: null },
     isLoading: true,
     referenceOptions: EMPTY_REFERENCE_OPTIONS,
-    yearOptions: [],
 
     // ── Edit Drawer State ──
     editDrawerOpened: false,
@@ -68,7 +67,6 @@ export function createStudentsStore(): StudentsStore {
     setFilter: (field, value) =>
       set((state) => ({ filters: { ...state.filters, [field]: value }, page: 1 })),
     syncReferenceOptions: (referenceOptions) => set({ referenceOptions }),
-    syncYearOptions: (yearOptions) => set({ yearOptions }),
 
     syncQueryData: ({ data, total, totalPages, isLoading }) =>
       set({

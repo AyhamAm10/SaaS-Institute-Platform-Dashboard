@@ -457,6 +457,13 @@ The student **finance drawer** (`students/finance/`) follows the same pattern: `
 - Print pages live in the `(print)` route group (authenticated, no sidebar), e.g. `/payments/:id/receipt` (A5).
 - **Reports (D3)**: the server builds every report into one `ReportDocument`; the dashboard never computes a report. Render it with the `AppReport` compound controller (`components/controllers/report`: `AppReport.Paper / Header / Meta / Body / Footer`, one block component per block type, fixed paper palette `REPORT_PAPER` so a report prints the same in both themes, brand = institute color). Pages: reports center `/reports` (catalog from `GET /reports/catalog`), workspace `/reports/[key]` (parameters → preview → print / Excel), print page `(print)/reports/[key]/print` (A4, opens the print dialog with `autoprint=1`), public `/verify/[token]` (QR check, no sign-in). Link a page to its reports with `<ReportMenu keys={[...]} params={{ ... }} />` (it hides what the user may not open); never hand-build a report URL (use `reportLink`).
 
+### J. Operational Context (Branch + Academic Year)
+
+- The header is the ONLY place that picks the branch and the academic year (`core/context/operational-context.ts`). **No page has its own year / branch selector, and no list request sends `branchId` / `academicYearId`**: the API client adds the headers and the server scopes every list (backend role.md §3.4). A page that needs "the year" reads `useOperationalContext()` (e.g. a new section is created in the header year).
+- The context is remembered per institute + user (`saas_ctx:<institute>:<user>:branch|year`) and reset on logout; another account never inherits it.
+- `OperationalContextGate` (dashboard and print layouts) validates the stored branch / year against the institute lists (`useOperationalContextResolver`) and renders the page only then; the API client sends the headers only once the context is resolved.
+- Switching the branch / year resets every context-dependent query centrally (`ContextCacheSync` → `clearContextQueries`). Queries that do NOT depend on the context are listed in `CONTEXT_FREE_QUERY_PREFIXES` (`core/context/context-cache.ts`); a new institute-wide query must be added there. Never call `invalidateQueries()` on a context switch yourself.
+- Branch / year names shown anywhere come from `useActiveContextLabels()` (one source for the header and the sidebar).
 ---
 
 ## 10. Arabic-First & Native RTL Architecture (Mandatory)

@@ -17,8 +17,6 @@ export interface StudentListFilters {
   statusId: number | null;
   busId: number | null;
   cityId: number | null;
-  /** Students without an enrollment in this academic year. */
-  unassignedYearId: number | null;
 }
 
 export type CustomFieldValue = string | number | boolean | null;
@@ -45,7 +43,6 @@ export interface StudentsState {
 
   // ── Reference-data options (filters + edit drawer) ──
   referenceOptions: StudentReferenceOptions;
-  yearOptions: { value: string; label: string }[];
 
   // ── Edit Drawer State ──
   editDrawerOpened: boolean;
@@ -78,9 +75,8 @@ export interface StudentsState {
   setPage: (page: number) => void;
   setSearch: (search: string) => void;
   setSelectedBranchId: (branchId: number | null) => void;
-  setFilter: (field: keyof StudentListFilters, value: number | null) => void;
+  setFilter: <K extends keyof StudentListFilters>(field: K, value: StudentListFilters[K]) => void;
   syncReferenceOptions: (options: StudentReferenceOptions) => void;
-  syncYearOptions: (options: { value: string; label: string }[]) => void;
   syncQueryData: (payload: {
     data: Student[];
     total: number;

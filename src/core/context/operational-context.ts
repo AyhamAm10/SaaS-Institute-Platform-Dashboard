@@ -2,102 +2,120 @@
 
 import { create } from 'zustand';
 
-const STORAGE_KEYS = {
-  BRANCH_ID: 'saas_active_branch_id',
-  ACADEMIC_YEAR_ID: 'saas_active_academic_year_id',
-} as const;
+/**
+ * Operational context (role.md §3 / dashboard §9.J): the ONE place that holds
+ * the active branch and academic year. The header picks them, the API client
+ * sends them (`X-Branch-Id`, `X-Academic-Year-Id`), the server scopes every
+ * list by them. Pages never choose a year or a branch themselves.
+ *
+ * The values are remembered per institute + user (`saas_ctx:<institute>:<user>:…`),
+ * so another account in the same browser never inherits them.
+ */
 
-interface OperationalContextState {
-  activeBranchId: number | null;
-  activeAcademicYearId: number | null;
-  setActiveBranchId: (id: number | null) => void;
-  setActiveAcademicYearId: (id: number | null) => void;
-  resetContext: () => void;
-}
+const LEGACY_KEYS = ['saas_active_branch_id', 'saas_active_academic_year_id'] as const;
 
-function getInitialNumberFromStorage(key: string): number | null {
+const storageKey = (identity: string, field: 'branch' | 'year') => `saas_ctx:${identity}:${field}`;
+
+function readNumber(key: string): number | null {
   if (typeof window === 'undefined') return null;
   try {
-    const raw = localStorage.getItem(key);
-    if (!raw) return null;
-    const num = Number(raw);
-    return !isNaN(num) && num > 0 ? num : null;
+    const n = Number(localStorage.getItem(key));
+    return Number.isInteger(n) && n > 0 ? n : null;
   } catch {
     return null;
   }
 }
 
-function setStorageItem(key: string, value: number | null): void {
+function writeNumber(key: string, value: number | null): void {
   if (typeof window === 'undefined') return;
   try {
-    if (value === null || value === undefined) {
-      localStorage.removeItem(key);
-    } else {
-      localStorage.setItem(key, String(value));
-    }
+    if (value === null) localStorage.removeItem(key);
+    else localStorage.setItem(key, String(value));
   } catch {
-    // Ignore storage quota or permission errors
+    // Storage blocked or full: the context still works for this tab
   }
 }
 
-/**
- * Global operational context store managing active geographic branch and academic year.
- * Used across the dashboard and intercepted into outgoing HTTP requests via apiClient.
- */
-export const useOperationalContextStore = create<OperationalContextState>((set) => ({
-  activeBranchId: getInitialNumberFromStorage(STORAGE_KEYS.BRANCH_ID),
-  activeAcademicYearId: getInitialNumberFromStorage(STORAGE_KEYS.ACADEMIC_YEAR_ID),
+interface OperationalContextState {
+  /** `<instituteId>:<userId>` of the signed-in account, null before sign-in. */
+  identity: string | null;
+  activeBranchId: number | null;
+  activeAcademicYearId: number | null;
+  /** True once the branch / year were validated against the institute lists. */
+  resolved: boolean;
 
-  setActiveBranchId: (id: number | null) => {
-    setStorageItem(STORAGE_KEYS.BRANCH_ID, id);
+  /** Switches to an account and restores ITS remembered context. */
+  bindIdentity: (instituteId: number, userId: number) => void;
+  setActiveBranchId: (id: number | null) => void;
+  setActiveAcademicYearId: (id: number | null) => void;
+  markResolved: () => void;
+  resetContext: () => void;
+}
+
+export const useOperationalContextStore = create<OperationalContextState>((set, get) => ({
+  identity: null,
+  activeBranchId: null,
+  activeAcademicYearId: null,
+  resolved: false,
+
+  bindIdentity: (instituteId, userId) => {
+    const identity = `${instituteId}:${userId}`;
+    if (get().identity === identity) return;
+    if (typeof window !== 'undefined') {
+      try {
+        for (const key of LEGACY_KEYS) localStorage.removeItem(key);
+      } catch {
+        // ignore
+      }
+    }
+    set({
+      identity,
+      activeBranchId: readNumber(storageKey(identity, 'branch')),
+      activeAcademicYearId: readNumber(storageKey(identity, 'year')),
+      resolved: false,
+    });
+  },
+
+  setActiveBranchId: (id) => {
+    const { identity, activeBranchId } = get();
+    if (id === activeBranchId) return;
+    if (identity) writeNumber(storageKey(identity, 'branch'), id);
     set({ activeBranchId: id });
   },
 
-  setActiveAcademicYearId: (id: number | null) => {
-    setStorageItem(STORAGE_KEYS.ACADEMIC_YEAR_ID, id);
+  setActiveAcademicYearId: (id) => {
+    const { identity, activeAcademicYearId } = get();
+    if (id === activeAcademicYearId) return;
+    if (identity) writeNumber(storageKey(identity, 'year'), id);
     set({ activeAcademicYearId: id });
   },
 
-  resetContext: () => {
-    setStorageItem(STORAGE_KEYS.BRANCH_ID, null);
-    setStorageItem(STORAGE_KEYS.ACADEMIC_YEAR_ID, null);
-    set({ activeBranchId: null, activeAcademicYearId: null });
-  },
+  markResolved: () => set({ resolved: true }),
+
+  resetContext: () => set({ identity: null, activeBranchId: null, activeAcademicYearId: null, resolved: false }),
 }));
 
-/**
- * Synchronous accessor for non-React code (e.g. Axios request interceptors).
- */
+/** Synchronous accessor for non-React code (the Axios request interceptor). */
 export function getActiveBranchId(): number | null {
-  const stateVal = useOperationalContextStore.getState().activeBranchId;
-  if (stateVal !== null) return stateVal;
-  return getInitialNumberFromStorage(STORAGE_KEYS.BRANCH_ID);
+  return useOperationalContextStore.getState().activeBranchId;
 }
 
-/**
- * Synchronous accessor for non-React code (e.g. Axios request interceptors).
- */
+/** Synchronous accessor for non-React code (the Axios request interceptor). */
 export function getActiveAcademicYearId(): number | null {
-  const stateVal = useOperationalContextStore.getState().activeAcademicYearId;
-  if (stateVal !== null) return stateVal;
-  return getInitialNumberFromStorage(STORAGE_KEYS.ACADEMIC_YEAR_ID);
+  return useOperationalContextStore.getState().activeAcademicYearId;
 }
 
-/**
- * Hook for consuming and modifying active operational dimensions in components.
- */
+/** Hook for reading / changing the active branch and academic year. */
 export function useOperationalContext() {
   const activeBranchId = useOperationalContextStore((s) => s.activeBranchId);
   const activeAcademicYearId = useOperationalContextStore((s) => s.activeAcademicYearId);
   const setActiveBranchId = useOperationalContextStore((s) => s.setActiveBranchId);
   const setActiveAcademicYearId = useOperationalContextStore((s) => s.setActiveAcademicYearId);
   const resetContext = useOperationalContextStore((s) => s.resetContext);
+  return { activeBranchId, activeAcademicYearId, setActiveBranchId, setActiveAcademicYearId, resetContext };
+}
 
-  return {
-    activeBranchId,
-    activeAcademicYearId,
-    setActiveBranchId,
-    setActiveAcademicYearId,
-    resetContext,
-  };
+/** True when pages may load data: the context is validated (or not needed). */
+export function useContextReady(): boolean {
+  return useOperationalContextStore((s) => s.resolved);
 }

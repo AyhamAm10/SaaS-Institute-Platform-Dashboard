@@ -2,7 +2,7 @@
 
 import { Box, Group, Image, Stack, Text, rem } from '@mantine/core';
 import { useAuth } from '@/src/core/auth';
-import { useBranchesQuery, useOperationalContext } from '@/src/core/api';
+import { useActiveContextLabels } from '../../../layout/useActiveContextLabels';
 
 export const BRAND_LOGO_SRC = '/brand/logo-mark.png';
 
@@ -37,10 +37,9 @@ export interface SidebarBrandProps {
 /** Logo + institute name + active branch. `compact` renders the mark only. */
 export function SidebarBrand({ compact }: SidebarBrandProps) {
   const { user } = useAuth();
-  const { activeBranchId } = useOperationalContext();
-  const { data: branches } = useBranchesQuery();
-  const activeBranch = branches?.find((b) => b.id === activeBranchId);
-  const branchLabel = user?.role === 'SUPER_ADMIN' ? 'المدير العام' : activeBranch?.name || 'الفرع الرئيسي';
+  // Same source as the header pills: they can never disagree
+  const { branchName } = useActiveContextLabels(user?.role !== 'SUPER_ADMIN');
+  const branchLabel = user?.role === 'SUPER_ADMIN' ? 'المدير العام' : branchName;
 
   if (compact) {
     return (

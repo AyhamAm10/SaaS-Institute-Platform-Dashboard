@@ -172,8 +172,8 @@ export const getPayments = (params: PaymentsQuery) =>
 export const getPayment = (id: number) => get<PaymentRecord>(`/payments/${id}`);
 export const getOverdueInstallments = (params: OverdueQuery) =>
   get<PaginatedResponse<OverdueInstallment>>('/installments/overdue', params);
-export const getOverdueSummary = (branchId?: number) =>
-  get<OverdueAgingItem[]>('/fees/overdue/summary', branchId ? { branchId } : undefined);
+/** Branch / year come from the header context (role.md §3). */
+export const getOverdueSummary = () => get<OverdueAgingItem[]>('/fees/overdue/summary');
 
 export interface OverdueAgingItem {
   currency: Currency;
@@ -257,10 +257,10 @@ export function useOverdueInstallmentsQuery(params: OverdueQuery) {
   });
 }
 
-export function useOverdueSummaryQuery(branchId?: number) {
+export function useOverdueSummaryQuery() {
   return useQuery({
-    queryKey: ['fees', 'overdue', 'summary', branchId],
-    queryFn: () => getOverdueSummary(branchId),
+    queryKey: ['fees', 'overdue', 'summary'],
+    queryFn: getOverdueSummary,
     staleTime: 60_000,
   });
 }

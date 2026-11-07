@@ -129,15 +129,14 @@ export interface StudentQueryParams {
   page?: number;
   limit?: number;
   search?: string;
-  branchId?: number;
   sectionId?: number;
   familyId?: number;
   statusId?: number;
   busId?: number;
   cityId?: number;
   schoolId?: number;
-  /** Only students without an enrollment in this academic year. */
-  unassignedYearId?: number;
+  /** Only students without an enrollment in the header (context) year. */
+  unassigned?: boolean;
 }
 
 // ---------------------------------------------------------------------------

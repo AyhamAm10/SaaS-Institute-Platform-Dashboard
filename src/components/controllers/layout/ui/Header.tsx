@@ -15,8 +15,7 @@ import {
   rem,
   useMantineColorScheme,
 } from '@mantine/core';
-import { ReactNode, useEffect } from 'react';
-import { useQueryClient } from '@tanstack/react-query';
+import { ReactNode } from 'react';
 import {
   IconBell,
   IconBuildingCommunity,
@@ -39,6 +38,7 @@ import {
   useOperationalContext,
   UserRole,
 } from '@/src/core/api';
+import { useActiveContextLabels } from '../useActiveContextLabels';
 
 interface ContextPillProps {
   icon: ReactNode;
@@ -74,7 +74,6 @@ function ContextPill({ icon, label, accent }: ContextPillProps) {
 
 export function DashboardHeader() {
   const { user, logout, isLoggingOut } = useAuth();
-  const queryClient = useQueryClient();
 
   const isSuperAdmin =
     user?.role === UserRole.SUPER_ADMIN || user?.role === 'SUPER_ADMIN';
@@ -102,31 +101,11 @@ export function DashboardHeader() {
     { enabled: !isSuperAdmin },
   );
 
-  // Auto-initialize active branch if not yet set or if stored ID does not exist in branches
-  useEffect(() => {
-    if (!isSuperAdmin && branches && branches.length > 0) {
-      const branchExists = branches.some((b) => b.id === activeBranchId);
-      if (!activeBranchId || !branchExists) {
-        setActiveBranchId(branches[0].id);
-      }
-    }
-  }, [isSuperAdmin, activeBranchId, branches, setActiveBranchId]);
+  // Validation / defaults live in useOperationalContextResolver (layout); the
+  // header only shows and switches the context (the cache resets centrally).
 
-  // Auto-initialize active academic year to current year if not yet set or invalid
-  useEffect(() => {
-    if (!isSuperAdmin && yearsData?.data && yearsData.data.length > 0) {
-      const yearExists = yearsData.data.some((y) => y.id === activeAcademicYearId);
-      if (!activeAcademicYearId || !yearExists) {
-        const currentYear = yearsData.data.find((y) => y.isCurrent) ?? yearsData.data[0];
-        setActiveAcademicYearId(currentYear.id);
-      }
-    }
-  }, [isSuperAdmin, activeAcademicYearId, yearsData, setActiveAcademicYearId]);
-
-  const activeBranchName =
-    branches?.find((b) => b.id === activeBranchId)?.name || 'اختر الفرع';
-  const activeYearName =
-    yearsData?.data?.find((y) => y.id === activeAcademicYearId)?.name || 'السنة الدراسية';
+  // One source with the sidebar (useActiveContextLabels)
+  const { branchName: activeBranchName, yearName: activeYearName } = useActiveContextLabels(!isSuperAdmin);
 
   const displayName = user?.fullName || (isSuperAdmin ? 'المشرف العام' : 'مدير النظام');
 
@@ -177,10 +156,7 @@ export function DashboardHeader() {
                         style={{ fontWeight: isSelected ? 500 : 400 }}
                         color={isSelected ? 'brand' : undefined}
                         onClick={() => {
-                          if (b.id !== activeBranchId) {
-                            setActiveBranchId(b.id);
-                            queryClient.invalidateQueries();
-                          }
+                          setActiveBranchId(b.id);
                         }}
                       >
                         {b.name}
@@ -207,10 +183,7 @@ export function DashboardHeader() {
                         style={{ fontWeight: isSelected ? 500 : 400 }}
                         color={isSelected ? 'brand' : undefined}
                         onClick={() => {
-                          if (y.id !== activeAcademicYearId) {
-                            setActiveAcademicYearId(y.id);
-                            queryClient.invalidateQueries();
-                          }
+                          setActiveAcademicYearId(y.id);
                         }}
                       >
                         {y.name} {y.isCurrent ? '(الحالية)' : ''}

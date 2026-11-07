@@ -62,9 +62,7 @@ export interface SectionsQueryParams {
   page?: number;
   limit?: number;
   search?: string;
-  academicYearId?: number;
   academicBranchId?: number;
-  branchId?: number;
   grade?: string;
 }
 

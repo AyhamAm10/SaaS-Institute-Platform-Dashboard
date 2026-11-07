@@ -139,15 +139,10 @@ export function SectionDrawer({
                 <AppSelect
                   label={sectionFormLabels.academicYearId}
                   data={yearOptions}
-                  value={
-                    sectionForm.academicYearId ||
-                    (activeAcademicYearId ? String(activeAcademicYearId) : '')
-                  }
-                  onChange={(val: string | null) =>
-                    setSectionFormField('academicYearId', val)
-                  }
+                  value={activeAcademicYearId ? String(activeAcademicYearId) : null}
+                  description="تُنشأ الشعبة في السنة المختارة في الأعلى"
+                  disabled
                   required
-                  placeholder="اختر السنة الدراسية"
                 />
               )}
             </AppDrawer.Section>

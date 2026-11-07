@@ -64,7 +64,6 @@ export interface TeachersQueryParams {
   page?: number;
   limit?: number;
   search?: string;
-  branchId?: number;
   academicBranchId?: number;
   subjectId?: number;
   isActive?: boolean;

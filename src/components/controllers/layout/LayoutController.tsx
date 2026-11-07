@@ -12,6 +12,7 @@ import {
 import { filterNavigation, requiredPermissionFor } from '../sidebar/utils/nav.utils';
 import { DashboardLayoutView } from './ui/DashboardLayoutView';
 import { NoPermissionView } from './ui/NoPermissionView';
+import { OperationalContextGate } from './OperationalContextGate';
 import { useAuth } from '@/src/core/auth';
 import { UserRole } from '@/src/core/api';
 
@@ -55,7 +56,10 @@ export function LayoutController({
     <LayoutContext.Provider value={store}>
       {/* Keyed by role: the sidebar store is created once per menu */}
       <SidebarController key={user?.role ?? 'guest'} {...resolvedSidebarProps}>
-        <DashboardLayoutView>{allowed ? children : <NoPermissionView />}</DashboardLayoutView>
+        <DashboardLayoutView>
+          {/* Pages load only once the branch / year context is resolved */}
+          <OperationalContextGate>{allowed ? children : <NoPermissionView />}</OperationalContextGate>
+        </DashboardLayoutView>
       </SidebarController>
     </LayoutContext.Provider>
   );

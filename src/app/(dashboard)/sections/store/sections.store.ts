@@ -18,7 +18,6 @@ export function createSectionsStore(): SectionsStore {
     page: 1,
     limit: 10,
     search: '',
-    selectedYearId: null,
     selectedBranchId: null,
     filterOptionsRequested: false,
 
@@ -95,7 +94,6 @@ export function createSectionsStore(): SectionsStore {
     // ── Actions: Pagination & Filters ──
     setPage: (page: number) => set({ page }),
     setSearch: (search: string) => set({ search, page: 1 }),
-    setSelectedYearId: (yearId: string | null) => set({ selectedYearId: yearId, page: 1 }),
     setSelectedBranchId: (branchId: string | null) => set({ selectedBranchId: branchId, page: 1 }),
     requestFilterOptions: () => set({ filterOptionsRequested: true }),
 
