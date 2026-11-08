@@ -1,13 +1,11 @@
 'use client';
 
-import { Box, Flex, Group, Text, UnstyledButton, rem } from '@mantine/core';
+import { Box, Flex, Text, rem } from '@mantine/core';
 import { formatNumber } from '@/src/core/format';
-import {
-  BarChartDataPoint,
-  resolveAxisMax,
-  resolveDefaultBarIndex,
-} from '../init/charts.init';
+import { BarChartDataPoint, resolveAxisMax, resolveDefaultBarIndex } from '../init/charts.init';
 import { useChartsMirror } from '../store/useChartsMirror';
+import { BarChartBar, LABEL_HEIGHT } from './BarChartBar';
+import { BarChartSummary } from './BarChartSummary';
 
 export interface BarChartProps {
   /** Static dataset (used when `datasets` has no entry for the active period). */
@@ -24,7 +22,6 @@ export interface BarChartProps {
 }
 
 const AXIS_TICKS = [1, 0.75, 0.5, 0.25, 0];
-const LABEL_HEIGHT = 30;
 
 /**
  * Interactive bar chart.
@@ -44,8 +41,6 @@ export function BarChart({
   const hoveredIndex = useChartsMirror('hoveredIndex');
   const selectedIndex = useChartsMirror('selectedIndex');
   const setHoveredIndex = useChartsMirror('setHoveredIndex');
-  const setSelectedIndex = useChartsMirror('setSelectedIndex');
-
   const points = datasets?.[activePeriod] ?? data;
   const axisMax = resolveAxisMax(points.map((p) => p.value));
   const defaultIndex = resolveDefaultBarIndex(points);
@@ -98,78 +93,17 @@ export function BarChart({
               const showTooltip = index === tooltipIndex;
 
               return (
-                <UnstyledButton
+                <BarChartBar
                   key={`${activePeriod}-${point.label}`}
-                  onMouseEnter={() => setHoveredIndex(index)}
-                  onFocus={() => setHoveredIndex(index)}
-                  onBlur={() => setHoveredIndex(null)}
-                  onClick={() => {
-                    setSelectedIndex(index);
-                    onBarClick?.(point, index);
-                  }}
-                  aria-label={`${point.label}: ${format(point.value)}`}
-                  aria-pressed={isSelected}
-                  style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: 0 }}
-                >
-                  <Box style={{ position: 'relative', flex: 1, width: '100%', display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
-                    {showTooltip && (
-                      <Box
-                        style={{
-                          position: 'absolute',
-                          left: '50%',
-                          bottom: `calc(${heightPercent}% + ${rem(10)})`,
-                          transform: 'translateX(-50%)',
-                          zIndex: 3,
-                          padding: `${rem(5)} ${rem(12)}`,
-                          borderRadius: 'var(--app-radius-pill)',
-                          backgroundColor: 'var(--mantine-color-primary-6)',
-                          border: '1px solid var(--app-border)',
-                          color: 'var(--app-text-on-brand)',
-                          fontSize: rem(12),
-                          whiteSpace: 'nowrap',
-                          boxShadow: 'var(--app-elev-2)',
-                          pointerEvents: 'none',
-                          animation: 'app-tooltip-in 500ms var(--app-ease-soft) both',
-                        }}
-                      >
-                        {point.tooltipBadge ?? (
-                          <>
-                            {point.label} ·{' '}
-                            <Text span inherit fw={500} c="var(--mantine-color-brand-3)">
-                              {format(point.value)}
-                            </Text>
-                          </>
-                        )}
-                      </Box>
-                    )}
-
-                    <Box
-                      className="app-chart-bar"
-                      data-selected={isSelected || undefined}
-                      data-hovered={(isHovered && !isSelected) || undefined}
-                      style={{
-                        height: `${heightPercent}%`,
-                        // Grow-in delay (staggered), then a phase offset for the twist loop.
-                        animationDelay: `${index * 0.05}s, ${-index * 0.6}s`,
-                      }}
-                    />
-                  </Box>
-
-                  <Text
-                    fw={isSelected ? 500 : 400}
-                    style={{
-                      height: rem(LABEL_HEIGHT),
-                      display: 'flex',
-                      alignItems: 'flex-end',
-                      fontSize: rem(11.5),
-                      whiteSpace: 'nowrap',
-                      color: isSelected ? 'var(--app-text-primary)' : 'var(--app-text-muted)',
-                      transition: 'color 200ms ease',
-                    }}
-                  >
-                    {point.label}
-                  </Text>
-                </UnstyledButton>
+                  point={point}
+                  index={index}
+                  heightPercent={heightPercent}
+                  isSelected={isSelected}
+                  isHovered={isHovered}
+                  showTooltip={showTooltip}
+                  format={format}
+                  onBarClick={onBarClick}
+                />
               );
             })}
           </Flex>
@@ -177,24 +111,13 @@ export function BarChart({
       </Flex>
 
       {withSummary && (
-        <Group gap="lg" mt="md" wrap="wrap">
-          <SummaryItem label="المجموع" value={format(total)} />
-          <SummaryItem label="المتوسط" value={format(total / points.length)} />
-          <SummaryItem label="الذروة" value={points[defaultIndex]?.label ?? '—'} />
-        </Group>
+        <BarChartSummary
+          total={format(total)}
+          average={format(total / points.length)}
+          peak={points[defaultIndex]?.label ?? '—'}
+        />
       )}
     </Box>
-  );
-}
-
-function SummaryItem({ label, value }: { label: string; value: string }) {
-  return (
-    <Text size="xs" fw={300} c="var(--app-text-muted)">
-      {label}{' '}
-      <Text span fw={500} c="var(--app-text-primary)">
-        {value}
-      </Text>
-    </Text>
   );
 }
 

@@ -1,9 +1,10 @@
 'use client';
 
-import { ActionIcon, Group, Menu, Tooltip } from '@mantine/core';
+import { Group, Menu } from '@mantine/core';
 import { IconBook, IconCoin, IconDotsVertical, IconEdit, IconEye } from '@tabler/icons-react';
 import { Section } from '@/src/core/api';
 import { ReportMenu } from '@/src/components/controllers/report';
+import { AppIconButton } from '@/src/components/controllers/button';
 
 const SECTION_REPORTS = [
   'section-roster',
@@ -22,27 +23,14 @@ interface SectionsActionsCellProps {
   onOpenDetails: (section: Section, tab?: string) => void;
 }
 
-export function SectionsActionsCell({
-  row,
-  canManage,
-  onEdit,
-  onOpenFee,
-  onOpenDetails,
-}: SectionsActionsCellProps) {
+export function SectionsActionsCell({ row, canManage, onEdit, onOpenFee, onOpenDetails }: SectionsActionsCellProps) {
   if (!canManage) {
     return (
       <Group gap={6} justify="center">
-        <Tooltip label="عرض تفاصيل الشعبة">
-          <ActionIcon
-            size="sm"
-            variant="light"
-            color="blue"
-            radius="xl"
-            onClick={() => onOpenDetails(row, 'info')}
-          >
-            <IconEye size={16} />
-          </ActionIcon>
-        </Tooltip>
+        <AppIconButton label="عرض تفاصيل الشعبة" size="sm" onClick={() => onOpenDetails(row, 'info')}>
+          <IconEye size={16} />
+        </AppIconButton>
+
         <ReportMenu compact keys={SECTION_REPORTS} params={{ sectionId: row.id }} />
       </Group>
     );
@@ -50,73 +38,37 @@ export function SectionsActionsCell({
 
   return (
     <Group gap={6} justify="center">
-      <Tooltip label="إسناد المواد المقررة والخطة">
-        <ActionIcon
-          size="sm"
-          variant="light"
-          color="indigo"
-          radius="xl"
-          onClick={() => onOpenDetails(row, 'subjects')}
-        >
-          <IconBook size={16} />
-        </ActionIcon>
-      </Tooltip>
+      <AppIconButton label="إسناد المواد المقررة والخطة" size="sm" onClick={() => onOpenDetails(row, 'subjects')}>
+        <IconBook size={16} />
+      </AppIconButton>
 
-      <Tooltip label="عرض تفاصيل الشعبة">
-        <ActionIcon
-          size="sm"
-          variant="light"
-          color="blue"
-          radius="xl"
-          onClick={() => onOpenDetails(row, 'info')}
-        >
-          <IconEye size={16} />
-        </ActionIcon>
-      </Tooltip>
+      <AppIconButton label="عرض تفاصيل الشعبة" size="sm" onClick={() => onOpenDetails(row, 'info')}>
+        <IconEye size={16} />
+      </AppIconButton>
 
-      <Tooltip label="تعديل الرسوم">
-        <ActionIcon
-          size="sm"
-          variant="light"
-          color="teal"
-          radius="xl"
-          onClick={() => onOpenFee(row)}
-        >
-          <IconCoin size={16} />
-        </ActionIcon>
-      </Tooltip>
+      <AppIconButton label="تعديل الرسوم" size="sm" onClick={() => onOpenFee(row)}>
+        <IconCoin size={16} />
+      </AppIconButton>
 
       <ReportMenu compact keys={SECTION_REPORTS} params={{ sectionId: row.id }} />
 
       <Menu shadow="md" width={180} position="bottom-end" radius="md">
         <Menu.Target>
-          <ActionIcon size="sm" variant="subtle" color="gray" radius="xl">
+          <AppIconButton variant="ghost" label="المزيد من الإجراءات" withTooltip={false} size="sm">
             <IconDotsVertical size={16} />
-          </ActionIcon>
+          </AppIconButton>
         </Menu.Target>
         <Menu.Dropdown>
-          <Menu.Item
-            leftSection={<IconBook size={14} />}
-            color="indigo"
-            onClick={() => onOpenDetails(row, 'subjects')}
-          >
+          <Menu.Item leftSection={<IconBook size={14} />} color="indigo" onClick={() => onOpenDetails(row, 'subjects')}>
             إسناد المواد المقررة
           </Menu.Item>
           <Menu.Item leftSection={<IconEdit size={14} />} onClick={() => onEdit(row)}>
             تعديل البيانات
           </Menu.Item>
-          <Menu.Item
-            leftSection={<IconCoin size={14} />}
-            color="teal"
-            onClick={() => onOpenFee(row)}
-          >
+          <Menu.Item leftSection={<IconCoin size={14} />} color="teal" onClick={() => onOpenFee(row)}>
             تعديل الرسوم
           </Menu.Item>
-          <Menu.Item
-            leftSection={<IconEye size={14} />}
-            color="blue"
-            onClick={() => onOpenDetails(row, 'info')}
-          >
+          <Menu.Item leftSection={<IconEye size={14} />} color="blue" onClick={() => onOpenDetails(row, 'info')}>
             عرض كامل التفاصيل
           </Menu.Item>
         </Menu.Dropdown>
@@ -124,4 +76,3 @@ export function SectionsActionsCell({
     </Group>
   );
 }
-

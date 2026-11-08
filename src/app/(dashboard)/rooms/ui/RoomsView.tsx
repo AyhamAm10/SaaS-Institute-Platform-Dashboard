@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import { ActionIcon, Button, Tooltip } from '@mantine/core';
+
 import { IconBuildingCommunity, IconPlus, IconRefresh } from '@tabler/icons-react';
 import { AppModule } from '@/src/components/controllers';
 import { DataModuleController } from '@/src/components/controllers/data-module';
@@ -10,6 +10,7 @@ import { Room } from '@/src/core/api';
 import { useRoomsMirror } from '../store/useRoomsMirror';
 import { getRoomsColumns } from './RoomsTable';
 import { RoomsDrawers, RoomsDrawersProps } from './RoomsDrawers';
+import { AppButton, AppIconButton } from '@/src/components/controllers/button';
 
 const ROOM_TYPE_FILTER_OPTIONS = [
   { value: 'all', label: 'كافة أنواع القاعات' },
@@ -69,20 +70,12 @@ export function RoomsView({ onRefresh, ...drawerProps }: RoomsViewProps) {
           onSearchChange={setSearch}
         >
           <DataModuleController.Header>
-            <DataModuleController.Title
-              icon={<IconBuildingCommunity size={18} />}
-              badgeLabel="قاعة"
-            />
+            <DataModuleController.Title icon={<IconBuildingCommunity size={18} />} badgeLabel="قاعة" />
             {canManage && (
               <DataModuleController.Actions>
-                <Button
-                  leftSection={<IconPlus size={16} />}
-                  onClick={openCreateDrawer}
-                  color="primary"
-                  radius="md"
-                >
+                <AppButton leftSection={<IconPlus size={16} />} onClick={openCreateDrawer}>
                   إضافة قاعة جديدة
-                </Button>
+                </AppButton>
               </DataModuleController.Actions>
             )}
           </DataModuleController.Header>
@@ -98,19 +91,15 @@ export function RoomsView({ onRefresh, ...drawerProps }: RoomsViewProps) {
                 style={{ width: 190 }}
               />
               {onRefresh && (
-                <Tooltip label="تحديث البيانات">
-                  <ActionIcon
-                    variant="subtle"
-                    color="gray"
-                    size="md"
-                    radius="md"
-                    onClick={onRefresh}
-                    loading={isFetching}
-                    aria-label="تحديث البيانات"
-                  >
-                    <IconRefresh size={16} />
-                  </ActionIcon>
-                </Tooltip>
+                <AppIconButton
+                  variant="ghost"
+                  label="تحديث البيانات"
+                  size="md"
+                  onClick={onRefresh}
+                  loading={isFetching}
+                >
+                  <IconRefresh size={16} />
+                </AppIconButton>
               )}
             </DataModuleController.FilterSlot>
           </DataModuleController.FilterBar>

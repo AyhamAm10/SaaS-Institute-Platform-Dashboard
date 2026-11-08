@@ -13,6 +13,8 @@ export interface StudentFieldsState {
   formType: 'TEXT' | 'NUMBER' | 'DATE' | 'SELECT' | 'BOOLEAN';
   formOptionsText: string;
   formOptions: string[];
+  /** Option being typed in the options editor (role.md §12.1). */
+  optionDraft: string;
   formIsRequired: boolean;
   formDisplayInReport: boolean;
   formSortOrder: number;
@@ -26,5 +28,8 @@ export interface StudentFieldsState {
   setFormField: (field: string, value: unknown) => void;
   addOption: (option: string) => void;
   removeOption: (index: number) => void;
+  setOptionDraft: (value: string) => void;
+  /** Adds the typed option (trimmed, no duplicates) and clears the draft. */
+  commitOptionDraft: () => void;
   setSubmitting: (isSubmitting: boolean) => void;
 }

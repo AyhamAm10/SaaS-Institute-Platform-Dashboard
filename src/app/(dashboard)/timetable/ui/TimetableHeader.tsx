@@ -1,8 +1,9 @@
 'use client';
 
-import { Badge, Group, Paper, Stack, Text, Title } from '@mantine/core';
+import { Group, Paper, Stack, Text, Title } from '@mantine/core';
 import { IconCalendarEvent } from '@tabler/icons-react';
 import { useTimetableMirror } from '../store/useTimetableMirror';
+import { StatusBadge } from '@/src/components/controllers/badge';
 
 export function TimetableHeader() {
   const timetable = useTimetableMirror('timetable');
@@ -12,12 +13,7 @@ export function TimetableHeader() {
     <Paper p="lg" radius="xl" withBorder>
       <Group justify="space-between" align="center" wrap="wrap">
         <Group gap="sm">
-          <Paper
-            p="xs"
-            radius="xl"
-            bg="var(--mantine-color-indigo-0)"
-            c="indigo.7"
-          >
+          <Paper p="xs" radius="xl" bg="var(--mantine-color-indigo-0)" c="indigo.7">
             <IconCalendarEvent size={28} />
           </Paper>
           <Stack gap={2}>
@@ -31,9 +27,9 @@ export function TimetableHeader() {
         </Group>
 
         <Group gap="xs">
-          <Badge size="lg" radius="xl" variant="light" color="indigo">
+          <StatusBadge tone="info" size="md">
             {entriesCount} حصص مجدولة
-          </Badge>
+          </StatusBadge>
         </Group>
       </Group>
     </Paper>

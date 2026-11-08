@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import { Button } from '@mantine/core';
+
 import { IconPlus } from '@tabler/icons-react';
 import { AppModule } from '@/src/components/controllers/app-module';
 import { DataModuleController } from '@/src/components/controllers/data-module';
@@ -10,6 +10,7 @@ import { studentFieldsLabels } from '../static-data/student-fields.data';
 import { getStudentFieldsColumns } from './StudentFieldsTable';
 import { StudentFieldDrawer } from './StudentFieldDrawer';
 import { StudentField } from '@/src/core/api';
+import { AppButton } from '@/src/components/controllers/button';
 
 export interface StudentFieldsViewProps {
   onSubmit: () => Promise<void>;
@@ -29,9 +30,7 @@ export function StudentFieldsView({ onSubmit, canManage = true }: StudentFieldsV
     const q = search.trim().toLowerCase();
     return fields.filter(
       (f) =>
-        f.label?.toLowerCase().includes(q) ||
-        f.name?.toLowerCase().includes(q) ||
-        f.type?.toLowerCase().includes(q),
+        f.label?.toLowerCase().includes(q) || f.name?.toLowerCase().includes(q) || f.type?.toLowerCase().includes(q),
     );
   }, [fields, search]);
 
@@ -61,14 +60,9 @@ export function StudentFieldsView({ onSubmit, canManage = true }: StudentFieldsV
             <DataModuleController.Title />
             {canManage && (
               <DataModuleController.Actions>
-                <Button
-                  leftSection={<IconPlus size={16} />}
-                  onClick={openCreateDrawer}
-                  color="primary"
-                  radius="md"
-                >
+                <AppButton leftSection={<IconPlus size={16} />} onClick={openCreateDrawer}>
                   {studentFieldsLabels.createAction}
-                </Button>
+                </AppButton>
               </DataModuleController.Actions>
             )}
           </DataModuleController.Header>

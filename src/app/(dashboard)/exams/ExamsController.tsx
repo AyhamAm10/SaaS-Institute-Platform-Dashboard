@@ -1,96 +1,19 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useStore } from 'zustand';
 import {
-  examTypesResource,
   getApiErrorMessage,
   useCreateExamMutation,
   useDeleteExamMutation,
-  useExamsQuery,
-  useSectionSubjectsQuery,
-  useSectionsQuery,
   useUpdateExamMutation,
 } from '@/src/core/api';
 import { PERMISSIONS, useAuth } from '@/src/core/auth';
-import { createExamsStore, ExamsContext, ExamsStore } from './store/exams.store';
+import { createExamsStore, ExamsContext } from './store/exams.store';
 import { toExamPayload, toUpdateExamPayload, validateExamForm } from './utils/exams.utils';
 import { examsLabels as labels } from './static-data/exams.data';
 import { ExamsView } from './ui/ExamsView';
-
-type SyncProps = { store: ExamsStore };
-
-function QuerySync({ store }: SyncProps) {
-  const page = useStore(store, (s) => s.page);
-  const limit = useStore(store, (s) => s.limit);
-  const search = useStore(store, (s) => s.search);
-  const f = useStore(store, (s) => s.filters);
-  const syncQueryData = useStore(store, (s) => s.syncQueryData);
-  const { data, isLoading } = useExamsQuery({
-    page,
-    limit,
-    search: search.trim() || undefined,
-    sectionId: f.sectionId ? Number(f.sectionId) : undefined,
-    examTypeId: f.examTypeId ? Number(f.examTypeId) : undefined,
-    from: f.from ?? undefined,
-    to: f.to ?? undefined,
-  });
-
-  useEffect(() => {
-    syncQueryData({
-      data: data?.data ?? [],
-      total: data?.total ?? 0,
-      totalPages: data?.totalPages ?? 1,
-      isLoading,
-    });
-  }, [data, isLoading, syncQueryData]);
-  return null;
-}
-
-/** Sections and exam types (filters + drawer). */
-function OptionsSync({ store }: SyncProps) {
-  const syncOptions = useStore(store, (s) => s.syncOptions);
-  const sections = useSectionsQuery({ limit: 100 });
-  const types = examTypesResource.useList({ limit: 100 });
-
-  useEffect(() => {
-    syncOptions(
-      'sectionOptions',
-      (sections.data?.data ?? []).map((s) => ({
-        value: String(s.id),
-        label: s.name,
-      })),
-    );
-  }, [sections.data, syncOptions]);
-  useEffect(() => {
-    syncOptions(
-      'examTypeOptions',
-      (types.data?.data ?? []).map((t) => ({
-        value: String(t.id),
-        label: t.name,
-      })),
-    );
-  }, [types.data, syncOptions]);
-  return null;
-}
-
-/** Plan subjects of the section chosen in the drawer. */
-function SubjectsSync({ store }: SyncProps) {
-  const sectionId = useStore(store, (s) => s.form.sectionId);
-  const syncOptions = useStore(store, (s) => s.syncOptions);
-  const { data } = useSectionSubjectsQuery(Number(sectionId ?? 0));
-
-  useEffect(() => {
-    syncOptions(
-      'subjectOptions',
-      (data ?? []).map((p) => ({
-        value: String(p.subject.id),
-        label: p.subject.name,
-      })),
-    );
-  }, [data, syncOptions]);
-  return null;
-}
+import { OptionsSync, OverviewSync, QuerySync, SubjectsSync } from './ExamsQuerySync';
 
 /**
  * ExamsController
@@ -150,6 +73,7 @@ export function ExamsController() {
 
   return (
     <ExamsContext.Provider value={store}>
+      <OverviewSync store={store} />
       <QuerySync store={store} />
       <OptionsSync store={store} />
       {drawerOpened && <SubjectsSync store={store} />}

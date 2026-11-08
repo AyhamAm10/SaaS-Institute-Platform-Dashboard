@@ -1,4 +1,5 @@
 import { AcademicYear } from '@/src/core/api';
+import type { AcademicYearForm } from '../utils/academic-years.utils';
 
 /**
  * AcademicYearsState
@@ -22,6 +23,9 @@ export interface AcademicYearsState {
   // ── Modal / Drawer State ──
   modalOpened: boolean;
   selectedYear: AcademicYear | null;
+  /** Create / edit form and its error (role.md §12.1: never local state). */
+  yearForm: AcademicYearForm;
+  formError: string | null;
 
   // ── Set-Current Workflow Drawer State ──
   setCurrentDrawerOpened: boolean;
@@ -40,6 +44,8 @@ export interface AcademicYearsState {
   openCreate: () => void;
   openEdit: (year: AcademicYear) => void;
   closeModal: () => void;
+  setYearFormField: <K extends keyof AcademicYearForm>(field: K, value: AcademicYearForm[K]) => void;
+  setFormError: (error: string | null) => void;
 
   // ── Actions: Set Current Drawer ──
   openSetCurrentDrawer: (year: AcademicYear) => void;

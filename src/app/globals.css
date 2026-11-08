@@ -223,6 +223,13 @@ body {
   }
 }
 
+/* Circle chart segments draw from empty to their length (CircleChart) */
+@keyframes app-circle-draw {
+  from {
+    stroke-dasharray: var(--app-circle-empty);
+  }
+}
+
 @keyframes app-bar-grow {
   from {
     transform: scaleY(0);

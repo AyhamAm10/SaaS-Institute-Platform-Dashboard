@@ -69,16 +69,11 @@ export function AppStepperRoot({ children }: AppStepperRootProps) {
                       backgroundColor: isCompleted
                         ? 'var(--app-brand-accent)'
                         : isCurrent
-                        ? 'var(--mantine-color-primary-filled)'
-                        : 'var(--app-glass-bg-strong)',
-                      border:
-                        isCompleted || isCurrent
-                          ? 'none'
-                          : '1.5px solid var(--app-border)',
+                          ? 'var(--mantine-color-primary-filled)'
+                          : 'var(--app-glass-bg-strong)',
+                      border: isCompleted || isCurrent ? 'none' : '1.5px solid var(--app-border)',
                       color: isCompleted || isCurrent ? 'var(--app-text-on-brand)' : 'var(--app-text-muted)',
-                      boxShadow: isCurrent
-                        ? '0 0 0 4px var(--app-brand-accent-ring)'
-                        : 'none',
+                      boxShadow: isCurrent ? '0 0 0 4px var(--app-brand-accent-ring)' : 'none',
                     }}
                   >
                     {isCompleted ? (
@@ -96,10 +91,7 @@ export function AppStepperRoot({ children }: AppStepperRootProps) {
                     style={{
                       flex: 1,
                       height: rem(2),
-                      backgroundColor:
-                        idx < active
-                          ? 'var(--app-brand-accent)'
-                          : 'var(--app-border)',
+                      backgroundColor: idx < active ? 'var(--app-brand-accent)' : 'var(--app-border)',
                       transition: 'background-color 0.2s ease',
                     }}
                   />
@@ -124,16 +116,9 @@ export function AppStepperRoot({ children }: AppStepperRootProps) {
       </Box>
 
       {/* DESKTOP SPLIT VIEW: Right Timeline Sidebar (with Actions under it!) + Left Collapsible Row Items Stack */}
-      <Flex
-        direction={{ base: 'column', md: 'row' }}
-        gap={{ base: 'lg', md: rem(40) }}
-        align="flex-start"
-        w="100%"
-      >
+      <Flex direction={{ base: 'column', md: 'row' }} gap={{ base: 'lg', md: rem(40) }} align="flex-start" w="100%">
         {/* Right Column (in RTL): Vertical Stepper Sidebar Timeline + Actions underneath it */}
-        <AppStepperSidebar>
-          {actionsChild}
-        </AppStepperSidebar>
+        <AppStepperSidebar>{actionsChild}</AppStepperSidebar>
 
         {/* Left Column (in RTL): Collapsible Row Items Stack (Free of buttons) */}
         <Stack gap="md" style={{ flex: 1, minWidth: 0 }}>

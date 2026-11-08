@@ -1,9 +1,12 @@
 'use client';
 
-import { ActionIcon, Badge, Group, Text, Tooltip } from '@mantine/core';
+import { Group, Text } from '@mantine/core';
 import { IconEdit, IconListDetails } from '@tabler/icons-react';
 import { StudentField } from '@/src/core/api';
 import { DataModuleColumn } from '@/src/components/controllers/data-module';
+import { AppIconButton } from '@/src/components/controllers/button';
+import { IconTile } from '@/src/components/controllers/info-tile';
+import { StatusBadge } from '@/src/components/controllers/badge';
 
 const TYPE_NAMES: Record<StudentField['type'], string> = {
   TEXT: 'نصي',
@@ -16,15 +19,35 @@ const TYPE_NAMES: Record<StudentField['type'], string> = {
 function getFieldTypeBadge(type: StudentField['type']) {
   switch (type) {
     case 'TEXT':
-      return <Badge color="blue" variant="light" radius="xl" size="sm">نصي</Badge>;
+      return (
+        <StatusBadge tone="info" size="sm">
+          نصي
+        </StatusBadge>
+      );
     case 'NUMBER':
-      return <Badge color="teal" variant="light" radius="xl" size="sm">رقمي</Badge>;
+      return (
+        <StatusBadge tone="success" size="sm">
+          رقمي
+        </StatusBadge>
+      );
     case 'DATE':
-      return <Badge color="violet" variant="light" radius="xl" size="sm">تاريخ</Badge>;
+      return (
+        <StatusBadge tone="info" size="sm">
+          تاريخ
+        </StatusBadge>
+      );
     case 'SELECT':
-      return <Badge color="orange" variant="light" radius="xl" size="sm">قائمة منسدلة</Badge>;
+      return (
+        <StatusBadge tone="warning" size="sm">
+          قائمة منسدلة
+        </StatusBadge>
+      );
     case 'BOOLEAN':
-      return <Badge color="gray" variant="light" radius="xl" size="sm">نعم / لا</Badge>;
+      return (
+        <StatusBadge tone="neutral" size="sm">
+          نعم / لا
+        </StatusBadge>
+      );
   }
 }
 
@@ -41,9 +64,9 @@ export function getStudentFieldsColumns(
       exportKind: 'text',
       render: (field) => (
         <Group gap="sm" wrap="nowrap">
-          <ActionIcon size="md" radius="xl" variant="light" color="primary">
+          <IconTile tone="neutral" size={36}>
             <IconListDetails size={18} />
-          </ActionIcon>
+          </IconTile>
           <Text fw={500} size="sm">
             {field.label}
           </Text>
@@ -63,14 +86,13 @@ export function getStudentFieldsColumns(
       exportValue: (field) => (field.isRequired ? 'إجباري' : 'اختياري'),
       exportKind: 'text',
       render: (field) => (
-        <Badge
-          color={field.isRequired ? 'red' : 'gray'}
-          variant={field.isRequired ? 'filled' : 'light'}
-          radius="xl"
+        <StatusBadge
+          tone={field.isRequired ? 'danger' : 'neutral'}
+          variant={field.isRequired ? 'solid' : 'soft'}
           size="sm"
         >
           {field.isRequired ? 'إجباري' : 'اختياري'}
-        </Badge>
+        </StatusBadge>
       ),
     },
     {
@@ -79,14 +101,9 @@ export function getStudentFieldsColumns(
       exportValue: (field) => (field.displayInReport ? 'يظهر بالتقرير' : 'داخلي فقط'),
       exportKind: 'text',
       render: (field) => (
-        <Badge
-          color={field.displayInReport ? 'teal' : 'gray'}
-          variant="light"
-          radius="xl"
-          size="sm"
-        >
+        <StatusBadge tone={field.displayInReport ? 'success' : 'neutral'} size="sm">
           {field.displayInReport ? 'يظهر بالتقرير' : 'داخلي فقط'}
-        </Badge>
+        </StatusBadge>
       ),
     },
   ];
@@ -97,17 +114,9 @@ export function getStudentFieldsColumns(
       title: 'الإجراءات',
       align: 'center',
       render: (field) => (
-        <Tooltip label="تعديل الحقل" withArrow position="top">
-          <ActionIcon
-            variant="subtle"
-            color="primary"
-            radius="xl"
-            size="sm"
-            onClick={() => onEdit(field)}
-          >
-            <IconEdit size={16} />
-          </ActionIcon>
-        </Tooltip>
+        <AppIconButton variant="ghost" label="تعديل الحقل" size="sm" onClick={() => onEdit(field)}>
+          <IconEdit size={16} />
+        </AppIconButton>
       ),
     });
   }

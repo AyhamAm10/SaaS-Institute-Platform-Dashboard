@@ -20,6 +20,8 @@ export const EMPTY_PAYMENT_FILTERS: PaymentFilters = {
 /** Isolated store of the payments page (role.md §3). */
 export function createPaymentsStore(): PaymentsStore {
   return createControllerStore<PaymentsState>((set) => ({
+    overview: null,
+    syncOverview: (overview) => set({ overview }),
     page: 1,
     limit: 10,
     search: '',

@@ -1,44 +1,17 @@
 'use client';
 
-import {
-  Alert,
-  Button,
-  Group,
-  Modal,
-  Paper,
-  Stack,
-  Switch,
-  Text,
-} from '@mantine/core';
-import {
-  IconAlertCircle,
-  IconCalendarEvent,
-  IconDeviceFloppy,
-} from '@tabler/icons-react';
+import { Alert, Group, Modal, Paper, Stack, Switch, Text } from '@mantine/core';
+import { IconAlertCircle, IconCalendarEvent, IconDeviceFloppy } from '@tabler/icons-react';
 import { AppSelect } from '@/src/components/controllers';
-import {
-  useRoomsQuery,
-  useSectionSubjectsQuery,
-  useTeachersQuery,
-} from '@/src/core/api';
 import { useTimetableMirror } from '../store/useTimetableMirror';
+import { weekDayName } from '@/src/core/format';
+import { AppButton } from '@/src/components/controllers/button';
 
 interface TimetableEntryModalProps {
   onSave: () => void;
 }
 
-const dayNames: Record<number, string> = {
-  0: 'الأحد',
-  1: 'الإثنين',
-  2: 'الثلاثاء',
-  3: 'الأربعاء',
-  4: 'الخميس',
-  5: 'الجمعة',
-  6: 'السبت',
-};
-
 export function TimetableEntryModal({ onSave }: TimetableEntryModalProps) {
-  const sectionId = useTimetableMirror('sectionId');
   const entryModalOpened = useTimetableMirror('entryModalOpened');
   const entryForm = useTimetableMirror('entryForm');
   const entryFormError = useTimetableMirror('entryFormError');
@@ -48,23 +21,23 @@ export function TimetableEntryModal({ onSave }: TimetableEntryModalProps) {
   const setEntryFormField = useTimetableMirror('setEntryFormField');
 
   // Options
-  const { data: sectionSubjects } = useSectionSubjectsQuery(sectionId ?? 0);
-  const { data: teachersData } = useTeachersQuery({ limit: 100 });
-  const { data: roomsData } = useRoomsQuery({ limit: 100 });
+  const sectionSubjects = useTimetableMirror('sectionSubjects');
+  const teachers = useTimetableMirror('teachers');
+  const rooms = useTimetableMirror('rooms');
 
   const subjectOptions = (sectionSubjects || []).map((ss) => ({
     value: String(ss.subjectId),
     label: `${ss.subject.name} (${ss.weeklyPeriods || 1} حصص أسبوعيا)`,
   }));
 
-  const teacherOptions = (teachersData?.data || []).map((t) => ({
+  const teacherOptions = teachers.map((t) => ({
     value: String(t.id),
     label: `${t.user.fullName} ${t.specialization ? `(${t.specialization})` : ''}`,
   }));
 
   const roomOptions = [
     { value: '', label: 'بدون قاعة محددة (افتراضية)' },
-    ...(roomsData?.data || []).map((r) => ({
+    ...rooms.map((r) => ({
       value: String(r.id),
       label: `${r.name} (${r.capacity} مقعد)`,
     })),
@@ -89,12 +62,7 @@ export function TimetableEntryModal({ onSave }: TimetableEntryModalProps) {
     >
       <Stack gap="md">
         {entryFormError && (
-          <Alert
-            icon={<IconAlertCircle size={18} />}
-            color="red"
-            radius="xl"
-            title="تعذر الحفظ"
-          >
+          <Alert icon={<IconAlertCircle size={18} />} color="red" radius="xl" title="تعذر الحفظ">
             {entryFormError}
           </Alert>
         )}
@@ -103,7 +71,7 @@ export function TimetableEntryModal({ onSave }: TimetableEntryModalProps) {
         <Paper p="xs" radius="md" withBorder bg="var(--app-subtle)">
           <Group justify="space-between">
             <Text size="xs" c="dimmed">
-              اليوم: {dayNames[entryForm.dayOfWeek] || entryForm.dayOfWeek}
+              اليوم: {weekDayName(entryForm.dayOfWeek)}
             </Text>
             <Text size="xs" fw={500} dir="ltr">
               الحصة {entryForm.periodNumber} ({entryForm.startTime} - {entryForm.endTime})
@@ -133,9 +101,7 @@ export function TimetableEntryModal({ onSave }: TimetableEntryModalProps) {
           placeholder="اختر المعلم"
           data={teacherOptions}
           value={entryForm.teacherId ? String(entryForm.teacherId) : null}
-          onChange={(val: string | null) =>
-            setEntryFormField('teacherId', val ? Number(val) : null)
-          }
+          onChange={(val: string | null) => setEntryFormField('teacherId', val ? Number(val) : null)}
           required
         />
 
@@ -144,9 +110,7 @@ export function TimetableEntryModal({ onSave }: TimetableEntryModalProps) {
           placeholder="اختر القاعة (اختياري)"
           data={roomOptions}
           value={entryForm.roomId ? String(entryForm.roomId) : ''}
-          onChange={(val: string | null) =>
-            setEntryFormField('roomId', val ? Number(val) : null)
-          }
+          onChange={(val: string | null) => setEntryFormField('roomId', val ? Number(val) : null)}
         />
 
         <Switch
@@ -157,17 +121,12 @@ export function TimetableEntryModal({ onSave }: TimetableEntryModalProps) {
         />
 
         <Group justify="flex-end" mt="lg">
-          <Button variant="light" color="gray" radius="xl" onClick={closeEntryModal}>
+          <AppButton variant="outline" onClick={closeEntryModal}>
             إلغاء
-          </Button>
-          <Button
-            leftSection={<IconDeviceFloppy size={18} />}
-            radius="xl"
-            loading={isSavingEntry}
-            onClick={onSave}
-          >
+          </AppButton>
+          <AppButton leftSection={<IconDeviceFloppy size={18} />} loading={isSavingEntry} onClick={onSave}>
             {isEdit ? 'حفظ التعديل' : 'حفظ وإدراج الحصة'}
-          </Button>
+          </AppButton>
         </Group>
       </Stack>
     </Modal>

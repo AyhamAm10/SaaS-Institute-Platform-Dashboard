@@ -1,20 +1,11 @@
 'use client';
 
-import {
-  Alert,
-  Button,
-  Drawer,
-  Group,
-  Stack,
-  Text,
-} from '@mantine/core';
-import {
-  IconAlertCircle,
-  IconBuildingCommunity,
-  IconDeviceFloppy,
-} from '@tabler/icons-react';
+import { Alert, Drawer, Group, Stack, Text } from '@mantine/core';
+import { IconAlertCircle, IconBuildingCommunity, IconDeviceFloppy } from '@tabler/icons-react';
 import { AppInput, AppSelect } from '@/src/components/controllers';
 import { useRoomsMirror } from '../store/useRoomsMirror';
+import { inputText } from '@/src/core/format';
+import { AppButton } from '@/src/components/controllers/button';
 
 const ROOM_TYPES = [
   { value: 'CLASSROOM', label: 'صف دراسي' },
@@ -59,12 +50,7 @@ export function RoomFormDrawer({ onSubmit }: RoomFormDrawerProps) {
     >
       <Stack gap="md">
         {generalError && (
-          <Alert
-            icon={<IconAlertCircle size={18} />}
-            color="red"
-            radius="xl"
-            title="تعذر الحفظ"
-          >
+          <Alert icon={<IconAlertCircle size={18} />} color="red" radius="xl" title="تعذر الحفظ">
             {generalError}
           </Alert>
         )}
@@ -73,7 +59,7 @@ export function RoomFormDrawer({ onSubmit }: RoomFormDrawerProps) {
           label="اسم القاعة"
           placeholder="مثال: قاعة الخوارزمي، مخبر الفيزياء 1"
           value={form.name}
-          onChange={(val) => setFormField('name', val)}
+          onChange={(val) => setFormField('name', inputText(val))}
           error={formErrors.name}
           required
         />
@@ -98,17 +84,12 @@ export function RoomFormDrawer({ onSubmit }: RoomFormDrawerProps) {
         />
 
         <Group justify="flex-end" mt="xl">
-          <Button variant="light" color="gray" radius="xl" onClick={closeDrawer}>
+          <AppButton variant="outline" onClick={closeDrawer}>
             إلغاء
-          </Button>
-          <Button
-            leftSection={<IconDeviceFloppy size={18} />}
-            radius="xl"
-            loading={isSubmitting}
-            onClick={onSubmit}
-          >
+          </AppButton>
+          <AppButton leftSection={<IconDeviceFloppy size={18} />} loading={isSubmitting} onClick={onSubmit}>
             {isEdit ? 'حفظ التعديلات' : 'إضافة القاعة'}
-          </Button>
+          </AppButton>
         </Group>
       </Stack>
     </Drawer>

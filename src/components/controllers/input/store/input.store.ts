@@ -18,15 +18,17 @@ export function createInputStore(initialProps: InputInitialProps): InputStore {
   return createControllerStore<InputState>((set, get) => ({
     ...initial,
 
-    setValue: (value: string | number | null, option?: any) => {
-      set({ value, isTouched: true });
+    setValue: (value, option) => {
+      // A DOM event keeps its text; selects / numbers report the value itself
+      const stored = typeof value === 'object' && value !== null ? value.target.value : value;
+      set({ value: stored, isTouched: true });
       const rawProps = get().rawProps;
       if (rawProps.onChange) {
         if (typeof value === 'object' && value !== null && 'target' in value) {
           rawProps.onChange(value);
         } else {
           // Select or direct value change
-          rawProps.onChange(value as any, option);
+          rawProps.onChange(value, option);
         }
       }
     },

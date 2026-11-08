@@ -1,3 +1,4 @@
+import type { DashboardOverview } from '@/src/core/api';
 import {
   AcademicBranch,
   AcademicYear,
@@ -16,6 +17,9 @@ import {
  * Adheres strictly to the Controller Component Pattern (role.md).
  */
 export interface SectionsState {
+  /** Home numbers (GET /dashboard/overview) for the KPI cards and charts. */
+  overview: DashboardOverview | null;
+  syncOverview: (overview: DashboardOverview | null) => void;
   // ── Pagination & Filters ──
   page: number;
   limit: number;

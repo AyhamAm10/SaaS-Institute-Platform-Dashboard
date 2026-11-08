@@ -1,42 +1,13 @@
 'use client';
 
-import {
-  Box,
-  Alert,
-  Badge,
-  Card,
-  Divider,
-  Group,
-  SimpleGrid,
-  Stack,
-  Text,
-  ThemeIcon,
-} from '@mantine/core';
-import {
-  IconAlertCircle,
-  IconBriefcase,
-  IconCalendarTime,
-  IconClock,
-  IconUser,
-} from '@tabler/icons-react';
+import { Alert, Card, Divider, Group, SimpleGrid, Stack, Text, ThemeIcon } from '@mantine/core';
+import { IconAlertCircle, IconCalendarTime, IconClock } from '@tabler/icons-react';
 import { useTeacherRegistrationMirror } from '../store/useTeacherRegistrationMirror';
-
-const dayNameMap: Record<number, string> = {
-  0: 'الأحد',
-  1: 'الإثنين',
-  2: 'الثلاثاء',
-  3: 'الأربعاء',
-  4: 'الخميس',
-  5: 'الجمعة',
-  6: 'السبت',
-};
+import { StatusBadge } from '@/src/components/controllers/badge';
+import { weekDayName } from '@/src/core/format';
+import { Step4AccountCard, Step4QualificationsCard } from './Step4ReviewCards';
 
 export function Step4Review() {
-  const fullName = useTeacherRegistrationMirror('fullName');
-  const phone = useTeacherRegistrationMirror('phone');
-  const specialization = useTeacherRegistrationMirror('specialization');
-  const isActive = useTeacherRegistrationMirror('isActive');
-  const qualifications = useTeacherRegistrationMirror('qualifications');
   const availabilities = useTeacherRegistrationMirror('availabilities');
   const stepErrors = useTeacherRegistrationMirror('stepErrors');
 
@@ -60,99 +31,8 @@ export function Step4Review() {
       )}
 
       <SimpleGrid cols={{ base: 1, md: 2 }} spacing="md">
-        {/* Basic Info Card */}
-        <Card radius="xl" withBorder p="lg">
-          <Stack gap="sm">
-            <Group gap="xs">
-              <ThemeIcon size="md" radius="xl" color="primary" variant="light">
-                <IconUser size={16} />
-              </ThemeIcon>
-              <Text fw={500} size="sm">
-                بيانات المعلم والحساب
-              </Text>
-            </Group>
-
-            <Divider />
-
-            <SimpleGrid cols={2} spacing="xs">
-              <Box>
-                <Text size="xs" c="dimmed">
-                  الاسم الكامل:
-                </Text>
-                <Text size="xs" fw={500}>
-                  {fullName || '—'}
-                </Text>
-              </Box>
-
-              <Box>
-                <Text size="xs" c="dimmed">
-                  رقم الهاتف:
-                </Text>
-                <Text size="xs" fw={500} dir="ltr" ta="right">
-                  {phone || '—'}
-                </Text>
-              </Box>
-
-              <Box>
-                <Text size="xs" c="dimmed">
-                  المسمى الأكاديمي:
-                </Text>
-                <Text size="xs" fw={500}>
-                  {specialization || 'غير محدد'}
-                </Text>
-              </Box>
-
-              <Box>
-                <Text size="xs" c="dimmed">
-                  حالة الحساب:
-                </Text>
-                <Badge variant="dot" color={isActive ? 'teal' : 'red'} size="xs" radius="sm">
-                  {isActive ? 'نشط' : 'غير نشط'}
-                </Badge>
-              </Box>
-            </SimpleGrid>
-          </Stack>
-        </Card>
-
-        {/* Qualifications Card */}
-        <Card radius="xl" withBorder p="lg">
-          <Stack gap="sm">
-            <Group gap="xs">
-              <ThemeIcon size="md" radius="xl" color="indigo" variant="light">
-                <IconBriefcase size={16} />
-              </ThemeIcon>
-              <Text fw={500} size="sm">
-                المواد والمؤهلات الأكاديمية ({qualifications.length})
-              </Text>
-            </Group>
-
-            <Divider />
-
-            {qualifications.length === 0 ? (
-              <Text size="xs" c="dimmed">
-                لم يتم إدراج مواد معتمدة (يمكن إضافتها لاحقاً من ملف المعلم).
-              </Text>
-            ) : (
-              <Stack gap={6} mah={180} style={{ overflowY: 'auto' }}>
-                {qualifications.map((q) => (
-                  <Group
-                    key={`${q.academicBranchId}-${q.subjectId}`}
-                    justify="space-between"
-                    p="xs"
-                    style={{ background: 'var(--app-subtle)', borderRadius: '8px' }}
-                  >
-                    <Text size="xs" fw={500}>
-                      {q.subjectName}
-                    </Text>
-                    <Badge size="xs" color="primary" variant="light" radius="sm">
-                      {q.academicBranchName}
-                    </Badge>
-                  </Group>
-                ))}
-              </Stack>
-            )}
-          </Stack>
-        </Card>
+        <Step4AccountCard />
+        <Step4QualificationsCard />
       </SimpleGrid>
 
       {/* Schedule / Availability Card */}
@@ -184,11 +64,11 @@ export function Step4Review() {
                 >
                   <IconClock size={14} color="var(--app-brand-accent)" />
                   <Text size="xs" fw={500}>
-                    {dayNameMap[avail.dayOfWeek]}
+                    {weekDayName(avail.dayOfWeek)}
                   </Text>
-                  <Badge size="xs" variant="outline" color="gray">
+                  <StatusBadge tone="neutral" variant="outline" size="xs">
                     {avail.startTime} - {avail.endTime}
-                  </Badge>
+                  </StatusBadge>
                 </Group>
               ))}
             </SimpleGrid>

@@ -4,10 +4,10 @@ import { IconCalendarCheck, IconSchool, IconUserCheck, IconUserOff } from '@tabl
 import { AppModule, StatCard } from '@/src/components/controllers';
 import { ChartCard } from '@/src/components/controllers/charts';
 import { formatNumber } from '@/src/core/format';
-import { useDashboardOverviewQuery } from '@/src/core/api';
+import { useSectionsMirror } from '../store/useSectionsMirror';
 
 export function SectionsOverview() {
-  const { data: overview } = useDashboardOverviewQuery();
+  const overview = useSectionsMirror('overview');
   if (!overview) return null;
 
   const { sections, students, attendance } = overview;

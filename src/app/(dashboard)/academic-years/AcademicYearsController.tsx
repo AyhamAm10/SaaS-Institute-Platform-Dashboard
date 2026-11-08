@@ -7,7 +7,9 @@ import {
   useCreateAcademicYearMutation,
   useSetCurrentAcademicYearMutation,
   useUpdateAcademicYearMutation,
+  getApiErrorMessage,
 } from '@/src/core/api';
+import { validateYearForm, yearSaveError } from './utils/academic-years.utils';
 import { PERMISSIONS, useAuth } from '@/src/core/auth';
 import { createAcademicYearsStore, AcademicYearsContext } from './store/academicYears.store';
 import { AcademicYearsView } from './ui/AcademicYearsView';
@@ -63,31 +65,21 @@ export function AcademicYearsController() {
   const setCurrentMutation = useSetCurrentAcademicYearMutation();
 
   // ── Form Submit Handler ──
-  const handleFormSubmit = useCallback(
-    async (formData: {
-      name: string;
-      startDate: string;
-      endDate: string;
-      isCurrent?: boolean;
-    }) => {
-      const selectedYear = store.getState().selectedYear;
-      store.getState().setFormSubmitting(true);
-      try {
-        if (selectedYear) {
-          await updateMutation.mutateAsync({
-            id: selectedYear.id,
-            payload: formData,
-          });
-        } else {
-          await createMutation.mutateAsync(formData);
-        }
-        store.getState().closeModal();
-      } finally {
-        store.getState().setFormSubmitting(false);
-      }
-    },
-    [store, createMutation, updateMutation],
-  );
+  const handleFormSubmit = useCallback(async () => {
+    const { selectedYear, yearForm, setFormError, setFormSubmitting, closeModal } = store.getState();
+    const result = validateYearForm(yearForm);
+    if ('error' in result) return setFormError(result.error);
+    setFormSubmitting(true);
+    try {
+      if (selectedYear) await updateMutation.mutateAsync({ id: selectedYear.id, payload: result.payload });
+      else await createMutation.mutateAsync(result.payload);
+      closeModal();
+    } catch (err: unknown) {
+      setFormError(yearSaveError(getApiErrorMessage(err, 'حدث خطأ أثناء حفظ السنة الدراسية')));
+    } finally {
+      setFormSubmitting(false);
+    }
+  }, [store, createMutation, updateMutation]);
 
   // ── Set Current Handler ──
   const handleSetCurrent = useCallback(

@@ -2,8 +2,6 @@
 
 import { AppShell, Box, Group, ScrollArea, Text, rem } from '@mantine/core';
 import { IconLayoutSidebarLeftCollapse, IconLayoutSidebarLeftExpand } from '@tabler/icons-react';
-import { usePathname } from 'next/navigation';
-import { useEffect } from 'react';
 import { useSidebarMirror } from '../../store/useSidebarMirror';
 import { AppIconButton } from '../../../button';
 import { SidebarBrand } from '../shared/SidebarBrand';
@@ -17,12 +15,6 @@ import { SidebarLogout } from '../shared/SidebarLogout';
 export function DesktopSidebar() {
   const isCollapsed = useSidebarMirror('isDesktopCollapsed');
   const toggleCollapse = useSidebarMirror('toggleDesktopCollapse');
-  const setActiveRoute = useSidebarMirror('setActiveRoute');
-  const pathname = usePathname();
-
-  useEffect(() => {
-    if (pathname) setActiveRoute(pathname);
-  }, [pathname, setActiveRoute]);
 
   return (
     <AppShell.Navbar p={rem(12)} pl={0} visibleFrom="md">

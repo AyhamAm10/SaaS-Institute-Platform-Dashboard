@@ -18,6 +18,8 @@ export interface DataModuleState<T = unknown> {
   isLoading: boolean;
   isFetching: boolean;
   search: string;
+  /** What is typed in the search box (committed to `search` after the debounce). */
+  searchInput: string;
   searchPlaceholder: string;
   sort: SortState;
   selectedIds: (string | number)[];
@@ -39,6 +41,7 @@ export interface DataModuleState<T = unknown> {
   setPage: (page: number) => void;
   setLimit: (limit: number) => void;
   setSearch: (search: string) => void;
+  setSearchInput: (value: string) => void;
   setSort: (column: string) => void;
   setFilter: (key: string, value: unknown) => void;
   resetFilters: () => void;

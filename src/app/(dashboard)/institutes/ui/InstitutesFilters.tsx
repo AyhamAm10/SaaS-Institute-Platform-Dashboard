@@ -1,9 +1,10 @@
 'use client';
 
-import { ActionIcon, Box, Card, Group, TextInput, Tooltip, rem } from '@mantine/core';
+import { Box, Card, Group, TextInput, rem } from '@mantine/core';
 import { IconRefresh, IconSearch, IconX } from '@tabler/icons-react';
 import { useInstitutesMirror } from '../store/useInstitutesMirror';
 import { institutesLabels } from '../static-data/institutes.data';
+import { AppIconButton } from '@/src/components/controllers/button';
 
 export interface InstitutesFiltersProps {
   onRefresh?: () => void;
@@ -33,15 +34,9 @@ export function InstitutesFilters({ onRefresh }: InstitutesFiltersProps) {
             leftSection={<IconSearch size={16} color="var(--mantine-color-dimmed)" />}
             rightSection={
               search ? (
-                <ActionIcon
-                  size="xs"
-                  variant="subtle"
-                  color="gray"
-                  onClick={() => setSearch('')}
-                  aria-label="مسح البحث"
-                >
+                <AppIconButton variant="ghost" label="مسح البحث" size="xs" onClick={() => setSearch('')}>
                   <IconX size={12} />
-                </ActionIcon>
+                </AppIconButton>
               ) : null
             }
             styles={{
@@ -55,19 +50,9 @@ export function InstitutesFilters({ onRefresh }: InstitutesFiltersProps) {
 
         <Group gap="xs">
           {onRefresh && (
-            <Tooltip label={institutesLabels.refreshButton} withArrow position="top">
-              <ActionIcon
-                variant="light"
-                color="primary"
-                size="lg"
-                radius="xl"
-                onClick={onRefresh}
-                loading={isFetching}
-                aria-label={institutesLabels.refreshButton}
-              >
-                <IconRefresh size={18} />
-              </ActionIcon>
-            </Tooltip>
+            <AppIconButton label={institutesLabels.refreshButton} size="lg" onClick={onRefresh} loading={isFetching}>
+              <IconRefresh size={18} />
+            </AppIconButton>
           )}
         </Group>
       </Group>

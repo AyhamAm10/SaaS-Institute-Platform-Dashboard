@@ -1,6 +1,6 @@
 'use client';
 
-import { Badge } from '@mantine/core';
+import { StatusBadge } from '@/src/components/controllers/badge';
 
 export interface AcademicYearStatusBadgeProps {
   isCurrent: boolean;
@@ -9,27 +9,15 @@ export interface AcademicYearStatusBadgeProps {
 export function AcademicYearStatusBadge({ isCurrent }: AcademicYearStatusBadgeProps) {
   if (isCurrent) {
     return (
-      <Badge
-        color="teal"
-        variant="light"
-        radius="xl"
-        size="sm"
-        fw={500}
-      >
+      <StatusBadge tone="success" size="sm">
         السنة الحالية النشطة
-      </Badge>
+      </StatusBadge>
     );
   }
 
   return (
-    <Badge
-      color="gray"
-      variant="light"
-      radius="xl"
-      size="sm"
-      fw={500}
-    >
+    <StatusBadge tone="neutral" size="sm">
       غير نشطة
-    </Badge>
+    </StatusBadge>
   );
 }

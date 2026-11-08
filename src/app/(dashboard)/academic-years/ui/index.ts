@@ -3,5 +3,4 @@ export * from './AcademicYearsActions';
 export * from './AcademicYearsTable';
 export * from './AcademicYearStatusBadge';
 export * from './AcademicYearDrawer';
-export * from './SetCurrentAcademicYearDrawer';
 export * from './SetCurrentAcademicYearModal';

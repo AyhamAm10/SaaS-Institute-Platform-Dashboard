@@ -5,6 +5,7 @@ import { IconSchool } from '@tabler/icons-react';
 import { AppInput, AppSelect } from '@/src/components/controllers';
 import { useInstitutesMirror } from '../store/useInstitutesMirror';
 import { institutesLabels, TIMEZONE_OPTIONS } from '../static-data/institutes.data';
+import { inputText } from '@/src/core/format';
 
 /**
  * InstituteInfoFields
@@ -39,7 +40,7 @@ export function InstituteInfoFields() {
           label={institutesLabels.instituteName}
           placeholder={institutesLabels.instituteNamePlaceholder}
           value={form.name}
-          onChange={(val) => setFormField('name', val)}
+          onChange={(val) => setFormField('name', inputText(val))}
           error={formErrors['name']}
           required
         />
@@ -49,7 +50,7 @@ export function InstituteInfoFields() {
           label={institutesLabels.institutePhone}
           placeholder={institutesLabels.institutePhonePlaceholder}
           value={form.phone}
-          onChange={(val) => setFormField('phone', val)}
+          onChange={(val) => setFormField('phone', inputText(val))}
           error={formErrors['phone']}
           required
         />
@@ -60,7 +61,7 @@ export function InstituteInfoFields() {
         description={isEdit ? institutesLabels.instituteCodeEditHint : undefined}
         placeholder={institutesLabels.instituteCodePlaceholder}
         value={form.code}
-        onChange={(val) => setFormField('code', val)}
+        onChange={(val) => setFormField('code', inputText(val))}
         error={formErrors['code']}
         required={isEdit}
       />
@@ -78,7 +79,7 @@ export function InstituteInfoFields() {
         label={institutesLabels.instituteAddress}
         placeholder={institutesLabels.instituteAddressPlaceholder}
         value={form.address}
-        onChange={(val) => setFormField('address', val)}
+        onChange={(val) => setFormField('address', inputText(val))}
         error={formErrors['address']}
         required
       />
@@ -88,7 +89,7 @@ export function InstituteInfoFields() {
         label={institutesLabels.instituteLogoUrl}
         placeholder={institutesLabels.instituteLogoUrlPlaceholder}
         value={form.logoUrl}
-        onChange={(val) => setFormField('logoUrl', val)}
+        onChange={(val) => setFormField('logoUrl', inputText(val))}
         error={formErrors['logoUrl']}
       />
 
@@ -96,7 +97,7 @@ export function InstituteInfoFields() {
         <ColorInput
           label={institutesLabels.institutePrimaryColor}
           value={form.primaryColor}
-          onChange={(val) => setFormField('primaryColor', val)}
+          onChange={(val) => setFormField('primaryColor', inputText(val))}
           radius="md"
           size="sm"
           format="hex"
@@ -105,7 +106,7 @@ export function InstituteInfoFields() {
         <ColorInput
           label={institutesLabels.instituteSecondaryColor}
           value={form.secondaryColor}
-          onChange={(val) => setFormField('secondaryColor', val)}
+          onChange={(val) => setFormField('secondaryColor', inputText(val))}
           radius="md"
           size="sm"
           format="hex"

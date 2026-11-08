@@ -1,21 +1,12 @@
 'use client';
 
-import {
-  Alert,
-  Badge,
-  Group,
-  Stack,
-  Text,
-} from '@mantine/core';
-import {
-  IconAlertCircle,
-  IconAlertTriangle,
-  IconTrash,
-} from '@tabler/icons-react';
+import { Alert, Group, Stack, Text } from '@mantine/core';
+import { IconAlertCircle, IconAlertTriangle, IconTrash } from '@tabler/icons-react';
 import { AppButton, AppModal } from '@/src/components/controllers';
 import { useSubjectsMirror } from '../store/useSubjectsMirror';
 import { subjectsLabels } from '../static-data/subjects.data';
 import { Subject } from '@/src/core/api';
+import { StatusBadge } from '@/src/components/controllers/badge';
 
 export interface SubjectDeleteModalProps {
   onConfirmDelete: (subject: Subject) => Promise<void>;
@@ -47,12 +38,7 @@ export function SubjectDeleteModal({ onConfirmDelete }: SubjectDeleteModalProps)
   };
 
   return (
-    <AppModal
-      opened={opened}
-      onClose={closeDeleteModal}
-      variant="danger"
-      size="sm"
-    >
+    <AppModal opened={opened} onClose={closeDeleteModal} variant="danger" size="sm">
       <AppModal.Header>
         <AppModal.Icon icon={<IconTrash size={22} />} color="red" />
         <AppModal.Title>{subjectsLabels.deleteModalTitle}</AppModal.Title>
@@ -83,20 +69,15 @@ export function SubjectDeleteModal({ onConfirmDelete }: SubjectDeleteModalProps)
           </Text>
 
           {hasLinkedSections ? (
-            <Alert
-              icon={<IconAlertTriangle size={18} />}
-              color="orange"
-              variant="light"
-              radius="md"
-            >
+            <Alert icon={<IconAlertTriangle size={18} />} color="orange" variant="light" radius="md">
               <Stack gap={4}>
                 <Text size="xs" fw={500}>
                   {subjectsLabels.deleteWarningLinkedSections}
                 </Text>
                 <Group gap="xs">
-                  <Badge color="orange" variant="filled" size="xs">
+                  <StatusBadge tone="warning" variant="solid" size="xs">
                     {linkedSectionsCount} شعبة دراسية مرتبطة
-                  </Badge>
+                  </StatusBadge>
                 </Group>
               </Stack>
             </Alert>

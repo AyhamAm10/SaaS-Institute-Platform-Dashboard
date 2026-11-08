@@ -1,10 +1,11 @@
 'use client';
 
-import { Avatar, Badge, Group, Stack, Text } from '@mantine/core';
+import { Avatar, Group, Stack, Text } from '@mantine/core';
 import { IconUser } from '@tabler/icons-react';
 import { Teacher } from '@/src/core/api';
 import { DataModuleColumn } from '@/src/components/controllers/data-module';
 import { TeacherActionsCell } from './TeacherActionsCell';
+import { StatusBadge } from '@/src/components/controllers/badge';
 
 export interface TeachersColumnsAccess {
   canManage?: boolean;
@@ -59,9 +60,9 @@ export function getTeachersColumns(
       exportKind: 'text',
       render: (teacher) =>
         teacher.specialization ? (
-          <Badge variant="light" color="indigo" radius="sm" size="sm">
+          <StatusBadge tone="info" size="sm">
             {teacher.specialization}
-          </Badge>
+          </StatusBadge>
         ) : (
           <Text size="xs" c="dimmed">
             غير محدد
@@ -80,9 +81,9 @@ export function getTeachersColumns(
         <Group gap={4} wrap="nowrap">
           {teacher.teacherBranches && teacher.teacherBranches.length > 0 ? (
             teacher.teacherBranches.map((tb) => (
-              <Badge key={tb.branchId} variant="outline" color="gray" size="xs" radius="sm">
+              <StatusBadge tone="neutral" variant="outline" key={tb.branchId} size="xs">
                 {tb.branch?.name || `فرع ${tb.branchId}`}
-              </Badge>
+              </StatusBadge>
             ))
           ) : (
             <Text size="xs" c="dimmed">
@@ -101,14 +102,9 @@ export function getTeachersColumns(
       }),
       exportKind: 'badge',
       render: (teacher) => (
-        <Badge
-          variant="dot"
-          color={teacher.isActive ? 'teal' : 'gray'}
-          radius="sm"
-          size="sm"
-        >
+        <StatusBadge tone={teacher.isActive ? 'success' : 'neutral'} variant="dot" size="sm">
           {teacher.isActive ? 'نشط' : 'معطل'}
-        </Badge>
+        </StatusBadge>
       ),
     },
     {

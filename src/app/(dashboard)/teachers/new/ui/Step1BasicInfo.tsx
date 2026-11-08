@@ -1,16 +1,10 @@
 'use client';
 
-import {
-  Alert,
-  Divider,
-  SimpleGrid,
-  Stack,
-  Switch,
-  Text,
-} from '@mantine/core';
+import { Alert, Divider, SimpleGrid, Stack, Switch, Text } from '@mantine/core';
 import { IconAlertCircle } from '@tabler/icons-react';
 import { AppInput } from '@/src/components/controllers';
 import { useTeacherRegistrationMirror } from '../store/useTeacherRegistrationMirror';
+import { inputText } from '@/src/core/format';
 
 export function Step1BasicInfo() {
   const fullName = useTeacherRegistrationMirror('fullName');
@@ -31,8 +25,7 @@ export function Step1BasicInfo() {
           الخطوة الأولى: البيانات الأساسية وحساب المعلم
         </Text>
         <Text size="xs" c="dimmed">
-          أدخل بيانات الهوية الشخصية ومعلومات الدخول للنظام (يتم التعيين تلقائياً للفرع المحدد في
-          أعلى المنصة)
+          أدخل بيانات الهوية الشخصية ومعلومات الدخول للنظام (يتم التعيين تلقائياً للفرع المحدد في أعلى المنصة)
         </Text>
       </Stack>
 
@@ -52,9 +45,7 @@ export function Step1BasicInfo() {
             label="الاسم الكامل للمعلم"
             placeholder="مثال: أ. أحمد عبد الله"
             value={fullName}
-            onChange={(val) =>
-              setBasicField('fullName', typeof val === 'string' ? val : val?.target?.value ?? '')
-            }
+            onChange={(val) => setBasicField('fullName', inputText(val))}
             required
           />
 
@@ -63,9 +54,7 @@ export function Step1BasicInfo() {
             placeholder="0912345678"
             type="tel"
             value={phone}
-            onChange={(val) =>
-              setBasicField('phone', typeof val === 'string' ? val : val?.target?.value ?? '')
-            }
+            onChange={(val) => setBasicField('phone', inputText(val))}
             required
           />
 
@@ -74,9 +63,7 @@ export function Step1BasicInfo() {
             placeholder="أدخل كلمة مرور قوية (8 محارف على الأقل)"
             type="password"
             value={password}
-            onChange={(val) =>
-              setBasicField('password', typeof val === 'string' ? val : val?.target?.value ?? '')
-            }
+            onChange={(val) => setBasicField('password', inputText(val))}
             required
           />
 
@@ -84,12 +71,7 @@ export function Step1BasicInfo() {
             label="المسمى الأكاديمي / النبذة العامة"
             placeholder="مثال: ماجستير فيزياء، دكتوراه في الرياضيات..."
             value={specialization}
-            onChange={(val) =>
-              setBasicField(
-                'specialization',
-                typeof val === 'string' ? val : val?.target?.value ?? '',
-              )
-            }
+            onChange={(val) => setBasicField('specialization', inputText(val))}
           />
         </SimpleGrid>
 

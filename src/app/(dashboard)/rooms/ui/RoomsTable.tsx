@@ -1,23 +1,19 @@
 'use client';
 
-import { Badge, Group, Text, ThemeIcon } from '@mantine/core';
-import {
-  IconBuildingCommunity,
-  IconFlask,
-  IconSchool,
-  IconUsers,
-} from '@tabler/icons-react';
+import { Center, Group, Text } from '@mantine/core';
+import { IconBuildingCommunity, IconFlask, IconSchool, IconUsers } from '@tabler/icons-react';
 import { Room } from '@/src/core/api';
 import { DataModuleColumn } from '@/src/components/controllers/data-module';
 import { RoomActionsCell } from './RoomActionsCell';
+import { BadgeTone, resolveBadgeStyle, StatusBadge } from '@/src/components/controllers/badge';
 
 type RoomTypeIcon = React.ComponentType<{ size?: number | string }>;
 
-const roomTypeLabels: Record<string, { label: string; color: string; icon: RoomTypeIcon }> = {
-  CLASSROOM: { label: 'صف دراسي', color: 'blue', icon: IconSchool },
-  LAB: { label: 'مختبر علمي', color: 'teal', icon: IconFlask },
-  HALL: { label: 'مدرج / قاعة', color: 'purple', icon: IconBuildingCommunity },
-  ACTIVITY: { label: 'قاعة أنشطة', color: 'orange', icon: IconUsers },
+const roomTypeLabels: Record<string, { label: string; color: BadgeTone; icon: RoomTypeIcon }> = {
+  CLASSROOM: { label: 'صف دراسي', color: 'info', icon: IconSchool },
+  LAB: { label: 'مختبر علمي', color: 'success', icon: IconFlask },
+  HALL: { label: 'مدرج / قاعة', color: 'ink', icon: IconBuildingCommunity },
+  ACTIVITY: { label: 'قاعة أنشطة', color: 'warning', icon: IconUsers },
 };
 
 export function getRoomsColumns(
@@ -36,15 +32,15 @@ export function getRoomsColumns(
       render: (room) => {
         const meta = roomTypeLabels[room.type] || {
           label: room.type,
-          color: 'gray',
+          color: 'neutral' as BadgeTone,
           icon: IconBuildingCommunity,
         };
         const IconComp = meta.icon;
         return (
           <Group gap="sm" wrap="nowrap">
-            <ThemeIcon radius="md" color={meta.color} variant="light" size="sm">
+            <Center w={26} h={26} style={{ borderRadius: 8, ...resolveBadgeStyle(meta.color) }}>
               <IconComp size={16} />
-            </ThemeIcon>
+            </Center>
             <Text fw={500} size="xs" style={{ fontSize: '13px' }}>
               {room.name}
             </Text>
@@ -60,12 +56,12 @@ export function getRoomsColumns(
       render: (room) => {
         const meta = roomTypeLabels[room.type] || {
           label: room.type,
-          color: 'gray',
+          color: 'neutral' as BadgeTone,
         };
         return (
-          <Badge variant="light" color={meta.color} radius="sm" size="sm">
+          <StatusBadge tone={meta.color} size="sm">
             {meta.label}
-          </Badge>
+          </StatusBadge>
         );
       },
     },
@@ -91,9 +87,9 @@ export function getRoomsColumns(
       exportKind: 'text',
       render: (room) =>
         room.branch ? (
-          <Badge variant="outline" color="gray" radius="sm" size="sm">
+          <StatusBadge tone="neutral" variant="outline" size="sm">
             {room.branch.name}
-          </Badge>
+          </StatusBadge>
         ) : (
           <Text size="xs" c="dimmed">
             كافة الفروع
@@ -106,9 +102,9 @@ export function getRoomsColumns(
       exportValue: (r) => r._count?.timetableEntries ?? 0,
       exportKind: 'number',
       render: (room) => (
-        <Badge variant="light" color="blue" radius="sm" size="xs">
+        <StatusBadge tone="info" size="xs">
           {room._count?.timetableEntries ?? 0} حصة
-        </Badge>
+        </StatusBadge>
       ),
     },
     {

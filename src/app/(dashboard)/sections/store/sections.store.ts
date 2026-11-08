@@ -14,6 +14,8 @@ export type SectionsStore = ControllerStoreApi<SectionsState>;
  */
 export function createSectionsStore(): SectionsStore {
   return createControllerStore<SectionsState>((set) => ({
+    overview: null,
+    syncOverview: (overview) => set({ overview }),
     // ── Pagination & Filters ──
     page: 1,
     limit: 10,

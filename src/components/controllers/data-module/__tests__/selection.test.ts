@@ -1,6 +1,6 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
-import { createDataModuleStore, selectSelectedRows } from '../store/data-module.store';
+import { createDataModuleStore } from '../store/data-module.store';
 import { buildSelectionDocument } from '../../app-module/init/selection-document';
 import { createAppModuleStore } from '../../app-module/store/app-module.store';
 import type { SelectionExportColumn } from '../../app-module/init/app-module.init';

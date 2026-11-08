@@ -5,11 +5,11 @@ import { IconCash, IconClock, IconPigMoney } from '@tabler/icons-react';
 import { AppModule, StatCard, StatusBadge } from '@/src/components/controllers';
 import { ChartCard } from '@/src/components/controllers/charts';
 import { formatMoney } from '@/src/core/format';
-import { useDashboardOverviewQuery } from '@/src/core/api';
+import { usePaymentsMirror } from '../store/payments.store';
 import { collectionDatasets } from '../../dashboard/utils/dashboard-overview.utils';
 
 export function PaymentsOverview() {
-  const { data: overview } = useDashboardOverviewQuery();
+  const overview = usePaymentsMirror('overview');
   if (!overview) return null;
 
   const { finance } = overview;

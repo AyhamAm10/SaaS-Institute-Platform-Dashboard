@@ -22,6 +22,12 @@ const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
   {
+    // `_name` marks a prop that is destructured on purpose to keep it out of a spread.
+    rules: {
+      "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_", varsIgnorePattern: "^_", ignoreRestSiblings: true }],
+    },
+  },
+  {
     files: ["src/app/**/*.{ts,tsx}"],
     rules: {
       "no-restricted-syntax": ["error", ...designSystemSyntax],

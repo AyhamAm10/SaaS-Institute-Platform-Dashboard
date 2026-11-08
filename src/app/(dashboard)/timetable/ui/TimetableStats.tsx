@@ -1,22 +1,14 @@
 'use client';
 
-import {
-  Badge,
-  Card,
-  Group,
-  Paper,
-  SimpleGrid,
-  Stack,
-  Text,
-} from '@mantine/core';
-import { useSectionSubjectsQuery } from '@/src/core/api';
+import { Card, Group, Paper, SimpleGrid, Stack, Text } from '@mantine/core';
 import { useTimetableMirror } from '../store/useTimetableMirror';
+import { BadgeTone, StatusBadge } from '@/src/components/controllers/badge';
 
 export function TimetableStats() {
   const sectionId = useTimetableMirror('sectionId');
   const timetable = useTimetableMirror('timetable');
 
-  const { data: sectionSubjects } = useSectionSubjectsQuery(sectionId ?? 0);
+  const sectionSubjects = useTimetableMirror('sectionSubjects');
 
   if (!sectionId || !sectionSubjects || sectionSubjects.length === 0) {
     return null;
@@ -38,31 +30,23 @@ export function TimetableStats() {
 
         <SimpleGrid cols={{ base: 1, sm: 2, md: 4 }} spacing="xs">
           {sectionSubjects.map((ss) => {
-            const scheduledCount = entries.filter(
-              (e) => e.subjectId === ss.subjectId,
-            ).length;
+            const scheduledCount = entries.filter((e) => e.subjectId === ss.subjectId).length;
             const required = ss.weeklyPeriods || 1;
             const isComplete = scheduledCount === required;
             const isOver = scheduledCount > required;
 
-            let color = 'teal';
+            let color: BadgeTone = 'success';
             let label = 'مكتمل';
             if (!isComplete && !isOver) {
-              color = 'orange';
+              color = 'warning';
               label = `متبقي ${required - scheduledCount}`;
             } else if (isOver) {
-              color = 'red';
+              color = 'danger';
               label = `زيادة ${scheduledCount - required}`;
             }
 
             return (
-              <Paper
-                key={ss.id}
-                p="xs"
-                radius="lg"
-                withBorder
-                bg="var(--mantine-color-gray-0)"
-              >
+              <Paper key={ss.id} p="xs" radius="lg" withBorder bg="var(--mantine-color-gray-0)">
                 <Group justify="space-between" align="center">
                   <Stack gap={2}>
                     <Text size="xs" fw={500}>
@@ -72,9 +56,9 @@ export function TimetableStats() {
                       {scheduledCount} من {required} حصة
                     </Text>
                   </Stack>
-                  <Badge size="xs" color={color} variant="light" radius="xl">
+                  <StatusBadge tone={color} size="xs">
                     {label}
-                  </Badge>
+                  </StatusBadge>
                 </Group>
               </Paper>
             );

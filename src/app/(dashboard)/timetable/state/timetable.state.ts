@@ -5,6 +5,7 @@ import {
   Subject,
   Teacher,
   Room,
+  SectionSubjectItem,
   Timetable,
   TimetableConflict,
   TimetableEntry,
@@ -34,7 +35,12 @@ export interface TimetableState {
   subjects: Subject[];
   teachers: Teacher[];
   rooms: Room[];
+  /** Plan subjects of the chosen section (entry modal options, weekly stats). */
+  sectionSubjects: SectionSubjectItem[];
   conflicts: TimetableConflict[];
+  /** Conflicts list expanded in the banner (role.md §12.1: no local state). */
+  conflictsOpened: boolean;
+  toggleConflicts: () => void;
 
   isLoading: boolean;
   isFetching: boolean;
@@ -97,6 +103,7 @@ export interface TimetableState {
     sections: Section[];
     teachers: Teacher[];
     rooms: Room[];
+    sectionSubjects: SectionSubjectItem[];
     isLoading: boolean;
     isFetching: boolean;
   }) => void;

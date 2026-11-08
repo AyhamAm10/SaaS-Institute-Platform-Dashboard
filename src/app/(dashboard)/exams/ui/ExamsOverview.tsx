@@ -4,10 +4,10 @@ import { IconAward, IconCalendarEvent } from '@tabler/icons-react';
 import { AppModule, StatCard } from '@/src/components/controllers';
 import { ChartCard } from '@/src/components/controllers/charts';
 import { formatNumber } from '@/src/core/format';
-import { useDashboardOverviewQuery } from '@/src/core/api';
+import { useExamsMirror } from '../store/exams.store';
 
 export function ExamsOverview() {
-  const { data: overview } = useDashboardOverviewQuery();
+  const overview = useExamsMirror('overview');
   if (!overview) return null;
 
   const { exams, sections } = overview;

@@ -1,20 +1,11 @@
 'use client';
 
-import {
-  Alert,
-  Badge,
-  Group,
-  Stack,
-  Text,
-} from '@mantine/core';
-import {
-  IconAlertCircle,
-  IconAlertTriangle,
-  IconTrash,
-} from '@tabler/icons-react';
+import { Alert, Group, Stack, Text } from '@mantine/core';
+import { IconAlertCircle, IconAlertTriangle, IconTrash } from '@tabler/icons-react';
 import { AppButton, AppModal } from '@/src/components/controllers';
 import { Teacher } from '@/src/core/api';
 import { useTeachersMirror } from '../store/useTeachersMirror';
+import { StatusBadge } from '@/src/components/controllers/badge';
 
 export interface TeacherDeleteModalProps {
   onConfirmDelete: (teacher: Teacher) => Promise<void>;
@@ -39,12 +30,7 @@ export function TeacherDeleteModal({ onConfirmDelete }: TeacherDeleteModalProps)
   };
 
   return (
-    <AppModal
-      opened={opened}
-      onClose={closeDeleteModal}
-      variant="danger"
-      size="sm"
-    >
+    <AppModal opened={opened} onClose={closeDeleteModal} variant="danger" size="sm">
       <AppModal.Header>
         <AppModal.Icon icon={<IconTrash size={22} />} color="red" />
         <AppModal.Title>حذف المعلم</AppModal.Title>
@@ -75,20 +61,15 @@ export function TeacherDeleteModal({ onConfirmDelete }: TeacherDeleteModalProps)
           </Text>
 
           {hasLinkedEntries ? (
-            <Alert
-              icon={<IconAlertTriangle size={18} />}
-              color="orange"
-              variant="light"
-              radius="md"
-            >
+            <Alert icon={<IconAlertTriangle size={18} />} color="orange" variant="light" radius="md">
               <Stack gap={4}>
                 <Text size="xs" fw={500}>
                   لا يمكن حذف المعلم لوجود حصص مجدولة مرتبطة به في الجداول الأسبوعية
                 </Text>
                 <Group gap="xs">
-                  <Badge color="orange" variant="filled" size="xs">
+                  <StatusBadge tone="warning" variant="solid" size="xs">
                     {linkedEntriesCount} حصة دراسية مرتبطة
-                  </Badge>
+                  </StatusBadge>
                 </Group>
               </Stack>
             </Alert>

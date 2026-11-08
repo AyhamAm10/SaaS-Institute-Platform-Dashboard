@@ -1,29 +1,13 @@
 'use client';
 
-import {
-  Box,
-  ActionIcon,
-  Alert,
-  Badge,
-  Button,
-  Divider,
-  Group,
-  Paper,
-  Stack,
-  Text,
-  Tooltip,
-} from '@mantine/core';
-import {
-  IconAlertCircle,
-  IconCheck,
-  IconGitBranch,
-  IconPlus,
-  IconTrash,
-} from '@tabler/icons-react';
-import { AppDrawer, AppInput } from '@/src/components/controllers';
+import { Alert, Divider, Stack } from '@mantine/core';
+import { IconAlertCircle, IconCheck, IconGitBranch } from '@tabler/icons-react';
+import { AppDrawer } from '@/src/components/controllers';
 import { AcademicBranch } from '@/src/core/api';
 import { useSectionsMirror } from '../store/useSectionsMirror';
 import { sectionFormLabels } from '../static-data/sections.data';
+import { AcademicBranchForm } from './AcademicBranchForm';
+import { AcademicBranchList } from './AcademicBranchList';
 
 export interface AcademicBranchesDrawerProps {
   opened: boolean;
@@ -47,31 +31,10 @@ export function AcademicBranchesDrawer({
   onCreate,
   onDelete,
 }: AcademicBranchesDrawerProps) {
-  const branchForm = useSectionsMirror('branchForm');
-  const setBranchFormField = useSectionsMirror('setBranchFormField');
-  const branchError = useSectionsMirror('branchError');
   const setBranchError = useSectionsMirror('setBranchError');
+  const branchError = useSectionsMirror('branchError');
   const branchSuccess = useSectionsMirror('branchSuccess');
   const setBranchSuccess = useSectionsMirror('setBranchSuccess');
-  const branchSubmitting = useSectionsMirror('branchSubmitting');
-
-  const handleCreate = async (e: React.FormEvent) => {
-    e.preventDefault();
-    await onCreate();
-  };
-
-  const handleDelete = async (branch: AcademicBranch) => {
-    if (branch._count && branch._count.sections > 0) {
-      setBranchError(`لا يمكن حذف الفرع "${branch.name}" لأنه مرتبط بشعب دراسية.`);
-      return;
-    }
-
-    if (!window.confirm(`هل أنت متأكد من حذف الفرع الأكاديمي "${branch.name}"؟`)) {
-      return;
-    }
-
-    await onDelete(branch.id, branch.name);
-  };
 
   return (
     <AppDrawer opened={opened} onClose={onClose} size="lg">
@@ -113,128 +76,10 @@ export function AcademicBranchesDrawer({
             </Alert>
           )}
 
-          {/* Form to add new branch */}
-          <AppDrawer.Section
-            title={sectionFormLabels.branchCreateTitle}
-            description="أنشئ فرعا أو مرحلة جديدة لمعهدك لتوزيع الشعب عليها"
-          >
-            <form onSubmit={handleCreate}>
-              <Stack gap="sm">
-                <AppInput
-                  type="text"
-                  label={sectionFormLabels.branchName}
-                  placeholder={sectionFormLabels.branchNamePlaceholder}
-                  value={branchForm.name}
-                  onChange={(e) =>
-                    setBranchFormField(
-                      'name',
-                      typeof e === 'string'
-                        ? e
-                        : e && typeof e === 'object' && 'target' in e
-                          ? (e.target as HTMLInputElement).value
-                          : '',
-                    )
-                  }
-                  required
-                />
-
-                <AppInput
-                  type="text"
-                  label={sectionFormLabels.branchDescription}
-                  placeholder={sectionFormLabels.branchDescriptionPlaceholder}
-                  value={branchForm.description}
-                  onChange={(e) =>
-                    setBranchFormField(
-                      'description',
-                      typeof e === 'string'
-                        ? e
-                        : e && typeof e === 'object' && 'target' in e
-                          ? (e.target as HTMLInputElement).value
-                          : '',
-                    )
-                  }
-                />
-
-                <Group justify="flex-end" mt="xs">
-                  <Button
-                    type="submit"
-                    color="teal"
-                    radius="xl"
-                    size="sm"
-                    loading={branchSubmitting}
-                    leftSection={<IconPlus size={16} />}
-                  >
-                    إضافة الفرع
-                  </Button>
-                </Group>
-              </Stack>
-            </form>
-          </AppDrawer.Section>
-
+          <AcademicBranchForm onCreate={onCreate} />
           <Divider />
 
-          {/* Existing branches list */}
-          <AppDrawer.Section
-            title={`الفروع الحالية (${branches.length})`}
-            description="قائمة الفروع الأكاديمية المفعلة للمعهد"
-          >
-            <Stack gap="xs">
-              {branches.length === 0 ? (
-                <Text size="sm" c="dimmed" ta="center" py="md">
-                  لا توجد فروع أكاديمية مسجلة حاليا
-                </Text>
-              ) : (
-                branches.map((b) => (
-                  <Paper
-                    key={b.id}
-                    withBorder
-                    p="sm"
-                    radius="md"
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                    }}
-                  >
-                    <Group gap="sm">
-                      <IconGitBranch size={18} color="teal" />
-                      <Box>
-                        <Group gap={8} align="center">
-                          <Text fw={500} size="sm">
-                            {b.name}
-                          </Text>
-                          {b._count && b._count.sections > 0 && (
-                            <Badge size="xs" variant="light" color="blue">
-                              {b._count.sections} شعب
-                            </Badge>
-                          )}
-                        </Group>
-                        {b.description && (
-                          <Text size="xs" c="dimmed">
-                            {b.description}
-                          </Text>
-                        )}
-                      </Box>
-                    </Group>
-
-                    <Tooltip label="حذف الفرع">
-                      <ActionIcon
-                        color="red"
-                        variant="subtle"
-                        radius="xl"
-                        size="sm"
-                        disabled={Boolean(b._count && b._count.sections > 0)}
-                        loading={branchSubmitting}
-                        onClick={() => handleDelete(b)}
-                      >
-                        <IconTrash size={16} />
-                      </ActionIcon>
-                    </Tooltip>
-                  </Paper>
-                ))
-              )}
-            </Stack>
-          </AppDrawer.Section>
+          <AcademicBranchList branches={branches} onDelete={onDelete} />
         </Stack>
       </AppDrawer.Content>
 

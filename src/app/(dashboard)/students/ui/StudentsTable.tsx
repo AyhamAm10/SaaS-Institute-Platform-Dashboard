@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { Group, Text, ThemeIcon } from '@mantine/core';
-import { IconBuildingCommunity, IconCash, IconEdit, IconTrash, IconUser } from '@tabler/icons-react';
+import { IconBuildingCommunity, IconUser } from '@tabler/icons-react';
 import { ReportTone, Student } from '@/src/core/api';
 import { DataModuleColumn } from '@/src/components/controllers/data-module';
 import { StatusBadge } from '@/src/components/controllers/badge';

@@ -78,15 +78,10 @@ export function SectionDetailsDrawer({
   return (
     <AppDrawer opened={opened} onClose={onClose} size="lg" loading={isLoading}>
       <AppDrawer.Header>
-        <AppDrawer.Icon
-          icon={header.icon}
-          color="primary"
-        />
+        <AppDrawer.Icon icon={header.icon} color="primary" />
         <Stack gap={2} style={{ flex: 1, minWidth: 0 }}>
           <AppDrawer.Title>{details?.name ?? sectionFormLabels.detailsTitle}</AppDrawer.Title>
-          <AppDrawer.Description>
-            {header.description}
-          </AppDrawer.Description>
+          <AppDrawer.Description>{header.description}</AppDrawer.Description>
         </Stack>
       </AppDrawer.Header>
 

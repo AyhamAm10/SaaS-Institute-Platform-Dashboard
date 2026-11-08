@@ -12,12 +12,7 @@ import { useAcademicYearsColumns } from './AcademicYearsTable';
 import { useAcademicYearsMirror } from '../store/useAcademicYearsMirror';
 
 interface AcademicYearsViewProps {
-  onFormSubmit: (formData: {
-    name: string;
-    startDate: string;
-    endDate: string;
-    isCurrent?: boolean;
-  }) => Promise<void>;
+  onFormSubmit: () => Promise<void>;
   onSetCurrent: (year: AcademicYear) => Promise<void>;
   canManage?: boolean;
 }
@@ -33,10 +28,6 @@ export function AcademicYearsView({ onFormSubmit, onSetCurrent, canManage = true
   const setPage = useAcademicYearsMirror('setPage');
   const setSearch = useAcademicYearsMirror('setSearch');
 
-  const modalOpened = useAcademicYearsMirror('modalOpened');
-  const selectedYear = useAcademicYearsMirror('selectedYear');
-  const closeModal = useAcademicYearsMirror('closeModal');
-  const formSubmitting = useAcademicYearsMirror('formSubmitting');
 
   const setCurrentDrawerOpened = useAcademicYearsMirror('setCurrentDrawerOpened');
   const selectedYearForSetCurrent = useAcademicYearsMirror('selectedYearForSetCurrent');
@@ -97,13 +88,7 @@ export function AcademicYearsView({ onFormSubmit, onSetCurrent, canManage = true
 
       {canManage && (
         <>
-          <AcademicYearDrawer
-            opened={modalOpened}
-            onClose={closeModal}
-            year={selectedYear}
-            onSubmit={onFormSubmit}
-            isLoading={formSubmitting}
-          />
+          <AcademicYearDrawer onSubmit={onFormSubmit} />
 
           <SetCurrentAcademicYearModal
             opened={setCurrentDrawerOpened}

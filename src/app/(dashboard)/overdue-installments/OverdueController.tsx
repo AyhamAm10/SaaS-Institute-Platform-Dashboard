@@ -1,10 +1,22 @@
 'use client';
 
+import { useDashboardOverviewQuery, useOverdueSummaryQuery } from '@/src/core/api';
 import { useEffect, useState } from 'react';
 import { useStore } from 'zustand';
 import { useOverdueInstallmentsQuery } from '@/src/core/api';
 import { createOverdueStore, OverdueContext, OverdueStore } from './store/overdue.store';
 import { OverdueView } from './ui/OverdueView';
+
+/** KPI / chart numbers of the page (role.md §12.1: no query in ui/). */
+function OverviewSync({ store }: { store: OverdueStore }) {
+  const syncOverview = useStore(store, (s) => s.syncOverview);
+  const { data } = useDashboardOverviewQuery();
+  const { data: aging } = useOverdueSummaryQuery();
+  useEffect(() => {
+    syncOverview(data ?? null, aging ?? []);
+  }, [data, aging, syncOverview]);
+  return null;
+}
 
 /** Bridges the overdue installments query into the store. */
 function QuerySync({ store }: { store: OverdueStore }) {
@@ -42,6 +54,7 @@ export function OverdueController() {
   const [store] = useState(createOverdueStore);
   return (
     <OverdueContext.Provider value={store}>
+      <OverviewSync store={store} />
       <QuerySync store={store} />
       <OverdueView />
     </OverdueContext.Provider>

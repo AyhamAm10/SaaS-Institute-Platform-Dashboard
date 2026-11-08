@@ -1,11 +1,12 @@
 'use client';
 
-import { ActionIcon, Avatar, Group, Text, Tooltip } from '@mantine/core';
+import { Avatar, Group, Text } from '@mantine/core';
 import { IconBook, IconEdit, IconLayoutGrid, IconTrash } from '@tabler/icons-react';
 import { formatDate } from '@/src/core/format';
 import { Subject } from '@/src/core/api';
 import { DataModuleColumn } from '@/src/components/controllers/data-module';
 import { subjectsLabels } from '../static-data/subjects.data';
+import { AppIconButton } from '@/src/components/controllers/button';
 
 export function getSubjectsColumns(
   openEditDrawer: (subject: Subject) => void,
@@ -68,31 +69,23 @@ export function getSubjectsColumns(
       align: 'center',
       render: (subject) => (
         <Group gap="xs" justify="center" wrap="nowrap">
-          <Tooltip label={subjectsLabels.editButton} withArrow>
-            <ActionIcon
-              variant="subtle"
-              color="blue"
-              size="sm"
-              radius="md"
-              onClick={() => openEditDrawer(subject)}
-              aria-label={subjectsLabels.editButton}
-            >
-              <IconEdit size={15} />
-            </ActionIcon>
-          </Tooltip>
+          <AppIconButton
+            variant="ghost"
+            label={subjectsLabels.editButton}
+            size="sm"
+            onClick={() => openEditDrawer(subject)}
+          >
+            <IconEdit size={15} />
+          </AppIconButton>
 
-          <Tooltip label={subjectsLabels.deleteButton} withArrow>
-            <ActionIcon
-              variant="subtle"
-              color="red"
-              size="sm"
-              radius="md"
-              onClick={() => openDeleteModal(subject)}
-              aria-label={subjectsLabels.deleteButton}
-            >
-              <IconTrash size={15} />
-            </ActionIcon>
-          </Tooltip>
+          <AppIconButton
+            variant="danger"
+            label={subjectsLabels.deleteButton}
+            size="sm"
+            onClick={() => openDeleteModal(subject)}
+          >
+            <IconTrash size={15} />
+          </AppIconButton>
         </Group>
       ),
     });

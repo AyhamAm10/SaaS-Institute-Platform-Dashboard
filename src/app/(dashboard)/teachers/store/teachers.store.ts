@@ -18,6 +18,9 @@ const defaultFormState: TeacherFormState = {
 
 export function createTeachersStore(): TeachersStore {
   return createControllerStore<TeachersState>((set) => ({
+    academicBranchOptions: [],
+    subjectOptions: [],
+    syncQualificationOptions: (academicBranchOptions, subjectOptions) => set({ academicBranchOptions, subjectOptions }),
     // Pagination & Filters
     page: 1,
     limit: 10,

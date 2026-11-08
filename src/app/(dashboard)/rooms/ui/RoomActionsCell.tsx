@@ -1,8 +1,9 @@
 'use client';
 
-import { ActionIcon, Group, Tooltip } from '@mantine/core';
+import { Group } from '@mantine/core';
 import { IconEdit, IconEye, IconTrash } from '@tabler/icons-react';
 import { Room } from '@/src/core/api';
+import { AppIconButton } from '@/src/components/controllers/button';
 
 interface RoomActionsCellProps {
   room: Room;
@@ -12,58 +13,24 @@ interface RoomActionsCellProps {
   onOpenDelete: (room: Room) => void;
 }
 
-export function RoomActionsCell({
-  room,
-  canManage,
-  onOpenDetails,
-  onOpenEdit,
-  onOpenDelete,
-}: RoomActionsCellProps) {
+export function RoomActionsCell({ room, canManage, onOpenDetails, onOpenEdit, onOpenDelete }: RoomActionsCellProps) {
   return (
     <Group gap="xs" justify="center" wrap="nowrap">
-      <Tooltip label="عرض التفاصيل وجدول الإشغال">
-        <ActionIcon
-          variant="subtle"
-          color="gray"
-          size="sm"
-          radius="md"
-          onClick={() => onOpenDetails(room)}
-          aria-label="عرض التفاصيل"
-        >
-          <IconEye size={15} />
-        </ActionIcon>
-      </Tooltip>
+      <AppIconButton variant="ghost" label="عرض التفاصيل وجدول الإشغال" size="sm" onClick={() => onOpenDetails(room)}>
+        <IconEye size={15} />
+      </AppIconButton>
 
       {canManage && (
         <>
-          <Tooltip label="تعديل القاعة">
-            <ActionIcon
-              variant="subtle"
-              color="blue"
-              size="sm"
-              radius="md"
-              onClick={() => onOpenEdit(room)}
-              aria-label="تعديل القاعة"
-            >
-              <IconEdit size={15} />
-            </ActionIcon>
-          </Tooltip>
+          <AppIconButton variant="ghost" label="تعديل القاعة" size="sm" onClick={() => onOpenEdit(room)}>
+            <IconEdit size={15} />
+          </AppIconButton>
 
-          <Tooltip label="حذف القاعة">
-            <ActionIcon
-              variant="subtle"
-              color="red"
-              size="sm"
-              radius="md"
-              onClick={() => onOpenDelete(room)}
-              aria-label="حذف القاعة"
-            >
-              <IconTrash size={15} />
-            </ActionIcon>
-          </Tooltip>
+          <AppIconButton variant="danger" label="حذف القاعة" size="sm" onClick={() => onOpenDelete(room)}>
+            <IconTrash size={15} />
+          </AppIconButton>
         </>
       )}
     </Group>
   );
 }
-

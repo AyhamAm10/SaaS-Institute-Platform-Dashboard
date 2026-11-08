@@ -30,6 +30,14 @@ export function useOperationalContextResolver(): void {
     if (user) bindIdentity(user.instituteId, user.id);
   }, [user, bindIdentity]);
 
+  // Lists for the header menus / labels (kept fresh after edits)
+  useEffect(() => {
+    useOperationalContextStore.getState().setLists(
+      (branches.data ?? []).map((b) => ({ id: b.id, name: b.name })),
+      (years.data?.data ?? []).map((y) => ({ id: y.id, name: y.name, isCurrent: y.isCurrent })),
+    );
+  }, [branches.data, years.data]);
+
   useEffect(() => {
     if (!identity || resolved) return;
     if (isSuperAdmin) return markResolved();

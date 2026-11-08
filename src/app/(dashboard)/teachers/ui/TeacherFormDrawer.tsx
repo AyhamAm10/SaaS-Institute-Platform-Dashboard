@@ -1,21 +1,10 @@
 'use client';
 
-import {
-  Alert,
-  Button,
-  Drawer,
-  Group,
-  Stack,
-  Switch,
-  Text,
-} from '@mantine/core';
-import {
-  IconAlertCircle,
-  IconDeviceFloppy,
-  IconUser,
-} from '@tabler/icons-react';
+import { Alert, Drawer, Group, Stack, Switch, Text } from '@mantine/core';
+import { IconAlertCircle, IconDeviceFloppy, IconUser } from '@tabler/icons-react';
 import { AppInput } from '@/src/components/controllers';
 import { useTeachersMirror } from '../store/useTeachersMirror';
+import { AppButton } from '@/src/components/controllers/button';
 
 interface TeacherFormDrawerProps {
   onSubmit: () => void;
@@ -53,12 +42,7 @@ export function TeacherFormDrawer({ onSubmit }: TeacherFormDrawerProps) {
     >
       <Stack gap="md">
         {generalError && (
-          <Alert
-            icon={<IconAlertCircle size={18} />}
-            color="red"
-            radius="xl"
-            title="تعذر الحفظ"
-          >
+          <Alert icon={<IconAlertCircle size={18} />} color="red" radius="xl" title="تعذر الحفظ">
             {generalError}
           </Alert>
         )}
@@ -105,24 +89,17 @@ export function TeacherFormDrawer({ onSubmit }: TeacherFormDrawerProps) {
           label="حساب نشط"
           description="يمكن للمعلم تسجيل الدخول واستلام الحصص"
           checked={form.isActive}
-          onChange={(event) =>
-            setFormField('isActive', event.currentTarget.checked)
-          }
+          onChange={(event) => setFormField('isActive', event.currentTarget.checked)}
           mt="xs"
         />
 
         <Group justify="flex-end" mt="xl">
-          <Button variant="light" color="gray" radius="xl" onClick={closeDrawer}>
+          <AppButton variant="outline" onClick={closeDrawer}>
             إلغاء
-          </Button>
-          <Button
-            leftSection={<IconDeviceFloppy size={18} />}
-            radius="xl"
-            loading={isSubmitting}
-            onClick={onSubmit}
-          >
+          </AppButton>
+          <AppButton leftSection={<IconDeviceFloppy size={18} />} loading={isSubmitting} onClick={onSubmit}>
             {isEdit ? 'حفظ التعديلات' : 'إضافة المعلم'}
-          </Button>
+          </AppButton>
         </Group>
       </Stack>
     </Drawer>

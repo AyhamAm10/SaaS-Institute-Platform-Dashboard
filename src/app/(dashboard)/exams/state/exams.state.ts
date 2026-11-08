@@ -1,3 +1,4 @@
+import type { DashboardOverview } from '@/src/core/api';
 import type { Exam } from '@/src/core/api';
 import type { ExamForm } from '../utils/exams.utils';
 
@@ -20,6 +21,9 @@ export interface ExamFilters {
  * plan subjects) and the delete modal (force when the exam has marks).
  */
 export interface ExamsState {
+  /** Home numbers (GET /dashboard/overview) for the KPI cards and charts. */
+  overview: DashboardOverview | null;
+  syncOverview: (overview: DashboardOverview | null) => void;
   page: number;
   limit: number;
   search: string;

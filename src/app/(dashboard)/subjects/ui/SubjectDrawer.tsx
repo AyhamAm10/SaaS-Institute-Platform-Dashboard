@@ -1,18 +1,12 @@
 'use client';
 
-import {
-  Alert,
-  Button,
-  Stack,
-} from '@mantine/core';
-import {
-  IconAlertCircle,
-  IconBook,
-  IconCheck,
-} from '@tabler/icons-react';
+import { Alert, Stack } from '@mantine/core';
+import { IconAlertCircle, IconBook, IconCheck } from '@tabler/icons-react';
 import { AppDrawer, AppInput } from '@/src/components/controllers';
 import { useSubjectsMirror } from '../store/useSubjectsMirror';
 import { subjectsLabels } from '../static-data/subjects.data';
+import { inputText } from '@/src/core/format';
+import { AppButton } from '@/src/components/controllers/button';
 
 export interface SubjectDrawerProps {
   onSubmit: () => Promise<void>;
@@ -38,9 +32,7 @@ export function SubjectDrawer({ onSubmit }: SubjectDrawerProps) {
 
   const isEdit = drawerMode === 'edit';
   const title = isEdit ? subjectsLabels.editTitle : subjectsLabels.createTitle;
-  const description = isEdit
-    ? subjectsLabels.editDescription
-    : subjectsLabels.createDescription;
+  const description = isEdit ? subjectsLabels.editDescription : subjectsLabels.createDescription;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -77,7 +69,7 @@ export function SubjectDrawer({ onSubmit }: SubjectDrawerProps) {
               label={subjectsLabels.fieldNameLabel}
               placeholder={subjectsLabels.fieldNamePlaceholder}
               value={form.name}
-              onChange={(val) => setFormField('name', val)}
+              onChange={(val) => setFormField('name', inputText(val))}
               error={formErrors['name']}
               required
             />
@@ -88,17 +80,9 @@ export function SubjectDrawer({ onSubmit }: SubjectDrawerProps) {
       <AppDrawer.Footer>
         <AppDrawer.FooterEnd>
           <AppDrawer.Cancel>{subjectsLabels.cancel}</AppDrawer.Cancel>
-          <Button
-            type="submit"
-            form="subject-form"
-            variant="filled"
-            color="primary"
-            radius="xl"
-            loading={isSubmitting}
-            leftSection={<IconCheck size={16} />}
-          >
+          <AppButton type="submit" form="subject-form" loading={isSubmitting} leftSection={<IconCheck size={16} />}>
             {isEdit ? subjectsLabels.submitEdit : subjectsLabels.submitCreate}
-          </Button>
+          </AppButton>
         </AppDrawer.FooterEnd>
       </AppDrawer.Footer>
     </AppDrawer>

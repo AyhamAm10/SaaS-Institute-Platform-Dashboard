@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useId, useState } from 'react';
+import { useId } from 'react';
 import { Box, Group, Stack, Text, rem } from '@mantine/core';
 import { formatNumber } from '@/src/core/format';
 import { CircleChartSegment } from '../init/charts.init';
@@ -22,12 +22,6 @@ export function CircleChart({
   strokeWidth = 16,
 }: CircleChartProps) {
   const gradientId = useId();
-  const [drawn, setDrawn] = useState(false);
-
-  useEffect(() => {
-    const frame = requestAnimationFrame(() => setDrawn(true));
-    return () => cancelAnimationFrame(frame);
-  }, []);
 
   if (!segments || segments.length === 0) return null;
 
@@ -77,10 +71,14 @@ export function CircleChart({
                 fill="transparent"
                 stroke={colorFor(seg, idx)}
                 strokeWidth={strokeWidth}
-                strokeDasharray={`${drawn ? length : 0} ${circumference}`}
+                strokeDasharray={`${length} ${circumference}`}
                 strokeDashoffset={offset}
                 strokeLinecap="round"
-                style={{ transition: `stroke-dasharray 1.1s var(--app-ease-soft) ${idx * 0.15}s` }}
+                // Entrance: drawn from 0 by CSS (no state / effect)
+                style={{
+                  ['--app-circle-empty' as string]: `0 ${circumference}`,
+                  animation: `app-circle-draw 1.1s var(--app-ease-soft) ${idx * 0.15}s both`,
+                }}
               />
             );
           })}

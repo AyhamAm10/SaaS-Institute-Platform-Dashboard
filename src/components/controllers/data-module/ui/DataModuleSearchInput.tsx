@@ -2,8 +2,8 @@
 
 import { Box, rem } from '@mantine/core';
 import { useDebouncedCallback } from '@mantine/hooks';
-import { useState } from 'react';
 import { AppInput } from '@/src/components/controllers/input';
+import { inputText } from '@/src/core/format';
 import { useDataModuleMirror } from '../store/useDataModuleMirror';
 
 export interface DataModuleSearchInputProps {
@@ -12,42 +12,28 @@ export interface DataModuleSearchInputProps {
   debounceMs?: number;
 }
 
-export function DataModuleSearchInput({
-  placeholder,
-  width = rem(320),
-  debounceMs = 300,
-}: DataModuleSearchInputProps) {
-  const storeSearch = useDataModuleMirror('search');
+/**
+ * Search box of the module: the typed text lives in the store (`searchInput`)
+ * and is committed to `search` after the debounce. ZERO useState.
+ */
+export function DataModuleSearchInput({ placeholder, width = rem(320), debounceMs = 300 }: DataModuleSearchInputProps) {
+  const searchInput = useDataModuleMirror('searchInput');
   const storePlaceholder = useDataModuleMirror('searchPlaceholder');
+  const setSearchInput = useDataModuleMirror('setSearchInput');
   const setSearch = useDataModuleMirror('setSearch');
-
-  const [localValue, setLocalValue] = useState(storeSearch);
-  const [prevStoreSearch, setPrevStoreSearch] = useState(storeSearch);
-
-  if (storeSearch !== prevStoreSearch) {
-    setPrevStoreSearch(storeSearch);
-    setLocalValue(storeSearch);
-  }
-
-  const debouncedSetSearch = useDebouncedCallback((val: string) => {
-    setSearch(val);
-  }, debounceMs);
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | number | string,
-  ) => {
-    const val = typeof e === 'string' ? e : typeof e === 'number' ? String(e) : e?.target?.value ?? '';
-    setLocalValue(val);
-    debouncedSetSearch(val);
-  };
+  const commitSearch = useDebouncedCallback((val: string) => setSearch(val), debounceMs);
 
   return (
     <Box style={{ width: typeof width === 'number' ? rem(width) : width, minWidth: rem(200) }}>
       <AppInput
         type="search"
         placeholder={placeholder ?? storePlaceholder}
-        value={localValue}
-        onChange={handleChange}
+        value={searchInput}
+        onChange={(e: unknown) => {
+          const value = inputText(e);
+          setSearchInput(value);
+          commitSearch(value);
+        }}
       />
     </Box>
   );

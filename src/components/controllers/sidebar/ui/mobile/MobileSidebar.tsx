@@ -1,8 +1,6 @@
 'use client';
 
 import { Box, Drawer, ScrollArea } from '@mantine/core';
-import { usePathname } from 'next/navigation';
-import { useEffect } from 'react';
 import { useSidebarMirror } from '../../store/useSidebarMirror';
 import { SidebarBrand } from '../shared/SidebarBrand';
 import { SidebarNavList } from '../shared/SidebarNavList';
@@ -12,15 +10,6 @@ import { SidebarLogout } from '../shared/SidebarLogout';
 export function MobileSidebar() {
   const isOpen = useSidebarMirror('isMobileOpen');
   const close = useSidebarMirror('closeMobile');
-  const setActiveRoute = useSidebarMirror('setActiveRoute');
-  const pathname = usePathname();
-
-  useEffect(() => {
-    if (pathname) {
-      setActiveRoute(pathname);
-      close(); // Auto-close drawer on route change
-    }
-  }, [pathname, setActiveRoute, close]);
 
   return (
     <Drawer

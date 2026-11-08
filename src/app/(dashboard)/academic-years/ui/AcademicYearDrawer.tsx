@@ -2,168 +2,76 @@
 
 import { Alert, Checkbox, Stack } from '@mantine/core';
 import { IconAlertCircle, IconCalendar, IconCalendarPlus } from '@tabler/icons-react';
-import { useEffect, useState } from 'react';
 import { AppDatePicker, AppDrawer, AppInput } from '@/src/components/controllers';
-import { AcademicYear, getApiErrorMessage } from '@/src/core/api';
 import { inputText } from '@/src/core/format';
-import { academicYearFormLabels } from '../static-data/academic-years.data';
+import { academicYearFormLabels as labels } from '../static-data/academic-years.data';
+import { useAcademicYearsMirror } from '../store/useAcademicYearsMirror';
 
-export interface AcademicYearDrawerProps {
-  opened: boolean;
-  onClose: () => void;
-  year?: AcademicYear | null;
-  onSubmit: (data: {
-    name: string;
-    startDate: string;
-    endDate: string;
-    isCurrent?: boolean;
-  }) => Promise<void>;
-  isLoading?: boolean;
-}
-
-export function AcademicYearDrawer({
-  opened,
-  onClose,
-  year,
-  onSubmit,
-  isLoading = false,
-}: AcademicYearDrawerProps) {
+/**
+ * Create / edit an academic year. Form, error and loading live in the store;
+ * validation and the save run in the controller (role.md §12.1). ZERO useState.
+ */
+export function AcademicYearDrawer({ onSubmit }: { onSubmit: () => Promise<void> }) {
+  const opened = useAcademicYearsMirror('modalOpened');
+  const year = useAcademicYearsMirror('selectedYear');
+  const form = useAcademicYearsMirror('yearForm');
+  const error = useAcademicYearsMirror('formError');
+  const isLoading = useAcademicYearsMirror('formSubmitting');
+  const setField = useAcademicYearsMirror('setYearFormField');
+  const close = useAcademicYearsMirror('closeModal');
   const isEditing = Boolean(year);
 
-  const [name, setName] = useState('');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
-  const [isCurrent, setIsCurrent] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (year) {
-      setName(year.name);
-      setStartDate(year.startDate ? year.startDate.split('T')[0] : '');
-      setEndDate(year.endDate ? year.endDate.split('T')[0] : '');
-      setIsCurrent(year.isCurrent);
-    } else {
-      setName('');
-      setStartDate('');
-      setEndDate('');
-      setIsCurrent(false);
-    }
-    setError(null);
-  }, [year, opened]);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(null);
-
-    if (!name.trim()) {
-      setError('يرجى إدخال اسم السنة الدراسية');
-      return;
-    }
-    if (!startDate) {
-      setError('يرجى تحديد تاريخ بداية السنة الدراسية (YYYY-MM-DD)');
-      return;
-    }
-    if (!endDate) {
-      setError('يرجى تحديد تاريخ نهاية السنة الدراسية (YYYY-MM-DD)');
-      return;
-    }
-    let formattedStart = startDate.trim();
-    let formattedEnd = endDate.trim();
-
-    if (/^\d{4}$/.test(formattedStart)) {
-      formattedStart = `${formattedStart}-09-01`;
-    }
-    if (/^\d{4}$/.test(formattedEnd)) {
-      formattedEnd = `${formattedEnd}-06-30`;
-    }
-
-    if (new Date(formattedStart) >= new Date(formattedEnd)) {
-      setError('يجب أن يكون تاريخ البداية قبل تاريخ النهاية');
-      return;
-    }
-
-    try {
-      await onSubmit({
-        name: name.trim(),
-        startDate: formattedStart,
-        endDate: formattedEnd,
-        isCurrent,
-      });
-      onClose();
-    } catch (err: unknown) {
-      let msg = getApiErrorMessage(err, 'حدث خطأ أثناء حفظ السنة الدراسية');
-      if (typeof msg === 'string' && (msg.includes('overlap') || msg.includes('تتداخل'))) {
-        msg = 'تواريخ السنة الدراسية تتداخل مع سنة دراسية أخرى موجودة مسبقا، يرجى اختيار تاريخ بداية ونهاية لا يتقاطعان مع السنوات السابقة';
-      }
-      setError(msg);
-    }
-  };
-
   return (
-    <AppDrawer
-      opened={opened}
-      onClose={onClose}
-      size="md"
-    >
+    <AppDrawer opened={opened} onClose={close} size="md">
       <AppDrawer.Header>
         <AppDrawer.Icon
           icon={isEditing ? <IconCalendar size={20} /> : <IconCalendarPlus size={20} />}
           color={isEditing ? 'blue' : 'primary'}
         />
         <Stack gap={2} style={{ flex: 1, minWidth: 0 }}>
-          <AppDrawer.Title>
-            {isEditing
-              ? academicYearFormLabels.editTitle
-              : academicYearFormLabels.createTitle}
-          </AppDrawer.Title>
+          <AppDrawer.Title>{isEditing ? labels.editTitle : labels.createTitle}</AppDrawer.Title>
           <AppDrawer.Description>
-            {isEditing
-              ? 'تحديث بيانات السنة والتواريخ المعتمدة'
-              : 'إضافة سنة دراسية جديدة للمعهد لتنظيم الفصول والطلاب'}
+            {isEditing ? 'تحديث بيانات السنة والتواريخ المعتمدة' : 'إضافة سنة دراسية جديدة للمعهد لتنظيم الفصول والطلاب'}
           </AppDrawer.Description>
         </Stack>
       </AppDrawer.Header>
 
       <AppDrawer.Content>
-        <form id="academic-year-form" onSubmit={handleSubmit}>
+        <form
+          id="academic-year-form"
+          onSubmit={(e) => {
+            e.preventDefault();
+            void onSubmit();
+          }}
+        >
           <Stack gap="md">
             {error && (
-              <Alert
-                icon={<IconAlertCircle size={16} />}
-                color="red"
-                variant="light"
-                radius="md"
-              >
+              <Alert icon={<IconAlertCircle size={16} />} color="red" variant="light" radius="md">
                 {error}
               </Alert>
             )}
 
-            <AppDrawer.Section
-              title="معلومات السنة"
-              description="أدخل اسم وفترة السنة الدراسية"
-            >
+            <AppDrawer.Section title="معلومات السنة" description="أدخل اسم وفترة السنة الدراسية">
               <AppInput
                 type="text"
-                label={academicYearFormLabels.name}
-                placeholder={academicYearFormLabels.namePlaceholder}
-                value={name}
-                onChange={(e: unknown) => setName(inputText(e))}
+                label={labels.name}
+                placeholder={labels.namePlaceholder}
+                value={form.name}
+                onChange={(e: unknown) => setField('name', inputText(e))}
                 required
               />
-
               <AppDatePicker
-                label={academicYearFormLabels.startDate}
+                label={labels.startDate}
                 placeholder="اختر تاريخ البداية..."
-                value={startDate}
-                onChange={(val) => setStartDate(val ?? '')}
+                value={form.startDate}
+                onChange={(val) => setField('startDate', val ?? '')}
                 required
               />
-
               <AppDatePicker
-                label={academicYearFormLabels.endDate}
+                label={labels.endDate}
                 placeholder="اختر تاريخ النهاية..."
-                value={endDate}
-                onChange={(val) => setEndDate(val ?? '')}
+                value={form.endDate}
+                onChange={(val) => setField('endDate', val ?? '')}
                 required
               />
             </AppDrawer.Section>
@@ -171,9 +79,9 @@ export function AcademicYearDrawer({
             {!isEditing && (
               <AppDrawer.Section>
                 <Checkbox
-                  label={academicYearFormLabels.isCurrent}
-                  checked={isCurrent}
-                  onChange={(e) => setIsCurrent(e.currentTarget.checked)}
+                  label={labels.isCurrent}
+                  checked={form.isCurrent}
+                  onChange={(e) => setField('isCurrent', e.currentTarget.checked)}
                   color="teal"
                   radius="sm"
                 />
@@ -186,19 +94,11 @@ export function AcademicYearDrawer({
       <AppDrawer.Footer>
         <AppDrawer.FooterEnd>
           <AppDrawer.Cancel disabled={isLoading} />
-          <AppDrawer.Submit
-            form="academic-year-form"
-            loading={isLoading}
-          >
-            {isEditing
-              ? academicYearFormLabels.submitEdit
-              : academicYearFormLabels.submitCreate}
+          <AppDrawer.Submit form="academic-year-form" loading={isLoading}>
+            {isEditing ? labels.submitEdit : labels.submitCreate}
           </AppDrawer.Submit>
         </AppDrawer.FooterEnd>
       </AppDrawer.Footer>
     </AppDrawer>
   );
 }
-
-// Backward compatibility export alias
-export const AcademicYearModal = AcademicYearDrawer;

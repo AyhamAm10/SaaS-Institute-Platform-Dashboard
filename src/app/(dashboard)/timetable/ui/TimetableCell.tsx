@@ -1,27 +1,8 @@
 'use client';
 
-import {
-  ActionIcon,
-  Badge,
-  Card,
-  Group,
-  Stack,
-  Text,
-  ThemeIcon,
-  Tooltip,
-} from '@mantine/core';
-import {
-  IconBook,
-  IconBuildingCommunity,
-  IconEdit,
-  IconLock,
-  IconLockOpen,
-  IconPlus,
-  IconTrash,
-  IconUser,
-} from '@tabler/icons-react';
 import { ScheduleSlot, TimetableEntry } from '@/src/core/api';
-import { useTimetableMirror } from '../store/useTimetableMirror';
+import { TimetableLessonCard } from './TimetableLessonCard';
+import { TimetableBreakCard, TimetableEmptySlot } from './TimetableSlotPlaceholder';
 
 interface TimetableCellProps {
   dayOfWeek: number;
@@ -40,190 +21,16 @@ export function TimetableCell({
   onDeleteEntry,
   canManage = true,
 }: TimetableCellProps) {
-  const openCreateEntryModal = useTimetableMirror('openCreateEntryModal');
-  const openEditEntryModal = useTimetableMirror('openEditEntryModal');
-
-  const isBreak = slot.type === 'BREAK';
-
-  if (isBreak) {
-    return (
-      <Card
-        p="xs"
-        radius="md"
-        withBorder
-        bg="var(--mantine-color-orange-0)"
-        h="100%"
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          minHeight: 90,
-          borderStyle: 'dashed',
-        }}
-      >
-        <Stack align="center" gap={2}>
-          <Badge size="xs" color="orange" variant="light">
-            استراحة
-          </Badge>
-          <Text size="xs" fw={500} c="orange.8">
-            {slot.name || 'فسحة'}
-          </Text>
-        </Stack>
-      </Card>
-    );
-  }
-
-  // If entry exists, render scheduled lesson card
+  if (slot.type === 'BREAK') return <TimetableBreakCard slot={slot} />;
   if (entry) {
     return (
-      <Card
-        p="xs"
-        radius="md"
-        withBorder
-        h="100%"
-        style={{
-          minHeight: 90,
-          backgroundColor: entry.isLocked
-            ? 'var(--app-subtle)'
-            : 'var(--app-surface)',
-          borderColor: entry.isLocked
-            ? 'var(--app-brand-accent)'
-            : 'var(--app-border)',
-          position: 'relative',
-        }}
-      >
-        <Stack justify="space-between" h="100%" gap="xs">
-          {/* Top Row: Subject Name & Lock */}
-          <Group justify="space-between" align="flex-start" wrap="nowrap">
-            <Group gap={4} wrap="nowrap">
-              <ThemeIcon size="xs" color="blue" variant="light" radius="xl">
-                <IconBook size={12} />
-              </ThemeIcon>
-              <Text size="xs" fw={500} lineClamp={1}>
-                {entry.subject?.name || `مادة ${entry.subjectId}`}
-              </Text>
-            </Group>
-
-            {canManage ? (
-              <Tooltip label={entry.isLocked ? 'حصة مثبتة (محمية من التوليد الآلي)' : 'تثبيت الحصة'}>
-                <ActionIcon
-                  size="xs"
-                  variant="subtle"
-                  color={entry.isLocked ? 'indigo' : 'gray'}
-                  onClick={() => onToggleLock(entry)}
-                >
-                  {entry.isLocked ? <IconLock size={14} /> : <IconLockOpen size={14} />}
-                </ActionIcon>
-              </Tooltip>
-            ) : entry.isLocked ? (
-              <ThemeIcon size="xs" variant="subtle" color="indigo">
-                <IconLock size={14} />
-              </ThemeIcon>
-            ) : null}
-          </Group>
-
-          {/* Middle Details: Teacher & Room */}
-          <Stack gap={2}>
-            <Group gap={4} wrap="nowrap">
-              <IconUser size={12} color="gray" />
-              <Text size="11px" c="dimmed" lineClamp={1}>
-                {entry.teacher?.user?.fullName || 'معلم غير محدد'}
-              </Text>
-            </Group>
-
-            {entry.room && (
-              <Group gap={4} wrap="nowrap">
-                <IconBuildingCommunity size={12} color="gray" />
-                <Text size="11px" c="dimmed" lineClamp={1}>
-                  {entry.room.name}
-                </Text>
-              </Group>
-            )}
-          </Stack>
-
-          {/* Bottom Actions Bar */}
-          {canManage && (
-            <Group justify="flex-end" gap={4}>
-              <Tooltip label="تعديل الحصة">
-                <ActionIcon
-                  size="xs"
-                  variant="subtle"
-                  color="blue"
-                  onClick={() => openEditEntryModal(entry)}
-                >
-                  <IconEdit size={12} />
-                </ActionIcon>
-              </Tooltip>
-              <Tooltip label="حذف الحصة">
-                <ActionIcon
-                  size="xs"
-                  variant="subtle"
-                  color="red"
-                  onClick={() => onDeleteEntry(entry)}
-                >
-                  <IconTrash size={12} />
-                </ActionIcon>
-              </Tooltip>
-            </Group>
-          )}
-        </Stack>
-      </Card>
+      <TimetableLessonCard
+        entry={entry}
+        onToggleLock={onToggleLock}
+        onDeleteEntry={onDeleteEntry}
+        canManage={canManage}
+      />
     );
   }
-
-  if (!canManage) {
-    return (
-      <Card
-        p="xs"
-        radius="md"
-        withBorder
-        h="100%"
-        style={{
-          minHeight: 90,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          borderStyle: 'dashed',
-          borderColor: 'var(--app-border)',
-          backgroundColor: 'var(--app-subtle)',
-        }}
-      >
-        <Text size="xs" c="dimmed">—</Text>
-      </Card>
-    );
-  }
-
-  // Empty Slot
-  return (
-    <Card
-      p="xs"
-      radius="md"
-      withBorder
-      h="100%"
-      style={{
-        minHeight: 90,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderStyle: 'dashed',
-        borderColor: 'var(--app-border)',
-        backgroundColor: 'var(--app-subtle)',
-        cursor: 'pointer',
-      }}
-      onClick={() =>
-        openCreateEntryModal({
-          dayOfWeek,
-          periodNumber: slot.periodNumber || 1,
-          startTime: slot.startTime,
-          endTime: slot.endTime,
-        })
-      }
-    >
-      <Tooltip label="إضافة حصة دراسية في هذه الخانة">
-        <ActionIcon variant="subtle" color="gray" radius="xl" size="sm">
-          <IconPlus size={16} />
-        </ActionIcon>
-      </Tooltip>
-    </Card>
-  );
+  return <TimetableEmptySlot dayOfWeek={dayOfWeek} slot={slot} canManage={canManage} />;
 }

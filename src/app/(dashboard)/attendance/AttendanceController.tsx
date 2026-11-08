@@ -1,5 +1,6 @@
 'use client';
 
+import { useDashboardOverviewQuery } from '@/src/core/api';
 import { useEffect, useState } from 'react';
 import { useStore } from 'zustand';
 import { useDailyAttendanceQuery, useSectionsQuery } from '@/src/core/api';
@@ -7,6 +8,16 @@ import { useAuth } from '@/src/core/auth';
 import { AttendanceContext, AttendanceStore, createAttendanceStore } from './store/attendance.store';
 import { useAttendanceActions } from './useAttendanceActions';
 import { AttendanceView } from './ui/AttendanceView';
+
+/** KPI / chart numbers of the page (role.md §12.1: no query in ui/). */
+function OverviewSync({ store }: { store: AttendanceStore }) {
+  const syncOverview = useStore(store, (s) => s.syncOverview);
+  const { data } = useDashboardOverviewQuery();
+  useEffect(() => {
+    syncOverview(data ?? null);
+  }, [data, syncOverview]);
+  return null;
+}
 
 /** Sections of the active branch / year → select options. */
 function SectionsSync({ store }: { store: AttendanceStore }) {
@@ -58,6 +69,7 @@ export function AttendanceController() {
 
   return (
     <AttendanceContext.Provider value={store}>
+      <OverviewSync store={store} />
       <TimeZoneSync store={store} />
       <SectionsSync store={store} />
       <DaySync store={store} />

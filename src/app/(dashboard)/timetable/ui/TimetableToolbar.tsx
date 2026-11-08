@@ -1,18 +1,10 @@
 'use client';
 
-import {
-  Button,
-  Group,
-  Paper,
-  SimpleGrid,
-} from '@mantine/core';
-import {
-  IconRefresh,
-  IconWand,
-} from '@tabler/icons-react';
+import { Group, Paper, SimpleGrid } from '@mantine/core';
+import { IconRefresh, IconWand } from '@tabler/icons-react';
 import { AppSelect } from '@/src/components/controllers';
-import { useSectionsQuery } from '@/src/core/api';
 import { useTimetableMirror } from '../store/useTimetableMirror';
+import { AppButton } from '@/src/components/controllers/button';
 
 interface TimetableToolbarProps {
   onRefresh: () => void;
@@ -27,9 +19,9 @@ export function TimetableToolbar({ onRefresh, canManage = true }: TimetableToolb
   const openGenerateModal = useTimetableMirror('openGenerateModal');
 
   // Sections of the header year (the year is never chosen on this page)
-  const { data: sectionsData } = useSectionsQuery({ limit: 100 });
+  const sections = useTimetableMirror('sections');
 
-  const sectionOptions = (sectionsData?.data || []).map((s) => ({
+  const sectionOptions = sections.map((s) => ({
     value: String(s.id),
     label: `${s.name} - ${s.academicBranch?.name || s.grade}`,
   }));
@@ -48,26 +40,13 @@ export function TimetableToolbar({ onRefresh, canManage = true }: TimetableToolb
         </SimpleGrid>
 
         <Group gap="sm">
-          <Button
-            leftSection={<IconRefresh size={18} />}
-            variant="light"
-            color="gray"
-            radius="xl"
-            onClick={onRefresh}
-            loading={isFetching}
-          >
+          <AppButton variant="outline" leftSection={<IconRefresh size={18} />} onClick={onRefresh} loading={isFetching}>
             تحديث
-          </Button>
+          </AppButton>
           {canManage && (
-            <Button
-              leftSection={<IconWand size={18} />}
-              radius="xl"
-              color="indigo"
-              onClick={openGenerateModal}
-              disabled={!academicYearId}
-            >
+            <AppButton leftSection={<IconWand size={18} />} onClick={openGenerateModal} disabled={!academicYearId}>
               توليد الجدول آليا
-            </Button>
+            </AppButton>
           )}
         </Group>
       </Group>

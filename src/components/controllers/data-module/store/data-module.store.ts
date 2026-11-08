@@ -36,6 +36,7 @@ export function createDataModuleStore<T = unknown>(
     isLoading: props?.isLoading ?? false,
     isFetching: props?.isFetching ?? false,
     search: props?.initialSearch ?? '',
+    searchInput: props?.initialSearch ?? '',
     searchPlaceholder: props?.searchPlaceholder ?? 'بحث في السجلات...',
     sort: { column: null, direction: null },
     selectedIds: [],
@@ -67,8 +68,10 @@ export function createDataModuleStore<T = unknown>(
       get().onLimitChange?.(limit);
     },
 
+    setSearchInput: (searchInput: string) => set({ searchInput }),
+
     setSearch: (search: string) => {
-      set({ search, page: 1, selectedIds: [] });
+      set({ search, searchInput: search, page: 1, selectedIds: [] });
       get().onSelect?.([]);
       get().onSearchChange?.(search);
     },
@@ -94,7 +97,7 @@ export function createDataModuleStore<T = unknown>(
     },
 
     resetFilters: () => {
-      set({ filters: {}, search: '', page: 1, selectedIds: [] });
+      set({ filters: {}, search: '', searchInput: '', page: 1, selectedIds: [] });
       get().onSelect?.([]);
       get().onFilterChange?.({});
       get().onSearchChange?.('');

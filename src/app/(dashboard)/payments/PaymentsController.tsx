@@ -1,5 +1,6 @@
 'use client';
 
+import { useDashboardOverviewQuery } from '@/src/core/api';
 import { useCallback, useEffect, useState } from 'react';
 import { useStore } from 'zustand';
 import { getApiErrorMessage, useCancelPaymentMutation, usePaymentsQuery } from '@/src/core/api';
@@ -8,6 +9,16 @@ import { createPaymentsStore, PaymentsContext, PaymentsStore } from './store/pay
 import { toPaymentsQuery } from './utils/payments.utils';
 import { paymentsLabels as labels } from './static-data/payments.data';
 import { PaymentsView } from './ui/PaymentsView';
+
+/** KPI / chart numbers of the page (role.md §12.1: no query in ui/). */
+function OverviewSync({ store }: { store: PaymentsStore }) {
+  const syncOverview = useStore(store, (s) => s.syncOverview);
+  const { data } = useDashboardOverviewQuery();
+  useEffect(() => {
+    syncOverview(data ?? null);
+  }, [data, syncOverview]);
+  return null;
+}
 
 /** Bridges the filtered payments query into the store. */
 function QuerySync({ store }: { store: PaymentsStore }) {
@@ -61,6 +72,7 @@ export function PaymentsController() {
 
   return (
     <PaymentsContext.Provider value={store}>
+      <OverviewSync store={store} />
       <QuerySync store={store} />
       <PaymentsView onConfirmCancel={handleCancel} canCancel={canCancel} />
     </PaymentsContext.Provider>

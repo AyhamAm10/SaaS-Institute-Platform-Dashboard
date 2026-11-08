@@ -78,12 +78,12 @@ export function SelectVariant() {
       }}
       onFocus={(e) => {
         setFocused(true);
-        rawProps.onFocus?.(e as any);
+        rawProps.onFocus?.(e);
       }}
       onBlur={(e) => {
         setFocused(false);
         setTouched(true);
-        rawProps.onBlur?.(e as any);
+        rawProps.onBlur?.(e);
       }}
     />
   );

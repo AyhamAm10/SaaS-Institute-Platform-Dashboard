@@ -7,6 +7,7 @@ import { AppDrawer, AppInput, AppSelect } from '@/src/components/controllers';
 import { useOperationalContext } from '@/src/core/api';
 import { sectionFormLabels } from '../static-data/sections.data';
 import { useSectionsMirror } from '../store/useSectionsMirror';
+import { inputText } from '@/src/core/format';
 
 export interface SectionDrawerProps {
   opened: boolean;
@@ -20,11 +21,7 @@ export interface SectionDrawerProps {
  * Pure presentation drawer for creating/editing a section.
  * Strictly adheres to role.md Section 12 (ZERO useState, reads via useSectionsMirror).
  */
-export function SectionDrawer({
-  opened,
-  onClose,
-  onSubmit,
-}: SectionDrawerProps) {
+export function SectionDrawer({ opened, onClose, onSubmit }: SectionDrawerProps) {
   const { activeAcademicYearId } = useOperationalContext();
   const selectedSection = useSectionsMirror('selectedSection');
   const sectionForm = useSectionsMirror('sectionForm');
@@ -62,22 +59,14 @@ export function SectionDrawer({
   };
 
   return (
-    <AppDrawer
-      opened={opened}
-      onClose={onClose}
-      size="md"
-    >
+    <AppDrawer opened={opened} onClose={onClose} size="md">
       <AppDrawer.Header>
         <AppDrawer.Icon
           icon={isEditing ? <IconEdit size={20} /> : <IconSchool size={20} />}
           color={isEditing ? 'blue' : 'primary'}
         />
         <Stack gap={2} style={{ flex: 1, minWidth: 0 }}>
-          <AppDrawer.Title>
-            {isEditing
-              ? sectionFormLabels.editTitle
-              : sectionFormLabels.createTitle}
-          </AppDrawer.Title>
+          <AppDrawer.Title>{isEditing ? sectionFormLabels.editTitle : sectionFormLabels.createTitle}</AppDrawer.Title>
           <AppDrawer.Description>
             {isEditing
               ? 'تحديث بيانات ومرحلة الشعبة الدراسية'
@@ -90,12 +79,7 @@ export function SectionDrawer({
         <form id="section-form" onSubmit={handleSubmit}>
           <Stack gap="md">
             {sectionFormError && (
-              <Alert
-                icon={<IconAlertCircle size={16} />}
-                color="red"
-                variant="light"
-                radius="md"
-              >
+              <Alert icon={<IconAlertCircle size={16} />} color="red" variant="light" radius="md">
                 {sectionFormError}
               </Alert>
             )}
@@ -110,16 +94,7 @@ export function SectionDrawer({
                 label={sectionFormLabels.name}
                 placeholder={sectionFormLabels.namePlaceholder}
                 value={sectionForm.name}
-                onChange={(e) =>
-                  setSectionFormField(
-                    'name',
-                    typeof e === 'string'
-                      ? e
-                      : e && typeof e === 'object' && 'target' in e
-                        ? (e.target as HTMLInputElement).value
-                        : '',
-                  )
-                }
+                onChange={(e) => setSectionFormField('name', inputText(e))}
                 required
               />
 
@@ -128,9 +103,7 @@ export function SectionDrawer({
                 placeholder="اختر الفرع الأكاديمي (مثال: الثانوي العام — الفرع العلمي)"
                 data={branchOptions}
                 value={sectionForm.academicBranchId}
-                onChange={(val: string | null) =>
-                  setSectionFormField('academicBranchId', val)
-                }
+                onChange={(val: string | null) => setSectionFormField('academicBranchId', val)}
                 searchable
                 required
               />
@@ -148,28 +121,14 @@ export function SectionDrawer({
             </AppDrawer.Section>
 
             {/* Financial Information Section */}
-            <AppDrawer.Section
-              title="البيانات المالية"
-              description="الرسوم الدراسية المقررة لطلاب هذه الشعبة"
-            >
+            <AppDrawer.Section title="البيانات المالية" description="الرسوم الدراسية المقررة لطلاب هذه الشعبة">
               <AppInput
                 type="number"
                 label={sectionFormLabels.feeAmount}
                 placeholder={sectionFormLabels.feePlaceholder}
                 value={sectionForm.feeAmount}
                 min={0}
-                onChange={(e) =>
-                  setSectionFormField(
-                    'feeAmount',
-                    typeof e === 'string'
-                      ? e
-                      : typeof e === 'number'
-                        ? String(e)
-                        : e && typeof e === 'object' && 'target' in e
-                          ? (e.target as HTMLInputElement).value
-                          : '0',
-                  )
-                }
+                onChange={(e) => setSectionFormField('feeAmount', inputText(e))}
                 required
               />
             </AppDrawer.Section>
@@ -180,10 +139,7 @@ export function SectionDrawer({
       <AppDrawer.Footer>
         <AppDrawer.FooterEnd>
           <AppDrawer.Cancel disabled={formSubmitting} />
-          <AppDrawer.Submit
-            form="section-form"
-            loading={formSubmitting}
-          >
+          <AppDrawer.Submit form="section-form" loading={formSubmitting}>
             {isEditing ? sectionFormLabels.submitEdit : sectionFormLabels.submitCreate}
           </AppDrawer.Submit>
         </AppDrawer.FooterEnd>
@@ -191,7 +147,3 @@ export function SectionDrawer({
     </AppDrawer>
   );
 }
-
-// Backward compatibility alias
-export const SectionModal = SectionDrawer;
-export type SectionModalProps = SectionDrawerProps;

@@ -1,22 +1,17 @@
 'use client';
 
 import { createContext, useContext } from 'react';
-import { createStore, StoreApi } from 'zustand';
-import { DashboardState, DashboardPeriod } from '../state/dashboard.state';
+import { createControllerStore } from '@/src/core/mirror';
+import type { ControllerStoreApi } from '@/src/core/mirror/types';
+import { DashboardState } from '../state/dashboard.state';
 
-export type DashboardStore = StoreApi<DashboardState>;
+export type DashboardStore = ControllerStoreApi<DashboardState>;
 
 export function createDashboardStore(): DashboardStore {
-  return createStore<DashboardState>((set) => ({
+  return createControllerStore<DashboardState>((set) => ({
     overview: null,
     isLoading: true,
     syncOverview: (overview, isLoading) => set({ overview, isLoading }),
-
-    selectedPeriod: 'semester',
-    setSelectedPeriod: (selectedPeriod: DashboardPeriod) => set({ selectedPeriod }),
-
-    selectedStageFilter: 'all',
-    setSelectedStageFilter: (selectedStageFilter: string) => set({ selectedStageFilter }),
   }));
 }
 

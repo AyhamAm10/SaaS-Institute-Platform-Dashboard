@@ -5,6 +5,7 @@ import { IconAlertCircle, IconCheck, IconHome } from '@tabler/icons-react';
 import { AppDrawer, AppInput } from '@/src/components/controllers';
 import { useFamiliesMirror } from '../store/useFamiliesMirror';
 import { familiesLabels } from '../static-data/families.data';
+import { inputText } from '@/src/core/format';
 
 export interface FamilyDrawerProps {
   onSubmit: () => Promise<void>;
@@ -70,7 +71,7 @@ export function FamilyDrawer({ onSubmit }: FamilyDrawerProps) {
                   label={familiesLabels.fieldFamilyName}
                   placeholder={familiesLabels.fieldFamilyNamePlaceholder}
                   value={form.familyName}
-                  onChange={(val) => setFormField('familyName', val)}
+                  onChange={(val) => setFormField('familyName', inputText(val))}
                   error={formErrors['familyName']}
                   required
                 />
@@ -78,12 +79,12 @@ export function FamilyDrawer({ onSubmit }: FamilyDrawerProps) {
                   <AppInput
                     label={familiesLabels.fieldFatherName}
                     value={form.fatherName}
-                    onChange={(val) => setFormField('fatherName', val)}
+                    onChange={(val) => setFormField('fatherName', inputText(val))}
                   />
                   <AppInput
                     label={familiesLabels.fieldMotherName}
                     value={form.motherName}
-                    onChange={(val) => setFormField('motherName', val)}
+                    onChange={(val) => setFormField('motherName', inputText(val))}
                   />
                 </SimpleGrid>
               </Stack>
@@ -95,7 +96,7 @@ export function FamilyDrawer({ onSubmit }: FamilyDrawerProps) {
                 label={familiesLabels.fieldPhone}
                 placeholder={familiesLabels.fieldPhonePlaceholder}
                 value={form.phone}
-                onChange={(val) => setFormField('phone', val)}
+                onChange={(val) => setFormField('phone', inputText(val))}
               />
             </AppDrawer.Section>
           </Stack>

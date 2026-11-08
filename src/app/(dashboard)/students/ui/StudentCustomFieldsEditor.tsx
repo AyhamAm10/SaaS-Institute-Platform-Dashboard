@@ -4,6 +4,7 @@ import { SimpleGrid, Text } from '@mantine/core';
 import { AppDatePicker, AppInput, AppSelect } from '@/src/components/controllers';
 import { useStudentsMirror } from '../store/useStudentsMirror';
 import { BOOLEAN_OPTIONS, studentsLabels } from '../static-data/students.data';
+import { inputText } from '@/src/core/format';
 
 /**
  * StudentCustomFieldsEditor
@@ -82,7 +83,8 @@ export function StudentCustomFieldsEditor() {
             type={field.type === 'NUMBER' ? 'number' : 'text'}
             label={field.label}
             value={value === undefined || value === null ? '' : String(value)}
-            onChange={(val) => setCustomFieldValue(field.name, val ?? null)}
+            // Number inputs report a number, text inputs a string
+            onChange={(val) => setCustomFieldValue(field.name, typeof val === 'number' ? val : inputText(val))}
             error={error}
             required={field.isRequired}
           />

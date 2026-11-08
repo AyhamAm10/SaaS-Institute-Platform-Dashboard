@@ -4,10 +4,10 @@ import { IconCalendarCheck, IconClock, IconUserCheck, IconUserX } from '@tabler/
 import { AppModule, StatCard } from '@/src/components/controllers';
 import { ChartCard } from '@/src/components/controllers/charts';
 import { formatDate, formatNumber } from '@/src/core/format';
-import { useDashboardOverviewQuery } from '@/src/core/api';
+import { useAttendanceMirror } from '../store/attendance.store';
 
 export function AttendanceOverview() {
-  const { data: overview } = useDashboardOverviewQuery();
+  const overview = useAttendanceMirror('overview');
   if (!overview) return null;
 
   const { attendance } = overview;

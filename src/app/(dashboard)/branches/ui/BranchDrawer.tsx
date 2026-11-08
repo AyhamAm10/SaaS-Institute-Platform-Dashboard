@@ -1,11 +1,13 @@
 'use client';
 
-import { Button, Stack } from '@mantine/core';
+import { Stack } from '@mantine/core';
 import { IconBuildingCommunity } from '@tabler/icons-react';
 import { AppDrawer } from '@/src/components/controllers/drawer';
 import { AppInput } from '@/src/components/controllers/input';
 import { useBranchesMirror } from '../store/useBranchesMirror';
 import { branchesLabels } from '../static-data/branches.data';
+import { inputText } from '@/src/core/format';
+import { AppButton } from '@/src/components/controllers/button';
 
 export interface BranchDrawerProps {
   onSubmit: () => Promise<void>;
@@ -36,9 +38,7 @@ export function BranchDrawer({ onSubmit }: BranchDrawerProps) {
           <AppDrawer.Title>
             {isEditing ? branchesLabels.drawerEditTitle : branchesLabels.drawerCreateTitle}
           </AppDrawer.Title>
-          <AppDrawer.Description>
-            {branchesLabels.drawerDescription}
-          </AppDrawer.Description>
+          <AppDrawer.Description>{branchesLabels.drawerDescription}</AppDrawer.Description>
         </Stack>
       </AppDrawer.Header>
 
@@ -51,12 +51,7 @@ export function BranchDrawer({ onSubmit }: BranchDrawerProps) {
                   label={branchesLabels.nameLabel}
                   placeholder={branchesLabels.namePlaceholder}
                   value={formName}
-                  onChange={(e) =>
-                    setFormField(
-                      'formName',
-                      typeof e === 'string' ? e : e?.target?.value ?? '',
-                    )
-                  }
+                  onChange={(e) => setFormField('formName', inputText(e))}
                   required
                 />
               </Stack>
@@ -69,24 +64,14 @@ export function BranchDrawer({ onSubmit }: BranchDrawerProps) {
                   label={branchesLabels.phoneLabel}
                   placeholder={branchesLabels.phonePlaceholder}
                   value={formPhone}
-                  onChange={(e) =>
-                    setFormField(
-                      'formPhone',
-                      typeof e === 'string' ? e : e?.target?.value ?? '',
-                    )
-                  }
+                  onChange={(e) => setFormField('formPhone', inputText(e))}
                 />
                 <AppInput
                   type="textarea"
                   label={branchesLabels.addressLabel}
                   placeholder={branchesLabels.addressPlaceholder}
                   value={formAddress}
-                  onChange={(e) =>
-                    setFormField(
-                      'formAddress',
-                      typeof e === 'string' ? e : e?.target?.value ?? '',
-                    )
-                  }
+                  onChange={(e) => setFormField('formAddress', inputText(e))}
                   rows={3}
                 />
               </Stack>
@@ -96,18 +81,12 @@ export function BranchDrawer({ onSubmit }: BranchDrawerProps) {
       </AppDrawer.Content>
 
       <AppDrawer.Footer>
-        <Button variant="subtle" color="gray" onClick={closeDrawer} radius="xl">
+        <AppButton variant="ghost" onClick={closeDrawer}>
           {branchesLabels.cancel}
-        </Button>
-        <Button
-          type="submit"
-          form="branch-form"
-          loading={isSubmitting}
-          radius="xl"
-          color="teal"
-        >
+        </AppButton>
+        <AppButton type="submit" form="branch-form" loading={isSubmitting}>
           {isEditing ? branchesLabels.submitUpdate : branchesLabels.submitCreate}
-        </Button>
+        </AppButton>
       </AppDrawer.Footer>
     </AppDrawer>
   );

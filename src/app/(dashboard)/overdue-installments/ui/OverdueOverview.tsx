@@ -1,11 +1,11 @@
 'use client';
 
-import { Group, Stack, Text } from '@mantine/core';
+import { Group } from '@mantine/core';
 import { IconAlertTriangle, IconClockExclamation } from '@tabler/icons-react';
 import { AppModule, StatCard, StatusBadge } from '@/src/components/controllers';
 import { ChartCard } from '@/src/components/controllers/charts';
 import { formatMoney, formatNumber } from '@/src/core/format';
-import { useDashboardOverviewQuery, useOverdueSummaryQuery } from '@/src/core/api';
+import { useOverdueMirror } from '../store/overdue.store';
 import { nonEmptySegments } from '../../dashboard/utils/dashboard-overview.utils';
 
 const BUCKET_COLORS = {
@@ -23,8 +23,8 @@ const BUCKET_LABELS: Record<string, string> = {
 };
 
 export function OverdueOverview() {
-  const { data: overview } = useDashboardOverviewQuery();
-  const { data: aging } = useOverdueSummaryQuery();
+  const overview = useOverdueMirror('overview');
+  const aging = useOverdueMirror('aging');
 
   if (!overview) return null;
 

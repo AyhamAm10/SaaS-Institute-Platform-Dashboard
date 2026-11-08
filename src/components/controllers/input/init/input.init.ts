@@ -22,6 +22,9 @@ export type InputType =
 
 export type SelectDataType = ComboboxData | string[];
 
+/** What an input reports on change: a DOM event (text inputs) or a value (select / number). */
+export type InputChangeValue = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | string | number | null;
+
 /**
  * Props accepted by the InputController (AppInput / AppSelect).
  * Matches standard Mantine input options plus type-specific configurations.
@@ -36,10 +39,11 @@ export interface InputInitialProps {
   placeholder?: string;
   value?: string | number | null;
   defaultValue?: string | number | null;
-  onChange?: (
-    event: any,
-    option?: ComboboxItem,
-  ) => void;
+  /**
+   * Method syntax on purpose: callers may declare the narrower value they
+   * expect (`(v: string | null) => …` for a select) without `any`.
+   */
+  onChange?(event: InputChangeValue, option?: ComboboxItem): void;
   onFocus?: (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   onBlur?: (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
@@ -69,8 +73,9 @@ export interface InputInitialProps {
   autosize?: boolean;
   className?: string;
   style?: React.CSSProperties;
-  styles?: Record<string, any>;
-  [key: string]: any;
+  styles?: Record<string, React.CSSProperties>;
+  /** Other Mantine props, forwarded as-is to the underlying input. */
+  [key: string]: unknown;
 }
 
 export interface ResolvedInputConfig {

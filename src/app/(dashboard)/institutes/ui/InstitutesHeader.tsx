@@ -1,9 +1,11 @@
 'use client';
 
-import { Badge, Button, Group, Stack, Text, Title } from '@mantine/core';
+import { Group, Stack, Text, Title } from '@mantine/core';
 import { IconPlus, IconSchool } from '@tabler/icons-react';
 import { useInstitutesMirror } from '../store/useInstitutesMirror';
 import { institutesLabels } from '../static-data/institutes.data';
+import { AppButton } from '@/src/components/controllers/button';
+import { StatusBadge } from '@/src/components/controllers/badge';
 
 /**
  * InstitutesHeader
@@ -24,19 +26,16 @@ export function InstitutesHeader() {
           <Title order={2} size="h3" fw={500}>
             {institutesLabels.title}
           </Title>
-          <Badge variant="filled" color="primary" radius="xl" size="lg">
+          <StatusBadge tone="ink" variant="solid" size="md">
             {isLoading ? '...' : `${total} ${institutesLabels.totalCountBadge}`}
-          </Badge>
+          </StatusBadge>
         </Group>
         <Text size="sm" c="dimmed">
           {institutesLabels.subtitle}
         </Text>
       </Stack>
 
-      <Button
-        variant="filled"
-        color="primary"
-        radius="xl"
+      <AppButton
         leftSection={<IconPlus size={16} />}
         onClick={openCreateDrawer}
         styles={{
@@ -46,7 +45,7 @@ export function InstitutesHeader() {
         }}
       >
         {institutesLabels.createNewButton}
-      </Button>
+      </AppButton>
     </Group>
   );
 }

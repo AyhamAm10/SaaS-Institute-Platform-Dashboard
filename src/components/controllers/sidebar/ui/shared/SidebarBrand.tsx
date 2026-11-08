@@ -38,7 +38,7 @@ export interface SidebarBrandProps {
 export function SidebarBrand({ compact }: SidebarBrandProps) {
   const { user } = useAuth();
   // Same source as the header pills: they can never disagree
-  const { branchName } = useActiveContextLabels(user?.role !== 'SUPER_ADMIN');
+  const { branchName } = useActiveContextLabels();
   const branchLabel = user?.role === 'SUPER_ADMIN' ? 'المدير العام' : branchName;
 
   if (compact) {

@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import { ActionIcon, Button, Tooltip } from '@mantine/core';
+
 import { IconBook, IconPlus, IconRefresh } from '@tabler/icons-react';
 import { AppModule } from '@/src/components/controllers';
 import { DataModuleController } from '@/src/components/controllers/data-module';
@@ -11,6 +11,7 @@ import { subjectsLabels } from '../static-data/subjects.data';
 import { getSubjectsColumns } from './SubjectsTable';
 import { SubjectDrawer } from './SubjectDrawer';
 import { SubjectDeleteModal } from './SubjectDeleteModal';
+import { AppButton, AppIconButton } from '@/src/components/controllers/button';
 
 export interface SubjectsViewProps {
   onRefresh?: () => void;
@@ -19,12 +20,7 @@ export interface SubjectsViewProps {
   canManage?: boolean;
 }
 
-export function SubjectsView({
-  onRefresh,
-  onSubmit,
-  onConfirmDelete,
-  canManage = true,
-}: SubjectsViewProps) {
+export function SubjectsView({ onRefresh, onSubmit, onConfirmDelete, canManage = true }: SubjectsViewProps) {
   const data = useSubjectsMirror('data');
   const isLoading = useSubjectsMirror('isLoading');
   const isFetching = useSubjectsMirror('isFetching');
@@ -66,20 +62,12 @@ export function SubjectsView({
           onSearchChange={setSearch}
         >
           <DataModuleController.Header>
-            <DataModuleController.Title
-              icon={<IconBook size={18} />}
-              badgeLabel={subjectsLabels.totalCountBadge}
-            />
+            <DataModuleController.Title icon={<IconBook size={18} />} badgeLabel={subjectsLabels.totalCountBadge} />
             {canManage && (
               <DataModuleController.Actions>
-                <Button
-                  leftSection={<IconPlus size={16} />}
-                  onClick={openCreateDrawer}
-                  color="primary"
-                  radius="md"
-                >
+                <AppButton leftSection={<IconPlus size={16} />} onClick={openCreateDrawer}>
                   {subjectsLabels.createNewButton}
-                </Button>
+                </AppButton>
               </DataModuleController.Actions>
             )}
           </DataModuleController.Header>
@@ -88,19 +76,15 @@ export function SubjectsView({
             <DataModuleController.SearchInput placeholder={subjectsLabels.searchPlaceholder} />
             <DataModuleController.FilterSlot>
               {onRefresh && (
-                <Tooltip label={subjectsLabels.refreshButton} withArrow>
-                  <ActionIcon
-                    variant="subtle"
-                    color="gray"
-                    size="md"
-                    radius="md"
-                    onClick={onRefresh}
-                    loading={isFetching}
-                    aria-label={subjectsLabels.refreshButton}
-                  >
-                    <IconRefresh size={16} />
-                  </ActionIcon>
-                </Tooltip>
+                <AppIconButton
+                  variant="ghost"
+                  label={subjectsLabels.refreshButton}
+                  size="md"
+                  onClick={onRefresh}
+                  loading={isFetching}
+                >
+                  <IconRefresh size={16} />
+                </AppIconButton>
               )}
             </DataModuleController.FilterSlot>
           </DataModuleController.FilterBar>

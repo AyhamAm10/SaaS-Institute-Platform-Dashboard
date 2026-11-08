@@ -33,6 +33,9 @@ export function createTimetableStore(): TimetableStore {
     teachers: [],
     rooms: [],
     conflicts: [],
+    sectionSubjects: [],
+    conflictsOpened: false,
+    toggleConflicts: () => set((s) => ({ conflictsOpened: !s.conflictsOpened })),
 
     isLoading: true,
     isFetching: false,
@@ -135,6 +138,7 @@ export function createTimetableStore(): TimetableStore {
         sections: payload.sections,
         teachers: payload.teachers,
         rooms: payload.rooms,
+        sectionSubjects: payload.sectionSubjects,
         isLoading: payload.isLoading,
         isFetching: payload.isFetching,
       }),

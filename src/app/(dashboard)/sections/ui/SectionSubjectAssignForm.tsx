@@ -3,13 +3,7 @@
 import { useMemo } from 'react';
 import { Alert, Group, Stack } from '@mantine/core';
 import { IconAlertCircle, IconPlus } from '@tabler/icons-react';
-import {
-  AppButton,
-  AppDrawer,
-  AppInput,
-  AppSelect,
-  StatusBadge,
-} from '@/src/components/controllers';
+import { AppButton, AppDrawer, AppInput, AppSelect, StatusBadge } from '@/src/components/controllers';
 import { Teacher } from '@/src/core/api';
 import { useSectionsMirror } from '../store/useSectionsMirror';
 import { sectionDetailsLabels as labels } from '../static-data/sections.data';
@@ -54,9 +48,7 @@ export function SectionSubjectAssignForm({ onAssign }: SectionSubjectAssignFormP
     if (!assignSubjectId || !details) return [];
     const subId = Number(assignSubjectId);
     const qualified = (teachersData ?? []).filter((t: Teacher) =>
-      t.assignments?.some(
-        (a) => a.subjectId === subId && a.academicBranchId === details.academicBranchId,
-      ),
+      t.assignments?.some((a) => a.subjectId === subId && a.academicBranchId === details.academicBranchId),
     );
     return qualified.map((t: Teacher) => ({
       value: String(t.id),

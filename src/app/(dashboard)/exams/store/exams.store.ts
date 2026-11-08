@@ -14,6 +14,8 @@ const freshDrawer = { formErrors: {}, generalError: null, isSubmitting: false };
 /** Isolated store of the exams page (role.md §3). */
 export function createExamsStore(): ExamsStore {
   return createControllerStore<ExamsState>((set) => ({
+    overview: null,
+    syncOverview: (overview) => set({ overview }),
     page: 1,
     limit: 10,
     search: '',

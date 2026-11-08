@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
+import type { ComboboxItem } from '@mantine/core';
 import { ControllerState } from '@/src/core/mirror/types';
-import { InputInitialProps, ResolvedInputConfig, resolveInputConfig } from '../init/input.init';
+import { InputChangeValue, InputInitialProps, ResolvedInputConfig, resolveInputConfig } from '../init/input.init';
 
 /**
  * Mirror state contract for the InputController.
@@ -16,7 +17,7 @@ export interface InputState extends ControllerState {
   rawProps: InputInitialProps;
 
   // Actions
-  setValue: (value: string | number | null, option?: any) => void;
+  setValue: (value: InputChangeValue, option?: ComboboxItem) => void;
   setFocused: (isFocused: boolean) => void;
   setTouched: (isTouched: boolean) => void;
   togglePasswordVisibility: () => void;

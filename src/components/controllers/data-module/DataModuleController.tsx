@@ -41,10 +41,7 @@ export interface DataModuleControllerProps<T = unknown> extends DataModuleInitia
  * - Isolated per-instance Zustand Store (role.md Section 3)
  * - Mantine-Only primitives & Modern Curved Organic UI
  */
-export function DataModuleController<T = unknown>({
-  children,
-  ...props
-}: DataModuleControllerProps<T>) {
+export function DataModuleController<T = unknown>({ children, ...props }: DataModuleControllerProps<T>) {
   const [store] = useState(() => createDataModuleStore<T>(props));
   const appModuleStore = useOptionalAppModuleStore();
 
@@ -128,9 +125,7 @@ export function DataModuleController<T = unknown>({
 
   return (
     <DataModuleContext.Provider value={store as unknown as DataModuleStore<unknown>}>
-      <Box w="100%">
-        {children ?? defaultContent}
-      </Box>
+      <Box w="100%">{children ?? defaultContent}</Box>
     </DataModuleContext.Provider>
   );
 }

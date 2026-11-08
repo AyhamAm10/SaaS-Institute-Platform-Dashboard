@@ -1,3 +1,4 @@
+import type { DashboardOverview } from '@/src/core/api';
 import type { Currency, PaymentMethod, PaymentRecord, PaymentStatus } from '@/src/core/api';
 
 export interface PaymentFilters {
@@ -16,6 +17,9 @@ export interface PaymentFilters {
  * receipt number, student search) and the cancel modal.
  */
 export interface PaymentsState {
+  /** Home numbers (GET /dashboard/overview) for the KPI cards and charts. */
+  overview: DashboardOverview | null;
+  syncOverview: (overview: DashboardOverview | null) => void;
   page: number;
   limit: number;
   search: string;

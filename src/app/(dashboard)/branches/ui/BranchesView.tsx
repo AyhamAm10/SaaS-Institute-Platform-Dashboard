@@ -1,6 +1,5 @@
 'use client';
 
-import { Button } from '@mantine/core';
 import { IconPlus } from '@tabler/icons-react';
 import { useMemo } from 'react';
 import { Branch } from '@/src/core/api';
@@ -10,6 +9,7 @@ import { useBranchesMirror } from '../store/useBranchesMirror';
 import { branchesLabels } from '../static-data/branches.data';
 import { getBranchesColumns } from './BranchesTable';
 import { BranchDrawer } from './BranchDrawer';
+import { AppButton } from '@/src/components/controllers/button';
 
 export interface BranchesViewProps {
   onSubmit: () => Promise<void>;
@@ -28,10 +28,7 @@ export function BranchesView({ onSubmit, canManage = true }: BranchesViewProps) 
     if (!search.trim()) return branches;
     const q = search.trim().toLowerCase();
     return branches.filter(
-      (b) =>
-        b.name?.toLowerCase().includes(q) ||
-        b.address?.toLowerCase().includes(q) ||
-        b.phone?.includes(q),
+      (b) => b.name?.toLowerCase().includes(q) || b.address?.toLowerCase().includes(q) || b.phone?.includes(q),
     );
   }, [branches, search]);
 
@@ -61,14 +58,9 @@ export function BranchesView({ onSubmit, canManage = true }: BranchesViewProps) 
             <DataModuleController.Title />
             {canManage && (
               <DataModuleController.Actions>
-                <Button
-                  leftSection={<IconPlus size={16} />}
-                  onClick={openCreateDrawer}
-                  color="teal"
-                  radius="md"
-                >
+                <AppButton leftSection={<IconPlus size={16} />} onClick={openCreateDrawer}>
                   {branchesLabels.createAction}
-                </Button>
+                </AppButton>
               </DataModuleController.Actions>
             )}
           </DataModuleController.Header>

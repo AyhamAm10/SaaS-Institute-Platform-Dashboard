@@ -12,7 +12,18 @@ export interface TeacherFormState {
   isActive: boolean;
 }
 
+/** Select option (value = id as string). */
+export interface TeacherOption {
+  value: string;
+  label: string;
+}
+
 export interface TeachersState {
+  /** Qualification pickers of the details drawer (synced by the controller). */
+  academicBranchOptions: TeacherOption[];
+  subjectOptions: TeacherOption[];
+  syncQualificationOptions: (academicBranches: TeacherOption[], subjects: TeacherOption[]) => void;
+
   // ── Pagination & Filters ──
   page: number;
   limit: number;

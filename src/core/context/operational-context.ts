@@ -36,6 +36,18 @@ function writeNumber(key: string, value: number | null): void {
   }
 }
 
+/** Branch / year as the header menus list them. */
+export interface ContextBranch {
+  id: number;
+  name: string;
+}
+
+export interface ContextYear {
+  id: number;
+  name: string;
+  isCurrent: boolean;
+}
+
 interface OperationalContextState {
   /** `<instituteId>:<userId>` of the signed-in account, null before sign-in. */
   identity: string | null;
@@ -43,12 +55,16 @@ interface OperationalContextState {
   activeAcademicYearId: number | null;
   /** True once the branch / year were validated against the institute lists. */
   resolved: boolean;
+  /** The institute lists (kept by the layout resolver; read by header / sidebar). */
+  branches: ContextBranch[];
+  years: ContextYear[];
 
   /** Switches to an account and restores ITS remembered context. */
   bindIdentity: (instituteId: number, userId: number) => void;
   setActiveBranchId: (id: number | null) => void;
   setActiveAcademicYearId: (id: number | null) => void;
   markResolved: () => void;
+  setLists: (branches: ContextBranch[], years: ContextYear[]) => void;
   resetContext: () => void;
 }
 
@@ -57,6 +73,8 @@ export const useOperationalContextStore = create<OperationalContextState>((set, 
   activeBranchId: null,
   activeAcademicYearId: null,
   resolved: false,
+  branches: [],
+  years: [],
 
   bindIdentity: (instituteId, userId) => {
     const identity = `${instituteId}:${userId}`;
@@ -91,8 +109,10 @@ export const useOperationalContextStore = create<OperationalContextState>((set, 
   },
 
   markResolved: () => set({ resolved: true }),
+  setLists: (branches, years) => set({ branches, years }),
 
-  resetContext: () => set({ identity: null, activeBranchId: null, activeAcademicYearId: null, resolved: false }),
+  resetContext: () =>
+    set({ identity: null, activeBranchId: null, activeAcademicYearId: null, resolved: false, branches: [], years: [] }),
 }));
 
 /** Synchronous accessor for non-React code (the Axios request interceptor). */

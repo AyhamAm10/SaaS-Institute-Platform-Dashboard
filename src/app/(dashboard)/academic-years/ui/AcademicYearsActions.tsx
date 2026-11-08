@@ -1,8 +1,8 @@
 'use client';
 
-import { Button } from '@mantine/core';
 import { IconPlus } from '@tabler/icons-react';
 import { useAcademicYearsMirror } from '../store/useAcademicYearsMirror';
+import { AppButton } from '@/src/components/controllers/button';
 
 /**
  * AcademicYearsActions
@@ -14,13 +14,8 @@ export function AcademicYearsActions() {
   const openCreate = useAcademicYearsMirror('openCreate');
 
   return (
-    <Button
-      color="primary"
-      radius="xl"
-      leftSection={<IconPlus size={16} />}
-      onClick={openCreate}
-    >
+    <AppButton leftSection={<IconPlus size={16} />} onClick={openCreate}>
       إضافة سنة دراسية
-    </Button>
+    </AppButton>
   );
 }

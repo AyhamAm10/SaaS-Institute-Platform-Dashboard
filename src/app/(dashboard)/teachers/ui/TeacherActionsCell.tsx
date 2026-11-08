@@ -1,8 +1,9 @@
 'use client';
 
-import { ActionIcon, Group, Tooltip } from '@mantine/core';
+import { Group } from '@mantine/core';
 import { IconEdit, IconEye, IconKey, IconTrash } from '@tabler/icons-react';
 import { Teacher } from '@/src/core/api';
+import { AppIconButton } from '@/src/components/controllers/button';
 
 export interface TeacherActionsCellProps {
   teacher: Teacher;
@@ -23,57 +24,30 @@ export function TeacherActionsCell({
 }: TeacherActionsCellProps) {
   return (
     <Group gap="xs" justify="center" wrap="nowrap">
-      <Tooltip label="التفاصيل والمؤهلات والدوام" withArrow>
-        <ActionIcon
-          variant="subtle"
-          color="blue"
-          radius="md"
-          size="sm"
-          onClick={() => openDetailsDrawer(teacher)}
-        >
-          <IconEye size={15} />
-        </ActionIcon>
-      </Tooltip>
+      <AppIconButton
+        variant="ghost"
+        label="التفاصيل والمؤهلات والدوام"
+        size="sm"
+        onClick={() => openDetailsDrawer(teacher)}
+      >
+        <IconEye size={15} />
+      </AppIconButton>
+
       {canManage && openPasswordModal && (
-        <Tooltip label="تغيير كلمة المرور" withArrow>
-          <ActionIcon
-            variant="subtle"
-            color="indigo"
-            radius="md"
-            size="sm"
-            onClick={() => openPasswordModal(teacher)}
-          >
-            <IconKey size={15} />
-          </ActionIcon>
-        </Tooltip>
+        <AppIconButton variant="ghost" label="تغيير كلمة المرور" size="sm" onClick={() => openPasswordModal(teacher)}>
+          <IconKey size={15} />
+        </AppIconButton>
       )}
       {canManage && (
-        <Tooltip label="تعديل البيانات" withArrow>
-          <ActionIcon
-            variant="subtle"
-            color="yellow"
-            radius="md"
-            size="sm"
-            onClick={() => openEditDrawer(teacher)}
-          >
-            <IconEdit size={15} />
-          </ActionIcon>
-        </Tooltip>
+        <AppIconButton variant="ghost" label="تعديل البيانات" size="sm" onClick={() => openEditDrawer(teacher)}>
+          <IconEdit size={15} />
+        </AppIconButton>
       )}
       {canManage && (
-        <Tooltip label="حذف المعلم" withArrow>
-          <ActionIcon
-            variant="subtle"
-            color="red"
-            radius="md"
-            size="sm"
-            onClick={() => openDeleteModal(teacher)}
-          >
-            <IconTrash size={15} />
-          </ActionIcon>
-        </Tooltip>
+        <AppIconButton variant="danger" label="حذف المعلم" size="sm" onClick={() => openDeleteModal(teacher)}>
+          <IconTrash size={15} />
+        </AppIconButton>
       )}
     </Group>
   );
 }
-

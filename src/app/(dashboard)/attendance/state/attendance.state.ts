@@ -1,3 +1,4 @@
+import type { DashboardOverview } from '@/src/core/api';
 import type { AttendanceRecord, AttendanceStatus, DailyAttendance, DailyAttendanceRow } from '@/src/core/api';
 
 export interface SectionOption {
@@ -25,6 +26,9 @@ export interface Notice {
  * counters, per-student / bulk actions, and the excuse and edit modals.
  */
 export interface AttendanceState {
+  /** Home numbers (GET /dashboard/overview) for the KPI cards and charts. */
+  overview: DashboardOverview | null;
+  syncOverview: (overview: DashboardOverview | null) => void;
   /** Institute IANA time zone (times are shown / edited in it). */
   timeZone: string | undefined;
   sectionId: string | null;

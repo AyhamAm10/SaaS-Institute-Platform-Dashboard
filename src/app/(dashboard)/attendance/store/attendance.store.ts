@@ -22,6 +22,8 @@ const closed = {
 /** Isolated store of the attendance page (role.md §3). */
 export function createAttendanceStore(): AttendanceStore {
   return createControllerStore<AttendanceState>((set, get) => ({
+    overview: null,
+    syncOverview: (overview) => set({ overview }),
     timeZone: undefined,
     sectionId: null,
     date: localToday(),

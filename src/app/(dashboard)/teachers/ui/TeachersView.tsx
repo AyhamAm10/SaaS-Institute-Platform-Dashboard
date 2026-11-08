@@ -1,8 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import { ActionIcon, Button, Tooltip } from '@mantine/core';
-import Link from 'next/link';
+
 import { IconPlus, IconRefresh, IconUserCheck } from '@tabler/icons-react';
 import { AppModule } from '@/src/components/controllers';
 import { DataModuleController } from '@/src/components/controllers/data-module';
@@ -10,6 +9,7 @@ import { Teacher } from '@/src/core/api';
 import { useTeachersMirror } from '../store/useTeachersMirror';
 import { getTeachersColumns } from './TeachersTable';
 import { TeachersModals, TeachersModalsProps } from './TeachersModals';
+import { AppButton, AppIconButton } from '@/src/components/controllers/button';
 
 export interface TeachersViewAccess {
   canManage?: boolean;
@@ -37,14 +37,7 @@ export function TeachersView({ access, onRefresh, ...modalProps }: TeachersViewP
   const openPasswordModal = useTeachersMirror('openPasswordModal');
 
   const columns = useMemo(
-    () =>
-      getTeachersColumns(
-        openDetailsDrawer,
-        openEditDrawer,
-        openDeleteModal,
-        openPasswordModal,
-        { canManage },
-      ),
+    () => getTeachersColumns(openDetailsDrawer, openEditDrawer, openDeleteModal, openPasswordModal, { canManage }),
     [openDetailsDrawer, openEditDrawer, openDeleteModal, openPasswordModal, canManage],
   );
 
@@ -71,21 +64,12 @@ export function TeachersView({ access, onRefresh, ...modalProps }: TeachersViewP
           onSearchChange={setSearch}
         >
           <DataModuleController.Header>
-            <DataModuleController.Title
-              icon={<IconUserCheck size={18} />}
-              badgeLabel="معلم"
-            />
+            <DataModuleController.Title icon={<IconUserCheck size={18} />} badgeLabel="معلم" />
             {canManage && (
               <DataModuleController.Actions>
-                <Button
-                  component={Link}
-                  href="/teachers/new"
-                  leftSection={<IconPlus size={16} />}
-                  color="primary"
-                  radius="md"
-                >
+                <AppButton href="/teachers/new" leftSection={<IconPlus size={16} />}>
                   إضافة معلم
-                </Button>
+                </AppButton>
               </DataModuleController.Actions>
             )}
           </DataModuleController.Header>
@@ -94,19 +78,15 @@ export function TeachersView({ access, onRefresh, ...modalProps }: TeachersViewP
             <DataModuleController.SearchInput placeholder="البحث بالاسم أو رقم الهاتف..." />
             <DataModuleController.FilterSlot>
               {onRefresh && (
-                <Tooltip label="تحديث البيانات">
-                  <ActionIcon
-                    variant="subtle"
-                    color="gray"
-                    size="md"
-                    radius="md"
-                    onClick={onRefresh}
-                    loading={isFetching}
-                    aria-label="تحديث البيانات"
-                  >
-                    <IconRefresh size={16} />
-                  </ActionIcon>
-                </Tooltip>
+                <AppIconButton
+                  variant="ghost"
+                  label="تحديث البيانات"
+                  size="md"
+                  onClick={onRefresh}
+                  loading={isFetching}
+                >
+                  <IconRefresh size={16} />
+                </AppIconButton>
               )}
             </DataModuleController.FilterSlot>
           </DataModuleController.FilterBar>

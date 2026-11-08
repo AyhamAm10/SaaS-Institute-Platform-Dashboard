@@ -1,13 +1,7 @@
 'use client';
 
 import { Alert, Box, Group, Stack, Text } from '@mantine/core';
-import {
-  IconAlertCircle,
-  IconCalendarCheck,
-  IconCalendarTime,
-  IconCheck,
-  IconInfoCircle,
-} from '@tabler/icons-react';
+import { IconAlertCircle, IconCalendarCheck, IconCalendarTime, IconCheck, IconInfoCircle } from '@tabler/icons-react';
 import { useState } from 'react';
 import { AppModal } from '@/src/components/controllers';
 import { AcademicYear, getApiErrorMessage } from '@/src/core/api';
@@ -51,43 +45,25 @@ export function SetCurrentAcademicYearModal({
   };
 
   return (
-    <AppModal
-      opened={opened}
-      onClose={onClose}
-      variant="info"
-      size="md"
-    >
+    <AppModal opened={opened} onClose={onClose} variant="info" size="md">
       <AppModal.Header>
         <AppModal.Icon icon={<IconCalendarCheck size={20} />} />
         <AppModal.Title>تعيين السنة الحالية النشطة</AppModal.Title>
-        <AppModal.Description>
-          تغيير السنة الدراسية الحالية المعتمدة لكافة عمليات المعهد
-        </AppModal.Description>
+        <AppModal.Description>تغيير السنة الدراسية الحالية المعتمدة لكافة عمليات المعهد</AppModal.Description>
         <AppModal.Close />
       </AppModal.Header>
 
       <AppModal.Content>
         <Stack gap="md">
           {error && (
-            <Alert
-              icon={<IconAlertCircle size={16} />}
-              color="red"
-              variant="light"
-              radius="md"
-            >
+            <Alert icon={<IconAlertCircle size={16} />} color="red" variant="light" radius="md">
               {error}
             </Alert>
           )}
 
-          <Alert
-            icon={<IconInfoCircle size={18} />}
-            color="blue"
-            variant="light"
-            radius="md"
-            title="تنبيه إداري"
-          >
-            تغيير السنة الدراسية الحالية سيجعل السنة المحددة هي الإطار الزمني الافتراضي لجميع
-            عمليات التسجيل، الجداول الدراسية، والرسوم الجديدة.
+          <Alert icon={<IconInfoCircle size={18} />} color="blue" variant="light" radius="md" title="تنبيه إداري">
+            تغيير السنة الدراسية الحالية سيجعل السنة المحددة هي الإطار الزمني الافتراضي لجميع عمليات التسجيل، الجداول
+            الدراسية، والرسوم الجديدة.
           </Alert>
 
           {/* Current Active Year comparison */}
@@ -102,15 +78,21 @@ export function SetCurrentAcademicYearModal({
             <Group justify="space-between" align="center">
               <Group gap="xs">
                 <IconCalendarTime size={16} color="var(--mantine-color-gray-6)" />
-                <Text size="xs" c="dimmed">السنة النشطة حاليا:</Text>
+                <Text size="xs" c="dimmed">
+                  السنة النشطة حاليا:
+                </Text>
               </Group>
               {currentActiveYear ? (
                 <Group gap="xs">
-                  <Text size="xs" fw={500}>{currentActiveYear.name}</Text>
+                  <Text size="xs" fw={500}>
+                    {currentActiveYear.name}
+                  </Text>
                   <AcademicYearStatusBadge isCurrent={true} />
                 </Group>
               ) : (
-                <Text size="xs" c="dimmed">لا توجد سنة نشطة</Text>
+                <Text size="xs" c="dimmed">
+                  لا توجد سنة نشطة
+                </Text>
               )}
             </Group>
           </Box>
@@ -128,9 +110,13 @@ export function SetCurrentAcademicYearModal({
               <Group justify="space-between" align="center">
                 <Group gap="xs">
                   <IconCalendarCheck size={16} color="var(--mantine-color-teal-7)" />
-                  <Text size="xs" c="teal.9" fw={500}>السنة المراد اعتمادها:</Text>
+                  <Text size="xs" c="teal.9" fw={500}>
+                    السنة المراد اعتمادها:
+                  </Text>
                 </Group>
-                <Text size="sm" fw={500} c="teal.8">{targetYear.name}</Text>
+                <Text size="sm" fw={500} c="teal.8">
+                  {targetYear.name}
+                </Text>
               </Group>
               <Text size="xs" c="dimmed" mt={4}>
                 فترة الدوام: {targetYear.startDate?.split('T')[0] ?? '—'} إلى {targetYear.endDate?.split('T')[0] ?? '—'}

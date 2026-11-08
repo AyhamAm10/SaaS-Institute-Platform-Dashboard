@@ -5,6 +5,7 @@ import { IconAlertCircle, IconInfoCircle } from '@tabler/icons-react';
 import { AppDatePicker, AppInput, AppSelect } from '@/src/components/controllers';
 import { useStudentRegistrationMirror } from '../store/useStudentRegistrationMirror';
 import { StudentField } from '@/src/core/api';
+import { inputText } from '@/src/core/format';
 
 export interface Step3CustomFieldsProps {
   fields: StudentField[];
@@ -126,7 +127,7 @@ export function Step3CustomFields({ fields }: Step3CustomFieldsProps) {
                 onChange={(e) =>
                   setCustomFieldValue(
                     field.name,
-                    typeof e === 'string' ? e : e?.target?.value ?? '',
+                    inputText(e),
                   )
                 }
                 required={field.isRequired}

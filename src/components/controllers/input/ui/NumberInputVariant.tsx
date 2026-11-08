@@ -43,7 +43,7 @@ export function NumberInputVariant() {
       min={min}
       max={max}
       step={step}
-      hideControls={rawProps.hideControls ?? true}
+      hideControls={typeof rawProps.hideControls === 'boolean' ? rawProps.hideControls : true}
       size={config.size}
       radius={config.radius}
       value={value ?? ''}

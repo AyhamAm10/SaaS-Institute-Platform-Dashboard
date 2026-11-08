@@ -20,6 +20,7 @@ export function createStudentFieldsStore(): StudentFieldsStore {
     formType: 'TEXT',
     formOptionsText: '',
     formOptions: [],
+    optionDraft: '',
     formIsRequired: false,
     formDisplayInReport: true,
     formSortOrder: 0,
@@ -37,6 +38,7 @@ export function createStudentFieldsStore(): StudentFieldsStore {
         formType: 'TEXT',
         formOptionsText: '',
         formOptions: [],
+        optionDraft: '',
         formIsRequired: false,
         formDisplayInReport: true,
         formSortOrder: 0,
@@ -52,6 +54,7 @@ export function createStudentFieldsStore(): StudentFieldsStore {
         formType: field.type,
         formOptionsText: opts.join('\n'),
         formOptions: [...opts],
+        optionDraft: '',
         formIsRequired: field.isRequired,
         formDisplayInReport: field.displayInReport,
         formSortOrder: field.sortOrder,
@@ -89,6 +92,15 @@ export function createStudentFieldsStore(): StudentFieldsStore {
           formOptions: next,
           formOptionsText: next.join('\n'),
         };
+      }),
+
+    setOptionDraft: (optionDraft) => set({ optionDraft }),
+    commitOptionDraft: () =>
+      set((state) => {
+        const trimmed = state.optionDraft.trim();
+        if (!trimmed || state.formOptions.includes(trimmed)) return { optionDraft: '' };
+        const next = [...state.formOptions, trimmed];
+        return { formOptions: next, formOptionsText: next.join('\n'), optionDraft: '' };
       }),
 
     setSubmitting: (isSubmitting) => set({ isSubmitting }),

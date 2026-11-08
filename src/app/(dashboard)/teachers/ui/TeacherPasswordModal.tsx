@@ -36,7 +36,8 @@ export function TeacherPasswordModal({ onSubmit }: TeacherPasswordModalProps) {
             </Alert>
           )}
           <Text size="sm">
-            أدخل كلمة المرور الجديدة للمعلم <strong>{target.user.fullName}</strong>. سيتم تسجيل خروج المعلم من كافة جلساته الحالية فور تغييرها.
+            أدخل كلمة المرور الجديدة للمعلم <strong>{target.user.fullName}</strong>. سيتم تسجيل خروج المعلم من كافة
+            جلساته الحالية فور تغييرها.
           </Text>
           <AppInput
             type="password"
@@ -59,4 +60,3 @@ export function TeacherPasswordModal({ onSubmit }: TeacherPasswordModalProps) {
     </AppModal>
   );
 }
-

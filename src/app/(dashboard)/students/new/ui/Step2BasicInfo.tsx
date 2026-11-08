@@ -8,6 +8,8 @@ import { useStudentRegistrationMirror } from '../store/useStudentRegistrationMir
 import { Section, StudentField } from '@/src/core/api';
 import type { StudentReferenceOptions } from '../../utils/student-references.utils';
 import { StudentReferenceFields } from '../../ui/StudentReferenceFields';
+import { inputText } from '@/src/core/format';
+import { Step2CustomFields } from './Step2CustomFields';
 
 export interface Step2BasicInfoProps {
   sections: Section[];
@@ -20,9 +22,7 @@ export function Step2BasicInfo({ sections, fields = [], referenceOptions }: Step
   const birthDate = useStudentRegistrationMirror('birthDate');
   const gender = useStudentRegistrationMirror('gender');
   const sectionId = useStudentRegistrationMirror('sectionId');
-  const customFields = useStudentRegistrationMirror('customFields');
   const setStudentField = useStudentRegistrationMirror('setStudentField');
-  const setCustomFieldValue = useStudentRegistrationMirror('setCustomFieldValue');
   const references = useStudentRegistrationMirror('references');
   const setReference = useStudentRegistrationMirror('setReference');
   const stepErrors = useStudentRegistrationMirror('stepErrors');
@@ -66,9 +66,7 @@ export function Step2BasicInfo({ sections, fields = [], referenceOptions }: Step
             label="اسم الطالب الكامل"
             placeholder="مثال: أحمد محمد العمر"
             value={fullName}
-            onChange={(e) =>
-              setStudentField('fullName', typeof e === 'string' ? e : e?.target?.value ?? '')
-            }
+            onChange={(e) => setStudentField('fullName', inputText(e))}
             required
           />
 
@@ -98,118 +96,15 @@ export function Step2BasicInfo({ sections, fields = [], referenceOptions }: Step
             placeholder="اختر الشعبة الدراسية لتسكين الطالب..."
             data={sectionsOptions}
             value={sectionId ? String(sectionId) : null}
-            onChange={(val: string | null) =>
-              setStudentField('sectionId', val ? Number(val) : null)
-            }
+            onChange={(val: string | null) => setStudentField('sectionId', val ? Number(val) : null)}
             searchable
             clearable
           />
         </SimpleGrid>
 
         <Divider my="xs" label="الحالة والسكن والنقل" labelPosition="center" />
-        <StudentReferenceFields
-          values={references}
-          options={referenceOptions}
-          onChange={setReference}
-        />
-
-        {fields.length > 0 && (
-          <Stack gap="lg" mt="xs">
-            <Divider my="md" label="الحقول والبيانات الإضافية الخاصة بالمعهد" labelPosition="center" />
-            <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="lg">
-              {fields.map((field) => {
-                const currentValue = customFields[field.name] ?? '';
-
-                if (field.type === 'SELECT') {
-                  const selectOptions = (field.options || []).map((opt) => ({
-                    value: opt,
-                    label: opt,
-                  }));
-                  return (
-                    <AppSelect
-                      key={field.name}
-                      label={field.label}
-                      placeholder={`اختر ${field.label}`}
-                      data={selectOptions}
-                      value={currentValue ? String(currentValue) : null}
-                      onChange={(val: string | null) => setCustomFieldValue(field.name, val)}
-                      required={field.isRequired}
-                      clearable
-                    />
-                  );
-                }
-
-                if (field.type === 'DATE') {
-                  return (
-                    <AppDatePicker
-                      key={field.name}
-                      label={field.label}
-                      placeholder={`اختر ${field.label}`}
-                      value={typeof currentValue === 'string' ? currentValue : ''}
-                      onChange={(val: string | null) => setCustomFieldValue(field.name, val)}
-                      required={field.isRequired}
-                    />
-                  );
-                }
-
-                if (field.type === 'BOOLEAN') {
-                  return (
-                    <AppSelect
-                      key={field.name}
-                      label={field.label}
-                      data={[
-                        { value: 'true', label: 'نعم' },
-                        { value: 'false', label: 'لا' },
-                      ]}
-                      value={currentValue === true ? 'true' : currentValue === false ? 'false' : null}
-                      onChange={(val: string | null) =>
-                        setCustomFieldValue(field.name, val === 'true' ? true : val === 'false' ? false : null)
-                      }
-                      placeholder={`اختر ${field.label}`}
-                      required={field.isRequired}
-                      clearable
-                    />
-                  );
-                }
-
-                if (field.type === 'NUMBER') {
-                  return (
-                    <AppInput
-                      key={field.name}
-                      type="number"
-                      label={field.label}
-                      placeholder={`أدخل ${field.label}`}
-                      value={currentValue != null ? String(currentValue) : ''}
-                      onChange={(e) =>
-                        setCustomFieldValue(
-                          field.name,
-                          typeof e === 'string' ? (e === '' ? null : Number(e)) : e?.target?.value === '' ? null : Number(e?.target?.value),
-                        )
-                      }
-                      required={field.isRequired}
-                    />
-                  );
-                }
-
-                return (
-                  <AppInput
-                    key={field.name}
-                    label={field.label}
-                    placeholder={`أدخل ${field.label}`}
-                    value={currentValue != null ? String(currentValue) : ''}
-                    onChange={(e) =>
-                      setCustomFieldValue(
-                        field.name,
-                        typeof e === 'string' ? e : e?.target?.value ?? '',
-                      )
-                    }
-                    required={field.isRequired}
-                  />
-                );
-              })}
-            </SimpleGrid>
-          </Stack>
-        )}
+        <StudentReferenceFields values={references} options={referenceOptions} onChange={setReference} />
+        <Step2CustomFields fields={fields} />
       </Stack>
     </Stack>
   );

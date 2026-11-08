@@ -2,7 +2,6 @@
 
 import {
   Alert,
-  Badge,
   Collapse,
   Group,
   Stack,
@@ -16,12 +15,13 @@ import {
   IconChevronDown,
   IconChevronUp,
 } from '@tabler/icons-react';
-import { useState } from 'react';
+import { StatusBadge } from '@/src/components/controllers';
 import { useTimetableMirror } from '../store/useTimetableMirror';
 
 export function TimetableConflictBanner() {
   const conflicts = useTimetableMirror('conflicts');
-  const [opened, setOpened] = useState(false);
+  const opened = useTimetableMirror('conflictsOpened');
+  const toggle = useTimetableMirror('toggleConflicts');
 
   if (!conflicts || conflicts.length === 0) {
     return (
@@ -58,12 +58,12 @@ export function TimetableConflictBanner() {
                 ? `تم اكتشاف ${hardConflicts.length} تعارضات حرجة في الجدول`
                 : `تنبيه: يوجد ${softConflicts.length} ملاحظات حول الحصص المطلوبة`}
             </Text>
-            <Badge color={isHard ? 'red' : 'yellow'} variant="filled" size="xs">
+            <StatusBadge tone={isHard ? 'danger' : 'warning'} variant="solid" size="xs">
               {conflicts.length} ملاحظة
-            </Badge>
+            </StatusBadge>
           </Group>
 
-          <UnstyledButton onClick={() => setOpened((o) => !o)}>
+          <UnstyledButton onClick={toggle}>
             <Group gap={4}>
               <Text size="xs" fw={500} c={isHard ? 'red.9' : 'yellow.9'}>
                 {opened ? 'إخفاء التفاصيل' : 'عرض كافة التعارضات'}
@@ -83,18 +83,14 @@ export function TimetableConflictBanner() {
               align="center"
               p="xs"
               style={{
-                backgroundColor: 'rgba(255, 255, 255, 0.6)',
+                backgroundColor: 'var(--app-sidebar-subtle)',
                 borderRadius: '8px',
               }}
             >
               <Group gap="xs">
-                <Badge
-                  color={c.severity === 'HARD' ? 'red' : 'yellow'}
-                  size="xs"
-                  variant="filled"
-                >
+                <StatusBadge tone={c.severity === 'HARD' ? 'danger' : 'warning'} variant="solid" size="xs">
                   {c.severity === 'HARD' ? 'تعارض حرج' : 'ملاحظة'}
-                </Badge>
+                </StatusBadge>
                 <Text size="xs" fw={500}>
                   {c.message}
                 </Text>

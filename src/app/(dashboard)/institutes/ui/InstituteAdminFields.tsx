@@ -5,6 +5,7 @@ import { IconUser } from '@tabler/icons-react';
 import { AppInput } from '@/src/components/controllers';
 import { useInstitutesMirror } from '../store/useInstitutesMirror';
 import { institutesLabels } from '../static-data/institutes.data';
+import { inputText } from '@/src/core/format';
 
 /**
  * InstituteAdminFields
@@ -36,7 +37,7 @@ export function InstituteAdminFields() {
           label={institutesLabels.adminFullName}
           placeholder={institutesLabels.adminFullNamePlaceholder}
           value={form.adminFullName}
-          onChange={(val) => setFormField('adminFullName', val)}
+          onChange={(val) => setFormField('adminFullName', inputText(val))}
           error={formErrors['adminFullName']}
           required
         />
@@ -46,7 +47,7 @@ export function InstituteAdminFields() {
           label={institutesLabels.adminPhone}
           placeholder={institutesLabels.adminPhonePlaceholder}
           value={form.adminPhone}
-          onChange={(val) => setFormField('adminPhone', val)}
+          onChange={(val) => setFormField('adminPhone', inputText(val))}
           error={formErrors['adminPhone']}
           required
         />
@@ -57,7 +58,7 @@ export function InstituteAdminFields() {
         label={institutesLabels.adminPassword}
         placeholder={institutesLabels.adminPasswordPlaceholder}
         value={form.adminPassword}
-        onChange={(val) => setFormField('adminPassword', val)}
+        onChange={(val) => setFormField('adminPassword', inputText(val))}
         error={formErrors['adminPassword']}
         required
       />

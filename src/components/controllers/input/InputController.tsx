@@ -5,7 +5,7 @@ import { InputInitialProps } from './init/input.init';
 import { createInputStore, InputContext } from './store/input.store';
 import { InputFactory } from './ui/InputFactory';
 
-export interface InputControllerProps extends InputInitialProps {}
+export type InputControllerProps = InputInitialProps;
 
 /**
  * InputController (AppInput / AppSelect)

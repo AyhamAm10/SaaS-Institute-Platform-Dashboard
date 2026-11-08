@@ -11,6 +11,9 @@ export type OverdueStore = ControllerStoreApi<OverdueState>;
 /** Isolated store of the overdue installments page (role.md §3). */
 export function createOverdueStore(): OverdueStore {
   return createControllerStore<OverdueState>((set) => ({
+    overview: null,
+    aging: [],
+    syncOverview: (overview, aging) => set(aging ? { overview, aging } : { overview }),
     page: 1,
     limit: 10,
     search: '',

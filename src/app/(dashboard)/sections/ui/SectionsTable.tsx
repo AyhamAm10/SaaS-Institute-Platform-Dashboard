@@ -1,12 +1,13 @@
 'use client';
 
 import { useMemo } from 'react';
-import { Badge, Text } from '@mantine/core';
+import { Text, UnstyledButton } from '@mantine/core';
 import { IconBook, IconPlus } from '@tabler/icons-react';
 import { formatMoney } from '@/src/core/format';
 import { DataModuleColumn } from '@/src/components/controllers/data-module';
 import { Section } from '@/src/core/api';
 import { SectionsActionsCell } from './SectionsActionsCell';
+import { StatusBadge } from '@/src/components/controllers/badge';
 
 export function useSectionsColumns(
   onEdit: (section: Section) => void,
@@ -14,116 +15,98 @@ export function useSectionsColumns(
   onOpenDetails: (section: Section, tab?: string) => void,
   access = { canManage: true },
 ): DataModuleColumn<Section>[] {
-  return useMemo(
-    () => {
-      const cols: DataModuleColumn<Section>[] = [
-        {
-          key: 'name',
-          title: 'اسم الشعبة',
-          sortable: true,
-          exportValue: (s) => s.name,
-          exportKind: 'text',
-          render: (row: Section) => (
-            <Text
-              fw={500}
-              size="sm"
-              style={{ cursor: 'pointer' }}
-              onClick={() => onOpenDetails(row, 'subjects')}
-            >
-              {row.name}
-            </Text>
-          ),
-        },
-        {
-          key: 'academicBranch',
-          title: 'الفرع الأكاديمي',
-          exportValue: (s) => s.academicBranch?.name ?? s.grade ?? '—',
-          exportKind: 'text',
-          render: (row: Section) => (
-            <Badge variant="light" color="teal" radius="xl" size="sm">
-              {row.academicBranch?.name ?? row.grade}
-            </Badge>
-          ),
-        },
-        {
-          key: 'academicYear',
-          title: 'السنة الدراسية',
-          exportValue: (s) => s.academicYear?.name ?? '—',
-          exportKind: 'text',
-          render: (row: Section) => (
-            <Text size="sm" c="dimmed">
-              {row.academicYear?.name ?? '—'}
-            </Text>
-          ),
-        },
-        {
-          key: 'subjects',
-          title: 'المواد المقررة',
-          exportValue: (s) => s._count?.sectionSubjects ?? 0,
-          exportKind: 'number',
-          render: (row: Section) => {
-            const count = row._count?.sectionSubjects ?? 0;
-            return count > 0 ? (
-              <Badge
-                variant="light"
-                color="indigo"
-                radius="xl"
-                size="sm"
-                style={{ cursor: 'pointer' }}
-                onClick={() => onOpenDetails(row, 'subjects')}
-                leftSection={<IconBook size={13} />}
-              >
+  return useMemo(() => {
+    const cols: DataModuleColumn<Section>[] = [
+      {
+        key: 'name',
+        title: 'اسم الشعبة',
+        sortable: true,
+        exportValue: (s) => s.name,
+        exportKind: 'text',
+        render: (row: Section) => (
+          <Text fw={500} size="sm" style={{ cursor: 'pointer' }} onClick={() => onOpenDetails(row, 'subjects')}>
+            {row.name}
+          </Text>
+        ),
+      },
+      {
+        key: 'academicBranch',
+        title: 'الفرع الأكاديمي',
+        exportValue: (s) => s.academicBranch?.name ?? s.grade ?? '—',
+        exportKind: 'text',
+        render: (row: Section) => (
+          <StatusBadge tone="success" size="sm">
+            {row.academicBranch?.name ?? row.grade}
+          </StatusBadge>
+        ),
+      },
+      {
+        key: 'academicYear',
+        title: 'السنة الدراسية',
+        exportValue: (s) => s.academicYear?.name ?? '—',
+        exportKind: 'text',
+        render: (row: Section) => (
+          <Text size="sm" c="dimmed">
+            {row.academicYear?.name ?? '—'}
+          </Text>
+        ),
+      },
+      {
+        key: 'subjects',
+        title: 'المواد المقررة',
+        exportValue: (s) => s._count?.sectionSubjects ?? 0,
+        exportKind: 'number',
+        render: (row: Section) => {
+          const count = row._count?.sectionSubjects ?? 0;
+          return count > 0 ? (
+            <UnstyledButton onClick={() => onOpenDetails(row, 'subjects')}>
+              <StatusBadge tone="info" icon={<IconBook size={13} />} size="sm">
                 {count} مواد مسندة
-              </Badge>
-            ) : access.canManage ? (
-              <Badge
-                variant="outline"
-                color="orange"
-                radius="xl"
-                size="sm"
-                style={{ cursor: 'pointer' }}
-                onClick={() => onOpenDetails(row, 'subjects')}
-                leftSection={<IconPlus size={13} />}
-              >
+              </StatusBadge>
+            </UnstyledButton>
+          ) : access.canManage ? (
+            <UnstyledButton onClick={() => onOpenDetails(row, 'subjects')}>
+              <StatusBadge tone="warning" variant="outline" icon={<IconPlus size={13} />} size="sm">
                 + إسناد المواد
-              </Badge>
-            ) : (
-              <Text size="xs" c="dimmed">لا توجد مواد</Text>
-            );
-          },
-        },
-        {
-          key: 'feeAmount',
-          title: 'الرسوم الدراسية',
-          exportValue: (s) => ({
-            amount: Number(s.feeAmount ?? 0),
-            currency: (s.feeCurrency as 'SYP' | 'USD') ?? 'SYP',
-          }),
-          exportKind: 'money',
-          render: (row: Section) => (
-            <Text fw={500} size="sm" c="teal">
-              {formatMoney(row.feeAmount, (row.feeCurrency as 'SYP' | 'USD') ?? 'SYP')}
+              </StatusBadge>
+            </UnstyledButton>
+          ) : (
+            <Text size="xs" c="dimmed">
+              لا توجد مواد
             </Text>
-          ),
+          );
         },
-        {
-          key: 'actions',
-          title: 'الإجراءات',
-          align: 'center',
-          render: (row: Section) => (
-            <SectionsActionsCell
-              row={row}
-              canManage={access.canManage}
-              onEdit={onEdit}
-              onOpenFee={onOpenFee}
-              onOpenDetails={onOpenDetails}
-            />
-          ),
-        },
-      ];
+      },
+      {
+        key: 'feeAmount',
+        title: 'الرسوم الدراسية',
+        exportValue: (s) => ({
+          amount: Number(s.feeAmount ?? 0),
+          currency: (s.feeCurrency as 'SYP' | 'USD') ?? 'SYP',
+        }),
+        exportKind: 'money',
+        render: (row: Section) => (
+          <Text fw={500} size="sm" c="teal">
+            {formatMoney(row.feeAmount, (row.feeCurrency as 'SYP' | 'USD') ?? 'SYP')}
+          </Text>
+        ),
+      },
+      {
+        key: 'actions',
+        title: 'الإجراءات',
+        align: 'center',
+        render: (row: Section) => (
+          <SectionsActionsCell
+            row={row}
+            canManage={access.canManage}
+            onEdit={onEdit}
+            onOpenFee={onOpenFee}
+            onOpenDetails={onOpenDetails}
+          />
+        ),
+      },
+    ];
 
-      return cols;
-    },
-    [onEdit, onOpenFee, onOpenDetails, access.canManage],
-  );
+    return cols;
+  }, [onEdit, onOpenFee, onOpenDetails, access.canManage]);
 }

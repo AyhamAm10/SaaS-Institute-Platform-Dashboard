@@ -4,6 +4,7 @@ import { createContext, useContext } from 'react';
 import { createControllerStore } from '@/src/core/mirror';
 import { ControllerStoreApi } from '@/src/core/mirror/types';
 import { AcademicYearsState } from '../state/academicYears.state';
+import { EMPTY_YEAR_FORM, yearFormFrom } from '../utils/academic-years.utils';
 
 export type AcademicYearsStore = ControllerStoreApi<AcademicYearsState>;
 
@@ -28,6 +29,8 @@ export function createAcademicYearsStore(): AcademicYearsStore {
     // ── Modal / Drawer State ──
     modalOpened: false,
     selectedYear: null,
+    yearForm: EMPTY_YEAR_FORM,
+    formError: null,
 
     // ── Set-Current Workflow Drawer State ──
     setCurrentDrawerOpened: false,
@@ -43,9 +46,11 @@ export function createAcademicYearsStore(): AcademicYearsStore {
     setSearch: (search: string) => set({ search, page: 1 }),
 
     // ── Actions: Create/Edit Drawer ──
-    openCreate: () => set({ selectedYear: null, modalOpened: true }),
-    openEdit: (year) => set({ selectedYear: year, modalOpened: true }),
+    openCreate: () => set({ selectedYear: null, modalOpened: true, yearForm: EMPTY_YEAR_FORM, formError: null }),
+    openEdit: (year) => set({ selectedYear: year, modalOpened: true, yearForm: yearFormFrom(year), formError: null }),
     closeModal: () => set({ modalOpened: false }),
+    setYearFormField: (field, value) => set((s) => ({ yearForm: { ...s.yearForm, [field]: value }, formError: null })),
+    setFormError: (formError) => set({ formError }),
 
     // ── Actions: Set Current Drawer ──
     openSetCurrentDrawer: (year) =>

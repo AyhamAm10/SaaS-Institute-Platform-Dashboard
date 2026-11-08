@@ -1,3 +1,4 @@
+import type { CustomFieldValue } from '../../state/students.state';
 import { Family, StudentField } from '@/src/core/api';
 import type {
   StudentReferenceField,
@@ -33,7 +34,7 @@ export interface StudentRegistrationState {
   references: StudentReferenceValues;
 
   // Step 3: Dynamic Custom Fields
-  customFields: Record<string, any>;
+  customFields: Record<string, CustomFieldValue>;
 
   // Actions
   setActiveStep: (step: number) => void;
@@ -45,7 +46,7 @@ export interface StudentRegistrationState {
     field: 'fullName' | 'birthDate' | 'gender' | 'branchId' | 'sectionId' | 'academicYearId',
     value: string | number | null,
   ) => void;
-  setCustomFieldValue: (fieldName: string, value: unknown) => void;
+  setCustomFieldValue: (fieldName: string, value: CustomFieldValue) => void;
   setReference: (field: StudentReferenceField, value: number | null) => void;
   setSubmitting: (isSubmitting: boolean) => void;
   setStepError: (step: number, error: string | null) => void;

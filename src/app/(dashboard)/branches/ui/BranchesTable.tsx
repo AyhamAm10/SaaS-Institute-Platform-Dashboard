@@ -1,9 +1,11 @@
 'use client';
 
-import { ActionIcon, Group, Text, Tooltip } from '@mantine/core';
+import { Group, Text } from '@mantine/core';
 import { IconBuildingCommunity, IconEdit, IconMapPin, IconPhone } from '@tabler/icons-react';
 import { Branch } from '@/src/core/api';
 import { DataModuleColumn } from '@/src/components/controllers/data-module';
+import { AppIconButton } from '@/src/components/controllers/button';
+import { IconTile } from '@/src/components/controllers/info-tile';
 
 export function getBranchesColumns(
   onEdit: (branch: Branch) => void,
@@ -18,9 +20,9 @@ export function getBranchesColumns(
       exportKind: 'text',
       render: (branch) => (
         <Group gap="sm" wrap="nowrap">
-          <ActionIcon size="md" radius="xl" variant="light" color="teal">
+          <IconTile tone="success" size={36}>
             <IconBuildingCommunity size={18} />
-          </ActionIcon>
+          </IconTile>
           <Text fw={500} size="sm">
             {branch.name}
           </Text>
@@ -73,17 +75,9 @@ export function getBranchesColumns(
       title: 'الإجراءات',
       align: 'center',
       render: (branch) => (
-        <Tooltip label="تعديل بيانات الفرع" withArrow position="top">
-          <ActionIcon
-            variant="subtle"
-            color="primary"
-            radius="xl"
-            size="sm"
-            onClick={() => onEdit(branch)}
-          >
-            <IconEdit size={16} />
-          </ActionIcon>
-        </Tooltip>
+        <AppIconButton variant="ghost" label="تعديل بيانات الفرع" size="sm" onClick={() => onEdit(branch)}>
+          <IconEdit size={16} />
+        </AppIconButton>
       ),
     });
   }
