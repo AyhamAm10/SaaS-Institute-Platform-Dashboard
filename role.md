@@ -464,6 +464,23 @@ The student **finance drawer** (`students/finance/`) follows the same pattern: `
 - `OperationalContextGate` (dashboard and print layouts) validates the stored branch / year against the institute lists (`useOperationalContextResolver`) and renders the page only then; the API client sends the headers only once the context is resolved.
 - Switching the branch / year resets every context-dependent query centrally (`ContextCacheSync` → `clearContextQueries`). Queries that do NOT depend on the context are listed in `CONTEXT_FREE_QUERY_PREFIXES` (`core/context/context-cache.ts`); a new institute-wide query must be added there. Never call `invalidateQueries()` on a context switch yourself.
 - Branch / year names shown anywhere come from `useActiveContextLabels()` (one source for the header and the sidebar).
+
+### K. Unified Settings Hub Pattern (`/settings`)
+
+- The platform consolidates configuration and account administration into a unified, tabbed hub at `/settings`.
+- **Authoritative Tabs Order & Permissions:**
+  1. `institute`: Institute profile & IANA timezone configuration (`settings.view` / `settings.manage`).
+  2. `schedule`: Daily working hours, attendance rules, periods & breaks (`settings.view`).
+  3. `staff`: Staff accounts, role assignments & deactivations (`staff.view`).
+  4. `teachers`: Teacher accounts & password reset scoped to the header's active branch (`academic.manage`).
+  5. `mobile`: Mobile application accounts for guardians (`FAMILY`) and students (`STUDENT`) (`students.view` / `students.manage`).
+  6. `student-fields`: Custom student profile fields (`settings.view`).
+  7. `reference-data`: Lookup reference tables via config-driven tabs (`settings.view`).
+- **Tab State & URL Synchronization:**
+  - URL query synchronization (`/settings?tab=<key>`). Invalid or unauthorized tab requests gracefully fall back to the first permitted tab.
+  - Tabs mount lazily on initial visit and stay mounted (`keepMounted={true}` on `AppTabs.Panel`) to preserve in-progress form inputs and nested controller stores across tab switches.
+- **Legacy Route Redirection:**
+  - Previous standalone routes (`/schedule-settings`, `/settings/staff`, `/settings/student-fields`, `/settings/reference-data`) serve server-side `redirect('/settings?tab=...')`.
 ---
 
 ## 10. Arabic-First & Native RTL Architecture (Mandatory)

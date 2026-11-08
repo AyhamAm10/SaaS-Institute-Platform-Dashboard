@@ -9,6 +9,7 @@ import {
 
 export interface TabsState extends ControllerState {
   active: string;
+  visited: string[];
   items: AppTabItem[];
   config: ResolvedTabsConfig;
   rawProps: AppTabsInitialProps;
@@ -18,8 +19,10 @@ export interface TabsState extends ControllerState {
 }
 
 export function createInitialTabsState(props: AppTabsInitialProps): TabsState {
+  const initialTab = resolveInitialTab(props);
   return {
-    active: resolveInitialTab(props),
+    active: initialTab,
+    visited: initialTab ? [initialTab] : [],
     items: props.items,
     config: resolveTabsConfig(props),
     rawProps: props,

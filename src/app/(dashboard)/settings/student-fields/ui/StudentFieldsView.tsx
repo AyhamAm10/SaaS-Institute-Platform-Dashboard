@@ -15,9 +15,10 @@ import { AppButton } from '@/src/components/controllers/button';
 export interface StudentFieldsViewProps {
   onSubmit: () => Promise<void>;
   canManage?: boolean;
+  hideHeader?: boolean;
 }
 
-export function StudentFieldsView({ onSubmit, canManage = true }: StudentFieldsViewProps) {
+export function StudentFieldsView({ onSubmit, canManage = true, hideHeader }: StudentFieldsViewProps) {
   const fields = useStudentFieldsMirror('fields');
   const isLoading = useStudentFieldsMirror('isLoading');
   const search = useStudentFieldsMirror('search');
@@ -40,8 +41,8 @@ export function StudentFieldsView({ onSubmit, canManage = true }: StudentFieldsV
     <AppModule exportTitle="الحقول المخصصة">
       <AppModule.Table>
         <DataModuleController
-          title={studentFieldsLabels.title}
-          description={studentFieldsLabels.description}
+          title={hideHeader ? undefined : studentFieldsLabels.title}
+          description={hideHeader ? undefined : studentFieldsLabels.description}
           data={filteredFields}
           columns={columns}
           total={filteredFields.length}
@@ -57,7 +58,7 @@ export function StudentFieldsView({ onSubmit, canManage = true }: StudentFieldsV
           selectable
         >
           <DataModuleController.Header>
-            <DataModuleController.Title />
+            {!hideHeader && <DataModuleController.Title />}
             {canManage && (
               <DataModuleController.Actions>
                 <AppButton leftSection={<IconPlus size={16} />} onClick={openCreateDrawer}>

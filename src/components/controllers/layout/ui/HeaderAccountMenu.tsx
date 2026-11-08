@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { Avatar, Menu, Stack, Text, UnstyledButton, rem } from '@mantine/core';
 import { IconChevronDown, IconLogout, IconSettings, IconUser } from '@tabler/icons-react';
 import { useAuth } from '@/src/core/auth';
@@ -56,7 +57,13 @@ export function HeaderAccountMenu({ isSuperAdmin }: { isSuperAdmin: boolean }) {
       <Menu.Dropdown>
         <Menu.Label>إدارة الحساب</Menu.Label>
         <Menu.Item leftSection={<IconUser size={15} stroke={1.6} />}>الملف التعريفي</Menu.Item>
-        <Menu.Item leftSection={<IconSettings size={15} stroke={1.6} />}>إعدادات المعهد</Menu.Item>
+        <Menu.Item
+          component={Link}
+          href="/settings?tab=institute"
+          leftSection={<IconSettings size={15} stroke={1.6} />}
+        >
+          إعدادات المعهد
+        </Menu.Item>
         <Menu.Divider />
         <Menu.Item
           color="danger"

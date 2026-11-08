@@ -41,7 +41,7 @@ function QuerySync({
   return null;
 }
 
-export function ScheduleSettingsController() {
+export function ScheduleSettingsController({ hideHeader }: { hideHeader?: boolean } = {}) {
   const [store] = useState(() => createScheduleSettingsStore());
   const { can } = useAuth();
   const canManage = can(PERMISSIONS.settingsManage);
@@ -125,6 +125,7 @@ export function ScheduleSettingsController() {
     <ScheduleSettingsContext.Provider value={store}>
       <QuerySync store={store} />
       <ScheduleSettingsView
+        hideHeader={hideHeader}
         onSave={handleSave}
         canManage={canManage}
         newBreakName={newBreakName}

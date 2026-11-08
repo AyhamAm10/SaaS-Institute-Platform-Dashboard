@@ -1,17 +1,7 @@
-import { Metadata } from 'next';
-import { RenderUi } from './render-ui';
+import { redirect } from 'next/navigation';
 
-export const metadata: Metadata = {
-  title: 'الحقول المخصصة للطلاب | منصة إدارة المعاهد',
-  description: 'إدارة وتخصيص الحقول الإضافية لبيانات الطلاب حسب احتياجات المعهد',
-};
-
-/**
- * StudentFieldsPage
- *
- * Pure Server Component entry point per Section 9 & 12 of role.md.
- * Delegates client rendering to RenderUi.
- */
+/** StudentFieldsPage — redirects to unified /settings tab (role.md §9). */
 export default function StudentFieldsPage() {
-  return <RenderUi />;
+  redirect('/settings?tab=student-fields');
 }
+

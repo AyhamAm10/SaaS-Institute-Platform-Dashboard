@@ -14,6 +14,7 @@ const TAB_ITEMS = LOOKUP_CONFIGS.map((config) => ({
 
 export interface ReferenceDataViewProps {
   canManage?: boolean;
+  hideHeader?: boolean;
 }
 
 /**
@@ -22,10 +23,10 @@ export interface ReferenceDataViewProps {
  * One tab per reference table; every panel hosts its own LookupController.
  * ZERO useState hooks.
  */
-export function ReferenceDataView({ canManage = true }: ReferenceDataViewProps) {
+export function ReferenceDataView({ canManage = true, hideHeader }: ReferenceDataViewProps) {
   return (
     <Stack gap="lg">
-      <AppPageHeader title={referenceDataLabels.title} description={referenceDataLabels.description} />
+      {!hideHeader && <AppPageHeader title={referenceDataLabels.title} description={referenceDataLabels.description} />}
       <AppTabs defaultValue={LOOKUP_CONFIGS[0].key} items={TAB_ITEMS}>
         <Box>
           <AppTabs.List />

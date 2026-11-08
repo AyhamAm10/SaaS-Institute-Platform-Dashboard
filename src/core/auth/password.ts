@@ -14,3 +14,14 @@ export function passwordError(password: string): string | null {
   return null;
 }
 
+/** Generates a secure random password of specified length. */
+export function generateSecurePassword(length = 10): string {
+  const chars = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789!@#$%';
+  let result = '';
+  for (let i = 0; i < length; i++) {
+    result += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return result;
+}
+
+

@@ -34,7 +34,7 @@ function QuerySync({ store }: { store: ReturnType<typeof createStudentFieldsStor
  * Root Controller Component for Custom Student Fields configuration.
  * Owns the isolated Zustand store lifecycle and coordinates state transitions.
  */
-export function StudentFieldsController() {
+export function StudentFieldsController({ hideHeader }: { hideHeader?: boolean } = {}) {
   const [store] = useState(() => createStudentFieldsStore());
   const { can } = useAuth();
   const canManage = can(PERMISSIONS.settingsManage);
@@ -116,7 +116,7 @@ export function StudentFieldsController() {
   return (
     <StudentFieldsContext.Provider value={store}>
       <QuerySync store={store} />
-      <StudentFieldsView onSubmit={handleSubmit} canManage={canManage} />
+      <StudentFieldsView hideHeader={hideHeader} onSubmit={handleSubmit} canManage={canManage} />
     </StudentFieldsContext.Provider>
   );
 }

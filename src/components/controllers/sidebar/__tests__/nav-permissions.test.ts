@@ -50,12 +50,12 @@ describe('filterNavigation', () => {
     for (const item of items) {
       if (item.subItems) assert.ok(item.subItems.length > 0, item.key);
     }
-    // Settings sub-pages all need settings.manage / staff.view
-    assert.ok(!items.some((i) => i.subItems?.some((s) => s.href === '/settings/staff')));
+    // Settings sub-pages all need settings.view
+    assert.ok(!items.some((i) => i.subItems?.some((s) => s.href === '/settings')));
   });
 
-  it('admin with every permission sees the staff page', () => {
-    assert.ok(hrefs([...REGISTRAR, ...ACCOUNTANT, 'staff.view', 'settings.manage', 'academic.manage']).includes('/settings/staff'));
+  it('admin with every permission sees the settings page', () => {
+    assert.ok(hrefs([...REGISTRAR, ...ACCOUNTANT, 'staff.view', 'settings.manage', 'academic.manage']).includes('/settings'));
   });
 });
 
@@ -63,7 +63,7 @@ describe('requiredPermissionFor', () => {
   it('maps a page and its sub-routes to the sidebar entry permission', () => {
     assert.strictEqual(requiredPermissionFor('/students', defaultNavigationConfig), 'students.view');
     assert.strictEqual(requiredPermissionFor('/students/12', defaultNavigationConfig), 'students.view');
-    assert.strictEqual(requiredPermissionFor('/settings/staff', defaultNavigationConfig), 'staff.view');
+    assert.strictEqual(requiredPermissionFor('/settings', defaultNavigationConfig), 'settings.view');
   });
 
   it('override: registering a student needs students.manage', () => {

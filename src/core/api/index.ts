@@ -6,6 +6,8 @@ export * from './academic-years.api';
 export * from './academic-branches.api';
 export * from './sections.api';
 export * from './institutes.api';
+export * from './institute-profile.api';
+export * from './mobile-accounts.api';
 export * from './subjects.api';
 export * from './schedule-config.api';
 export * from './teachers.api';

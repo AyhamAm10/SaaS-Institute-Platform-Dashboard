@@ -15,10 +15,11 @@ import { type StaffModalActions, StaffModals } from './StaffModals';
 interface StaffViewProps extends StaffModalActions {
   onSubmit: () => Promise<void>;
   currentUserId: number | null;
+  hideHeader?: boolean;
 }
 
 /** Staff page: filtered table, drawer and member modals. ZERO useState hooks. */
-export function StaffView({ onSubmit, onResetPassword, onDeactivate, currentUserId }: StaffViewProps) {
+export function StaffView({ onSubmit, onResetPassword, onDeactivate, currentUserId, hideHeader }: StaffViewProps) {
   const data = useStaffMirror('data');
   const total = useStaffMirror('total');
   const page = useStaffMirror('page');
@@ -41,8 +42,8 @@ export function StaffView({ onSubmit, onResetPassword, onDeactivate, currentUser
     <AppModule exportTitle="الموظفون">
       <AppModule.Table>
         <DataModuleController
-          title={labels.title}
-          description={labels.description}
+          title={hideHeader ? undefined : labels.title}
+          description={hideHeader ? undefined : labels.description}
           data={data}
           columns={columns}
           total={total}
@@ -59,7 +60,7 @@ export function StaffView({ onSubmit, onResetPassword, onDeactivate, currentUser
           selectable
         >
           <DataModuleController.Header>
-            <DataModuleController.Title icon={<IconUsersGroup size={20} />} badgeLabel="موظف" />
+            {!hideHeader && <DataModuleController.Title icon={<IconUsersGroup size={20} />} badgeLabel="موظف" />}
             <DataModuleController.Actions>
               <ReportMenu keys={['staff-activity']} params={{}} />
               <AppButton leftSection={<IconPlus size={16} />} onClick={openCreate}>

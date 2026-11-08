@@ -1,16 +1,7 @@
-import { Metadata } from 'next';
-import { RenderUi } from './render-ui';
+import { redirect } from 'next/navigation';
 
-export const metadata: Metadata = {
-  title: 'الجداول المرجعية | منصة إدارة المنظومة التعليمية',
-  description: 'إدارة المدن والمدارس والباصات وطرق المعرفة وحالات الطلاب وأنواع المذاكرات',
-};
-
-/**
- * ReferenceDataPage
- *
- * Pure Server Component entry point (role.md §9). Delegates to RenderUi.
- */
+/** ReferenceDataPage — redirects to unified /settings tab (role.md §9). */
 export default function ReferenceDataPage() {
-  return <RenderUi />;
+  redirect('/settings?tab=reference-data');
 }
+

@@ -38,7 +38,7 @@ function QuerySync({ store }: { store: StaffStore }) {
  * role (admin / registrar / accountant), reset passwords and deactivate.
  * The server guards self changes and the last admin. Owns its isolated store (role.md §3).
  */
-export function StaffController() {
+export function StaffController({ hideHeader }: { hideHeader?: boolean } = {}) {
   const [store] = useState(createStaffStore);
   const currentUserId = useAuth().user?.id ?? null;
   const createMutation = useCreateStaffMutation();
@@ -99,6 +99,7 @@ export function StaffController() {
     <StaffContext.Provider value={store}>
       <QuerySync store={store} />
       <StaffView
+        hideHeader={hideHeader}
         onSubmit={handleSubmit}
         onResetPassword={handleResetPassword}
         onDeactivate={handleDeactivate}

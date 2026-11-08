@@ -13,18 +13,27 @@ export function createTabsStore(props: AppTabsInitialProps): TabsStore {
     ...initial,
 
     setActive: (value: string) => {
-      const { rawProps } = get();
+      const { rawProps, visited } = get();
+      const nextVisited = visited.includes(value) ? visited : [...visited, value];
       // Controlled mode: only the parent decides; uncontrolled: update locally.
-      if (rawProps.value === undefined) set({ active: value });
+      if (rawProps.value === undefined) set({ active: value, visited: nextVisited });
+      else set({ visited: nextVisited });
       rawProps.onChange?.(value);
     },
 
     updateProps: (props: AppTabsInitialProps) => {
+      const { visited } = get();
+      const val = props.value;
+      const nextVisited =
+        val !== undefined && val !== null && !visited.includes(val)
+          ? [...visited, val]
+          : visited;
       set({
         rawProps: props,
         items: props.items,
         config: resolveTabsConfig(props),
-        ...(props.value !== undefined && props.value !== null && { active: props.value }),
+        visited: nextVisited,
+        ...(val !== undefined && val !== null && { active: val }),
       });
     },
   }));

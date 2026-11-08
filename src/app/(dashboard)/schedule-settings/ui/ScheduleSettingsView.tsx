@@ -12,9 +12,10 @@ import { SlotsPreview } from './SlotsPreview';
 interface ScheduleSettingsViewProps extends BreaksSectionProps {
   onSave: () => void;
   canManage?: boolean;
+  hideHeader?: boolean;
 }
 
-export function ScheduleSettingsView({ onSave, canManage = true, ...breaks }: ScheduleSettingsViewProps) {
+export function ScheduleSettingsView({ onSave, canManage = true, hideHeader, ...breaks }: ScheduleSettingsViewProps) {
   const isLoading = useScheduleSettingsMirror('isLoading');
 
   if (isLoading) {
@@ -29,7 +30,7 @@ export function ScheduleSettingsView({ onSave, canManage = true, ...breaks }: Sc
 
   return (
     <Stack gap="xl">
-      <ScheduleSettingsHeader onSave={onSave} canManage={canManage} />
+      <ScheduleSettingsHeader onSave={onSave} canManage={canManage} hideHeader={hideHeader} />
 
       <SimpleGrid cols={{ base: 1, md: 2 }} spacing="lg">
         <Box>

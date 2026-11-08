@@ -1,12 +1,7 @@
-import { Metadata } from 'next';
-import { RenderUi } from './render-ui';
+import { redirect } from 'next/navigation';
 
-export const metadata: Metadata = {
-  title: 'الموظفون والصلاحيات | منصة إدارة المنظومة التعليمية',
-  description: 'حسابات موظفي المعهد وأدوارهم',
-};
-
-/** StaffPage — Server Component entry point (role.md §9). */
+/** StaffPage — redirects to unified /settings tab (role.md §9). */
 export default function StaffPage() {
-  return <RenderUi />;
+  redirect('/settings?tab=staff');
 }
+
