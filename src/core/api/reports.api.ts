@@ -103,7 +103,13 @@ export type ReportParamKind =
   | 'currency'
   | 'paymentMethod'
   | 'minCount'
-  | 'days';
+  | 'days'
+  | 'status'
+  | 'city'
+  | 'school'
+  | 'bus'
+  | 'knowWay'
+  | 'customFilters';
 
 export interface ReportDefinition {
   key: string;
@@ -128,6 +134,12 @@ export interface ReportParams {
   paymentMethod?: 'CASH' | 'BANK_TRANSFER' | 'OTHER';
   minCount?: number;
   days?: number;
+  statusId?: number;
+  cityId?: number;
+  schoolId?: number;
+  busId?: number;
+  knowWayId?: number;
+  customFilters?: string;
 }
 
 export interface VerificationResult {

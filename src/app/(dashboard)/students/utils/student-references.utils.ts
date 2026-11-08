@@ -59,6 +59,6 @@ export function toReferencePayload(values: StudentReferenceValues): StudentRefer
 }
 
 /** Schools of the chosen city (all schools when no city is chosen). */
-export function schoolsOfCity(schools: SchoolOption[], cityId: number | null): SchoolOption[] {
-  return cityId ? schools.filter((s) => s.cityId === null || s.cityId === cityId) : schools;
+export function schoolsOfCity<T extends { cityId?: number | null }>(schools: T[], cityId: number | null): T[] {
+  return cityId ? schools.filter((s) => s.cityId == null || s.cityId === cityId) : schools;
 }

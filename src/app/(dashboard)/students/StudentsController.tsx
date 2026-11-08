@@ -12,6 +12,7 @@ import {
   OverviewSync,
   QuerySync,
   ReferenceOptionsSync,
+  StudentFieldsSync,
 } from './StudentsQuerySync';
 
 /**
@@ -74,6 +75,7 @@ export function StudentsController() {
   return (
     <StudentsContext.Provider value={store}>
       <QuerySync store={store} />
+      <StudentFieldsSync store={store} />
       <EditLookupsSync store={store} />
       <ReferenceOptionsSync store={store} />
       <DeletionReportSync store={store} />

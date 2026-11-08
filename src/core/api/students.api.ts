@@ -28,6 +28,7 @@ export interface StudentField {
   options?: string[] | null;
   isRequired: boolean;
   displayInReport: boolean;
+  isFilterable?: boolean;
   sortOrder: number;
   isActive: boolean;
 }
@@ -135,6 +136,8 @@ export interface StudentQueryParams {
   busId?: number;
   cityId?: number;
   schoolId?: number;
+  knowWayId?: number;
+  customFilters?: string;
   /** Only students without an enrollment in the header (context) year. */
   unassigned?: boolean;
 }

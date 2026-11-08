@@ -25,6 +25,11 @@ export function QuerySync({ store }: { store: Store }) {
   const filters = useStore(store, (s) => s.filters);
   const syncQueryData = useStore(store, (s) => s.syncQueryData);
 
+  const customFiltersJson =
+    Object.keys(filters.customFilters || {}).length > 0
+      ? JSON.stringify(filters.customFilters)
+      : undefined;
+
   const { data: paginatedData, isLoading } = useStudentsQuery({
     page,
     limit,
@@ -32,6 +37,9 @@ export function QuerySync({ store }: { store: Store }) {
     statusId: filters.statusId ?? undefined,
     busId: filters.busId ?? undefined,
     cityId: filters.cityId ?? undefined,
+    schoolId: filters.schoolId ?? undefined,
+    knowWayId: filters.knowWayId ?? undefined,
+    customFilters: customFiltersJson,
     // Branch / year: header context; the column shows this year's enrollment
   });
 
@@ -48,29 +56,44 @@ export function QuerySync({ store }: { store: Store }) {
 }
 
 /**
+ * StudentFieldsSync
+ *
+ * Keeps active custom fields synced in store for both list filters and edit drawer.
+ */
+export function StudentFieldsSync({ store }: { store: Store }) {
+  const syncStudentFields = useStore(store, (s) => s.syncStudentFields);
+  const { data: fields } = useStudentFieldsQuery();
+
+  useEffect(() => {
+    syncStudentFields((fields ?? []).filter((f) => f.isActive));
+  }, [fields, syncStudentFields]);
+
+  return null;
+}
+
+/**
  * EditLookupsSync
  *
- * While the edit drawer is open, loads family search results and the
- * institute's custom student fields into the store.
+ * While the edit drawer is open, loads family search results into the store.
  */
 export function EditLookupsSync({ store }: { store: Store }) {
   const opened = useStore(store, (s) => s.editDrawerOpened);
   const familySearch = useStore(store, (s) => s.familySearch);
   const syncEditLookups = useStore(store, (s) => s.syncEditLookups);
+  const studentFields = useStore(store, (s) => s.studentFields);
 
   const { data: families, isLoading: isLoadingFamilies } = useFamiliesSearchQuery(
     familySearch.trim() ? familySearch.trim() : undefined,
     opened,
   );
-  const { data: fields } = useStudentFieldsQuery();
 
   useEffect(() => {
     syncEditLookups({
       families: families ?? [],
       isLoadingFamilies: opened && isLoadingFamilies,
-      fields: (fields ?? []).filter((f) => f.isActive),
+      fields: studentFields,
     });
-  }, [opened, families, isLoadingFamilies, fields, syncEditLookups]);
+  }, [opened, families, isLoadingFamilies, studentFields, syncEditLookups]);
 
   return null;
 }

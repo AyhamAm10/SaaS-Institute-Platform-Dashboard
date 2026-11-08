@@ -39,9 +39,27 @@ export const PARAM_QUERY: Record<ReportParamKind, keyof ReportParams> = {
   paymentMethod: 'paymentMethod',
   minCount: 'minCount',
   days: 'days',
+  status: 'statusId',
+  city: 'cityId',
+  school: 'schoolId',
+  bus: 'busId',
+  knowWay: 'knowWayId',
+  customFilters: 'customFilters',
 };
 
-const NUMERIC: ReadonlySet<ReportParamKind> = new Set(['student', 'section', 'exam', 'teacher', 'minCount', 'days']);
+const NUMERIC: ReadonlySet<ReportParamKind> = new Set([
+  'student',
+  'section',
+  'exam',
+  'teacher',
+  'minCount',
+  'days',
+  'status',
+  'city',
+  'school',
+  'bus',
+  'knowWay',
+]);
 
 /** Form → API params (only the report's own parameters, empty values dropped). */
 export function toReportParams(definition: Pick<ReportDefinition, 'params'>, form: ReportForm): ReportParams {

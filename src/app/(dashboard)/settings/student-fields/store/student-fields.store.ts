@@ -23,6 +23,7 @@ export function createStudentFieldsStore(): StudentFieldsStore {
     optionDraft: '',
     formIsRequired: false,
     formDisplayInReport: true,
+    formIsFilterable: false,
     formSortOrder: 0,
     isSubmitting: false,
 
@@ -41,6 +42,7 @@ export function createStudentFieldsStore(): StudentFieldsStore {
         optionDraft: '',
         formIsRequired: false,
         formDisplayInReport: true,
+        formIsFilterable: false,
         formSortOrder: 0,
       }),
 
@@ -57,6 +59,7 @@ export function createStudentFieldsStore(): StudentFieldsStore {
         optionDraft: '',
         formIsRequired: field.isRequired,
         formDisplayInReport: field.displayInReport,
+        formIsFilterable: field.isFilterable ?? false,
         formSortOrder: field.sortOrder,
       });
     },
@@ -68,7 +71,13 @@ export function createStudentFieldsStore(): StudentFieldsStore {
       }),
 
     setFormField: (field, value) =>
-      set((state) => ({ ...state, [field]: value })),
+      set((state) => {
+        const next = { ...state, [field]: value };
+        if (field === 'formType' && value !== 'SELECT' && value !== 'BOOLEAN') {
+          next.formIsFilterable = false;
+        }
+        return next;
+      }),
 
     addOption: (option) => {
       const trimmed = option.trim();

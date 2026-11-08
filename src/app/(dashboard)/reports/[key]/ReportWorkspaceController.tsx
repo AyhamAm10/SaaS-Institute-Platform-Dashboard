@@ -17,6 +17,7 @@ import {
 import { createReportWorkspaceStore, ReportWorkspaceContext, type ReportWorkspaceStore } from './store/report-workspace.store';
 import { reportsLabels as labels } from '../static-data/reports.data';
 import { reportPrintHref, type ReportForm } from '../utils/reports.utils';
+import { ReferenceOptionsReportSync } from './ReferenceOptionsReportSync';
 import { ReportWorkspaceView } from './ui/ReportWorkspaceView';
 
 type SyncProps = { store: ReportWorkspaceStore };
@@ -107,6 +108,13 @@ export function ReportWorkspaceController({ reportKey, initialForm }: { reportKe
   const [store] = useState(() => createReportWorkspaceStore(reportKey, initialForm));
   const definition = useStore(store, (s) => s.definition);
   const kinds = new Set(definition?.params.map((p) => p.kind) ?? []);
+  const needsReferences =
+    kinds.has('status') ||
+    kinds.has('city') ||
+    kinds.has('school') ||
+    kinds.has('bus') ||
+    kinds.has('knowWay') ||
+    kinds.has('customFilters');
 
   const handlePrint = useCallback(() => {
     const { submitted } = store.getState();
@@ -133,6 +141,7 @@ export function ReportWorkspaceController({ reportKey, initialForm }: { reportKe
       {kinds.has('teacher') && <TeachersSync store={store} />}
       {kinds.has('exam') && <ExamsSync store={store} />}
       {kinds.has('student') && <StudentsSync store={store} />}
+      {needsReferences && <ReferenceOptionsReportSync store={store} />}
       <ReportWorkspaceView onPrint={handlePrint} onExcel={handleExcel} />
     </ReportWorkspaceContext.Provider>
   );

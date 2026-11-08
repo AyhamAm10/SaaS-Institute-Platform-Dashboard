@@ -30,6 +30,7 @@ export function StudentFieldDrawer({ onSubmit }: StudentFieldDrawerProps) {
   const formType = useStudentFieldsMirror('formType');
   const formIsRequired = useStudentFieldsMirror('formIsRequired');
   const formDisplayInReport = useStudentFieldsMirror('formDisplayInReport');
+  const formIsFilterable = useStudentFieldsMirror('formIsFilterable');
   const isSubmitting = useStudentFieldsMirror('isSubmitting');
   const setFormField = useStudentFieldsMirror('setFormField');
   const isEditing = Boolean(selectedField);
@@ -82,6 +83,13 @@ export function StudentFieldDrawer({ onSubmit }: StudentFieldDrawerProps) {
                 checked={formDisplayInReport}
                 onChange={(e) => setFormField('formDisplayInReport', e.currentTarget.checked)}
               />
+              {(formType === 'SELECT' || formType === 'BOOLEAN') && (
+                <Checkbox
+                  label="قابل للفلترة في سجل الطلاب والتقارير"
+                  checked={formIsFilterable}
+                  onChange={(e) => setFormField('formIsFilterable', e.currentTarget.checked)}
+                />
+              )}
             </Stack>
           </Stack>
         </form>

@@ -21,22 +21,43 @@ export function createReportWorkspaceStore(reportKey: string, initialForm: Repor
     document: null,
     isBuilding: false,
     buildError: null,
-    options: { sections: [], exams: [], teachers: [], students: [] },
+    options: {
+      sections: [],
+      exams: [],
+      teachers: [],
+      students: [],
+      statuses: [],
+      cities: [],
+      schools: [],
+      buses: [],
+      knowWays: [],
+    },
+    studentFields: [],
     studentSearch: '',
     selectedStudent: null,
     isExporting: false,
     exportError: null,
 
     setField: (kind, value) =>
-      set((s) => ({
-        form: {
-          ...s.form,
-          [kind]: value,
-          // A new section changes its exams
-          ...(kind === 'section' && { exam: null }),
-        },
-        missing: s.missing.filter((k) => k !== kind),
-      })),
+      set((s) => {
+        let school = s.form.school;
+        if (kind === 'city' && school) {
+          const foundSchool = s.options.schools.find((item) => item.value === school);
+          if (foundSchool && foundSchool.cityId != null && String(foundSchool.cityId) !== value) {
+            school = null;
+          }
+        }
+        return {
+          form: {
+            ...s.form,
+            [kind]: value,
+            // A new section changes its exams
+            ...(kind === 'section' && { exam: null }),
+            ...(kind === 'city' && { school }),
+          },
+          missing: s.missing.filter((k) => k !== kind),
+        };
+      }),
     setStudentSearch: (studentSearch) => set({ studentSearch }),
     submit: () => {
       const { definition, form } = get();
@@ -55,6 +76,7 @@ export function createReportWorkspaceStore(reportKey: string, initialForm: Repor
     },
     syncDocument: (document, isBuilding, buildError) => set({ document, isBuilding, buildError }),
     syncOptions: (key, options) => set((s) => ({ options: { ...s.options, [key]: options } })),
+    syncStudentFields: (studentFields) => set({ studentFields }),
     setSelectedStudent: (selectedStudent) => set({ selectedStudent }),
     setExporting: (isExporting, exportError = null) => set({ isExporting, exportError }),
   }));

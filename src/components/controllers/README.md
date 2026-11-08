@@ -1,305 +1,105 @@
-# Controller Component Architecture Guide
+# App Controllers Catalog
 
-> **Binding Architectural Standard for UI Controllers**  
-> Location: `src/components/controllers/`  
-> Governed by: [role.md](../../../role.md)
+Shared UI components of the dashboard. Pages compose these; they never style raw Mantine
+(`TextInput`, `Select`, `Drawer`, `Modal`, `Button`, `ActionIcon`, `Badge`, `Tabs`, `Table`, `Paper`
+for cards). ESLint errors on hex colors, `fw` above 600 and Mantine `Tabs` inside `src/app`.
 
----
+- **Import path:** in `src/app` prefer the folder path, `@/src/components/controllers/<name>`
+  (for example `.../controllers/drawer`, `.../controllers/input`). The barrel
+  `@/src/components/controllers` re-exports everything and is also valid.
+- **Folder layout / rules:** each folder is `init/ state/ store/ ui/` + root component (stateless
+  primitives ship only `init/` + root). State is a per-instance Zustand store read through
+  `use<X>Mirror`. Full rules: `docs/rules/core.md`, `docs/rules/ui-controllers.md`.
+- **Theme:** colors/tones come from `src/theme` tokens (`--app-*`). Numbers and dates go through
+  `src/core/format` (Latin digits). All UI text is Arabic.
 
-## 1. Architectural Philosophy
+## Catalog
 
-A **Controller Component** in this platform is not merely a single React component file. It is a self-contained, enterprise-grade module responsible for orchestrating **initialization, isolated state management, declarative compound composition, and Mantine-only visual presentation**.
+| Component | Import | Use it for | Key props | Notes / gotchas |
+|---|---|---|---|---|
+| `AppInput` | `controllers/input` | Every text field | `type`: text, password, number, email, tel, search, url, textarea, select; `label`, `description`, `error`, `placeholder`, `value`, `onChange`, `required`, `disabled`, `readOnly`, `leftSection`, `rightSection`, `size`, `rows` (textarea), `min`/`max`/`step` (number) | `onChange` gets a DOM event for text types: unwrap with `inputText(e)` from `@/src/core/format`. Auto LTR for tel/email/password/number/url, RTL otherwise. Default icons for tel/email/search/password. Unknown props are forwarded to Mantine. |
+| `AppSelect` | `controllers/input` | Dropdowns | `data` (string[] or Mantine data), `value`, `onChange(value, option)`, `searchable`, `clearable`, `nothingFoundMessage`, `label`, `required` | Same component as `AppInput` with `type="select"` (no `type` prop). Passing `data` to `AppInput` also yields a select. There is no `select/` folder. `onChange` receives the value (`string \| null`), not an event. |
+| `AppDatePicker` | `controllers/date-picker` | Every date field | `value` (ISO string or Date), `onChange(value: string \| null)`, `minDate`, `maxDate`, `label`, `required`, `clearable`, `dropdownType`: popover, modal | Emits ISO `YYYY-MM-DD`. Arabic locale. Exported name is `DatePickerController` / `AppDatePicker` (see docs/rules 5.2). |
+| `AppDrawer` | `controllers/drawer` | Side sheets: create/edit forms, detail views | `opened`, `onClose`, `size` (default `md`), `position` (default `right`), `loading`, `title`, `description`, `icon` (simple mode) | Compound: `.Header`, `.Icon`, `.Title`, `.Description`, `.Actions`, `.Close`, `.Toolbar`, `.Content`, `.Section` (`title`), `.SectionHeader`, `.Details`, `.Detail`, `.Footer`, `.FooterStart`, `.FooterEnd`, `.Cancel`, `.Submit`. No feature logic or API calls inside. Forms use `<form id>` + submit button `form="id"` in the footer. |
+| `AppModal` | `controllers/modal` | Confirmations, warnings, compact forms | `opened`, `onClose`, `variant`: default, danger, warning, info, success; `size` (default `md`), `centered` (default true), `loading`, `title`, `description`, `icon` | Compound: `.Header`, `.Icon`, `.Title`, `.Description`, `.Actions`, `.Close`, `.Content`, `.Footer`, `.FooterStart`, `.FooterEnd`, `.Cancel`, `.Confirm`. Deep or multi-section work belongs in `AppDrawer`. |
+| `DeleteConfirmationModal` | `controllers/modal` | Ready-made delete confirm | `opened`, `onClose`, `onConfirm`, `itemName`, `title`, `description`, `warningMessage`, `confirmLabel`, `cancelLabel`, `isLoading` | Zero boilerplate; prefer it over hand-built danger modals. |
+| `DataModuleController` | `controllers/data-module` | Every table / list with search, filters, pagination | `title`, `description`, `data`, `columns`, `total`, `page`, `limit`, `totalPages`, `isLoading`, `isFetching`, `keyExtractor`, `searchPlaceholder`, `emptyMessage`, `emptyDescription`, `selectable`, `onSelect`, `onPageChange`, `onLimitChange`, `onSearchChange`, `onSortChange`, `onFilterChange` | Compound: `.Header`, `.Title`, `.Actions`, `.FilterBar`, `.SearchInput`, `.FilterSlot`, `.ResetButton`, `.Content`, `.Table`, `.Footer` (also `.Pagination`, `.Empty`, `.Loading`). Column (`DataModuleColumn<T>`): `key`, `title`, `width`, `align`: left, center, right; `sortable`, `render(row, index)`, `exportValue(row)`, `exportKind`. Controller owns all layout: never wrap it in your own Card/Paper. Columns without `exportValue` are excluded from export. Wrap in `AppModule.Table` for the selection bar. |
+| `AppModule` | `controllers/app-module` | Page shell for stats + charts + table with print/Excel export | `exportTitle`, `className` | Compound: `.Header`, `.Stats`, `.Charts`, `.Table`, `.Content`. Selecting rows in the nested `DataModuleController` shows the floating print / Excel bar. KPIs and chart data must come from server overview endpoints, never aggregated from a table page. |
+| `AppButton` | `controllers/button` | Every action button | `variant`: primary, accent, outline, ghost, danger, dangerSolid; `href` (renders a Next link); plus Mantine `ButtonProps` (`size`, `loading`, `leftSection`, `disabled`, `fullWidth`) and native `type`, `form`, `onClick` | `variant` default `primary` (ink). `accent` (orange) is rare. `dangerSolid` for destructive confirm. Do not pass `color`. |
+| `AppIconButton` | `controllers/button` | Icon-only actions | `variant`: default, ghost, brand, danger, primary; `size`: xs, sm, md, lg (28/32/36/42 px) | Always give it an accessible label (`aria-label`). Plus Mantine ActionIcon props. |
+| `StatusBadge` | `controllers/badge` | Every status / pill | `children`, `tone`: brand, success, danger, warning, info, neutral, ink; `variant`: soft, outline, dot, solid; `size`: xs, sm, md; `icon` | Choose by meaning (`tone`), never a raw color. Defaults: tone neutral, variant soft, size sm. |
+| `AppTabs` | `controllers/tabs` | Every tab switch | `items: { value, label, icon?, count?, disabled? }[]`, `value`, `defaultValue`, `onChange(value)`, `size`: xs, sm, md; `fullWidth` | Compound: `.List`, `.Panel` (matching `value`). Never use Mantine `Tabs` in `src/app`. |
+| `AppPageHeader` | `controllers/page-header` | Page title outside DataModule | `title`, `description`, `icon`, `badge`, `actions`, `breadcrumbs: { label, href? }[]`, `withBreadcrumbs` | Breadcrumbs hidden by default (sidebar shows location). |
+| `AppSurface` | `controllers/surface` | Every card / panel / nested block | `level`: 1, 2, 3 (default 2); `tone`: glass, subtle, brand; `radius`: md, lg, xl; `padding`, `interactive`, `onClick` | Level 1 = toolbars/nested, 2 = card, 3 = floating overlays. `subtle` and `brand` ignore `level` background. |
+| `AppEmptyState` | `controllers/empty-state` | Empty lists / no-result blocks | `title`, `description`, `icon`, `action`, `compact` | Inside tables use `emptyMessage` on DataModule instead. |
+| `IconTile` | `controllers/info-tile` | Raised icon square | `children`, `tone`: brand, ink, neutral, success, danger; `size` (default 44) | |
+| `InfoTile` | `controllers/info-tile` | Small label + value metric | `label`, `value`, `icon`, `hint`, `tone`: brand, ink, neutral, success, danger | |
+| `DetailList` | `controllers/info-tile` | Label/value grid | `items: { label, value, icon? }[]`, `columns`: 1, 2, 3 | 1 column on mobile always. |
+| `StatCard` | `controllers/stats` | KPI card | `variant`: default, elevated, glass (default glass) | Compound: `.Icon` (`tone`: brand, ink), `.Title`, `.Content`, `.Progress` (`value`, `label`, `tone`: brand, ink), `.Action`. |
+| `ChartCard` | `controllers/charts` | Chart container with period tabs | `title`, `subtitle`, `periods`, `activePeriod`, `onPeriodChange` | Compound: `.Header`, `.Tabs`, `.Bar` (data `{ label, value, highlight?, tooltipBadge?, secondaryValue? }[]`), `.Circle` (segments `{ label, value, color? }[]`). Default periods are Arabic daily / weekly / monthly. |
+| `AppStepper` | `controllers/stepper` | Multi-step wizard with sidebar | `active`, `defaultStep`, `onStepChange`, `onStepClick`, `allowStepSelect`, `onBeforeNext`, `onBeforePrev` (may return a Promise), `sidebarWidth` (default 340) | Compound: `.Sidebar`, `.Step` (`step` index) with `.Step.Header` and `.Step.Content`, `.Actions` (`onSubmit`). Step list type is `StepConfig { step, label, description?, icon? }`. |
+| `AppAmbient` | `controllers/ambient` | Animated blob background | `variant`: dashboard, login; `intensity`: soft, normal, vivid | Mounted once by the dashboard layout and login; pages do not add it. |
+| `LayoutController` | `controllers/layout` | Dashboard shell (sidebar + permission gate) | `sidebarProps`, `children` | Mounted by the dashboard layout only. Filters navigation by permissions; shows a no-permission view. |
+| `SidebarController` | `controllers/sidebar` | Navigation sidebar (desktop + mobile drawer) | `items` (navigation config), `children` | Composed by `LayoutController`; menu config lives in `sidebar/init/navigation`. Not for page code. |
+| `LoginController` | `controllers/login` | Login screen | `LoginInitialProps` | Handles redirect and auth cache invalidation itself. Used by the login route only. |
+| `AppReport` | `controllers/report` | Printable report document | `document`, `institute`, `variant`: screen, print; `verifyOrigin` | Uses fixed paper colors (`REPORT_PAPER`) on purpose, for print. Also exports `ReportMenu`, `useQrDataUri`, report formatters. |
 
-### Core Tenets
+## Patterns
 
-1. **Per-Instance State Isolation (Mandatory):**  
-   Every Controller instance MUST create its own isolated Zustand store via `createControllerStore` from `@/src/core/mirror`. Global Zustand singletons for controller state are strictly prohibited. Multiple instances of a controller on the same screen (e.g. multiple Modals, Drawers, Inputs, or Steppers) will never bleed state into one another.
-
-2. **Decoupled 4-Layer Separation:**  
-   Code is organized into 4 distinct, immutable layers:
-   - `init/` — Parameter derivation and config resolution.
-   - `state/` — Domain state schema and initial state factory.
-   - `store/` — Per-instance Zustand store, React Context bridge, and typed `useMirror` hook.
-   - `ui/` — Pure presentation components utilizing Mantine primitives only.
-
-3. **Compound Component Composition:**  
-   Controllers expose a clean, highly composable Compound API (e.g., `AppStepper.Step`, `AppStepper.Step.Header`, `AppStepper.Step.Content`, `AppStepper.Actions`). All sub-components accept `children` and consume state reactively via `useMirror`.
-
-4. **Mantine-Only UI Foundation:**  
-   Raw HTML elements (`<div />`, `<button />`, `<span />`) are strictly forbidden. All layout, styling, and interactions must use Mantine primitives (`Box`, `Group`, `Stack`, `Flex`, `Collapse`, `Paper`, `Button`, `Text`, etc.).
-
----
-
-## 2. Directory & File Structure
-
-Every controller inside `src/components/controllers/<name>/` must follow this standard directory layout:
-
-```text
-src/components/controllers/<component-name>/
-├── init/
-│   ├── <name>.init.ts          # Props interfaces & configuration resolvers
-│   └── index.ts
-├── state/
-│   ├── <name>.state.ts         # ControllerState schema & initial state factory
-│   └── index.ts
-├── store/
-│   ├── <name>.store.ts         # Per-instance Zustand store & React Context
-│   ├── use<Name>Mirror.ts      # Typed useMirror & useMirrorSelector hooks
-│   └── index.ts
-├── ui/
-│   ├── <SubComponent1>.tsx     # Presentation subcomponents
-│   ├── <SubComponent2>.tsx
-│   └── index.ts
-├── App<Name>.tsx               # Root Controller entry point (provides store & compounds)
-└── index.ts                    # Public export barrel
-```
-
----
-
-## 3. Layer Responsibilities & Implementation Rules
-
-### Layer 1: `init/` (Runtime Bootstrap & Configuration)
-
-- **File:** `init/<name>.init.ts`
-- **Responsibility:** Defines the external component props interface (`App<Name>InitialProps`) and normalizes/defaults incoming props into a typed runtime configuration (`Resolved<Name>Config`).
-- **Rules:**
-  - MUST contain pure functions only (`resolve<Name>Config`).
-  - NO React hooks, NO state, NO DOM manipulation, NO API calls.
-
-```ts
-// Example: init/stepper.init.ts
-export interface AppStepperInitialProps {
-  active?: number;
-  defaultStep?: number;
-  allowStepSelect?: boolean;
-  onStepChange?: (step: number) => void;
-  children?: ReactNode;
-}
-
-export interface ResolvedStepperConfig {
-  allowStepSelect: boolean;
-  sidebarWidth: number;
-}
-
-export function resolveStepperConfig(props: AppStepperInitialProps): ResolvedStepperConfig {
-  return {
-    allowStepSelect: props.allowStepSelect ?? false,
-    sidebarWidth: 280,
-  };
-}
-```
-
----
-
-### Layer 2: `state/` (Domain State & Actions Schema)
-
-- **File:** `state/<name>.state.ts`
-- **Responsibility:** Defines the complete runtime state interface extending `ControllerState` from `@/src/core/mirror/types`, and provides the initial state factory function.
-- **Rules:**
-  - Must explicitly type all state properties and action functions.
-  - Initial factory (`createInitial<Name>State`) must populate defaults cleanly without side-effects.
-
-```ts
-// Example: state/stepper.state.ts
-import { ControllerState } from '@/src/core/mirror/types';
-
-export interface StepperState extends ControllerState {
-  // Domain State
-  active: number;
-  totalSteps: number;
-  isControlled: boolean;
-  config: ResolvedStepperConfig;
-  rawProps: AppStepperInitialProps;
-
-  // Actions
-  setActive: (step: number) => void;
-  nextStep: () => void;
-  prevStep: () => void;
-  updateProps: (props: AppStepperInitialProps) => void;
-}
-```
-
----
-
-### Layer 3: `store/` (Isolated Zustand Store & Mirror Hook)
-
-- **Files:** `store/<name>.store.ts` & `store/use<Name>Mirror.ts`
-- **Responsibility:**
-  1. Creates an isolated vanilla Zustand store per component mount using `createControllerStore` from `@/src/core/mirror`.
-  2. Creates a React Context to distribute the store instance downward.
-  3. Provides `use<Name>Mirror(key)` for selective, zero-overhead re-rendering.
-- **Rules:**
-  - Never export a global store singleton.
-  - Always use `createControllerStore<State>((set, get) => ({ ... }))`.
-  - Always throw a descriptive error if `use<Name>Store` is used outside its Provider.
-
-```ts
-// Example: store/stepper.store.ts
-import { createContext, useContext } from 'react';
-import { createControllerStore } from '@/src/core/mirror';
-import { ControllerStoreApi } from '@/src/core/mirror/types';
-import { StepperState, createInitialStepperState } from '../state/stepper.state';
-
-export type StepperStore = ControllerStoreApi<StepperState>;
-
-export function createStepperStore(initialProps: AppStepperInitialProps): StepperStore {
-  const initial = createInitialStepperState(initialProps);
-
-  return createControllerStore<StepperState>((set, get) => ({
-    ...initial,
-
-    setActive: (step: number) => {
-      set({ active: step });
-      get().rawProps.onStepChange?.(step);
-    },
-
-    nextStep: () => {
-      const current = get().active;
-      if (current < get().totalSteps - 1) {
-        get().setActive(current + 1);
-      }
-    },
-
-    prevStep: () => {
-      const current = get().active;
-      if (current > 0) {
-        get().setActive(current - 1);
-      }
-    },
-
-    updateProps: (props: AppStepperInitialProps) => {
-      set({
-        rawProps: props,
-        active: props.active !== undefined ? props.active : get().active,
-      });
-    },
-  }));
-}
-
-export const StepperContext = createContext<StepperStore | null>(null);
-
-export function useStepperStore(): StepperStore {
-  const store = useContext(StepperContext);
-  if (!store) {
-    throw new Error('useStepperStore must be used within an <AppStepper> component hierarchy.');
-  }
-  return store;
-}
-```
-
-```ts
-// Example: store/useStepperMirror.ts
-import { useStore } from 'zustand';
-import { useStepperStore } from './stepper.store';
-import { StepperState } from '../state/stepper.state';
-
-export function useStepperMirror<K extends keyof StepperState>(key: K): StepperState[K] {
-  const store = useStepperStore();
-  return useStore(store, (state) => state[key]);
-}
-
-export function useStepperMirrorSelector<TSelected>(
-  selector: (state: StepperState) => TSelected,
-): TSelected {
-  const store = useStepperStore();
-  return useStore(store, selector);
-}
-```
-
----
-
-### Layer 4: `ui/` (Pure Mantine Presentation Layer)
-
-- **Directory:** `ui/`
-- **Responsibility:** Renders the visual structure, layout, and animations strictly using Mantine components.
-- **Rules:**
-  - Consume state ONLY via `use<Name>Mirror('key')` or `use<Name>MirrorSelector`.
-  - No direct prop drilling of internal controller state.
-  - Sub-components must accept `children` and `className` / style props when appropriate.
-  - Animations must use Mantine's `<Collapse>` or `<Transition>`.
-
----
-
-### Layer 5: Root Controller (`App<Name>.tsx`)
-
-- **File:** `App<Name>.tsx`
-- **Responsibility:**
-  1. Instantiates the store instance once per component lifecycle using:
-     ```ts
-     const [store] = useState(() => createStepperStore(props));
-     ```
-  2. Keeps external controlled props synchronized via `useEffect`:
-     ```ts
-     useEffect(() => {
-       store.getState().updateProps(props);
-     }, [props.active, props.allowStepSelect, ...]);
-     ```
-  3. Provides the store instance via `<Context.Provider value={store}>`.
-  4. Attaches compound sub-components to the main export (e.g., `AppStepper.Step = AppStepperStep`).
-
----
-
-## 4. Strict Prohibitions & Anti-Patterns
-
-| Anti-Pattern | Why It Is Forbidden | Mandatory Correction |
-|---|---|---|
-| **Global Zustand Singleton** | State bleeds across multiple instances of the component on the same or different routes. | Always use `useState(() => createControllerStore(props))` and distribute via React Context. |
-| **Raw HTML tags (`<div />`, `<button />`, etc.)** | Violates design system unification and accessibility guidelines. | Use Mantine primitives (`Box`, `Group`, `Stack`, `Paper`, `Button`, `Collapse`, etc.). |
-| **Prop Drilling Internal State** | Couples parent and child tightly, triggers unnecessary re-renders. | Child components subscribe to the slice they need via `useMirror('key')`. |
-| **Plain React Context without Zustand** | Context re-renders the entire tree on every state update, degrading performance. | Use Zustand vanilla store inside Context; components use `useStore` with selectors. |
-| **Bypassing the 4 Layers** | Leads to monolithic, untestable, unmaintainable components. | Always adhere to `init/`, `state/`, `store/`, and `ui/`. |
-
----
-
-## 5. Compound Pattern Standard
-
-Compound components must be attached directly to the main Controller export:
+Form field (inside a store-driven form, text unwrapped with `inputText`):
 
 ```tsx
-// Attachment in AppStepper.tsx
-AppStepper.Step = AppStepperStep;
-AppStepper.Step.Header = AppStepperStepHeader;
-AppStepper.Step.Content = AppStepperStepContent;
-AppStepper.Actions = AppStepperActions;
+import { AppInput } from '@/src/components/controllers/input';
+import { inputText } from '@/src/core/format';
 
-// Public Usage in Application:
-<AppStepper>
-  <AppStepper.Step step={0}>
-    <AppStepper.Step.Header>
-      <Title order={4}>بيانات العائلة</Title>
-    </AppStepper.Step.Header>
-    <AppStepper.Step.Content>
-      <FamilyForm />
-    </AppStepper.Step.Content>
-  </AppStepper.Step>
-  <AppStepper.Actions onSubmit={handleSubmit} />
-</AppStepper>
+<AppInput
+  type="tel"
+  label={branchesLabels.phoneLabel}
+  value={formPhone}
+  onChange={(e) => setFormField('formPhone', inputText(e))}
+/>
 ```
 
----
+Table (from `branches/ui/BranchesView.tsx`; the `columns` array comes from a `useMemo` factory):
 
-## 6. Design System Layer (Theme + Primitives)
+```tsx
+<AppModule exportTitle="الفروع">
+  <AppModule.Table>
+    <DataModuleController
+      title={labels.title} data={rows} columns={columns} total={rows.length}
+      page={1} limit={10} totalPages={1} isLoading={isLoading}
+      keyExtractor={(item: Branch) => item.id} onSearchChange={setSearch} selectable
+    >
+      <DataModuleController.Header>
+        <DataModuleController.Title />
+        <DataModuleController.Actions>
+          <AppButton leftSection={<IconPlus size={16} />} onClick={openCreate}>إضافة</AppButton>
+        </DataModuleController.Actions>
+      </DataModuleController.Header>
+      <DataModuleController.FilterBar><DataModuleController.SearchInput /></DataModuleController.FilterBar>
+      <DataModuleController.Content><DataModuleController.Table /></DataModuleController.Content>
+      <DataModuleController.Footer />
+    </DataModuleController>
+  </AppModule.Table>
+</AppModule>
+```
 
-Visual identity lives in exactly two places, so a redesign never touches page code:
+Drawer (from `branches/ui/BranchDrawer.tsx`):
 
-1. **`src/theme/`** — the single source of truth.
-   - `tokens.ts`: semantic tokens for light / dark (surfaces, glass, elevation, brand, tones). Emitted as `--app-*` CSS variables by `css-variables.ts` (Mantine `cssVariablesResolver`, mounted in `AppThemeProvider`).
-   - `colors.ts`: Mantine tuples. `primary` = ink (black actions), `brand` = logo orange `#F16726`. Legacy palette names (`teal`, `blue`, `violet`, …) are remapped onto semantic tuples in `index.ts`.
-   - `components.ts` + `src/app/globals.css`: Mantine defaults and interactive states (hover / focus cannot be expressed in Mantine `styles` objects).
-2. **Controllers** — pages compose these instead of styling Mantine directly:
-
-| Controller | Use it for |
-|---|---|
-| `AppAmbient` | Living background (orange liquid blobs). Mounted by the dashboard layout and login. |
-| `AppSurface` | Every card / panel / nested block (`level` 1–3 glass, `tone` glass / subtle / brand). |
-| `AppButton`, `AppIconButton` | All actions (`variant` primary / accent / outline / ghost / danger). |
-| `StatusBadge` | All statuses (`tone` brand / success / danger / warning / info / neutral / ink). |
-| `AppTabs` | All tab switching (`AppTabs.List`, `AppTabs.Panel`). |
-| `IconTile`, `InfoTile`, `DetailList` | Raised icon squares, small metrics, label/value grids. |
-| `AppEmptyState`, `AppPageHeader` | Empty states and page titles outside DataModule. |
-
-**Stateless primitives** (`surface`, `button`, `badge`, `info-tile`, `empty-state`, `page-header`) have no runtime state, so they ship `init/` (style resolution) + root component only. Controllers with state (e.g. `tabs`, `charts`, `ambient`) keep the full `init/state/store/ui` layering.
-
-**Typography:** Alexandria, weights 300 / 400 / 500 / 600 only. Numbers and dates go through `src/core/format` (Latin digits).
-
-**Guards:** `eslint.config.mjs` errors on hex colors, `fw` above 600 and Mantine `Tabs` inside `src/app`, and warns on raw `Button` / `ActionIcon` / `Badge` / `SegmentedControl` imports (migration backlog).
+```tsx
+<AppDrawer opened={isDrawerOpen} onClose={closeDrawer} size="md">
+  <AppDrawer.Header>
+    <AppDrawer.Icon icon={<IconBuildingCommunity size={20} />} color="teal" />
+    <AppDrawer.Title>{title}</AppDrawer.Title>
+  </AppDrawer.Header>
+  <AppDrawer.Content>
+    <form id="branch-form" onSubmit={handleSubmit}>
+      <AppDrawer.Section title="البيانات الأساسية">{/* AppInput fields */}</AppDrawer.Section>
+    </form>
+  </AppDrawer.Content>
+  <AppDrawer.Footer>
+    <AppButton variant="ghost" onClick={closeDrawer}>إلغاء</AppButton>
+    <AppButton type="submit" form="branch-form" loading={isSubmitting}>حفظ</AppButton>
+  </AppDrawer.Footer>
+</AppDrawer>
+```

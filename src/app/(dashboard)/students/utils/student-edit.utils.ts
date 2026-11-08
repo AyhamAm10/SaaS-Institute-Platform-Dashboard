@@ -1,6 +1,26 @@
 import { Student, StudentField, UpdateStudentPayload } from '@/src/core/api';
-import { StudentEditFormState } from '../state/students.state';
-import { toReferencePayload } from './student-references.utils';
+import { CustomFieldValue, StudentEditFormState, StudentListFilters } from '../state/students.state';
+import { studentReferencesFrom, toReferencePayload } from './student-references.utils';
+
+export const DEFAULT_STUDENT_FILTERS: StudentListFilters = {
+  statusId: null,
+  busId: null,
+  cityId: null,
+  schoolId: null,
+  knowWayId: null,
+  customFilters: {},
+};
+
+export function studentToEditForm(student: Student): StudentEditFormState {
+  return {
+    fullName: student.fullName,
+    birthDate: student.birthDate ? String(student.birthDate).split('T')[0] : null,
+    gender: student.gender === 'FEMALE' ? 'FEMALE' : 'MALE',
+    familyId: student.familyId,
+    customFields: { ...((student.customFields ?? {}) as Record<string, CustomFieldValue>) },
+    references: studentReferencesFrom(student),
+  };
+}
 
 /**
  * Client-side validation of the student edit form, including the institute's

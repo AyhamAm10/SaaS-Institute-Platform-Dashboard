@@ -17,6 +17,7 @@ export interface StudentFieldsState {
   optionDraft: string;
   formIsRequired: boolean;
   formDisplayInReport: boolean;
+  formIsFilterable: boolean;
   formSortOrder: number;
   isSubmitting: boolean;
 

@@ -66,6 +66,12 @@ export const PARAM_LABELS: Record<ReportParamKind, string> = {
   paymentMethod: 'طريقة الدفع',
   minCount: 'الحد الأدنى (مرات)',
   days: 'عدد أيام الدوام',
+  status: 'الحالة',
+  city: 'المدينة',
+  school: 'المدرسة',
+  bus: 'الحافلة',
+  knowWay: 'طريقة المعرفة',
+  customFilters: 'الفلاتر المخصصة',
 };
 
 /** Every parameter kind, optional (print page: reads whatever the URL carries). */

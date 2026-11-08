@@ -106,6 +106,17 @@ export function getStudentFieldsColumns(
         </StatusBadge>
       ),
     },
+    {
+      key: 'isFilterable',
+      title: 'قابل للفلترة',
+      exportValue: (field) => (field.isFilterable ? 'نعم' : 'لا'),
+      exportKind: 'text',
+      render: (field) => (
+        <StatusBadge tone={field.isFilterable ? 'info' : 'neutral'} size="sm">
+          {field.isFilterable ? 'نعم' : 'لا'}
+        </StatusBadge>
+      ),
+    },
   ];
 
   if (access.canManage) {

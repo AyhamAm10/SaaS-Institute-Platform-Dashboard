@@ -51,12 +51,15 @@ export function StudentFieldsController({ hideHeader }: { hideHeader?: boolean }
       formOptionsText,
       formIsRequired,
       formDisplayInReport,
+      formIsFilterable,
       formSortOrder,
     } = store.getState();
 
     if (!formLabel.trim()) {
       return;
     }
+
+    const isFilterable = formType === 'SELECT' || formType === 'BOOLEAN' ? formIsFilterable : false;
 
     const options =
       formType === 'SELECT'
@@ -90,6 +93,7 @@ export function StudentFieldsController({ hideHeader }: { hideHeader?: boolean }
             options,
             isRequired: formIsRequired,
             displayInReport: formDisplayInReport,
+            isFilterable,
             sortOrder: Number(formSortOrder) || 0,
           },
         });
@@ -101,6 +105,7 @@ export function StudentFieldsController({ hideHeader }: { hideHeader?: boolean }
           options,
           isRequired: formIsRequired,
           displayInReport: formDisplayInReport,
+          isFilterable,
           sortOrder: Number(formSortOrder) || 0,
         });
       }

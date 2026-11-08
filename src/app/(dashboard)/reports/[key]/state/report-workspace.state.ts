@@ -1,12 +1,28 @@
-import type { ReportDefinition, ReportDocument, ReportParamKind, ReportParams } from '@/src/core/api';
+import type {
+  ReportDefinition,
+  ReportDocument,
+  ReportParamKind,
+  ReportParams,
+  StudentField,
+} from '@/src/core/api';
 import type { ReportForm } from '../../utils/reports.utils';
 
 export interface Option {
   value: string;
   label: string;
+  cityId?: number | null;
 }
 
-export type OptionKey = 'sections' | 'exams' | 'teachers' | 'students';
+export type OptionKey =
+  | 'sections'
+  | 'exams'
+  | 'teachers'
+  | 'students'
+  | 'statuses'
+  | 'cities'
+  | 'schools'
+  | 'buses'
+  | 'knowWays';
 
 /**
  * ReportWorkspaceState
@@ -29,6 +45,7 @@ export interface ReportWorkspaceState {
   buildError: string | null;
 
   options: Record<OptionKey, Option[]>;
+  studentFields: StudentField[];
   studentSearch: string;
   /** Chosen student kept as an option while the search list changes. */
   selectedStudent: Option | null;
@@ -42,6 +59,7 @@ export interface ReportWorkspaceState {
   syncDefinition: (definition: ReportDefinition | null, loading: boolean) => void;
   syncDocument: (document: ReportDocument | null, isBuilding: boolean, error: string | null) => void;
   syncOptions: (key: OptionKey, options: Option[]) => void;
+  syncStudentFields: (fields: StudentField[]) => void;
   setSelectedStudent: (option: Option | null) => void;
   setExporting: (isExporting: boolean, error?: string | null) => void;
 }

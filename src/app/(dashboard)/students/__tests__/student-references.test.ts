@@ -63,4 +63,42 @@ describe('StudentsStore — references & filters', () => {
     assert.strictEqual(store.getState().page, 1);
     assert.strictEqual(store.getState().filters.statusId, 2);
   });
+
+  it('resets school when city changes to a non-matching city', () => {
+    const store = createStudentsStore();
+    store.getState().syncReferenceOptions({
+      statuses: [],
+      knowWays: [],
+      cities: [{ value: '1', label: 'دمشق' }, { value: '2', label: 'حلب' }],
+      schools: [
+        { value: '10', label: 'مدرسة دمشق', cityId: 1 },
+        { value: '20', label: 'مدرسة حلب', cityId: 2 },
+      ],
+      buses: [],
+    });
+    store.getState().setFilter('cityId', 1);
+    store.getState().setFilter('schoolId', 10);
+    assert.strictEqual(store.getState().filters.schoolId, 10);
+
+    // Change city to Aleppo (2) -> schoolId 10 should be cleared
+    store.getState().setFilter('cityId', 2);
+    assert.strictEqual(store.getState().filters.schoolId, null);
+  });
+
+  it('handles custom filters and clear filters', () => {
+    const store = createStudentsStore();
+    store.getState().setPage(4);
+    store.getState().setCustomFilter('blood_type', 'O+');
+    assert.strictEqual(store.getState().page, 1);
+    assert.strictEqual(store.getState().filters.customFilters.blood_type, 'O+');
+
+    store.getState().setCustomFilter('blood_type', null);
+    assert.strictEqual(store.getState().filters.customFilters.blood_type, undefined);
+
+    store.getState().setFilter('statusId', 5);
+    store.getState().setCustomFilter('transport', true);
+    store.getState().clearFilters();
+    assert.strictEqual(store.getState().filters.statusId, null);
+    assert.deepStrictEqual(store.getState().filters.customFilters, {});
+  });
 });

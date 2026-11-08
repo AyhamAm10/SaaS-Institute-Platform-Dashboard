@@ -12,11 +12,14 @@ import type {
 } from '../utils/student-references.utils';
 import type { FinanceStudent } from '../finance/state/student-finance.state';
 
-/** List filters by reference data (null = all). */
+/** List filters by reference data and custom fields (null = all). */
 export interface StudentListFilters {
   statusId: number | null;
   busId: number | null;
   cityId: number | null;
+  schoolId: number | null;
+  knowWayId: number | null;
+  customFilters: Record<string, unknown>;
 }
 
 export type CustomFieldValue = string | number | boolean | null;
@@ -76,6 +79,9 @@ export interface StudentsState {
   setSearch: (search: string) => void;
   setSelectedBranchId: (branchId: number | null) => void;
   setFilter: <K extends keyof StudentListFilters>(field: K, value: StudentListFilters[K]) => void;
+  setCustomFilter: (field: string, value: unknown) => void;
+  clearFilters: () => void;
+  syncStudentFields: (fields: StudentField[]) => void;
   syncReferenceOptions: (options: StudentReferenceOptions) => void;
   syncQueryData: (payload: {
     data: Student[];
