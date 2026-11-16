@@ -1,7 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createTeachersStore } from '../store/teachers.store';
-import { passwordError, STAFF_PASSWORD_MIN } from '@/src/core/auth';
 import { Teacher } from '@/src/core/api';
 
 const mockTeacher: Teacher = {
@@ -21,39 +20,14 @@ const mockTeacher: Teacher = {
   teacherBranches: [],
 };
 
-test('TeachersStore: password modal state flow', () => {
+test('TeachersStore: the edit drawer loads the teacher and the form carries no password', () => {
   const store = createTeachersStore();
+  store.getState().openEditDrawer(mockTeacher);
 
-  assert.equal(store.getState().passwordModalOpened, false);
-  assert.equal(store.getState().passwordTarget, null);
-  assert.equal(store.getState().newPassword, '');
-  assert.equal(store.getState().passwordModalError, null);
-
-  // Open modal
-  store.getState().openPasswordModal(mockTeacher);
-  assert.equal(store.getState().passwordModalOpened, true);
-  assert.equal(store.getState().passwordTarget?.id, 42);
-  assert.equal(store.getState().newPassword, '');
-
-  // Type new password
-  store.getState().setNewPassword('Short1');
-  assert.equal(store.getState().newPassword, 'Short1');
-
-  // Error validation using passwordError
-  const err = passwordError(store.getState().newPassword);
-  assert.equal(err, `كلمة المرور ${STAFF_PASSWORD_MIN} محارف على الأقل`);
-  store.getState().setPasswordModalError(err);
-  assert.equal(store.getState().passwordModalError, err);
-
-  // Valid password
-  store.getState().setNewPassword('NewTeacherPass123!');
-  assert.equal(passwordError(store.getState().newPassword), null);
-
-  // Close modal resets target and fields
-  store.getState().closePasswordModal();
-  assert.equal(store.getState().passwordModalOpened, false);
-  assert.equal(store.getState().passwordTarget, null);
-  assert.equal(store.getState().newPassword, '');
-  assert.equal(store.getState().passwordModalError, null);
+  const { form, drawerMode, drawerOpened } = store.getState();
+  assert.equal(drawerOpened, true);
+  assert.equal(drawerMode, 'edit');
+  assert.equal(form.fullName, 'أستاذ أحمد');
+  assert.equal(form.phone, '0912345678');
+  assert.equal('password' in form, false);
 });
-

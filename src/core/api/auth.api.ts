@@ -1,5 +1,6 @@
 import { apiClient } from './client';
 import {
+  ChangePasswordPayload,
   LoginCredentials,
   RefreshResponse,
   UserProfile,
@@ -37,6 +38,15 @@ export const authApi = {
    */
   async getMe(): Promise<UserProfile> {
     const response = await apiClient.get<UserProfile>('/auth/me');
+    return response.data;
+  },
+
+  /**
+   * The user picks a new password (forced after a new or reset account).
+   * The server rotates the cookies, so the session continues.
+   */
+  async changePassword(payload: ChangePasswordPayload): Promise<WebAuthResponse> {
+    const response = await apiClient.post<WebAuthResponse>('/auth/change-password', payload);
     return response.data;
   },
 

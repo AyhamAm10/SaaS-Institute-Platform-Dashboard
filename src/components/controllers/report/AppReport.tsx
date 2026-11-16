@@ -9,6 +9,9 @@ import { ReportHeader } from './ui/ReportHeader';
 import { ReportMeta } from './ui/ReportMeta';
 import { ReportBody } from './ui/ReportBody';
 import { ReportFooter } from './ui/ReportFooter';
+import { ReportCover } from './ui/ReportCover';
+import { ReportFrame } from './ui/ReportFrame';
+import { useReportScope } from './useReportScope';
 
 /**
  * AppReport
@@ -25,7 +28,9 @@ import { ReportFooter } from './ui/ReportFooter';
  *     </AppReport.Paper>
  *   </AppReport>
  */
-export function AppReport(props: AppReportProps) {
+export function AppReport(rawProps: AppReportProps) {
+  const contextScope = useReportScope();
+  const props = { ...rawProps, scope: rawProps.scope ?? contextScope };
   const [store] = useState(() => createReportStore(props));
   const verifyUrl = resolveReportConfig(props).verifyUrl;
 
@@ -34,7 +39,7 @@ export function AppReport(props: AppReportProps) {
     const config = resolveReportConfig(props);
     store.getState().sync({ document: props.document, institute: props.institute, ...config });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.document, props.institute, props.variant, props.verifyOrigin, store]);
+  }, [props.document, props.institute, props.variant, props.verifyOrigin, props.scope, store]);
 
   // Verification QR (async SVG generation) → store
   const qr = useQrDataUri(verifyUrl);
@@ -44,14 +49,24 @@ export function AppReport(props: AppReportProps) {
 
   return (
     <ReportContext.Provider value={store}>
-      {props.children ?? (
-        <ReportPaper>
-          <ReportHeader />
-          <ReportMeta />
-          <ReportBody />
-          <ReportFooter />
-        </ReportPaper>
-      )}
+      {props.children ??
+        (props.variant === 'print' ? (
+          <ReportPaper>
+            <ReportCover />
+            <ReportFrame>
+              <ReportMeta />
+              <ReportBody />
+              <ReportFooter />
+            </ReportFrame>
+          </ReportPaper>
+        ) : (
+          <ReportPaper>
+            <ReportHeader />
+            <ReportMeta />
+            <ReportBody />
+            <ReportFooter />
+          </ReportPaper>
+        ))}
     </ReportContext.Provider>
   );
 }

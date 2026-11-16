@@ -10,4 +10,3 @@ export function RenderUi() {
 
   return <SelectionPrintController docId={docId} autoPrint={autoPrint} />;
 }
-

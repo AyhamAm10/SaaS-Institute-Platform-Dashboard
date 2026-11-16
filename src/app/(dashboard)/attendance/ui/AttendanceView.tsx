@@ -102,7 +102,7 @@ export function AttendanceView({ actions }: { actions: AttendanceActions }) {
 
       {day && !day.isWorkingDay && (
         <Alert color="yellow" variant="light" radius="md">
-          {labels.notWorkingDay}
+          {day.closure ? labels.closureDay(day.closure.reason) : labels.notWorkingDay}
         </Alert>
       )}
 

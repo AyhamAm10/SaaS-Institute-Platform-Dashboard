@@ -34,6 +34,8 @@ export interface DailyAttendanceRow {
 export interface DailyAttendance {
   date: string;
   isWorkingDay: boolean;
+  /** Closure (holiday) covering the section on this day, if any. */
+  closure: { id: number; scope: 'INSTITUTE' | 'BRANCH' | 'SECTION'; reason: string } | null;
   counts: AttendanceCounts;
   rows: DailyAttendanceRow[];
 }

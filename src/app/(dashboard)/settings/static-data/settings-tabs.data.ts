@@ -2,20 +2,18 @@ import { ComponentType } from 'react';
 import {
   IconBuildingSkyscraper,
   IconCalendar,
+  IconCalendarOff,
   IconDatabase,
-  IconDeviceMobile,
   IconListDetails,
-  IconUserCheck,
-  IconUsers,
+  IconUserCog,
 } from '@tabler/icons-react';
 import { PERMISSIONS, Permission } from '@/src/core/auth';
 
 export type SettingsTabKey =
   | 'institute'
   | 'schedule'
-  | 'staff'
-  | 'teachers'
-  | 'mobile'
+  | 'closures'
+  | 'accounts'
   | 'student-fields'
   | 'reference-data';
 
@@ -40,22 +38,16 @@ export const SETTINGS_TABS: SettingsTabItem[] = [
     permission: PERMISSIONS.settingsView,
   },
   {
-    key: 'staff',
-    label: 'الموظفون والصلاحيات',
-    icon: IconUsers,
+    key: 'closures',
+    label: 'العطل',
+    icon: IconCalendarOff,
+    permission: PERMISSIONS.settingsView,
+  },
+  {
+    key: 'accounts',
+    label: 'إدارة الحسابات',
+    icon: IconUserCog,
     permission: PERMISSIONS.staffView,
-  },
-  {
-    key: 'teachers',
-    label: 'حسابات المعلمين',
-    icon: IconUserCheck,
-    permission: PERMISSIONS.academicManage,
-  },
-  {
-    key: 'mobile',
-    label: 'حسابات التطبيق',
-    icon: IconDeviceMobile,
-    permission: PERMISSIONS.studentsView,
   },
   {
     key: 'student-fields',

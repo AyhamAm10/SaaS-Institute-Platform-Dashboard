@@ -9,7 +9,6 @@ import { inputText } from '@/src/core/format';
 export function Step1BasicInfo() {
   const fullName = useTeacherRegistrationMirror('fullName');
   const phone = useTeacherRegistrationMirror('phone');
-  const password = useTeacherRegistrationMirror('password');
   const specialization = useTeacherRegistrationMirror('specialization');
   const isActive = useTeacherRegistrationMirror('isActive');
 
@@ -51,19 +50,11 @@ export function Step1BasicInfo() {
 
           <AppInput
             label="رقم الهاتف (اسم المستخدم)"
+            description="يُنشأ حساب الدخول تلقائياً بكلمة المرور الافتراضية، ويغيّرها المعلم عند أول دخول"
             placeholder="0912345678"
             type="tel"
             value={phone}
             onChange={(val) => setBasicField('phone', inputText(val))}
-            required
-          />
-
-          <AppInput
-            label="كلمة المرور"
-            placeholder="أدخل كلمة مرور قوية (8 محارف على الأقل)"
-            type="password"
-            value={password}
-            onChange={(val) => setBasicField('password', inputText(val))}
             required
           />
 

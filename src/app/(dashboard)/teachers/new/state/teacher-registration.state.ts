@@ -21,7 +21,6 @@ export interface TeacherRegistrationState {
   // Step 1: Basic Info
   fullName: string;
   phone: string;
-  password: string;
   specialization: string;
   branchIds: number[];
   isActive: boolean;
@@ -42,7 +41,7 @@ export interface TeacherRegistrationState {
   setSubmitting: (isSubmitting: boolean) => void;
   setStepError: (step: number, error: string | null) => void;
 
-  setBasicField: <K extends 'fullName' | 'phone' | 'password' | 'specialization' | 'isActive'>(
+  setBasicField: <K extends 'fullName' | 'phone' | 'specialization' | 'isActive'>(
     field: K,
     value: TeacherRegistrationState[K],
   ) => void;

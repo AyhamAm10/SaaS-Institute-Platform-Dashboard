@@ -17,7 +17,8 @@ export const CONTEXT_FREE_QUERY_PREFIXES: readonly (readonly string[])[] = [
   ['institutes'],
   ['institute-profile'],
   ['staff'],
-  ['mobile-accounts'],
+  ['closures'],
+  ['accounts'],
   ['reports', 'catalog'],
   ['reports', 'verify'],
 ];

@@ -11,7 +11,12 @@ export function useQrDataUri(text: string | null): string | null {
   useEffect(() => {
     if (!text) return;
     let cancelled = false;
-    QRCode.toString(text, { type: 'svg', margin: 0, errorCorrectionLevel: 'M', color: { dark: REPORT_PAPER.text, light: '#0000' } })
+    QRCode.toString(text, {
+      type: 'svg',
+      margin: 0,
+      errorCorrectionLevel: 'M',
+      color: { dark: REPORT_PAPER.text, light: '#0000' },
+    })
       .then((svg) => !cancelled && setUri({ text, value: `data:image/svg+xml;utf8,${encodeURIComponent(svg)}` }))
       .catch(() => undefined);
     return () => {

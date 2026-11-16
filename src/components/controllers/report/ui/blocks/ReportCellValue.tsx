@@ -7,7 +7,15 @@ import { formatReportCell, isBadgeCell, isLtrKind } from '../../init/report.form
 import { resolveTone } from '../../init/report.init';
 
 /** One typed value: badges as soft pills, numbers / phones / money left-to-right. */
-export function ReportCellValue({ cell, kind, strong }: { cell: ReportCell; kind: ReportColumnKind; strong?: boolean }) {
+export function ReportCellValue({
+  cell,
+  kind,
+  strong,
+}: {
+  cell: ReportCell;
+  kind: ReportColumnKind;
+  strong?: boolean;
+}) {
   const brand = useReportMirror('brand');
 
   if (isBadgeCell(cell)) {
@@ -37,7 +45,10 @@ export function ReportCellValue({ cell, kind, strong }: { cell: ReportCell; kind
       fz="inherit"
       fw={strong ? 700 : undefined}
       dir={isLtrKind(kind) ? 'ltr' : undefined}
-      style={{ whiteSpace: kind === 'money' || kind === 'phone' || kind === 'date' ? 'nowrap' : undefined, unicodeBidi: 'isolate' }}
+      style={{
+        whiteSpace: kind === 'money' || kind === 'phone' || kind === 'date' ? 'nowrap' : undefined,
+        unicodeBidi: 'isolate',
+      }}
     >
       {formatReportCell(cell, kind)}
     </Text>

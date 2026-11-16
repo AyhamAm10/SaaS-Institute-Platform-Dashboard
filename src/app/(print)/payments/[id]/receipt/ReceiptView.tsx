@@ -1,7 +1,13 @@
 'use client';
 
 import { Box, Group, Image, Stack, Table, Text } from '@mantine/core';
-import { AppButton } from '@/src/components/controllers';
+import {
+  AppButton,
+  PrintLetterhead,
+  REPORT_FOOTER_NOTE,
+  REPORT_PAPER,
+  resolveBrand,
+} from '@/src/components/controllers';
 import { IconPrinter } from '@tabler/icons-react';
 import { type InstituteInfo, type PaymentRecord, toAmount } from '@/src/core/api';
 import { formatDate, formatMoney } from '@/src/core/format';
@@ -22,7 +28,7 @@ interface ReceiptViewProps {
 
 export function ReceiptView({ payment, institute, verification }: ReceiptViewProps) {
   // Institute brand color (data); falls back to the platform token
-  const brand = institute?.primaryColor || 'var(--app-brand-primary)';
+  const brand = resolveBrand(institute);
   const contractCurrency = payment.subscription.currency;
   const cancelled = payment.status === 'CANCELLED';
   const rows: [string, string][] = [
@@ -34,7 +40,7 @@ export function ReceiptView({ payment, institute, verification }: ReceiptViewPro
   ];
 
   return (
-    <Box maw={560} mx="auto" p="lg" style={{ background: 'white', color: 'black' }}>
+    <Box maw={560} mx="auto" p="lg" style={{ background: REPORT_PAPER.background, color: REPORT_PAPER.text }}>
       <style>{PRINT_CSS}</style>
       <Group className="no-print" justify="flex-end" mb="md">
         <AppButton leftSection={<IconPrinter size={16} />} onClick={() => window.print()}>
@@ -43,21 +49,14 @@ export function ReceiptView({ payment, institute, verification }: ReceiptViewPro
       </Group>
 
       <Stack gap="md" style={{ border: `2px solid ${brand}`, borderRadius: 12, padding: 20, position: 'relative' }}>
-        <Group justify="space-between" align="flex-start">
-          <Stack gap={2}>
-            <Text fw={600} size="lg" style={{ color: brand }}>
-              {institute?.name ?? ''}
-            </Text>
-            {institute?.address && <Text size="xs">{institute.address}</Text>}
-            {institute?.phone && <Text size="xs" dir="ltr">{institute.phone}</Text>}
-          </Stack>
-          {institute?.logoUrl && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={institute.logoUrl} alt="" style={{ height: 56, objectFit: 'contain' }} />
-          )}
-        </Group>
+        <PrintLetterhead
+          institute={institute}
+          brand={brand}
+          title="إيصال دفع"
+          caption={[institute?.address, institute?.phone].filter(Boolean).join(' · ')}
+        />
 
-        <Group justify="space-between" style={{ borderTop: `1px solid ${brand}`, paddingTop: 10 }}>
+        <Group justify="space-between" style={{ paddingTop: 2 }}>
           <Text fw={600}>إيصال دفع رقم {payment.receiptNumber}</Text>
           <Text size="sm">{formatDate(payment.paidAt)}</Text>
         </Group>
@@ -72,7 +71,9 @@ export function ReceiptView({ payment, institute, verification }: ReceiptViewPro
           <Table.Tbody>
             {rows.map(([label, value]) => (
               <Table.Tr key={label}>
-                <Table.Td w={110} c="dimmed">{label}</Table.Td>
+                <Table.Td w={110} c="dimmed">
+                  {label}
+                </Table.Td>
                 <Table.Td fw={500}>{value}</Table.Td>
               </Table.Tr>
             ))}
@@ -85,14 +86,17 @@ export function ReceiptView({ payment, institute, verification }: ReceiptViewPro
           </Text>
           {payment.currency !== contractCurrency && (
             <Text ta="center" size="xs">
-              سعر الصرف {toAmount(payment.exchangeRate)} ← {formatMoney(toAmount(payment.appliedAmount), contractCurrency)}
+              سعر الصرف {toAmount(payment.exchangeRate)} ←{' '}
+              {formatMoney(toAmount(payment.appliedAmount), contractCurrency)}
             </Text>
           )}
         </Box>
 
         {payment.allocations.length > 0 && (
           <Stack gap={2}>
-            <Text size="xs" fw={500}>توزيع الدفعة على الأقساط:</Text>
+            <Text size="xs" fw={500}>
+              توزيع الدفعة على الأقساط:
+            </Text>
             {payment.allocations.map((a) => (
               <Text key={a.installment.id} size="xs">
                 القسط {a.installment.installmentNumber} (استحقاق {formatDate(a.installment.dueDate)}):{' '}
@@ -112,10 +116,15 @@ export function ReceiptView({ payment, institute, verification }: ReceiptViewPro
           {verification && (
             <Stack gap={2} align="center">
               <Image src={verification.qr} alt="رمز التحقق" w={64} h={64} />
-              <Text size="10px" dir="ltr">{verification.number}</Text>
+              <Text size="10px" dir="ltr">
+                {verification.number}
+              </Text>
             </Stack>
           )}
         </Group>
+        <Text size="10px" ta="center" style={{ color: REPORT_PAPER.faint }}>
+          {REPORT_FOOTER_NOTE} · {formatDate(new Date())}
+        </Text>
       </Stack>
     </Box>
   );

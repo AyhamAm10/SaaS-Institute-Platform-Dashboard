@@ -3,7 +3,7 @@
 import type { ReactNode } from 'react';
 import { Box, rem } from '@mantine/core';
 import { useReportMirror, useReportMirrorSelector } from '../store/useReportMirror';
-import { pageCss } from '../init/report.format';
+import { formatGeneratedAt, pageCss } from '../init/report.format';
 import { REPORT_PAPER } from '../init/report.init';
 
 /**
@@ -14,6 +14,7 @@ export function ReportPaper({ children }: { children?: ReactNode }) {
   const variant = useReportMirror('variant');
   const brand = useReportMirror('brand');
   const orientation = useReportMirrorSelector((s) => s.document.orientation);
+  const generatedAt = useReportMirrorSelector((s) => s.document.generatedAt);
   const screen = variant === 'screen';
   const width = orientation === 'landscape' ? 297 : 210;
 
@@ -32,12 +33,12 @@ export function ReportPaper({ children }: { children?: ReactNode }) {
         borderRadius: screen ? rem(10) : 0,
         border: screen ? `1px solid ${REPORT_PAPER.border}` : undefined,
         boxShadow: screen ? '0 18px 40px -24px rgba(15, 23, 42, 0.35)' : undefined,
-        borderTop: `${rem(6)} solid ${brand}`,
+        borderTop: screen ? `${rem(6)} solid ${brand}` : undefined,
         fontSize: rem(12.5),
         lineHeight: 1.55,
       }}
     >
-      <style>{pageCss(orientation)}</style>
+      <style>{pageCss(orientation, formatGeneratedAt(generatedAt))}</style>
       {children}
     </Box>
   );

@@ -7,13 +7,7 @@ import { AppButton, AppReport, REPORT_PAPER } from '@/src/components/controllers
 import type { ReportDocument } from '@/src/core/api';
 import { useAuth } from '@/src/core/auth';
 
-export function SelectionPrintController({
-  docId,
-  autoPrint,
-}: {
-  docId: string;
-  autoPrint: boolean;
-}) {
+export function SelectionPrintController({ docId, autoPrint }: { docId: string; autoPrint: boolean }) {
   const institute = useAuth().user?.institute ?? null;
   const [document] = useState<ReportDocument | null>(() => {
     if (!docId || typeof window === 'undefined') return null;
@@ -37,9 +31,7 @@ export function SelectionPrintController({
   if (!document) {
     return (
       <Center h="100vh">
-        <Text c="var(--app-text-muted)">
-          انتهت صلاحية هذه الطباعة، أعد المحاولة من الصفحة
-        </Text>
+        <Text c="var(--app-text-muted)">انتهت صلاحية هذه الطباعة، أعد المحاولة من الصفحة</Text>
       </Center>
     );
   }
@@ -64,4 +56,3 @@ export function SelectionPrintController({
     </Stack>
   );
 }
-

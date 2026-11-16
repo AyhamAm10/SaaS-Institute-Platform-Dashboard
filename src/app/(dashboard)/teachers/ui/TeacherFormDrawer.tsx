@@ -66,18 +66,6 @@ export function TeacherFormDrawer({ onSubmit }: TeacherFormDrawerProps) {
           required
         />
 
-        {!isEdit && (
-          <AppInput
-            label="كلمة المرور"
-            placeholder="8 محارف على الأقل"
-            type="password"
-            value={form.password || ''}
-            onChange={(val: unknown) => setFormField('password', typeof val === 'string' ? val : '')}
-            error={formErrors.password}
-            required
-          />
-        )}
-
         <AppInput
           label="التخصص الأكاديمي"
           placeholder="مثال: لغة عربية، رياضيات، فيزياء..."

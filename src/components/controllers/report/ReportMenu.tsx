@@ -40,14 +40,23 @@ export function ReportMenu({ keys, params, label = 'تقارير', compact }: Re
             <IconReportAnalytics size={15} />
           </AppIconButton>
         ) : (
-          <AppButton variant="outline" leftSection={<IconReportAnalytics size={16} />} rightSection={<IconChevronDown size={14} />}>
+          <AppButton
+            variant="outline"
+            leftSection={<IconReportAnalytics size={16} />}
+            rightSection={<IconChevronDown size={14} />}
+          >
             {label}
           </AppButton>
         )}
       </Menu.Target>
       <Menu.Dropdown>
         {items.map((report) => (
-          <Menu.Item key={report.key} component={Link} href={reportLink(report.key, params)} leftSection={<IconFileDescription size={16} />}>
+          <Menu.Item
+            key={report.key}
+            component={Link}
+            href={reportLink(report.key, params)}
+            leftSection={<IconFileDescription size={16} />}
+          >
             <Text size="sm" fw={500}>
               {report.title}
             </Text>

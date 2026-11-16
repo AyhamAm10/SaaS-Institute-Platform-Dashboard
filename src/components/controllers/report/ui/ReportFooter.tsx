@@ -12,6 +12,9 @@ import { formatGeneratedAt } from '../init/report.format';
 export function ReportFooter() {
   const document = useReportMirror('document');
   const qr = useReportMirror('qrDataUri');
+  const variant = useReportMirror('variant');
+  // Print: issue date + note live in the page footer; only the QR closes the last page
+  if (variant === 'print' && !document.verification) return null;
 
   return (
     <Group
@@ -23,7 +26,7 @@ export function ReportFooter() {
       className="report-avoid-break"
       style={{ borderTop: `1px dashed ${REPORT_PAPER.border}` }}
     >
-      <Stack gap={rem(2)}>
+      <Stack gap={rem(2)} style={{ visibility: variant === 'print' ? 'hidden' : undefined }}>
         <Text fz={rem(10.5)} style={{ color: REPORT_PAPER.muted }}>
           صدر بتاريخ <Box component="bdi">{formatGeneratedAt(document.generatedAt)}</Box>
           {document.generatedBy ? ` · بواسطة ${document.generatedBy}` : ''}

@@ -15,7 +15,6 @@ export function getTeachersColumns(
   openDetailsDrawer: (teacher: Teacher) => void,
   openEditDrawer: (teacher: Teacher) => void,
   openDeleteModal: (teacher: Teacher) => void,
-  openPasswordModal?: (teacher: Teacher) => void,
   access: TeachersColumnsAccess = { canManage: true },
 ): DataModuleColumn<Teacher>[] {
   const canManage = access.canManage ?? true;
@@ -118,7 +117,6 @@ export function getTeachersColumns(
           openDetailsDrawer={openDetailsDrawer}
           openEditDrawer={openEditDrawer}
           openDeleteModal={openDeleteModal}
-          openPasswordModal={openPasswordModal}
         />
       ),
     },

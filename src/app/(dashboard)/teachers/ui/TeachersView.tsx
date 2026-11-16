@@ -34,11 +34,10 @@ export function TeachersView({ access, onRefresh, ...modalProps }: TeachersViewP
   const openEditDrawer = useTeachersMirror('openEditDrawer');
   const openDetailsDrawer = useTeachersMirror('openDetailsDrawer');
   const openDeleteModal = useTeachersMirror('openDeleteModal');
-  const openPasswordModal = useTeachersMirror('openPasswordModal');
 
   const columns = useMemo(
-    () => getTeachersColumns(openDetailsDrawer, openEditDrawer, openDeleteModal, openPasswordModal, { canManage }),
-    [openDetailsDrawer, openEditDrawer, openDeleteModal, openPasswordModal, canManage],
+    () => getTeachersColumns(openDetailsDrawer, openEditDrawer, openDeleteModal, { canManage }),
+    [openDetailsDrawer, openEditDrawer, openDeleteModal, canManage],
   );
 
   return (

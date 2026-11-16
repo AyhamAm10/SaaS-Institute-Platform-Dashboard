@@ -24,7 +24,6 @@ export interface CreateStaffPayload {
   fullName: string;
   phone: string;
   role: StaffRole;
-  password: string;
 }
 
 export interface UpdateStaffPayload {
@@ -49,16 +48,6 @@ export async function createStaff(payload: CreateStaffPayload): Promise<StaffMem
 export async function updateStaff(id: number, payload: UpdateStaffPayload): Promise<StaffMember> {
   const { data } = await apiClient.patch<StaffMember>(`/staff/${id}`, payload);
   return data;
-}
-
-/** New password; the member's sessions are revoked by the server. */
-export async function resetStaffPassword(id: number, password: string): Promise<void> {
-  await apiClient.post(`/staff/${id}/reset-password`, { password });
-}
-
-/** Deactivate (soft delete); history and audit are kept. */
-export async function deactivateStaff(id: number): Promise<void> {
-  await apiClient.delete(`/staff/${id}`);
 }
 
 // --------------------------------------------------------------------------
@@ -92,12 +81,4 @@ export function useCreateStaffMutation() {
 
 export function useUpdateStaffMutation() {
   return useStaffMutation(({ id, payload }: { id: number; payload: UpdateStaffPayload }) => updateStaff(id, payload));
-}
-
-export function useResetStaffPasswordMutation() {
-  return useStaffMutation(({ id, password }: { id: number; password: string }) => resetStaffPassword(id, password));
-}
-
-export function useDeactivateStaffMutation() {
-  return useStaffMutation((id: number) => deactivateStaff(id));
 }

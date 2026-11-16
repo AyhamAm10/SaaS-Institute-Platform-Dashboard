@@ -1,13 +1,7 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert';
-import {
-  columnPercents,
-  formatReportCell,
-  inferKind,
-  isLtrKind,
-  pageCss,
-} from '../init/report.format';
-import { resolveReportConfig, resolveTone, withAlpha } from '../init/report.init';
+import { columnPercents, formatReportCell, columnAlign, inferKind, isLtrKind, pageCss } from '../init/report.format';
+import { coverDetails, resolveBrand, resolveReportConfig, resolveTone, withAlpha } from '../init/report.init';
 import { reportLink } from '../init/report-link';
 import type { ReportDocument } from '@/src/core/api';
 
@@ -52,6 +46,31 @@ describe('report cell formatting', () => {
   });
 });
 
+describe('report print system', () => {
+  it('aligns numbers to the cell edge, text right', () => {
+    assert.strictEqual(columnAlign('money'), 'left');
+    assert.strictEqual(columnAlign('date'), 'center');
+    assert.strictEqual(columnAlign('text'), 'right');
+  });
+
+  it('cover lists scope unless the document states it', () => {
+    const meta = [{ label: 'الفرع', value: 'أ' }];
+    const scope = [
+      { label: 'الفرع', value: 'ب' },
+      { label: 'السنة الدراسية', value: '2026' },
+    ];
+    assert.deepStrictEqual(
+      coverDetails(meta, scope).map((m) => m.value),
+      ['2026', 'أ'],
+    );
+  });
+
+  it('falls back to the official brand orange', () => {
+    assert.strictEqual(resolveBrand(null), '#F16726');
+    assert.strictEqual(resolveBrand({ primaryColor: '#112233' }), '#112233');
+  });
+});
+
 describe('report config', () => {
   it('brand and tones', () => {
     assert.strictEqual(withAlpha('#ff0000', 0.5), 'rgba(255, 0, 0, 0.5)');
@@ -61,10 +80,17 @@ describe('report config', () => {
   });
 
   it('verification link only for signed documents', () => {
-    const signed = resolveReportConfig({ document: doc({ number: 'ST-1', token: 'abc.def' }), institute: null, verifyOrigin: 'https://x.test' });
+    const signed = resolveReportConfig({
+      document: doc({ number: 'ST-1', token: 'abc.def' }),
+      institute: null,
+      verifyOrigin: 'https://x.test',
+    });
     assert.strictEqual(signed.verifyUrl, 'https://x.test/verify/abc.def');
     assert.strictEqual(resolveReportConfig({ document: doc(), institute: null }).verifyUrl, null);
-    assert.strictEqual(resolveReportConfig({ document: doc(), institute: { name: 'م', primaryColor: '#00aa00' } }).brand, '#00aa00');
+    assert.strictEqual(
+      resolveReportConfig({ document: doc(), institute: { name: 'م', primaryColor: '#00aa00' } }).brand,
+      '#00aa00',
+    );
   });
 
   it('report links carry the parameters', () => {

@@ -2,7 +2,6 @@
 
 import { createContext, useContext } from 'react';
 import { createStore, StoreApi } from 'zustand';
-import { passwordError } from '@/src/core/auth';
 import {
   AddedAvailability,
   AddedQualification,
@@ -27,7 +26,6 @@ export function createTeacherRegistrationStore(): TeacherRegistrationStore {
     // Step 1: Basic info
     fullName: '',
     phone: '',
-    password: '',
     specialization: '',
     branchIds: [],
     isActive: true,
@@ -202,13 +200,6 @@ export function createTeacherRegistrationStore(): TeacherRegistrationStore {
           }));
           return false;
         }
-        const pwdErr = passwordError(state.password);
-        if (pwdErr) {
-          set((s) => ({
-            stepErrors: { ...s.stepErrors, 0: pwdErr },
-          }));
-          return false;
-        }
         set((s) => ({
           stepErrors: { ...s.stepErrors, 0: null },
         }));
@@ -241,7 +232,6 @@ export function createTeacherRegistrationStore(): TeacherRegistrationStore {
         stepErrors: {},
         fullName: '',
         phone: '',
-        password: '',
         specialization: '',
         branchIds: [],
         isActive: true,

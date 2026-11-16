@@ -1,7 +1,7 @@
 'use client';
 
 import { Group } from '@mantine/core';
-import { IconEdit, IconEye, IconKey, IconTrash } from '@tabler/icons-react';
+import { IconEdit, IconEye, IconTrash } from '@tabler/icons-react';
 import { Teacher } from '@/src/core/api';
 import { AppIconButton } from '@/src/components/controllers/button';
 
@@ -11,7 +11,6 @@ export interface TeacherActionsCellProps {
   openDetailsDrawer: (teacher: Teacher) => void;
   openEditDrawer: (teacher: Teacher) => void;
   openDeleteModal: (teacher: Teacher) => void;
-  openPasswordModal?: (teacher: Teacher) => void;
 }
 
 export function TeacherActionsCell({
@@ -20,7 +19,6 @@ export function TeacherActionsCell({
   openDetailsDrawer,
   openEditDrawer,
   openDeleteModal,
-  openPasswordModal,
 }: TeacherActionsCellProps) {
   return (
     <Group gap="xs" justify="center" wrap="nowrap">
@@ -33,11 +31,6 @@ export function TeacherActionsCell({
         <IconEye size={15} />
       </AppIconButton>
 
-      {canManage && openPasswordModal && (
-        <AppIconButton variant="ghost" label="تغيير كلمة المرور" size="sm" onClick={() => openPasswordModal(teacher)}>
-          <IconKey size={15} />
-        </AppIconButton>
-      )}
       {canManage && (
         <AppIconButton variant="ghost" label="تعديل البيانات" size="sm" onClick={() => openEditDrawer(teacher)}>
           <IconEdit size={15} />

@@ -1,6 +1,6 @@
 import type { ControllerState } from '@/src/core/mirror';
 import type { ReportDocument } from '@/src/core/api';
-import type { ReportInstitute } from '../init/report.init';
+import type { ReportInstitute, ReportScopeItem } from '../init/report.init';
 
 /**
  * ReportState
@@ -13,9 +13,12 @@ export interface ReportState extends ControllerState {
   institute: ReportInstitute | null;
   variant: 'screen' | 'print';
   brand: string;
+  scope: ReportScopeItem[];
   verifyUrl: string | null;
   /** SVG data URI of the verification QR (null until generated). */
   qrDataUri: string | null;
   setQrDataUri: (uri: string | null) => void;
-  sync: (patch: Partial<Pick<ReportState, 'document' | 'institute' | 'variant' | 'brand' | 'verifyUrl'>>) => void;
+  sync: (
+    patch: Partial<Pick<ReportState, 'document' | 'institute' | 'variant' | 'brand' | 'scope' | 'verifyUrl'>>,
+  ) => void;
 }

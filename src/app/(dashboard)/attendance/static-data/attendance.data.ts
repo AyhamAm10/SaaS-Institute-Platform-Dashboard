@@ -13,6 +13,7 @@ export const attendanceLabels = {
   bulkCheckInDone: 'تم تسجيل الدخول',
   bulkCheckOutDone: 'تم تسجيل الانصراف',
   notWorkingDay: 'هذا اليوم ليس يوم دوام حسب إعدادات الجدول.',
+  closureDay: (reason: string) => `هذا اليوم عطلة (${reason}): لا يُسجَّل حضور ولا يُحسب غياب.`,
   pickSection: 'اختر شعبة لعرض طلابها',
   noStudents: 'لا يوجد طلاب فعّالون في هذه الشعبة',
   checkIn: 'دخول',

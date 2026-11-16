@@ -20,6 +20,8 @@ export interface SafeUser {
   fullName: string;
   phone: string;
   role: UserRole | string;
+  /** On the default password: the dashboard asks for a new one before anything else. */
+  mustChangePassword?: boolean;
   createdAt?: string | Date;
   updatedAt?: string | Date;
 }
@@ -56,6 +58,12 @@ export interface LoginCredentials {
   password: string;
   /** Needed only when the same phone + password exist in several institutes. */
   instituteCode?: string;
+}
+
+/** Body of POST /auth/change-password. */
+export interface ChangePasswordPayload {
+  currentPassword: string;
+  newPassword: string;
 }
 
 /**

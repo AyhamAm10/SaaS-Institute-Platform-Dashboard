@@ -23,7 +23,15 @@ export function ReportBarsBlock({ title, items }: { title?: string; items: Repor
               <Text fz={rem(11)} w="26%" truncate style={{ color: REPORT_PAPER.text }}>
                 {item.label}
               </Text>
-              <Box style={{ flex: 1, height: rem(10), borderRadius: rem(999), background: REPORT_PAPER.headerFill, overflow: 'hidden' }}>
+              <Box
+                style={{
+                  flex: 1,
+                  height: rem(10),
+                  borderRadius: rem(999),
+                  background: REPORT_PAPER.headerFill,
+                  overflow: 'hidden',
+                }}
+              >
                 <Box style={{ width: `${value}%`, height: '100%', borderRadius: rem(999), background: tone.text }} />
               </Box>
               <Text fz={rem(10.5)} w={rem(76)} ta="left" dir="ltr" fw={600} style={{ color: tone.text }}>

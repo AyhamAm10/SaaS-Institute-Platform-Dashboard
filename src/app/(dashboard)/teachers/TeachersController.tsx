@@ -15,7 +15,7 @@ export function TeachersController() {
   const canManage = can(PERMISSIONS.academicManage);
   const [store] = useState(() => createTeachersStore());
   const queryClient = useQueryClient();
-  const { handleSubmit, handleConfirmDelete, handleResetPassword } = useTeacherAccountActions(store);
+  const { handleSubmit, handleConfirmDelete } = useTeacherAccountActions(store);
   const { handleAssignQualification, handleRemoveQualification, handleSaveAvailabilities, ...availability } =
     useTeacherProfileActions(store);
 
@@ -32,7 +32,6 @@ export function TeachersController() {
         onRefresh={handleRefresh}
         onSubmit={handleSubmit}
         onConfirmDelete={handleConfirmDelete}
-        onResetPassword={handleResetPassword}
         onAssignQualification={handleAssignQualification}
         onRemoveQualification={handleRemoveQualification}
         onSaveAvailabilities={handleSaveAvailabilities}

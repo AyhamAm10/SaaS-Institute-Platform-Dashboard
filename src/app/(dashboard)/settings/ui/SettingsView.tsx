@@ -7,10 +7,9 @@ import { AppTabs } from '@/src/components/controllers/tabs';
 import { SETTINGS_TABS } from '../static-data/settings-tabs.data';
 import { useSettingsMirror } from '../store/useSettingsMirror';
 import { InstituteTabController } from '../tabs/institute';
-import { TeachersTabController } from '../tabs/teachers';
-import { MobileAccountsController } from '../tabs/mobile';
 import { ScheduleSettingsController } from '../../schedule-settings/ScheduleSettingsController';
-import { StaffController } from '../staff/StaffController';
+import { AccountsController } from '../accounts';
+import { ClosuresController } from '../closures/ClosuresController';
 import { StudentFieldsController } from '../student-fields/StudentFieldsController';
 import { ReferenceDataController } from '../reference-data/ReferenceDataController';
 
@@ -57,21 +56,15 @@ export function SettingsView({ onTabChange }: SettingsViewProps) {
           </AppTabs.Panel>
         )}
 
-        {permittedTabs.includes('staff') && (
-          <AppTabs.Panel value="staff" keepMounted>
-            <StaffController hideHeader />
+        {permittedTabs.includes('closures') && (
+          <AppTabs.Panel value="closures" keepMounted>
+            <ClosuresController hideHeader />
           </AppTabs.Panel>
         )}
 
-        {permittedTabs.includes('teachers') && (
-          <AppTabs.Panel value="teachers" keepMounted>
-            <TeachersTabController />
-          </AppTabs.Panel>
-        )}
-
-        {permittedTabs.includes('mobile') && (
-          <AppTabs.Panel value="mobile" keepMounted>
-            <MobileAccountsController />
+        {permittedTabs.includes('accounts') && (
+          <AppTabs.Panel value="accounts" keepMounted>
+            <AccountsController />
           </AppTabs.Panel>
         )}
 

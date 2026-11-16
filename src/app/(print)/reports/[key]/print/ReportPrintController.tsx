@@ -15,7 +15,15 @@ import { useAuth } from '@/src/core/auth';
  * `autoprint`, it opens the browser print dialog (print / save as PDF) once
  * the document is ready.
  */
-export function ReportPrintController({ reportKey, params, autoPrint }: { reportKey: string; params: ReportParams; autoPrint: boolean }) {
+export function ReportPrintController({
+  reportKey,
+  params,
+  autoPrint,
+}: {
+  reportKey: string;
+  params: ReportParams;
+  autoPrint: boolean;
+}) {
   const institute = useAuth().user?.institute ?? null;
   const { data, isLoading, error } = useReportQuery(reportKey, params, true);
 
@@ -42,7 +50,13 @@ export function ReportPrintController({ reportKey, params, autoPrint }: { report
   }
   return (
     <Stack gap={0} style={{ background: REPORT_PAPER.background, minHeight: '100vh' }}>
-      <Group className="no-print" justify="center" gap="xs" py="sm" style={{ borderBottom: `1px solid ${REPORT_PAPER.border}` }}>
+      <Group
+        className="no-print"
+        justify="center"
+        gap="xs"
+        py="sm"
+        style={{ borderBottom: `1px solid ${REPORT_PAPER.border}` }}
+      >
         <AppButton leftSection={<IconPrinter size={16} />} onClick={() => window.print()}>
           طباعة / حفظ PDF
         </AppButton>

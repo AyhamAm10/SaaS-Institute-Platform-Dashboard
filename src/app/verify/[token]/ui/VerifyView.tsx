@@ -2,7 +2,7 @@
 
 import { Box, Center, Group, Image, Loader, Stack, Text, ThemeIcon, rem } from '@mantine/core';
 import { IconCircleCheck, IconCircleX } from '@tabler/icons-react';
-import { AppSurface } from '@/src/components/controllers';
+import { AppSurface, resolveBrand } from '@/src/components/controllers';
 import type { VerificationResult } from '@/src/core/api';
 import { formatDate } from '@/src/core/format';
 
@@ -22,14 +22,21 @@ export function VerifyView({ result, isLoading }: { result: VerificationResult |
       </Center>
     );
   }
-  const brand = result.institute?.primaryColor || 'var(--app-brand-primary)';
+  const brand = resolveBrand(result.institute);
 
   return (
     <Center mih="100vh" p="md" style={{ background: 'var(--app-bg)' }}>
-      <AppSurface level={2} radius="lg" padding="xl" style={{ width: '100%', maxWidth: rem(440), borderTop: `${rem(5)} solid ${brand}` }}>
+      <AppSurface
+        level={2}
+        radius="lg"
+        padding="xl"
+        style={{ width: '100%', maxWidth: rem(440), borderTop: `${rem(5)} solid ${brand}` }}
+      >
         {result.valid ? (
           <Stack gap="md" align="center" ta="center">
-            {result.institute?.logoUrl && <Image src={result.institute.logoUrl} alt="" h={rem(56)} w="auto" fit="contain" />}
+            {result.institute?.logoUrl && (
+              <Image src={result.institute.logoUrl} alt="" h={rem(56)} w="auto" fit="contain" />
+            )}
             <Text fw={600} size="lg" style={{ color: brand }}>
               {result.institute?.name}
             </Text>
@@ -39,7 +46,11 @@ export function VerifyView({ result, isLoading }: { result: VerificationResult |
               </ThemeIcon>
               <Text fw={600}>مستند صادر عن المعهد</Text>
             </Group>
-            <Box w="100%" p="md" style={{ background: 'var(--app-sidebar-subtle)', borderRadius: 'var(--app-radius-md)' }}>
+            <Box
+              w="100%"
+              p="md"
+              style={{ background: 'var(--app-sidebar-subtle)', borderRadius: 'var(--app-radius-md)' }}
+            >
               <Stack gap={6}>
                 <Row label="نوع المستند" value={KIND_LABELS[result.kind ?? ''] ?? result.kind ?? '—'} />
                 <Row label="رقم المستند" value={result.number ?? '—'} ltr />

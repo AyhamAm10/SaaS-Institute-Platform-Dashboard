@@ -126,7 +126,7 @@ The student **finance drawer** (`students/finance/`) follows the same pattern: `
 - **Charts**: `BarChart` keys bars by period + label, so labels must be unique (e.g. `الخميس 5`, not `الخميس`). `ChartCard` opens on the 2nd period by default; pass `activePeriod` when the first tab must be active. Leave zero values out of `CircleChart` segments (`nonEmptySegments`): a zero-length round-capped arc still draws a dot.
 - **Status colours in charts** use the semantic palette (`success`, `brand`, `danger`, `info`), not `yellow` / `blue`, which this theme maps to the brand orange and slate.
 - **Permissions (D2)**: the server decides (`user.permissions` from `/auth/me`); the UI only hides what the user cannot do. Use `useAuth().can(PERMISSIONS.x)` in the **controller** and pass booleans down (`access` props, or a `canManage` field in the store) — never call `useAuth` in `ui/`. Every sidebar entry carries its `permission`; `filterNavigation` hides entries and `requiredPermissionFor` gates the page (`NoPermissionView`), with `ROUTE_OVERRIDES` for sub-pages that need more (e.g. `/students/new` → `students.manage`, `/teachers/new` → `academic.manage`). A new page MUST add its permission to `navigation.ts`.
-- **Shared Password Validation**: Password constraints and error formatting are centralized in `src/core/auth/password.ts` (`USER_PASSWORD_MIN = 8`, `STAFF_PASSWORD_MIN = 8`, and `passwordError(password: string): string | null`), re-exported from `@/src/core/auth`. Used uniformly across staff management (`settings/staff`) and teacher management (`teachers/new`, `TeacherFormDrawer`, and `TeacherPasswordModal`).
+- **Shared Password Validation**: Password constraints and error formatting are centralized in `src/core/auth/password.ts` (`USER_PASSWORD_MIN = 8`, `STAFF_PASSWORD_MIN = 8`, and `passwordError(password: string): string | null`), re-exported from `@/src/core/auth`. Now used by the forced password change (`components/controllers/password-change`); staff and teacher forms no longer ask for a password (accounts start on `12345678`, see `docs/features/accounts.md`).
 - Print pages live in the `(print)` route group (authenticated, no sidebar), e.g. `/payments/:id/receipt` (A5).
 - **Reports (D3)**: the server builds every report into one `ReportDocument`; the dashboard never computes a report. Render it with the `AppReport` compound controller (`components/controllers/report`: `AppReport.Paper / Header / Meta / Body / Footer`, one block component per block type, fixed paper palette `REPORT_PAPER` so a report prints the same in both themes, brand = institute color). Pages: reports center `/reports` (catalog from `GET /reports/catalog`), workspace `/reports/[key]` (parameters → preview → print / Excel), print page `(print)/reports/[key]/print` (A4, opens the print dialog with `autoprint=1`), public `/verify/[token]` (QR check, no sign-in). Link a page to its reports with `<ReportMenu keys={[...]} params={{ ... }} />` (it hides what the user may not open); never hand-build a report URL (use `reportLink`).
 
@@ -144,11 +144,12 @@ The student **finance drawer** (`students/finance/`) follows the same pattern: `
 - **Authoritative Tabs Order & Permissions:**
   1. `institute`: Institute profile & IANA timezone configuration (`settings.view` / `settings.manage`).
   2. `schedule`: Daily working hours, attendance rules, periods & breaks (`settings.view`).
-  3. `staff`: Staff accounts, role assignments & deactivations (`staff.view`).
-  4. `teachers`: Teacher accounts & password reset scoped to the header's active branch (`academic.manage`).
-  5. `mobile`: Mobile application accounts for guardians (`FAMILY`) and students (`STUDENT`) (`students.view` / `students.manage`).
-  6. `student-fields`: Custom student profile fields (`settings.view`).
-  7. `reference-data`: Lookup reference tables via config-driven tabs (`settings.view`).
+  3. `closures`: Closures / holidays for the institute, a branch or sections (`settings.view`; create / edit / delete need `settings.manage`, checked in the controller). See `docs/features/closures.md`.
+  4. `staff`: Staff accounts, role assignments & deactivations (`staff.view`).
+  5. `teachers`: Teacher accounts & password reset scoped to the header's active branch (`academic.manage`).
+  6. `mobile`: Mobile application accounts for guardians (`FAMILY`) and students (`STUDENT`) (`students.view` / `students.manage`).
+  7. `student-fields`: Custom student profile fields (`settings.view`).
+  8. `reference-data`: Lookup reference tables via config-driven tabs (`settings.view`).
 - **Tab State & URL Synchronization:**
   - URL query synchronization (`/settings?tab=<key>`). Invalid or unauthorized tab requests gracefully fall back to the first permitted tab.
   - Tabs mount lazily on initial visit and stay mounted (`keepMounted={true}` on `AppTabs.Panel`) to preserve in-progress form inputs and nested controller stores across tab switches.

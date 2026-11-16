@@ -7,3 +7,6 @@ export * from './store/report.store';
 export * from './store/useReportMirror';
 export * from './ReportMenu';
 export * from './useQrDataUri';
+export * from './useReportScope';
+export * from './ui/PrintLetterhead';
+export * from './ui/PrintLogo';

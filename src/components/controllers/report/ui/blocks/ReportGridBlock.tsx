@@ -24,16 +24,35 @@ export function ReportGridBlock({ title, corner, columns, rows, ruled }: ReportG
   return (
     <Box>
       <ReportBlockTitle title={title} />
-      <Table withTableBorder withColumnBorders verticalSpacing={0} horizontalSpacing={0} style={{ tableLayout: 'fixed', width: '100%', borderColor: REPORT_PAPER.border }}>
+      <Table
+        withTableBorder
+        withColumnBorders
+        verticalSpacing={0}
+        horizontalSpacing={0}
+        style={{ tableLayout: 'fixed', width: '100%', borderColor: REPORT_PAPER.border }}
+      >
         <Table.Thead>
           <Table.Tr style={{ background: REPORT_PAPER.headerFill }}>
-            <Table.Th style={{ width: ruled ? '24%' : '11%', padding: rem(6), fontSize: rem(11), borderBottom: `2px solid ${brand}` }}>
+            <Table.Th
+              style={{
+                width: ruled ? '24%' : '11%',
+                padding: rem(6),
+                fontSize: rem(11),
+                borderBottom: `2px solid ${brand}`,
+              }}
+            >
               {corner}
             </Table.Th>
             {columns.map((c) => (
               <Table.Th
                 key={c}
-                style={{ padding: rem(5), textAlign: 'center', fontSize: rem(10.5), whiteSpace: 'pre-line', borderBottom: `2px solid ${brand}` }}
+                style={{
+                  padding: rem(5),
+                  textAlign: 'center',
+                  fontSize: rem(10.5),
+                  whiteSpace: 'pre-line',
+                  borderBottom: `2px solid ${brand}`,
+                }}
               >
                 {c}
               </Table.Th>

@@ -73,7 +73,6 @@ export function TeacherRegistrationController() {
       const payload: CreateTeacherPayload = {
         fullName: state.fullName.trim(),
         phone: state.phone.trim(),
-        password: state.password.trim(),
         specialization: state.specialization.trim() || undefined,
         branchIds: activeBranchId ? [activeBranchId] : [],
         isActive: state.isActive,
