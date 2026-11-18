@@ -28,6 +28,8 @@ export interface ExamsState {
   limit: number;
   search: string;
   filters: ExamFilters;
+  /** Embedded in a section page: the section is fixed (filter hidden, drawer locked). */
+  lockedSection: boolean;
   data: Exam[];
   total: number;
   totalPages: number;

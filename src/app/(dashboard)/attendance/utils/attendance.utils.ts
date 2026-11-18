@@ -40,6 +40,11 @@ export function localToday(now: Date = new Date(), timeZone?: string): string {
   return zonedParts(now, timeZone).date;
 }
 
+/** True when `now` (institute zone) is before `HH:mm` of the day end: a check-out now is an early exit. */
+export function isBeforeDayEnd(dayEnd: string | undefined, timeZone?: string, now: Date = new Date()): boolean {
+  return Boolean(dayEnd) && zonedParts(now, timeZone).time < dayEnd!;
+}
+
 /** ISO instant → `HH:mm` in the institute time zone ('' when missing). */
 export function toTime(value: string | null | undefined, timeZone?: string): string {
   if (!value) return '';

@@ -48,6 +48,8 @@ export const examsLabels = {
 } as const;
 
 export const sheetLabels = {
+  examsList: 'المذاكرات',
+  sectionPage: 'صفحة الشعبة',
   back: 'المذاكرات',
   student: 'الطالب',
   mark: 'العلامة',

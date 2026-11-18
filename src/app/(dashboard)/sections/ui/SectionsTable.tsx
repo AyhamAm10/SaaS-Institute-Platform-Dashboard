@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
+import Link from 'next/link';
 import { Text, UnstyledButton } from '@mantine/core';
 import { IconBook, IconPlus } from '@tabler/icons-react';
 import { formatMoney } from '@/src/core/format';
@@ -24,7 +25,7 @@ export function useSectionsColumns(
         exportValue: (s) => s.name,
         exportKind: 'text',
         render: (row: Section) => (
-          <Text fw={500} size="sm" style={{ cursor: 'pointer' }} onClick={() => onOpenDetails(row, 'subjects')}>
+          <Text component={Link} href={`/sections/${row.id}`} fw={500} size="sm" c="inherit">
             {row.name}
           </Text>
         ),

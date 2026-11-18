@@ -133,3 +133,22 @@ export function useDeleteSubjectMutation() {
     },
   });
 }
+
+// Where a subject is taught (GET /subjects/:id/sections)
+export interface SubjectPlacement {
+  sectionId: number;
+  sectionName: string;
+  branchName: string | null;
+  academicYearId: number;
+  weeklyPeriods: number;
+  teacherId: number | null;
+  teacherName: string | null;
+}
+
+export function useSubjectPlacementsQuery(id: number) {
+  return useQuery({
+    queryKey: ['subjects', 'placements', id] as const,
+    queryFn: async () => (await apiClient.get<SubjectPlacement[]>(`/subjects/${id}/sections`)).data,
+    enabled: id > 0,
+  });
+}

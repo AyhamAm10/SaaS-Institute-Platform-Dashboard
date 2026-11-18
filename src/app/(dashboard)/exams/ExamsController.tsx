@@ -21,8 +21,8 @@ import { OptionsSync, OverviewSync, QuerySync, SubjectsSync } from './ExamsQuery
  * Exams page (E9): filtered list, create / edit drawer, delete (with
  * confirmation when the exam has marks). Owns its isolated store (role.md §3).
  */
-export function ExamsController() {
-  const [store] = useState(createExamsStore);
+export function ExamsController({ sectionId }: { sectionId?: number } = {}) {
+  const [store] = useState(() => createExamsStore(sectionId));
   const drawerOpened = useStore(store, (s) => s.drawerOpened);
   const createMutation = useCreateExamMutation();
   const updateMutation = useUpdateExamMutation();
@@ -73,7 +73,7 @@ export function ExamsController() {
 
   return (
     <ExamsContext.Provider value={store}>
-      <OverviewSync store={store} />
+      {!sectionId && <OverviewSync store={store} />}
       <QuerySync store={store} />
       <OptionsSync store={store} />
       {drawerOpened && <SubjectsSync store={store} />}

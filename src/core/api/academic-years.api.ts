@@ -144,3 +144,21 @@ export function useSetCurrentAcademicYearMutation() {
     },
   });
 }
+
+// Sections of one academic year (GET /academic-years/:id/sections)
+export interface AcademicYearSection {
+  id: number;
+  name: string;
+  grade: string;
+  branch?: { id: number; name: string } | null;
+  academicBranch?: { id: number; name: string } | null;
+  _count?: { studentEnrollments?: number };
+}
+
+export function useAcademicYearSectionsQuery(id: number) {
+  return useQuery({
+    queryKey: ['academic-years', 'sections', id] as const,
+    queryFn: async () => (await apiClient.get<AcademicYearSection[]>(`/academic-years/${id}/sections`)).data,
+    enabled: id > 0,
+  });
+}

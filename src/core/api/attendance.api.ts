@@ -16,6 +16,10 @@ export interface AttendanceRecord {
   checkInMethod: AttendanceMethod | null;
   checkOutMethod: AttendanceMethod | null;
   note: string | null;
+  /** Why the student left (and who collected them). */
+  checkOutNote: string | null;
+  /** Left before the end of the school day (set by the server on read). */
+  earlyExit?: boolean;
 }
 
 export interface AttendanceCounts {
@@ -34,6 +38,8 @@ export interface DailyAttendanceRow {
 export interface DailyAttendance {
   date: string;
   isWorkingDay: boolean;
+  /** Local end of the school day (HH:mm): a check-out before it is an early exit. */
+  dayEndTime?: string;
   /** Closure (holiday) covering the section on this day, if any. */
   closure: { id: number; scope: 'INSTITUTE' | 'BRANCH' | 'SECTION'; reason: string } | null;
   counts: AttendanceCounts;
@@ -78,7 +84,8 @@ export async function getStudentAttendance(studentId: number, from?: string, to?
 const post = async <T>(url: string, body: object) => (await apiClient.post<T>(url, body)).data;
 
 export const checkIn = (studentId: number) => post<AttendanceRecord>('/attendance/check-in', { studentId });
-export const checkOut = (studentId: number) => post<AttendanceRecord>('/attendance/check-out', { studentId });
+export const checkOut = (studentId: number, note?: string) =>
+  post<AttendanceRecord>('/attendance/check-out', { studentId, note });
 export const bulkAttendance = (sectionId: number, action: 'check-in' | 'check-out') =>
   post<BulkAttendanceResult>('/attendance/bulk', { sectionId, action });
 export const excuseStudent = (studentId: number, date: string, note?: string) =>
@@ -124,7 +131,8 @@ function useAttendanceMutation<TVars, TData>(fn: (vars: TVars) => Promise<TData>
 }
 
 export const useCheckInMutation = () => useAttendanceMutation((studentId: number) => checkIn(studentId));
-export const useCheckOutMutation = () => useAttendanceMutation((studentId: number) => checkOut(studentId));
+export const useCheckOutMutation = () =>
+  useAttendanceMutation(({ studentId, note }: { studentId: number; note?: string }) => checkOut(studentId, note));
 export const useBulkAttendanceMutation = () =>
   useAttendanceMutation(({ sectionId, action }: { sectionId: number; action: 'check-in' | 'check-out' }) =>
     bulkAttendance(sectionId, action),

@@ -12,14 +12,15 @@ export type ExamsStore = ControllerStoreApi<ExamsState>;
 const freshDrawer = { formErrors: {}, generalError: null, isSubmitting: false };
 
 /** Isolated store of the exams page (role.md §3). */
-export function createExamsStore(): ExamsStore {
+export function createExamsStore(sectionId?: number): ExamsStore {
   return createControllerStore<ExamsState>((set) => ({
     overview: null,
     syncOverview: (overview) => set({ overview }),
     page: 1,
     limit: 10,
     search: '',
-    filters: { sectionId: null, examTypeId: null, from: null, to: null },
+    filters: { sectionId: sectionId ? String(sectionId) : null, examTypeId: null, from: null, to: null },
+    lockedSection: Boolean(sectionId),
     data: [],
     total: 0,
     totalPages: 1,

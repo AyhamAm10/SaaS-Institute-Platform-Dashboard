@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { Alert, Center, Checkbox, Group, Loader, SimpleGrid, Stack, Table, Text } from '@mantine/core';
 import { IconArrowRight, IconDeviceFloppy, IconPencilCheck } from '@tabler/icons-react';
 import { AppButton, AppInput, AppPageHeader, AppSurface, StatusBadge } from '@/src/components/controllers';
@@ -45,9 +46,14 @@ export function MarkSheetView({ onSave }: { onSave: () => Promise<void> }) {
         <AppPageHeader
           icon={<IconPencilCheck size={22} />}
           title={exam.title}
+          withBreadcrumbs
+          breadcrumbs={[{ label: labels.examsList, href: '/exams' }, { label: exam.title }]}
           description={`${exam.section.name} · ${exam.subject.name} · ${formatDate(exam.examDate)} · ${labels.outOf(maxMark)}`}
         />
         <Group gap="xs">
+          <AppButton variant="outline" href={`/sections/${exam.section.id}?tab=exams`}>
+            {labels.sectionPage}
+          </AppButton>
           <AppButton variant="outline" href="/exams" leftSection={<IconArrowRight size={16} />}>
             {labels.back}
           </AppButton>
@@ -99,7 +105,7 @@ export function MarkSheetView({ onSave }: { onSave: () => Promise<void> }) {
                 return (
                   <Table.Tr key={row.student.id}>
                     <Table.Td>
-                      <Text size="sm" fw={500}>
+                      <Text component={Link} href={`/students/${row.student.id}`} size="sm" fw={500} c="inherit">
                         {row.student.fullName}
                       </Text>
                       {!row.eligible && (

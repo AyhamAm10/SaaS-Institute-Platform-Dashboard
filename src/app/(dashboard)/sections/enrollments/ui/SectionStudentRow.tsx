@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { Group, Menu, Stack, Text } from '@mantine/core';
 import {
   IconArrowsExchange,
@@ -49,7 +50,7 @@ export function SectionStudentRow({ item, onAction, canManage = true }: SectionS
           </IconTile>
           <Stack gap={4} style={{ minWidth: 0 }}>
             <Group gap={6} wrap="wrap">
-              <Text size="sm" fw={500} truncate>
+              <Text component={Link} href={`/students/${item.student.id}`} size="sm" fw={500} c="inherit" truncate>
                 {item.student.fullName}
               </Text>
               <StatusBadge tone={status.tone} variant="dot" size="xs">

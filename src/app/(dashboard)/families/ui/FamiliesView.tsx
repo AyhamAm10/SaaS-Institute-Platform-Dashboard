@@ -17,9 +17,10 @@ export interface FamiliesViewProps {
   onSubmit: () => Promise<void>;
   onConfirmDelete: (family: Family) => Promise<void>;
   canManage?: boolean;
+  canDelete?: boolean;
 }
 
-export function FamiliesView({ onRefresh, onSubmit, onConfirmDelete, canManage = true }: FamiliesViewProps) {
+export function FamiliesView({ onRefresh, onSubmit, onConfirmDelete, canManage = true, canDelete = true }: FamiliesViewProps) {
   const data = useFamiliesMirror('data');
   const isLoading = useFamiliesMirror('isLoading');
   const isFetching = useFamiliesMirror('isFetching');
@@ -29,8 +30,8 @@ export function FamiliesView({ onRefresh, onSubmit, onConfirmDelete, canManage =
   const openDeleteModal = useFamiliesMirror('openDeleteModal');
 
   const columns = useMemo(
-    () => getFamiliesColumns(openEditDrawer, openDeleteModal, { canManage }),
-    [openEditDrawer, openDeleteModal, canManage],
+    () => getFamiliesColumns(openEditDrawer, openDeleteModal, { canManage, canDelete }),
+    [openEditDrawer, openDeleteModal, canManage, canDelete],
   );
 
   return (

@@ -3,7 +3,7 @@ import { apiClient } from './client';
 import type { PaginatedResponse } from './types';
 
 /** Roles an institute admin can give a staff account (D2, role.md §8.6). */
-export type StaffRole = 'INSTITUTE_ADMIN' | 'REGISTRAR' | 'ACCOUNTANT';
+export type StaffRole = 'INSTITUTE_ADMIN' | 'REGISTRAR' | 'ACCOUNTANT' | 'DATA_ENTRY';
 
 export interface StaffMember {
   id: number;

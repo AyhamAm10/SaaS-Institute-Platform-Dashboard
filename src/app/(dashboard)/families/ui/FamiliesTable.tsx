@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { Avatar, Group, Stack, Text } from '@mantine/core';
 import { IconEdit, IconHome, IconPhone, IconTrash, IconUsers } from '@tabler/icons-react';
 import { Family } from '@/src/core/api';
@@ -11,7 +12,7 @@ import { familiesLabels } from '../static-data/families.data';
 export function getFamiliesColumns(
   openEditDrawer: (family: Family) => void,
   openDeleteModal: (family: Family) => void,
-  access = { canManage: true },
+  access = { canManage: true, canDelete: true },
 ): DataModuleColumn<Family>[] {
   const cols: DataModuleColumn<Family>[] = [
     {
@@ -25,7 +26,7 @@ export function getFamiliesColumns(
           <Avatar color="primary" radius="md" size="sm" variant="light">
             <IconHome size={16} />
           </Avatar>
-          <Text size="sm" fw={500}>
+          <Text component={Link} href={`/families/${family.id}`} c="inherit" size="sm" fw={500}>
             عائلة {family.familyName}
           </Text>
         </Group>
@@ -90,14 +91,16 @@ export function getFamiliesColumns(
           >
             <IconEdit size={15} />
           </AppIconButton>
-          <AppIconButton
-            variant="danger"
-            size="sm"
-            label={familiesLabels.deleteButton}
-            onClick={() => openDeleteModal(family)}
-          >
-            <IconTrash size={15} />
-          </AppIconButton>
+          {access.canDelete && (
+            <AppIconButton
+              variant="danger"
+              size="sm"
+              label={familiesLabels.deleteButton}
+              onClick={() => openDeleteModal(family)}
+            >
+              <IconTrash size={15} />
+            </AppIconButton>
+          )}
         </Group>
       ),
     });

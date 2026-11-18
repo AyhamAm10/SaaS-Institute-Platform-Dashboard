@@ -65,7 +65,19 @@ export function AttendanceTable({ actions }: { actions: AttendanceActions }) {
                     </StatusBadge>
                   </Table.Td>
                   <Table.Td>{toTime(record?.checkInAt, timeZone) || '—'}</Table.Td>
-                  <Table.Td>{toTime(record?.checkOutAt, timeZone) || '—'}</Table.Td>
+                  <Table.Td>
+                    {toTime(record?.checkOutAt, timeZone) || '—'}
+                    {record?.earlyExit && (
+                      <StatusBadge tone="warning" size="xs">
+                        {labels.earlyExit}
+                      </StatusBadge>
+                    )}
+                    {record?.checkOutNote && (
+                      <Text size="xs" c="var(--app-text-muted)">
+                        {record.checkOutNote}
+                      </Text>
+                    )}
+                  </Table.Td>
                   <Table.Td>
                     <Group gap={6} justify="center" wrap="nowrap">
                       {can.canCheckIn && (
@@ -74,7 +86,7 @@ export function AttendanceTable({ actions }: { actions: AttendanceActions }) {
                         </AppButton>
                       )}
                       {can.canCheckOut && (
-                        <AppButton size="xs" variant="outline" leftSection={<IconLogout size={14} />} loading={busy} onClick={() => actions.mark(row.student.id, 'check-out')}>
+                        <AppButton size="xs" variant="outline" leftSection={<IconLogout size={14} />} loading={busy} onClick={() => actions.requestCheckOut(row)}>
                           {labels.checkOut}
                         </AppButton>
                       )}

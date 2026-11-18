@@ -19,6 +19,7 @@ export function StudentProfileController({ studentId }: { studentId: number }) {
   if (can(PERMISSIONS.feesView)) tabs.push('finance');
   if (can(PERMISSIONS.attendanceView)) tabs.push('attendance');
   if (can(PERMISSIONS.examsView)) tabs.push('results');
+  if (can(PERMISSIONS.studentsView)) tabs.push('notes');
 
   return <StudentProfileView student={(data as Student | undefined) ?? null} isLoading={isLoading} tabs={tabs} />;
 }

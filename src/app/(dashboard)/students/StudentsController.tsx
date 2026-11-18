@@ -27,6 +27,7 @@ export function StudentsController() {
   // Buttons follow the role; the server enforces the same rules (role.md §8.6)
   const access = {
     canManage: can(PERMISSIONS.studentsManage),
+    canDelete: can(PERMISSIONS.recordsDelete),
     canSeeFees: can(PERMISSIONS.feesView),
   };
   const updateMutation = useUpdateStudentMutation();

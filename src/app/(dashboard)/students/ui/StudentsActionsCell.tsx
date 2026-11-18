@@ -44,14 +44,16 @@ export function StudentsActionsCell({
           >
             <IconEdit size={15} />
           </AppIconButton>
-          <AppIconButton
-            variant="danger"
-            size="sm"
-            label={studentsLabels.deleteButton}
-            onClick={() => onDelete(student)}
-          >
-            <IconTrash size={15} />
-          </AppIconButton>
+          {access.canDelete && (
+            <AppIconButton
+              variant="danger"
+              size="sm"
+              label={studentsLabels.deleteButton}
+              onClick={() => onDelete(student)}
+            >
+              <IconTrash size={15} />
+            </AppIconButton>
+          )}
         </>
       )}
     </Group>

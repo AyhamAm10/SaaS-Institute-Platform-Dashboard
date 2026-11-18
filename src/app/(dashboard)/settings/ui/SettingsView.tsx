@@ -9,6 +9,7 @@ import { useSettingsMirror } from '../store/useSettingsMirror';
 import { InstituteTabController } from '../tabs/institute';
 import { ScheduleSettingsController } from '../../schedule-settings/ScheduleSettingsController';
 import { AccountsController } from '../accounts';
+import { AuditController } from '../audit/AuditController';
 import { ClosuresController } from '../closures/ClosuresController';
 import { StudentFieldsController } from '../student-fields/StudentFieldsController';
 import { ReferenceDataController } from '../reference-data/ReferenceDataController';
@@ -65,6 +66,12 @@ export function SettingsView({ onTabChange }: SettingsViewProps) {
         {permittedTabs.includes('accounts') && (
           <AppTabs.Panel value="accounts" keepMounted>
             <AccountsController />
+          </AppTabs.Panel>
+        )}
+
+        {permittedTabs.includes('audit') && (
+          <AppTabs.Panel value="audit">
+            <AuditController />
           </AppTabs.Panel>
         )}
 

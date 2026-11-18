@@ -9,8 +9,9 @@ import {
   useExcuseMutation,
   useUpdateAttendanceMutation,
 } from '@/src/core/api';
+import type { DailyAttendanceRow } from '@/src/core/api';
 import { AttendanceStore } from './store/attendance.store';
-import { bulkNotice, isValidTime, toUpdatePayload } from './utils/attendance.utils';
+import { bulkNotice, isBeforeDayEnd, isValidTime, toUpdatePayload } from './utils/attendance.utils';
 import { attendanceLabels as labels } from './static-data/attendance.data';
 
 /** Orchestrates the attendance mutations. Controller-level hook (role.md §3). */
@@ -22,12 +23,13 @@ export function useAttendanceActions(store: AttendanceStore) {
   const update = useUpdateAttendanceMutation();
 
   const mark = useCallback(
-    async (studentId: number, action: 'check-in' | 'check-out') => {
+    async (studentId: number, action: 'check-in' | 'check-out', note?: string) => {
       const { setBusyStudentId, setNotice } = store.getState();
       setNotice(null);
       setBusyStudentId(studentId);
       try {
-        await (action === 'check-in' ? checkIn : checkOut).mutateAsync(studentId);
+        if (action === 'check-in') await checkIn.mutateAsync(studentId);
+        else await checkOut.mutateAsync({ studentId, note });
       } catch (err: unknown) {
         setNotice({ tone: 'error', text: getApiErrorMessage(err, labels.actionError) });
       } finally {
@@ -36,6 +38,23 @@ export function useAttendanceActions(store: AttendanceStore) {
     },
     [store, checkIn, checkOut],
   );
+
+  /** Check-out: before the end of the day it asks for the reason first (early exit). */
+  const requestCheckOut = useCallback(
+    (row: DailyAttendanceRow) => {
+      const { day, timeZone, openExit } = store.getState();
+      if (isBeforeDayEnd(day?.dayEndTime, timeZone)) openExit(row);
+      else void mark(row.student.id, 'check-out');
+    },
+    [store, mark],
+  );
+
+  const submitExit = useCallback(async () => {
+    const { exitRow, exitNote, closeModals } = store.getState();
+    if (!exitRow) return;
+    closeModals();
+    await mark(exitRow.student.id, 'check-out', exitNote.trim() || undefined);
+  }, [store, mark]);
 
   const markAll = useCallback(
     async (action: 'check-in' | 'check-out') => {
@@ -92,7 +111,7 @@ export function useAttendanceActions(store: AttendanceStore) {
     );
   }, [store, submitModal, update]);
 
-  return { mark, markAll, submitExcuse, submitEdit };
+  return { mark, requestCheckOut, submitExit, markAll, submitExcuse, submitEdit };
 }
 
 export type AttendanceActions = ReturnType<typeof useAttendanceActions>;

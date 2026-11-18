@@ -18,3 +18,4 @@ export * from './info-tile';
 export * from './empty-state';
 export * from './page-header';
 export * from './report';
+export * from './detail-page';

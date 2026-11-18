@@ -10,6 +10,7 @@ import {
   useFamiliesSearchQuery,
   useUpdateFamilyMutation,
 } from '@/src/core/api';
+import { PERMISSIONS, useAuth } from '@/src/core/auth';
 import { createFamiliesStore, FamiliesContext } from './store/families.store';
 import { FamiliesView } from './ui/FamiliesView';
 
@@ -50,6 +51,7 @@ function QuerySync({ store }: { store: ReturnType<typeof createFamiliesStore> })
 export function FamiliesController() {
   const [store] = useState(() => createFamiliesStore());
   const queryClient = useQueryClient();
+  const { can } = useAuth();
   const createMutation = useCreateFamilyMutation();
   const updateMutation = useUpdateFamilyMutation();
   const deleteMutation = useDeleteFamilyMutation();
@@ -122,6 +124,8 @@ export function FamiliesController() {
         onRefresh={handleRefetch}
         onSubmit={handleSubmit}
         onConfirmDelete={handleConfirmDelete}
+        canManage={can(PERMISSIONS.studentsManage)}
+        canDelete={can(PERMISSIONS.recordsDelete)}
       />
     </FamiliesContext.Provider>
   );

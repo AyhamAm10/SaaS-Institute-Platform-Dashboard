@@ -22,6 +22,8 @@ export const PERMISSIONS = {
   settingsManage: 'settings.manage',
   staffView: 'staff.view',
   staffManage: 'staff.manage',
+  /** Deleting students and families (not given to the data-entry role). */
+  recordsDelete: 'records.delete',
 } as const;
 
 export type Permission = (typeof PERMISSIONS)[keyof typeof PERMISSIONS];
@@ -31,6 +33,7 @@ export const DASHBOARD_ROLES: readonly string[] = [
   UserRole.SUPER_ADMIN,
   UserRole.INSTITUTE_ADMIN,
   UserRole.REGISTRAR,
+  UserRole.DATA_ENTRY,
   UserRole.ACCOUNTANT,
   UserRole.TEACHER,
 ];
@@ -46,8 +49,9 @@ export function hasPermission(user: UserProfile | null | undefined, permission: 
 /** Arabic label of a role (staff screen, header). */
 export const ROLE_LABELS: Record<string, string> = {
   [UserRole.SUPER_ADMIN]: 'مدير المنصة',
-  [UserRole.INSTITUTE_ADMIN]: 'مدير المعهد',
-  [UserRole.REGISTRAR]: 'مسجّل',
+  [UserRole.INSTITUTE_ADMIN]: 'مدير عام',
+  [UserRole.REGISTRAR]: 'إداري',
+  [UserRole.DATA_ENTRY]: 'مدخل بيانات',
   [UserRole.ACCOUNTANT]: 'محاسب',
   [UserRole.TEACHER]: 'مدرّس',
 };

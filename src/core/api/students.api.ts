@@ -393,3 +393,19 @@ export function useDeleteFamilyMutation() {
     },
   });
 }
+
+// ---------------------------------------------------------------------------
+// Family detail (GET /families/:id: students and count)
+// ---------------------------------------------------------------------------
+
+export interface FamilyDetails extends Family {
+  students: { id: number; fullName: string; gender: string; birthDate: string }[];
+}
+
+export function useFamilyQuery(id: number) {
+  return useQuery({
+    queryKey: ['families', 'detail', id] as const,
+    queryFn: async () => (await apiClient.get<FamilyDetails>(`/families/${id}`)).data,
+    enabled: id > 0,
+  });
+}

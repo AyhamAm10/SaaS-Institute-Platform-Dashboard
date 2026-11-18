@@ -1,10 +1,11 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import {
   useSectionsQuery,
   useFamiliesSearchQuery,
+  useFamilyQuery,
   useStudentFieldsQuery,
   useCreateStudentMutation,
   CreateStudentPayload,
@@ -29,6 +30,15 @@ export function StudentRegistrationController() {
       store.getState().setStudentField('branchId', activeBranchId);
     }
   }, [store, activeBranchId]);
+
+  // "Add child" from a family page: start on step 2 with the family chosen
+  const presetFamilyId = Number(useSearchParams().get('familyId') ?? 0);
+  const { data: presetFamily } = useFamilyQuery(presetFamilyId);
+  useEffect(() => {
+    if (!presetFamily) return;
+    store.getState().setSelectedFamily(presetFamily);
+    store.getState().setActiveStep(1);
+  }, [store, presetFamily]);
 
   const { data: sectionsData } = useSectionsQuery({
     limit: 100,

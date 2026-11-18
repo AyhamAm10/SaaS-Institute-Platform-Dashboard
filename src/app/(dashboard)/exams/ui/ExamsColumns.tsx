@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { Group, Stack, Text } from '@mantine/core';
 import { IconEdit, IconPencilCheck, IconTrash } from '@tabler/icons-react';
 import { DataModuleColumn } from '@/src/components/controllers/data-module';
@@ -44,7 +45,9 @@ export function getExamsColumns(
       exportKind: 'text',
       render: (e) => (
         <Stack gap={0}>
-          <Text size="sm">{e.section.name}</Text>
+          <Text component={Link} href={`/sections/${e.section.id}?tab=exams`} size="sm" c="inherit">
+            {e.section.name}
+          </Text>
           <Text size="xs" c="var(--app-text-muted)">
             {e.subject.name}
           </Text>

@@ -17,6 +17,17 @@ const REGISTRAR: Permission[] = [
   'academic.view',
   'settings.view',
 ];
+const DATA_ENTRY: Permission[] = [
+  'dashboard.view',
+  'students.view',
+  'students.manage',
+  'attendance.view',
+  'attendance.manage',
+  'exams.view',
+  'academic.view',
+  'settings.view',
+  'marks.enter',
+];
 const ACCOUNTANT: Permission[] = ['dashboard.view', 'students.view', 'fees.view', 'fees.manage', 'academic.view', 'settings.view'];
 const TEACHER: Permission[] = ['attendance.view', 'attendance.manage', 'exams.view', 'academic.view', 'marks.enter'];
 
@@ -35,6 +46,16 @@ describe('filterNavigation', () => {
     assert.ok(links.includes('/payments'));
     assert.ok(!links.includes('/settings/staff'));
     assert.ok(!links.includes('/branches'));
+  });
+
+  it('data entry: students, attendance and exams, but no payments or accounts', () => {
+    const links = hrefs(DATA_ENTRY);
+    assert.ok(links.includes('/students'));
+    assert.ok(links.includes('/attendance'));
+    assert.ok(links.includes('/exams'));
+    assert.ok(!links.includes('/payments'));
+    assert.ok(!links.includes('/overdue-installments'));
+    assert.ok(!hasPermission({ permissions: DATA_ENTRY } as UserProfile, 'records.delete'));
   });
 
   it('teacher: no dashboard home, no students, no finance', () => {

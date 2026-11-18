@@ -1,37 +1,23 @@
 'use client';
 
-import { Box, Center, Group, Loader, Stack, Text } from '@mantine/core';
-import { IconArrowRight, IconCalendarCheck, IconCash, IconClipboardList, IconUser } from '@tabler/icons-react';
-import { AppButton, AppPageHeader, AppSurface, ReportMenu, StatusBadge } from '@/src/components/controllers';
-import { AppTabs } from '@/src/components/controllers/tabs';
-import type { ReactNode } from 'react';
+import { Center, Loader, Text } from '@mantine/core';
+import { IconCalendarCheck, IconCash, IconClipboardList, IconInfoCircle, IconMessage, IconUser } from '@tabler/icons-react';
+import { AppButton, ReportMenu, StatusBadge } from '@/src/components/controllers';
+import { DetailPage, type DetailPageTab } from '@/src/components/controllers/detail-page';
 import type { Student } from '@/src/core/api';
 import { STATUS_TONES } from '../../../settings/reference-data/static-data/reference-data.data';
 import { StudentFinanceController } from '../../finance/StudentFinanceController';
 import { financeStudentFrom } from '../../finance/utils/student-finance.utils';
+import { StudentQuickActionsController } from '../StudentQuickActionsController';
 import { StudentAttendanceController } from '../StudentAttendanceController';
+import { StudentNotesController } from '../StudentNotesController';
 import { StudentResultsController } from '../StudentResultsController';
 import { profileLabels as labels } from '../static-data/student-profile.data';
+import { StudentOverviewTab } from './StudentOverviewTab';
 
-export type ProfileTab = 'finance' | 'attendance' | 'results';
+export type ProfileTab = 'finance' | 'attendance' | 'results' | 'notes';
 
-const TABS: { value: ProfileTab; label: string; icon: ReactNode }[] = [
-  {
-    value: 'finance',
-    label: labels.tabFinance,
-    icon: <IconCash size={16} stroke={1.6} />,
-  },
-  {
-    value: 'attendance',
-    label: labels.tabAttendance,
-    icon: <IconCalendarCheck size={16} stroke={1.6} />,
-  },
-  {
-    value: 'results',
-    label: labels.tabResults,
-    icon: <IconClipboardList size={16} stroke={1.6} />,
-  },
-];
+const icon = { size: 16, stroke: 1.6 };
 
 interface StudentProfileViewProps {
   student: Student | null;
@@ -40,7 +26,7 @@ interface StudentProfileViewProps {
   tabs: ProfileTab[];
 }
 
-/** Student profile: identity, enrollments and the permitted tabs. Props only. */
+/** Student page: DetailPage with the overview and the permitted tabs. Props only. */
 export function StudentProfileView({ student, isLoading, tabs }: StudentProfileViewProps) {
   if (isLoading) {
     return (
@@ -56,77 +42,71 @@ export function StudentProfileView({ student, isLoading, tabs }: StudentProfileV
       </Text>
     );
   }
-  const enrollments = student.studentEnrollments ?? [];
-  const items = TABS.filter((t) => tabs.includes(t.value));
-  const facts: [string, string][] = [
-    [labels.family, student.family?.familyName ?? '—'],
-    [labels.phone, student.family?.phone ?? '—'],
-    [labels.branch, (student as Student & { branch?: { name: string } }).branch?.name ?? '—'],
+
+  const all: Record<ProfileTab, DetailPageTab> = {
+    finance: {
+      value: 'finance',
+      label: labels.tabFinance,
+      icon: <IconCash {...icon} />,
+      content: <StudentFinanceController embedded student={financeStudentFrom(student)} />,
+    },
+    attendance: {
+      value: 'attendance',
+      label: labels.tabAttendance,
+      icon: <IconCalendarCheck {...icon} />,
+      content: <StudentAttendanceController studentId={student.id} />,
+    },
+    notes: {
+      value: 'notes',
+      label: labels.tabNotes,
+      icon: <IconMessage {...icon} />,
+      content: <StudentNotesController studentId={student.id} />,
+    },
+    results: {
+      value: 'results',
+      label: labels.tabResults,
+      icon: <IconClipboardList {...icon} />,
+      content: <StudentResultsController studentId={student.id} />,
+    },
+  };
+  const items: DetailPageTab[] = [
+    {
+      value: 'overview',
+      label: labels.tabOverview,
+      icon: <IconInfoCircle {...icon} />,
+      content: <StudentOverviewTab student={student} />,
+    },
+    ...tabs.map((t) => all[t]),
   ];
 
   return (
-    <Stack gap="lg">
-      <Group justify="space-between" align="flex-start" wrap="wrap">
-        <AppPageHeader
-          icon={<IconUser size={22} />}
-          title={student.fullName}
-          description={facts.map(([k, v]) => `${k}: ${v}`).join(' · ')}
-        />
-        <Group gap="xs">
+    <DetailPage
+      icon={<IconUser size={22} />}
+      title={student.fullName}
+      description={[student.family?.familyName && `${labels.family}: ${student.family.familyName}`, student.branch?.name]
+        .filter(Boolean)
+        .join(' · ')}
+      badge={
+        student.status && (
+          <StatusBadge tone={STATUS_TONES[student.status.tone].badge} size="sm">
+            {student.status.name}
+          </StatusBadge>
+        )
+      }
+      breadcrumbs={[{ label: labels.back, href: '/students' }, { label: student.fullName }]}
+      actions={
+        <>
+          <StudentQuickActionsController studentId={student.id} />
           <ReportMenu
-            keys={['student-statement', 'student-transcript', 'student-attendance', 'student-card']}
+            keys={['student-monthly', 'student-statement', 'student-transcript', 'student-attendance', 'student-card']}
             params={{ studentId: student.id }}
           />
-          <AppButton variant="outline" href="/students" leftSection={<IconArrowRight size={16} />}>
+          <AppButton variant="outline" href="/students">
             {labels.back}
           </AppButton>
-        </Group>
-      </Group>
-
-      <AppSurface level={2} radius="md" padding="sm">
-        <Group gap="xs" wrap="wrap">
-          {student.status && (
-            <StatusBadge tone={STATUS_TONES[student.status.tone].badge} size="sm">
-              {student.status.name}
-            </StatusBadge>
-          )}
-          <Text size="sm" c="var(--app-text-muted)">
-            {labels.enrollments}:
-          </Text>
-          {enrollments.length === 0 ? (
-            <StatusBadge size="sm">{labels.noEnrollment}</StatusBadge>
-          ) : (
-            enrollments.map((e) => (
-              <StatusBadge key={e.id} tone={e.status === 'ACTIVE' ? 'info' : 'neutral'} size="sm">
-                {e.section?.name} · {e.academicYear?.name}
-              </StatusBadge>
-            ))
-          )}
-        </Group>
-      </AppSurface>
-
-      {items.length > 0 && (
-        <AppTabs defaultValue={items[0].value} items={items}>
-          <Box>
-            <AppTabs.List />
-          </Box>
-          {tabs.includes('finance') && (
-            <AppTabs.Panel value="finance">
-              <StudentFinanceController embedded student={financeStudentFrom(student)} />
-            </AppTabs.Panel>
-          )}
-          {tabs.includes('attendance') && (
-            <AppTabs.Panel value="attendance">
-              <StudentAttendanceController studentId={student.id} />
-            </AppTabs.Panel>
-          )}
-          {tabs.includes('results') && (
-            <AppTabs.Panel value="results">
-              <StudentResultsController studentId={student.id} />
-            </AppTabs.Panel>
-          )}
-        </AppTabs>
-      )}
-    </Stack>
+        </>
+      }
+      tabs={items}
+    />
   );
 }

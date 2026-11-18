@@ -4,6 +4,7 @@ import {
   IconCalendar,
   IconCalendarOff,
   IconDatabase,
+  IconHistory,
   IconListDetails,
   IconUserCog,
 } from '@tabler/icons-react';
@@ -14,6 +15,7 @@ export type SettingsTabKey =
   | 'schedule'
   | 'closures'
   | 'accounts'
+  | 'audit'
   | 'student-fields'
   | 'reference-data';
 
@@ -47,6 +49,12 @@ export const SETTINGS_TABS: SettingsTabItem[] = [
     key: 'accounts',
     label: 'إدارة الحسابات',
     icon: IconUserCog,
+    permission: PERMISSIONS.staffView,
+  },
+  {
+    key: 'audit',
+    label: 'سجل التدقيق',
+    icon: IconHistory,
     permission: PERMISSIONS.staffView,
   },
   {

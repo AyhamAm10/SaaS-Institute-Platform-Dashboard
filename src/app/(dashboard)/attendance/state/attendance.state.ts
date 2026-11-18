@@ -43,6 +43,9 @@ export interface AttendanceState {
 
   excuseRow: DailyAttendanceRow | null;
   excuseNote: string;
+  /** Early check-out being confirmed with its reason. */
+  exitRow: DailyAttendanceRow | null;
+  exitNote: string;
   editRecord: AttendanceRecord | null;
   editForm: EditForm;
   modalError: string | null;
@@ -56,6 +59,8 @@ export interface AttendanceState {
   setNotice: (notice: Notice | null) => void;
   openExcuse: (row: DailyAttendanceRow) => void;
   setExcuseNote: (note: string) => void;
+  openExit: (row: DailyAttendanceRow) => void;
+  setExitNote: (note: string) => void;
   openEdit: (record: AttendanceRecord) => void;
   setEditField: <K extends keyof EditForm>(key: K, value: EditForm[K]) => void;
   closeModals: () => void;

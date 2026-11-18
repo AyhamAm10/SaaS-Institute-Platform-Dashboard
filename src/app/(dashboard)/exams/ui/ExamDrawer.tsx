@@ -20,6 +20,7 @@ export function ExamDrawer({ onSubmit }: { onSubmit: () => Promise<void> }) {
   const sections = useExamsMirror('sectionOptions');
   const types = useExamsMirror('examTypeOptions');
   const subjects = useExamsMirror('subjectOptions');
+  const locked = useExamsMirror('lockedSection');
 
   return (
     <AppDrawer opened={opened} onClose={closeDrawer} size="md">
@@ -44,7 +45,7 @@ export function ExamDrawer({ onSubmit }: { onSubmit: () => Promise<void> }) {
             value={form.sectionId}
             onChange={(v: string | null) => setField('sectionId', v)}
             error={errors.sectionId}
-            disabled={Boolean(editing)}
+            disabled={Boolean(editing) || locked}
             searchable
             required
           />

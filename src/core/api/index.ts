@@ -15,6 +15,8 @@ export * from './rooms.api';
 export * from './timetables.api';
 export * from './branches.api';
 export * from './students.api';
+export * from './student-notes.api';
+export * from './audit.api';
 export * from './reference-data.api';
 export * from './enrollments.api';
 export * from './fees.api';

@@ -78,7 +78,19 @@ export function StudentAttendanceTab({ history, isLoading, timeZone }: StudentAt
                       </StatusBadge>
                     </Table.Td>
                     <Table.Td>{toTime(r.checkInAt, timeZone) || '—'}</Table.Td>
-                    <Table.Td>{toTime(r.checkOutAt, timeZone) || '—'}</Table.Td>
+                    <Table.Td>
+                      {toTime(r.checkOutAt, timeZone) || '—'}
+                      {r.earlyExit && (
+                        <StatusBadge tone="warning" size="xs">
+                          {attendanceLabels.earlyExit}
+                        </StatusBadge>
+                      )}
+                      {r.checkOutNote && (
+                        <Text size="xs" c="var(--app-text-muted)">
+                          {r.checkOutNote}
+                        </Text>
+                      )}
+                    </Table.Td>
                     <Table.Td>{r.note ?? ''}</Table.Td>
                   </Table.Tr>
                 );

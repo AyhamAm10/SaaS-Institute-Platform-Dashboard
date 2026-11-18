@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { Avatar, Group, Text } from '@mantine/core';
 import { IconBook, IconEdit, IconLayoutGrid, IconTrash } from '@tabler/icons-react';
 import { formatDate } from '@/src/core/format';
@@ -25,7 +26,7 @@ export function getSubjectsColumns(
           <Avatar color="primary" radius="md" size="sm" variant="light">
             <IconBook size={16} />
           </Avatar>
-          <Text size="sm" fw={500}>
+          <Text component={Link} href={`/subjects/${subject.id}`} c="inherit" size="sm" fw={500}>
             {subject.name}
           </Text>
         </Group>

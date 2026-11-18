@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { Avatar, Group, Stack, Text } from '@mantine/core';
 import { IconUser } from '@tabler/icons-react';
 import { Teacher } from '@/src/core/api';
@@ -31,7 +32,7 @@ export function getTeachersColumns(
             <IconUser size={16} />
           </Avatar>
           <Stack gap={1}>
-            <Text fw={500} size="xs" style={{ fontSize: '13px' }}>
+            <Text component={Link} href={`/teachers/${teacher.id}`} c="inherit" fw={500} size="xs" style={{ fontSize: '13px' }}>
               {teacher.user.fullName}
             </Text>
             <Text size="xs" c="dimmed" style={{ fontSize: '11px' }}>

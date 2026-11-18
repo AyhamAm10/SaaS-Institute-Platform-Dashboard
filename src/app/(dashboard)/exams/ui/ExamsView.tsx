@@ -19,18 +19,21 @@ function ExamsFilters() {
   const setFilter = useExamsMirror('setFilter');
   const sections = useExamsMirror('sectionOptions');
   const types = useExamsMirror('examTypeOptions');
+  const locked = useExamsMirror('lockedSection');
   return (
     <Group gap="xs" wrap="wrap">
-      <AppSelect
-        placeholder={labels.sectionFilter}
-        data={sections}
-        value={filters.sectionId}
-        onChange={(v: string | null) => setFilter('sectionId', v)}
-        clearable
-        searchable
-        size="sm"
-        w={170}
-      />
+      {!locked && (
+        <AppSelect
+          placeholder={labels.sectionFilter}
+          data={sections}
+          value={filters.sectionId}
+          onChange={(v: string | null) => setFilter('sectionId', v)}
+          clearable
+          searchable
+          size="sm"
+          w={170}
+        />
+      )}
       <AppSelect
         placeholder={labels.typeFilter}
         data={types}
@@ -78,11 +81,12 @@ export function ExamsView({ onSubmit, onConfirmDelete, access }: ExamsViewProps)
   const openCreate = useExamsMirror('openCreate');
   const openEdit = useExamsMirror('openEdit');
   const openDelete = useExamsMirror('openDelete');
+  const locked = useExamsMirror('lockedSection');
   const columns = useMemo(() => getExamsColumns(openEdit, openDelete, access), [openEdit, openDelete, access]);
 
   return (
     <AppModule exportTitle="المذاكرات">
-      <ExamsOverview />
+      {!locked && <ExamsOverview />}
 
       <AppModule.Table>
         <DataModuleController

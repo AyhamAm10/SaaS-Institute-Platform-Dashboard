@@ -284,3 +284,26 @@ export function useSetTeacherAvailabilitiesMutation() {
     },
   });
 }
+
+// ---------------------------------------------------------------------------
+// Sections and subjects a teacher teaches (GET /teachers/:id/sections)
+// ---------------------------------------------------------------------------
+
+export interface TeacherSection {
+  sectionId: number;
+  sectionName: string;
+  grade: string | null;
+  branchName: string | null;
+  academicYearId: number;
+  subjectId: number;
+  subjectName: string;
+  weeklyPeriods: number;
+}
+
+export function useTeacherSectionsQuery(teacherId: number) {
+  return useQuery({
+    queryKey: [...teachersKeys.detail(teacherId), 'sections'] as const,
+    queryFn: async () => (await apiClient.get<TeacherSection[]>(`/teachers/${teacherId}/sections`)).data,
+    enabled: teacherId > 0,
+  });
+}

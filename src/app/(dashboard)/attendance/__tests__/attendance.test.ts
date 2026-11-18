@@ -4,6 +4,7 @@ import type { AttendanceRecord, DailyAttendanceRow } from '@/src/core/api';
 import {
   bulkNotice,
   editFormFrom,
+  isBeforeDayEnd,
   isValidTime,
   localToday,
   rowActions,
@@ -23,6 +24,7 @@ const record = (over: Partial<AttendanceRecord> = {}): AttendanceRecord => ({
   checkInMethod: null,
   checkOutMethod: null,
   note: null,
+  checkOutNote: null,
   ...over,
 });
 const row = (r: AttendanceRecord | null): DailyAttendanceRow => ({
@@ -92,5 +94,17 @@ describe('attendance times in the institute time zone', () => {
     assert.strictEqual(toTime('2026-11-05T10:55:00.000Z', 'Asia/Damascus'), '13:55');
     assert.strictEqual(toInstant('2026-11-05', '08:05', 'Asia/Damascus'), '2026-11-05T05:05:00.000Z');
     assert.strictEqual(localToday(new Date('2026-11-04T22:30:00Z'), 'Asia/Damascus'), '2026-11-05');
+  });
+});
+
+describe('isBeforeDayEnd', () => {
+  const at = (time: string) => new Date(`2026-11-04T${time}:00+03:00`);
+  it('is true before the end of the day in the institute zone, false from the end on', () => {
+    assert.equal(isBeforeDayEnd('14:00', 'Asia/Damascus', at('11:00')), true);
+    assert.equal(isBeforeDayEnd('14:00', 'Asia/Damascus', at('14:00')), false);
+    assert.equal(isBeforeDayEnd('14:00', 'Asia/Damascus', at('15:30')), false);
+  });
+  it('is false when the server did not send the end of the day', () => {
+    assert.equal(isBeforeDayEnd(undefined, 'Asia/Damascus', at('09:00')), false);
   });
 });

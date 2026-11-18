@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useMemo } from 'react';
 import { Group, Menu, Text } from '@mantine/core';
 import { IconCalendarCheck, IconDotsVertical, IconEdit } from '@tabler/icons-react';
@@ -26,7 +27,7 @@ export function useAcademicYearsColumns(
         exportValue: (y) => y.name,
         exportKind: 'text',
         render: (row: AcademicYear) => (
-          <Text fw={500} size="sm">
+          <Text component={Link} href={`/academic-years/${row.id}`} c="inherit" fw={500} size="sm">
             {row.name}
           </Text>
         ),

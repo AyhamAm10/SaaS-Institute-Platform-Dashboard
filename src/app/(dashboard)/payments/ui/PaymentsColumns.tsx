@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { Group, Stack, Text } from '@mantine/core';
 import { IconPrinter, IconReceiptOff } from '@tabler/icons-react';
 import { DataModuleColumn } from '@/src/components/controllers/data-module';
@@ -20,7 +21,7 @@ export function getPaymentsColumns(
       exportValue: (p) => `#${p.receiptNumber}`,
       exportKind: 'text',
       render: (p) => (
-        <Text size="sm" fw={600}>
+        <Text component={Link} href={`/payments/${p.id}`} c="inherit" size="sm" fw={600}>
           #{p.receiptNumber}
         </Text>
       ),
@@ -32,7 +33,7 @@ export function getPaymentsColumns(
       exportKind: 'text',
       render: (p) => (
         <Stack gap={0}>
-          <Text size="sm" fw={500}>
+          <Text component={Link} href={`/students/${p.subscription.student.id}`} c="inherit" size="sm" fw={500}>
             {p.subscription.student.fullName}
           </Text>
           <Text size="xs" c="var(--app-text-muted)">

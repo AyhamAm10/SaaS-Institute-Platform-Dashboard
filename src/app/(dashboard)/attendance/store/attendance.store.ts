@@ -13,6 +13,8 @@ const EMPTY_EDIT: EditForm = { checkIn: '', checkOut: '', status: 'PRESENT', not
 const closed = {
   excuseRow: null,
   excuseNote: '',
+  exitRow: null,
+  exitNote: '',
   editRecord: null,
   editForm: EMPTY_EDIT,
   modalError: null,
@@ -44,6 +46,8 @@ export function createAttendanceStore(): AttendanceStore {
     setNotice: (notice) => set({ notice }),
     openExcuse: (excuseRow) => set({ ...closed, excuseRow }),
     setExcuseNote: (excuseNote) => set({ excuseNote }),
+    openExit: (exitRow) => set({ ...closed, exitRow }),
+    setExitNote: (exitNote) => set({ exitNote }),
     openEdit: (editRecord) =>
       set({ ...closed, editRecord, editForm: editFormFrom(editRecord, get().timeZone) }),
     setEditField: (key, value) =>

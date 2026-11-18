@@ -1,7 +1,7 @@
 'use client';
 
 import { Alert, SimpleGrid, Stack, Text } from '@mantine/core';
-import { IconAlertCircle, IconEdit, IconNotes } from '@tabler/icons-react';
+import { IconAlertCircle, IconEdit, IconLogout, IconNotes } from '@tabler/icons-react';
 import { AppButton, AppInput, AppModal, AppSelect } from '@/src/components/controllers';
 import type { AttendanceStatus } from '@/src/core/api';
 import { inputText } from '@/src/core/format';
@@ -24,6 +24,9 @@ export function AttendanceModals({ actions }: { actions: AttendanceActions }) {
   const excuseRow = useAttendanceMirror('excuseRow');
   const excuseNote = useAttendanceMirror('excuseNote');
   const setExcuseNote = useAttendanceMirror('setExcuseNote');
+  const exitRow = useAttendanceMirror('exitRow');
+  const exitNote = useAttendanceMirror('exitNote');
+  const setExitNote = useAttendanceMirror('setExitNote');
   const editRecord = useAttendanceMirror('editRecord');
   const form = useAttendanceMirror('editForm');
   const setField = useAttendanceMirror('setEditField');
@@ -54,6 +57,32 @@ export function AttendanceModals({ actions }: { actions: AttendanceActions }) {
             <AppButton onClick={actions.submitExcuse} loading={isSubmitting}>
               {labels.save}
             </AppButton>
+          </AppModal.FooterEnd>
+        </AppModal.Footer>
+      </AppModal>
+    );
+  }
+
+  if (exitRow) {
+    return (
+      <AppModal opened onClose={closeModals} size="sm">
+        <AppModal.Header>
+          <AppModal.Icon icon={<IconLogout size={22} />} />
+          <AppModal.Title>{labels.exitTitle}</AppModal.Title>
+          <AppModal.Close />
+        </AppModal.Header>
+        <AppModal.Content>
+          <Stack gap="md">
+            <Text size="sm" fw={500}>
+              {exitRow.student.fullName}
+            </Text>
+            <AppInput type="textarea" label={labels.exitReason} value={exitNote} onChange={(e: unknown) => setExitNote(inputText(e))} rows={2} />
+          </Stack>
+        </AppModal.Content>
+        <AppModal.Footer>
+          <AppModal.FooterEnd>
+            <AppModal.Cancel>{labels.cancel}</AppModal.Cancel>
+            <AppButton onClick={actions.submitExit}>{labels.exitConfirm}</AppButton>
           </AppModal.FooterEnd>
         </AppModal.Footer>
       </AppModal>

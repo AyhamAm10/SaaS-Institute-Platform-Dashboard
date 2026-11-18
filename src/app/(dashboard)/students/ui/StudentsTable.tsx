@@ -25,6 +25,8 @@ function toReportTone(tone?: string): ReportTone {
 
 export interface StudentsAccess {
   canManage: boolean;
+  /** Deleting needs its own permission (records.delete). */
+  canDelete: boolean;
   canSeeFees: boolean;
 }
 
@@ -59,9 +61,11 @@ export function getStudentsColumns(
       exportKind: 'text',
       render: (student) => (
         <Group gap="xs" wrap="nowrap">
-          <StatusBadge tone="info" size="sm">
-            عائلة {student.family?.familyName || '—'}
-          </StatusBadge>
+          <Text component={Link} href={`/families/${student.familyId}`} c="inherit" span>
+            <StatusBadge tone="info" size="sm">
+              عائلة {student.family?.familyName || '—'}
+            </StatusBadge>
+          </Text>
           {student.family?.fatherName && <Text size="xs" c="dimmed">(الأب: {student.family.fatherName})</Text>}
           {student.family?.phone && <Text size="xs" c="dimmed" dir="ltr">{student.family.phone}</Text>}
         </Group>

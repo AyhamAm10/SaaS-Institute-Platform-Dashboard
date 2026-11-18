@@ -289,5 +289,55 @@ export const useCreatePaymentMutation = () =>
     createPayment(contractId, payload),
   );
 
+/** One visit, several children: one payment and receipt per contract, all or none. */
+export const useCreateFamilyPaymentMutation = (familyId: number) =>
+  useFeesMutation(async (payload: FamilyPaymentPayload) =>
+    (await apiClient.post<PaymentRecord[]>(`/families/${familyId}/payments`, payload)).data,
+  );
+
 export const useCancelPaymentMutation = () =>
   useFeesMutation(({ id, reason }: { id: number; reason: string }) => cancelPayment(id, reason));
+
+// ---------------------------------------------------------------------------
+// Family finances (GET /families/:id/financial-summary)
+// ---------------------------------------------------------------------------
+
+/** An active contract of the family with something left to pay (one line of a family payment). */
+export interface FamilyOpenContract {
+  contractId: number;
+  studentId: number;
+  fullName: string;
+  sectionName: string;
+  yearName: string;
+  currency: Currency;
+  remaining: number;
+}
+
+export interface FamilyPaymentPayload {
+  payments: { contractId: number; amount: number }[];
+  paymentMethod?: PaymentMethod;
+  note?: string;
+}
+
+export interface FamilyFinanceSummary {
+  totals: CurrencySummary[];
+  openContracts: FamilyOpenContract[];
+  students: { studentId: number; fullName: string; summary: CurrencySummary[] }[];
+}
+
+export function useFamilyFinancialSummaryQuery(familyId: number) {
+  return useQuery({
+    queryKey: [...feesKeys.all, 'family-summary', familyId] as const,
+    queryFn: async () => (await apiClient.get<FamilyFinanceSummary>(`/families/${familyId}/financial-summary`)).data,
+    enabled: familyId > 0,
+  });
+}
+
+// One contract with its schedule and payments (GET /contracts/:id)
+export function useContractQuery(id: number) {
+  return useQuery({
+    queryKey: [...feesKeys.all, 'contract', id] as const,
+    queryFn: () => get<Contract>(`/contracts/${id}`),
+    enabled: id > 0,
+  });
+}
