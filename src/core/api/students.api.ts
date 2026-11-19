@@ -121,7 +121,7 @@ export interface StudentDeletionReport {
   studentId: number;
   enrollments: number;
   examResults: number;
-  lessonAttendance: number;
+  attendance: number;
   subscriptions: number;
   payments: number;
 }

@@ -34,7 +34,7 @@ export function StudentDeleteModal({ onConfirmDelete }: StudentDeleteModalProps)
     ? [
         { label: 'تسجيل بالشعب', value: report.enrollments },
         { label: 'علامات', value: report.examResults },
-        { label: 'سجلات حضور', value: report.lessonAttendance },
+        { label: 'سجلات حضور', value: report.attendance },
         { label: 'عقود', value: report.subscriptions },
         { label: 'دفعات', value: report.payments },
       ].filter((item) => item.value > 0)
