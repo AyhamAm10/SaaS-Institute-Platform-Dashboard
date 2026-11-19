@@ -2,8 +2,14 @@ import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { tokenRefreshHandler } from './refresh';
 import { getActiveAcademicYearId, getActiveBranchId, useOperationalContextStore } from '../context/operational-context';
 
-export const API_BASE_URL =
-  process.env['NEXT_PUBLIC_API_URL'] || 'http://localhost:4000/api';
+/**
+ * The API address, defined here only. It is public (every browser request shows it),
+ * so the deployed address is the default and a build needs no env file.
+ * `NEXT_PUBLIC_API_URL` can still override it, e.g. `http://localhost:4000/api` for local work.
+ */
+const DEFAULT_API_URL = 'https://jilapi.ayhamashram.me/api';
+
+export const API_BASE_URL = process.env['NEXT_PUBLIC_API_URL'] || DEFAULT_API_URL;
 
 /**
  * Standard configured Axios client for the Admin Dashboard.
