@@ -4,6 +4,9 @@ import { AppSurface, DetailList, StatusBadge } from '@/src/components/controller
 import type { Student } from '@/src/core/api';
 import { formatDate } from '@/src/core/format';
 import { profileLabels as labels } from '../static-data/student-profile.data';
+import { enrollmentDetailsLabels as detailsLabels } from '../static-data/enrollment-details.data';
+import { EnrollmentDetailsController } from '../EnrollmentDetailsController';
+import { StudentOfficialCard } from './StudentOfficialCard';
 
 /** Identity, family and the enrollments (each links to its section page). Props only. */
 export function StudentOverviewTab({ student }: { student: Student }) {
@@ -25,6 +28,7 @@ export function StudentOverviewTab({ student }: { student: Student }) {
           ]}
         />
       </AppSurface>
+      <StudentOfficialCard student={student} />
       <AppSurface level={2} radius="lg" padding="md">
         <Text fw={600} size="sm" mb="xs">
           {labels.enrollments}
@@ -42,7 +46,14 @@ export function StudentOverviewTab({ student }: { student: Student }) {
                 {e.academicYear?.name}{' '}
                 <StatusBadge tone={e.status === 'ACTIVE' ? 'info' : 'neutral'} size="xs">
                   {e.status === 'ACTIVE' ? labels.active : e.status}
-                </StatusBadge>
+                </StatusBadge>{' '}
+                {e.situation && <StatusBadge size="xs">{e.situation.name}</StatusBadge>}{' '}
+                {e.isExamCandidate && (
+                  <StatusBadge tone="brand" size="xs">
+                    {[detailsLabels.candidateBadge, e.examLanguage?.name, e.candidateNumber].filter(Boolean).join(' · ')}
+                  </StatusBadge>
+                )}{' '}
+                <EnrollmentDetailsController enrollment={e} />
               </Text>
             ))}
           </Stack>

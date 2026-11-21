@@ -1,5 +1,6 @@
 'use client';
 
+import { EMPTY_PARENT_DETAILS } from '../../../families/utils/parent-details';
 import { createContext, useContext } from 'react';
 import { createStore, StoreApi } from 'zustand';
 import { StudentRegistrationState, NewFamilyForm } from '../state/student-registration.state';
@@ -13,6 +14,7 @@ const initialNewFamily: NewFamilyForm = {
   fatherName: '',
   motherName: '',
   phone: '',
+  ...EMPTY_PARENT_DETAILS,
 };
 
 export function createStudentRegistrationStore(): StudentRegistrationStore {

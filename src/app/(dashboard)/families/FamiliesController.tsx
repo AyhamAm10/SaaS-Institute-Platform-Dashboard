@@ -1,5 +1,6 @@
 'use client';
 
+import { parentDetailsPayload } from './utils/parent-details';
 import { useCallback, useEffect, useState } from 'react';
 import { useStore } from 'zustand';
 import { useQueryClient } from '@tanstack/react-query';
@@ -75,6 +76,7 @@ export function FamiliesController() {
       fatherName: form.fatherName.trim(),
       motherName: form.motherName.trim(),
       phone: form.phone.trim(),
+      ...parentDetailsPayload(form),
     };
 
     store.getState().setIsSubmitting(true);
@@ -87,6 +89,7 @@ export function FamiliesController() {
           fatherName: payload.fatherName || undefined,
           motherName: payload.motherName || undefined,
           phone: payload.phone || undefined,
+          ...parentDetailsPayload(form),
         });
       }
       store.getState().closeDrawer();

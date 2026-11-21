@@ -17,6 +17,7 @@ import {
 } from '@/src/core/api';
 import type { BadgeTone } from '@/src/components/controllers';
 import { LookupConfig } from '../lookup/lookup.config';
+import { OFFICIAL_LIST_CONFIGS } from './official-lists.data';
 
 export const referenceDataLabels = {
   title: 'الجداول المرجعية',
@@ -139,4 +140,5 @@ export const LOOKUP_CONFIGS: LookupConfig[] = [
     fields: [nameField('نوع المذاكرة', 'مثال: مذاكرة شهرية')],
     columns: [],
   },
+  ...OFFICIAL_LIST_CONFIGS,
 ];

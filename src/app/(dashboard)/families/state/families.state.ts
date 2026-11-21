@@ -1,6 +1,7 @@
 import { Family } from '@/src/core/api';
+import type { ParentDetails } from '../utils/parent-details';
 
-export interface FamilyFormState {
+export interface FamilyFormState extends ParentDetails {
   familyName: string;
   fatherName: string;
   motherName: string;

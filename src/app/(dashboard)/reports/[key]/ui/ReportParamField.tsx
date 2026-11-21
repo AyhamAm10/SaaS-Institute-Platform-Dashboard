@@ -6,7 +6,7 @@ import { CURRENCY_OPTIONS, inputText } from '@/src/core/format';
 import { PAYMENT_METHOD_OPTIONS } from '../../../students/finance/static-data/student-finance.data';
 import { schoolsOfCity } from '../../../students/utils/student-references.utils';
 import { useWorkspaceMirror } from '../store/report-workspace.store';
-import { PARAM_LABELS, reportsLabels as labels } from '../../static-data/reports.data';
+import { FIXED_PARAM_OPTIONS, PARAM_LABELS, reportsLabels as labels } from '../../static-data/reports.data';
 import type { OptionKey } from '../state/report-workspace.state';
 import { ReportCustomFiltersField } from './ReportCustomFiltersField';
 
@@ -19,6 +19,10 @@ const SELECT_OPTIONS: Partial<Record<ReportParamKind, OptionKey>> = {
   school: 'schools',
   bus: 'buses',
   knowWay: 'knowWays',
+  nationality: 'nationalities',
+  religion: 'religions',
+  language: 'languages',
+  situation: 'situations',
 };
 
 /** One parameter input, chosen by its kind. ZERO useState hooks. */
@@ -88,6 +92,10 @@ export function ReportParamField({ kind, required }: { kind: ReportParamKind; re
         onChange={(v: string | null) => setField(kind, v)}
       />
     );
+  }
+  const fixed = FIXED_PARAM_OPTIONS[kind];
+  if (fixed) {
+    return <AppSelect {...common} data={fixed} value={value} clearable onChange={(v: string | null) => setField(kind, v)} />;
   }
   if (kind === 'date' || kind === 'from' || kind === 'to') {
     return <AppDatePicker {...common} value={value} clearable onChange={(v) => setField(kind, v ?? null)} />;

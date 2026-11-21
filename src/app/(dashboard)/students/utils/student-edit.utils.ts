@@ -8,6 +8,12 @@ export const DEFAULT_STUDENT_FILTERS: StudentListFilters = {
   cityId: null,
   schoolId: null,
   knowWayId: null,
+  nationalityId: null,
+  religionId: null,
+  languageId: null,
+  situationId: null,
+  gender: null,
+  examCandidate: null,
   customFilters: {},
 };
 

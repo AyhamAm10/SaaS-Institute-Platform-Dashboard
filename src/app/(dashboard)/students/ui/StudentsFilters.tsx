@@ -7,6 +7,8 @@ import { useStudentsMirror } from '../store/useStudentsMirror';
 import { studentsLabels } from '../static-data/students.data';
 import { schoolsOfCity } from '../utils/student-references.utils';
 import { StudentCustomFilters } from './StudentCustomFilters';
+import { StudentOfficialFilters } from './StudentOfficialFilters';
+import { hasActiveFilters } from '../utils/student-filters.utils';
 import type { StudentListFilters } from '../state/students.state';
 
 const toValue = (id: number | null) => (id ? String(id) : null);
@@ -14,7 +16,7 @@ const toValue = (id: number | null) => (id ? String(id) : null);
 /**
  * StudentsFilters
  *
- * Status, bus, city, school, knowWay and custom fields filters.
+ * Status, bus, city, school, knowWay, official data and custom fields filters.
  * ZERO useState hooks.
  */
 export function StudentsFilters() {
@@ -27,13 +29,7 @@ export function StudentsFilters() {
     setFilter(field, (val ? Number(val) : null) as never);
 
   const availableSchools = schoolsOfCity(options.schools, filters.cityId);
-  const hasActiveFilters =
-    filters.statusId != null ||
-    filters.busId != null ||
-    filters.cityId != null ||
-    filters.schoolId != null ||
-    filters.knowWayId != null ||
-    Object.keys(filters.customFilters || {}).length > 0;
+  const showClear = hasActiveFilters(filters);
 
   return (
     <Group gap="xs" wrap="wrap">
@@ -85,8 +81,9 @@ export function StudentsFilters() {
         size="sm"
         w={150}
       />
+      <StudentOfficialFilters />
       <StudentCustomFilters />
-      {hasActiveFilters && (
+      {showClear && (
         <AppButton
           variant="ghost"
           size="sm"

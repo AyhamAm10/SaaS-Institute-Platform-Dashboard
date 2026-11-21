@@ -119,3 +119,9 @@ export const examTypesResource = createLookupResource<ExamType>('/exam-types');
 /** Buses of the active branch (X-Branch-Id). */
 export const busesResource = createLookupResource<Bus>('/buses');
 export const studentStatusesResource = createLookupResource<StudentStatus>('/student-statuses');
+
+/** Official lists (settings): identity of the student and his situation each year. */
+export const nationalitiesResource = createLookupResource<LookupItem>('/nationalities');
+export const religionsResource = createLookupResource<LookupItem>('/religions');
+export const languagesResource = createLookupResource<LookupItem>('/languages');
+export const enrollmentSituationsResource = createLookupResource<LookupItem>('/enrollment-situations');

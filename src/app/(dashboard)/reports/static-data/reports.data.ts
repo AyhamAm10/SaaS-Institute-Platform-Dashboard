@@ -71,8 +71,51 @@ export const PARAM_LABELS: Record<ReportParamKind, string> = {
   school: 'المدرسة',
   bus: 'الحافلة',
   knowWay: 'طريقة المعرفة',
+  nationality: 'الجنسية',
+  religion: 'الديانة',
+  language: 'اللغة',
+  situation: 'وضع الطالب',
+  gender: 'الجنس',
+  examCandidate: 'الترشح للامتحان',
+  groupBy: 'التجميع حسب',
   customFilters: 'الفلاتر المخصصة',
+};
+
+/** Fixed choices of the parameters that are not settings lists. */
+export const FIXED_PARAM_OPTIONS: Partial<Record<ReportParamKind, { value: string; label: string }[]>> = {
+  gender: [
+    { value: 'MALE', label: 'ذكور' },
+    { value: 'FEMALE', label: 'إناث' },
+  ],
+  examCandidate: [
+    { value: 'true', label: 'المتقدمون للامتحان' },
+    { value: 'false', label: 'غير المتقدمين' },
+  ],
+  groupBy: [
+    { value: 'section', label: 'الشعبة' },
+    { value: 'gender', label: 'الجنس' },
+    { value: 'situation', label: 'وضع الطالب' },
+    { value: 'nationality', label: 'الجنسية' },
+    { value: 'religion', label: 'الديانة' },
+    { value: 'language', label: 'اللغة' },
+    { value: 'status', label: 'الحالة' },
+  ],
 };
 
 /** Every parameter kind, optional (print page: reads whatever the URL carries). */
 export const REPORT_KINDS = (Object.keys(PARAM_LABELS) as ReportParamKind[]).map((kind) => ({ kind, required: false }));
+
+
+/** Parameters whose choices come from the settings lists (loaded only when used). */
+export const REFERENCE_KINDS: ReportParamKind[] = [
+  'status',
+  'city',
+  'school',
+  'bus',
+  'knowWay',
+  'nationality',
+  'religion',
+  'language',
+  'situation',
+  'customFilters',
+];

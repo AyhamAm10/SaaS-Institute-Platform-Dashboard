@@ -1,5 +1,6 @@
 'use client';
 
+import { EMPTY_PARENT_DETAILS, parentDetailsFrom } from '../utils/parent-details';
 import { createContext, useContext } from 'react';
 import { createControllerStore } from '@/src/core/mirror';
 import { ControllerStoreApi } from '@/src/core/mirror/types';
@@ -12,6 +13,7 @@ const defaultFormState: FamilyFormState = {
   fatherName: '',
   motherName: '',
   phone: '',
+  ...EMPTY_PARENT_DETAILS,
 };
 
 /**
@@ -67,6 +69,7 @@ export function createFamiliesStore(): FamiliesStore {
           fatherName: family.fatherName ?? '',
           motherName: family.motherName ?? '',
           phone: family.phone ?? '',
+          ...parentDetailsFrom(family),
         },
         formErrors: {},
         generalError: null,

@@ -8,6 +8,7 @@ import { useStudentRegistrationMirror } from '../store/useStudentRegistrationMir
 import { Section, StudentField } from '@/src/core/api';
 import type { StudentReferenceOptions } from '../../utils/student-references.utils';
 import { StudentReferenceFields } from '../../ui/StudentReferenceFields';
+import { StudentIdentityFields } from '../../ui/StudentIdentityFields';
 import { inputText } from '@/src/core/format';
 import { Step2CustomFields } from './Step2CustomFields';
 
@@ -104,6 +105,8 @@ export function Step2BasicInfo({ sections, fields = [], referenceOptions }: Step
 
         <Divider my="xs" label="الحالة والسكن والنقل" labelPosition="center" />
         <StudentReferenceFields values={references} options={referenceOptions} onChange={setReference} />
+        <Divider my="xs" label="البيانات الرسمية (اختيارية)" labelPosition="center" />
+        <StudentIdentityFields values={references} options={referenceOptions} onSelect={setReference} onText={setReference} />
         <Step2CustomFields fields={fields} />
       </Stack>
     </Stack>

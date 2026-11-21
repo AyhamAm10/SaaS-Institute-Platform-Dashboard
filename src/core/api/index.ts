@@ -19,6 +19,7 @@ export * from './student-notes.api';
 export * from './audit.api';
 export * from './reference-data.api';
 export * from './enrollments.api';
+export * from './enrollment-details.api';
 export * from './fees.api';
 export * from './attendance.api';
 export * from './exams.api';

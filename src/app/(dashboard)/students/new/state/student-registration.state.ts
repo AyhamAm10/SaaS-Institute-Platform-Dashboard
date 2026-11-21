@@ -1,11 +1,12 @@
+import type { ParentDetails } from '../../../families/utils/parent-details';
 import type { CustomFieldValue } from '../../state/students.state';
 import { Family, StudentField } from '@/src/core/api';
 import type {
-  StudentReferenceField,
+  StudentReferenceKey,
   StudentReferenceValues,
 } from '../../utils/student-references.utils';
 
-export interface NewFamilyForm {
+export interface NewFamilyForm extends ParentDetails {
   familyName: string;
   fatherName: string;
   motherName: string;
@@ -47,7 +48,7 @@ export interface StudentRegistrationState {
     value: string | number | null,
   ) => void;
   setCustomFieldValue: (fieldName: string, value: CustomFieldValue) => void;
-  setReference: (field: StudentReferenceField, value: number | null) => void;
+  setReference: <K extends StudentReferenceKey>(field: K, value: StudentReferenceValues[K]) => void;
   setSubmitting: (isSubmitting: boolean) => void;
   setStepError: (step: number, error: string | null) => void;
   validateCurrentStep: (configuredFields?: StudentField[]) => boolean;

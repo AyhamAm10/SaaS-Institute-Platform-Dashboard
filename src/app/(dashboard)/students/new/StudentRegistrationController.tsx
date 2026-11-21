@@ -1,5 +1,6 @@
 'use client';
 
+import { parentDetailsPayload } from '../../families/utils/parent-details';
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import {
@@ -111,6 +112,7 @@ export function StudentRegistrationController() {
           fatherName: state.newFamily.fatherName.trim() || undefined,
           motherName: state.newFamily.motherName.trim() || undefined,
           phone: state.newFamily.phone.trim() || undefined,
+          ...parentDetailsPayload(state.newFamily),
         };
       }
 

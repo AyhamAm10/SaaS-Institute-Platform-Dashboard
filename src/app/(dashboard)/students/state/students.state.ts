@@ -6,7 +6,7 @@ import {
   StudentField,
 } from '@/src/core/api';
 import type {
-  StudentReferenceField,
+  StudentReferenceKey,
   StudentReferenceOptions,
   StudentReferenceValues,
 } from '../utils/student-references.utils';
@@ -19,6 +19,12 @@ export interface StudentListFilters {
   cityId: number | null;
   schoolId: number | null;
   knowWayId: number | null;
+  nationalityId: number | null;
+  religionId: number | null;
+  languageId: number | null;
+  situationId: number | null;
+  gender: 'MALE' | 'FEMALE' | null;
+  examCandidate: boolean | null;
   customFilters: Record<string, unknown>;
 }
 
@@ -98,7 +104,7 @@ export interface StudentsState {
     value: StudentEditFormState[K],
   ) => void;
   setCustomFieldValue: (name: string, value: CustomFieldValue) => void;
-  setReference: (field: StudentReferenceField, value: number | null) => void;
+  setReference: <K extends StudentReferenceKey>(field: K, value: StudentReferenceValues[K]) => void;
   setFamilySearch: (search: string) => void;
   setFieldError: (field: string, error: string | null) => void;
   setGeneralError: (error: string | null) => void;

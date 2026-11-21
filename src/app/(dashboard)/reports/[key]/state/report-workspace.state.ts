@@ -22,7 +22,11 @@ export type OptionKey =
   | 'cities'
   | 'schools'
   | 'buses'
-  | 'knowWays';
+  | 'knowWays'
+  | 'nationalities'
+  | 'religions'
+  | 'languages'
+  | 'situations';
 
 /**
  * ReportWorkspaceState

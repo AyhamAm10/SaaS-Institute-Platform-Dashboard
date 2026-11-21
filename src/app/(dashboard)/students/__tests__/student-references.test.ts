@@ -1,7 +1,7 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert';
 import type { Student } from '@/src/core/api';
-import {
+import { EMPTY_REFERENCE_OPTIONS,
   EMPTY_STUDENT_REFERENCES,
   schoolsOfCity,
   studentReferencesFrom,
@@ -21,8 +21,22 @@ describe('student reference utils', () => {
       cityId: null,
       schoolId: null,
       busId: 7,
+      nationalityId: null,
+      religionId: null,
+      languageId: null,
+      nationalId: null,
+      birthPlace: null,
+      civilRegistry: null,
+      foreignName: null,
+      grandfatherName: null,
+      address: null,
     });
     assert.strictEqual(toReferencePayload({ ...EMPTY_STUDENT_REFERENCES, statusId: 3 }).statusId, 3);
+  });
+
+  it('trims the identity texts and sends an emptied one as null (cleared)', () => {
+    const payload = toReferencePayload({ ...EMPTY_STUDENT_REFERENCES, nationalId: ' 0102 ', birthPlace: '   ', religionId: 2 });
+    assert.deepStrictEqual([payload.nationalId, payload.birthPlace, payload.religionId], ['0102', null, 2]);
   });
 
   it('filters schools by city, keeping schools without a city', () => {
@@ -67,8 +81,7 @@ describe('StudentsStore — references & filters', () => {
   it('resets school when city changes to a non-matching city', () => {
     const store = createStudentsStore();
     store.getState().syncReferenceOptions({
-      statuses: [],
-      knowWays: [],
+      ...EMPTY_REFERENCE_OPTIONS,
       cities: [{ value: '1', label: 'دمشق' }, { value: '2', label: 'حلب' }],
       schools: [
         { value: '10', label: 'مدرسة دمشق', cityId: 1 },

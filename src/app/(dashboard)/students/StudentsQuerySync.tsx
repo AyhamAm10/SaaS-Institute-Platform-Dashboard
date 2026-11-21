@@ -1,5 +1,6 @@
 'use client';
 
+import { filtersToQuery } from './utils/student-filters.utils';
 import { useEffect } from 'react';
 import { useStore } from 'zustand';
 import {
@@ -25,21 +26,11 @@ export function QuerySync({ store }: { store: Store }) {
   const filters = useStore(store, (s) => s.filters);
   const syncQueryData = useStore(store, (s) => s.syncQueryData);
 
-  const customFiltersJson =
-    Object.keys(filters.customFilters || {}).length > 0
-      ? JSON.stringify(filters.customFilters)
-      : undefined;
-
   const { data: paginatedData, isLoading } = useStudentsQuery({
     page,
     limit,
     search: search.trim() ? search.trim() : undefined,
-    statusId: filters.statusId ?? undefined,
-    busId: filters.busId ?? undefined,
-    cityId: filters.cityId ?? undefined,
-    schoolId: filters.schoolId ?? undefined,
-    knowWayId: filters.knowWayId ?? undefined,
-    customFilters: customFiltersJson,
+    ...filtersToQuery(filters),
     // Branch / year: header context; the column shows this year's enrollment
   });
 

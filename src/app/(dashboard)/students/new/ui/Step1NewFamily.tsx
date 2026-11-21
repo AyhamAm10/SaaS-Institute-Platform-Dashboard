@@ -4,6 +4,7 @@ import { SimpleGrid, Stack } from '@mantine/core';
 import { AppInput } from '@/src/components/controllers/input';
 import { inputText } from '@/src/core/format';
 import { useStudentRegistrationMirror } from '../store/useStudentRegistrationMirror';
+import { FamilyParentFields } from '../../../families/ui/FamilyParentFields';
 
 /** New family form. */
 export function Step1NewFamily() {
@@ -43,6 +44,8 @@ export function Step1NewFamily() {
           onChange={(e) => setNewFamilyField('motherName', inputText(e))}
         />
       </SimpleGrid>
+
+      <FamilyParentFields values={newFamily} onChange={setNewFamilyField} />
     </Stack>
   );
 }

@@ -6,11 +6,17 @@ import {
   citiesResource,
   knowWaysResource,
   schoolsResource,
+  languagesResource,
+  nationalitiesResource,
+  religionsResource,
+  enrollmentSituationsResource,
   studentStatusesResource,
 } from '@/src/core/api';
 import type { StudentReferenceOptions } from './student-references.utils';
 
 const ALL = { limit: 100 };
+
+const named = (list?: { id: number; name: string }[]) => (list ?? []).map((x) => ({ value: String(x.id), label: x.name }));
 
 /**
  * Loads the reference tables a student links to as select options.
@@ -23,6 +29,10 @@ export function useStudentReferenceOptions(enabled = true): StudentReferenceOpti
   const cities = citiesResource.useList(ALL, enabled).data?.data;
   const schools = schoolsResource.useList(ALL, enabled).data?.data;
   const buses = busesResource.useList(ALL, enabled).data?.data;
+  const nationalities = nationalitiesResource.useList(ALL, enabled).data?.data;
+  const religions = religionsResource.useList(ALL, enabled).data?.data;
+  const languages = languagesResource.useList(ALL, enabled).data?.data;
+  const situations = enrollmentSituationsResource.useList(ALL, enabled).data?.data;
 
   return useMemo(
     () => ({
@@ -39,7 +49,11 @@ export function useStudentReferenceOptions(enabled = true): StudentReferenceOpti
       buses: (buses ?? [])
         .filter((b) => b.isActive)
         .map((b) => ({ value: String(b.id), label: b.name })),
+      nationalities: named(nationalities),
+      religions: named(religions),
+      languages: named(languages),
+      situations: named(situations),
     }),
-    [statuses, knowWays, cities, schools, buses],
+    [statuses, knowWays, cities, schools, buses, nationalities, religions, languages, situations],
   );
 }

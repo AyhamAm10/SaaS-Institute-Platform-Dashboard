@@ -1,5 +1,6 @@
 'use client';
 
+import { FamilyParentFields } from './FamilyParentFields';
 import { Alert, SimpleGrid, Stack } from '@mantine/core';
 import { IconAlertCircle, IconCheck, IconHome } from '@tabler/icons-react';
 import { AppDrawer, AppInput } from '@/src/components/controllers';
@@ -98,6 +99,10 @@ export function FamilyDrawer({ onSubmit }: FamilyDrawerProps) {
                 value={form.phone}
                 onChange={(val) => setFormField('phone', inputText(val))}
               />
+            </AppDrawer.Section>
+
+            <AppDrawer.Section title="عمل الأبوين وأرقامهما (اختياري)">
+              <FamilyParentFields values={form} onChange={setFormField} />
             </AppDrawer.Section>
           </Stack>
         </form>

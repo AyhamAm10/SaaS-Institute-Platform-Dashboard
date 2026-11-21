@@ -14,6 +14,10 @@ export interface Family {
   fatherName?: string | null;
   motherName?: string | null;
   phone?: string | null;
+  fatherJob?: string | null;
+  motherJob?: string | null;
+  fatherPhone?: string | null;
+  motherPhone?: string | null;
   _count?: {
     students?: number;
   };
@@ -48,6 +52,18 @@ export interface StudentEnrollmentItem {
     name: string;
     isCurrent: boolean;
   };
+  /** Yearly data (see EnrollmentDetails). */
+  situation?: NamedRef | null;
+  examLanguage?: NamedRef | null;
+  isExamCandidate?: boolean;
+  candidateNumber?: string | null;
+  previousSchool?: string | null;
+  transferredFrom?: string | null;
+  certificateName?: string | null;
+  certificateNumber?: string | null;
+  certificateDate?: string | null;
+  certificateSource?: string | null;
+  certificateGrade?: string | null;
 }
 
 /** Reference-data links of a student; `null` clears a link (except the status). */
@@ -57,6 +73,20 @@ export interface StudentReferenceIds {
   busId?: number | null;
   knowWayId?: number | null;
   statusId?: number | null;
+  /** Official lists (settings). */
+  nationalityId?: number | null;
+  religionId?: number | null;
+  languageId?: number | null;
+}
+
+/** Official identity texts of a student (all optional; empty = not set). */
+export interface StudentIdentityTexts {
+  nationalId?: string | null;
+  birthPlace?: string | null;
+  civilRegistry?: string | null;
+  foreignName?: string | null;
+  grandfatherName?: string | null;
+  address?: string | null;
 }
 
 interface NamedRef {
@@ -64,7 +94,7 @@ interface NamedRef {
   name: string;
 }
 
-export interface Student extends StudentReferenceIds {
+export interface Student extends StudentReferenceIds, StudentIdentityTexts {
   id: number;
   instituteId: number;
   branchId?: number | null;
@@ -85,6 +115,9 @@ export interface Student extends StudentReferenceIds {
   bus?: NamedRef | null;
   knowWay?: NamedRef | null;
   status?: (NamedRef & { tone: StatusTone }) | null;
+  nationality?: NamedRef | null;
+  religion?: NamedRef | null;
+  language?: NamedRef | null;
 }
 
 export interface CreateFamilyPayload {
@@ -92,9 +125,13 @@ export interface CreateFamilyPayload {
   fatherName?: string;
   motherName?: string;
   phone?: string;
+  fatherJob?: string;
+  motherJob?: string;
+  fatherPhone?: string;
+  motherPhone?: string;
 }
 
-export interface CreateStudentPayload extends StudentReferenceIds {
+export interface CreateStudentPayload extends StudentReferenceIds, StudentIdentityTexts {
   fullName: string;
   birthDate: string;
   gender: string;
@@ -107,7 +144,7 @@ export interface CreateStudentPayload extends StudentReferenceIds {
 
 export type UpdateFamilyPayload = Partial<CreateFamilyPayload>;
 
-export interface UpdateStudentPayload extends StudentReferenceIds {
+export interface UpdateStudentPayload extends StudentReferenceIds, StudentIdentityTexts {
   fullName?: string;
   birthDate?: string;
   gender?: string;
@@ -137,6 +174,13 @@ export interface StudentQueryParams {
   cityId?: number;
   schoolId?: number;
   knowWayId?: number;
+  nationalityId?: number;
+  religionId?: number;
+  languageId?: number;
+  /** This year's enrollment: situation and official exam candidacy. */
+  situationId?: number;
+  examCandidate?: boolean;
+  gender?: 'MALE' | 'FEMALE';
   customFilters?: string;
   /** Only students without an enrollment in the header (context) year. */
   unassigned?: boolean;

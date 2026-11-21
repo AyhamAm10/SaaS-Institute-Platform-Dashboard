@@ -109,6 +109,13 @@ export type ReportParamKind =
   | 'school'
   | 'bus'
   | 'knowWay'
+  | 'nationality'
+  | 'religion'
+  | 'language'
+  | 'situation'
+  | 'gender'
+  | 'examCandidate'
+  | 'groupBy'
   | 'customFilters';
 
 export interface ReportDefinition {
@@ -139,6 +146,14 @@ export interface ReportParams {
   schoolId?: number;
   busId?: number;
   knowWayId?: number;
+  nationalityId?: number;
+  religionId?: number;
+  languageId?: number;
+  situationId?: number;
+  gender?: 'MALE' | 'FEMALE';
+  examCandidate?: 'true' | 'false';
+  /** One table per value: section, gender, nationality, religion, language, situation, status. */
+  groupBy?: string;
   customFilters?: string;
 }
 

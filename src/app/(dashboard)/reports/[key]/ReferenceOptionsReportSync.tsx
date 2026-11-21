@@ -24,6 +24,10 @@ export function ReferenceOptionsReportSync({ store }: { store: ReportWorkspaceSt
     syncOptions('schools', options.schools);
     syncOptions('buses', options.buses);
     syncOptions('knowWays', options.knowWays);
+    syncOptions('nationalities', options.nationalities);
+    syncOptions('religions', options.religions);
+    syncOptions('languages', options.languages);
+    syncOptions('situations', options.situations);
   }, [options, syncOptions]);
 
   useEffect(() => {

@@ -44,6 +44,13 @@ export const PARAM_QUERY: Record<ReportParamKind, keyof ReportParams> = {
   school: 'schoolId',
   bus: 'busId',
   knowWay: 'knowWayId',
+  nationality: 'nationalityId',
+  religion: 'religionId',
+  language: 'languageId',
+  situation: 'situationId',
+  gender: 'gender',
+  examCandidate: 'examCandidate',
+  groupBy: 'groupBy',
   customFilters: 'customFilters',
 };
 
@@ -59,6 +66,10 @@ const NUMERIC: ReadonlySet<ReportParamKind> = new Set([
   'school',
   'bus',
   'knowWay',
+  'nationality',
+  'religion',
+  'language',
+  'situation',
 ]);
 
 /** Form → API params (only the report's own parameters, empty values dropped). */
