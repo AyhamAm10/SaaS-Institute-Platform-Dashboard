@@ -7,6 +7,7 @@ import {
   useDashboardOverviewQuery,
   useExamsQuery,
   useSectionSubjectsQuery,
+  useSupervisorOptionsQuery,
   useSectionsQuery,
 } from '@/src/core/api';
 import { ExamsStore } from './store/exams.store';
@@ -74,6 +75,20 @@ export function OptionsSync({ store }: SyncProps) {
       })),
     );
   }, [types.data, syncOptions]);
+  return null;
+}
+
+/** Active supervisors to choose from (the drawer, administration only). */
+export function SupervisorsSync({ store }: SyncProps) {
+  const syncOptions = useStore(store, (s) => s.syncOptions);
+  const { data } = useSupervisorOptionsQuery(true);
+
+  useEffect(() => {
+    syncOptions(
+      'supervisorOptions',
+      (data ?? []).map((u) => ({ value: String(u.id), label: u.fullName })),
+    );
+  }, [data, syncOptions]);
   return null;
 }
 

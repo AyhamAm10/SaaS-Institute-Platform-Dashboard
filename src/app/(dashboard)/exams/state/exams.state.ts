@@ -38,6 +38,8 @@ export interface ExamsState {
   sectionOptions: Option[];
   examTypeOptions: Option[];
   subjectOptions: Option[];
+  /** Active supervisors (loaded while the drawer is open, administration only). */
+  supervisorOptions: Option[];
 
   drawerOpened: boolean;
   editing: Exam | null;
@@ -65,5 +67,8 @@ export interface ExamsState {
   setDeleteError: (error: string | null) => void;
   setIsDeleting: (value: boolean) => void;
   syncQueryData: (payload: { data: Exam[]; total: number; totalPages: number; isLoading: boolean }) => void;
-  syncOptions: (key: 'sectionOptions' | 'examTypeOptions' | 'subjectOptions', options: Option[]) => void;
+  syncOptions: (
+    key: 'sectionOptions' | 'examTypeOptions' | 'subjectOptions' | 'supervisorOptions',
+    options: Option[],
+  ) => void;
 }

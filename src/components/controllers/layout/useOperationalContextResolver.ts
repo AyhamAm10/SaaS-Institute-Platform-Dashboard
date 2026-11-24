@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useAcademicYearsQuery, useBranchesQuery, UserRole } from '@/src/core/api';
-import { useAuth } from '@/src/core/auth';
+import { useAcademicYearsQuery, useBranchesQuery } from '@/src/core/api';
+import { needsOperationalContext, useAuth } from '@/src/core/auth';
 import { useOperationalContextStore } from '@/src/core/context';
 
 /**
@@ -11,11 +11,12 @@ import { useOperationalContextStore } from '@/src/core/context';
  * 2. checks them against the institute lists (stale ids are replaced by the
  *    first branch and the current year);
  * 3. marks the context resolved, which unlocks the API headers and the pages.
- * The super admin has no operational context and resolves at once.
+ * The roles without a branch / year (platform admin, supervisor, guardian, student) resolve at once.
  */
 export function useOperationalContextResolver(): void {
   const { user } = useAuth();
-  const isSuperAdmin = user?.role === UserRole.SUPER_ADMIN;
+  // no branch / year is needed for the super admin, a supervisor, a guardian or a student (needsOperationalContext)
+  const isSuperAdmin = Boolean(user) && !needsOperationalContext(user?.role);
   const identity = useOperationalContextStore((s) => s.identity);
   const resolved = useOperationalContextStore((s) => s.resolved);
   const branchId = useOperationalContextStore((s) => s.activeBranchId);
@@ -23,7 +24,7 @@ export function useOperationalContextResolver(): void {
   const { bindIdentity, setActiveBranchId, setActiveAcademicYearId, markResolved } = useOperationalContextStore.getState();
 
   const lookupsEnabled = Boolean(identity) && !isSuperAdmin;
-  const branches = useBranchesQuery();
+  const branches = useBranchesQuery({ enabled: lookupsEnabled });
   const years = useAcademicYearsQuery({ limit: 50 }, { enabled: lookupsEnabled });
 
   useEffect(() => {

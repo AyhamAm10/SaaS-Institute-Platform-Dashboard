@@ -23,6 +23,8 @@ export * from './enrollment-details.api';
 export * from './fees.api';
 export * from './attendance.api';
 export * from './exams.api';
+export * from './supervision.api';
+export * from './portal.api';
 export * from './staff.api';
 export * from './closures.api';
 export * from './reports.api';

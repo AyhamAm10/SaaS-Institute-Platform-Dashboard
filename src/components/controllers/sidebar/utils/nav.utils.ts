@@ -49,6 +49,7 @@ export function filterNavigation(items: NavItem[], can: (permission: Permission)
       const subItems = item.subItems.filter((sub) => !sub.permission || can(sub.permission));
       return subItems.length > 0 ? [{ ...item, subItems }] : [];
     }
+    if (item.anyOf) return item.anyOf.some(can) ? [item] : [];
     return !item.permission || can(item.permission) ? [item] : [];
   });
 }

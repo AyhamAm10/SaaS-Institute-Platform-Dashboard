@@ -49,11 +49,12 @@ export const branchesKeys = {
   list: () => [...branchesKeys.all, 'list'] as const,
 };
 
-export function useBranchesQuery() {
+export function useBranchesQuery(options?: { enabled?: boolean }) {
   return useQuery({
     queryKey: branchesKeys.list(),
     queryFn: getBranches,
     placeholderData: [],
+    enabled: options?.enabled ?? true,
   });
 }
 

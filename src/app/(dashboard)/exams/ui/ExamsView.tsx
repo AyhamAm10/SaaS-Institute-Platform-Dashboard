@@ -130,7 +130,7 @@ export function ExamsView({ onSubmit, onConfirmDelete, access }: ExamsViewProps)
         </DataModuleController>
       </AppModule.Table>
 
-      <ExamDrawer onSubmit={onSubmit} />
+      <ExamDrawer onSubmit={onSubmit} canSupervise={access.canSupervise} />
       <DeleteExamModal onConfirm={onConfirmDelete} />
     </AppModule>
   );

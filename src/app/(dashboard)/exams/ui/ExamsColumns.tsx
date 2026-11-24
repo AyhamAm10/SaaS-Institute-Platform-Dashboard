@@ -12,12 +12,14 @@ import { examsLabels as labels } from '../static-data/exams.data';
 export interface ExamsAccess {
   canManage: boolean;
   canEnterMarks: boolean;
+  /** The administration chooses the supervisors (not a teacher). */
+  canSupervise: boolean;
 }
 
 export function getExamsColumns(
   onEdit: (exam: Exam) => void,
   onDelete: (exam: Exam) => void,
-  access: ExamsAccess = { canManage: true, canEnterMarks: true },
+  access: ExamsAccess = { canManage: true, canEnterMarks: true, canSupervise: true },
 ): DataModuleColumn<Exam>[] {
   return [
     {
@@ -67,6 +69,30 @@ export function getExamsColumns(
       exportValue: (e) => `${Number(e.maxMark)} / ${Number(e.passMark)}`,
       exportKind: 'text',
       render: (e) => `${Number(e.maxMark)} / ${Number(e.passMark)}`,
+    },
+    {
+      key: 'supervision',
+      title: labels.colSupervision,
+      exportValue: (e) => (e.needsSupervision ? e.supervisors.map((s) => s.fullName).join('، ') || labels.supervisorsMissing : labels.notSupervised),
+      exportKind: 'text',
+      render: (e) =>
+        !e.needsSupervision ? (
+          <Text size="sm" c="var(--app-text-muted)">
+            {labels.notSupervised}
+          </Text>
+        ) : e.supervisors.length === 0 ? (
+          <StatusBadge tone="warning" size="xs">
+            {labels.supervisorsMissing}
+          </StatusBadge>
+        ) : (
+          <Stack gap={2}>
+            {e.supervisors.map((s) => (
+              <Text key={s.id} size="xs">
+                {s.fullName}
+              </Text>
+            ))}
+          </Stack>
+        ),
     },
     {
       key: 'results',

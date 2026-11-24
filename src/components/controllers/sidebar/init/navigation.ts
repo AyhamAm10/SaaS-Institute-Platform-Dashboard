@@ -12,6 +12,8 @@ import {
   IconCalendarCheck,
   IconClipboardList,
   IconReportAnalytics,
+  IconEyeCheck,
+  IconUserHeart,
 } from '@tabler/icons-react';
 import { ComponentType } from 'react';
 import { PERMISSIONS, type Permission } from '@/src/core/auth/permissions';
@@ -33,6 +35,8 @@ export interface NavItem {
   badge?: string | number;
   /** Permission needed to see a leaf entry (groups show when any sub-item is visible). */
   permission?: Permission;
+  /** Alternative to `permission`: visible when the user has ANY of these (e.g. the reports center). */
+  anyOf?: Permission[];
   subItems?: NavSubItem[];
 }
 
@@ -46,6 +50,20 @@ export const defaultNavigationConfig: NavItem[] = [
     icon: IconDashboard,
     href: '/',
     permission: PERMISSIONS.dashboardView,
+  },
+  {
+    key: 'portal',
+    label: 'متابعة الابن',
+    icon: IconUserHeart,
+    href: '/',
+    permission: PERMISSIONS.portalView,
+  },
+  {
+    key: 'supervision',
+    label: 'مراقباتي',
+    icon: IconEyeCheck,
+    href: '/supervision',
+    permission: PERMISSIONS.supervisionView,
   },
   {
     key: 'students',
@@ -95,6 +113,16 @@ export const defaultNavigationConfig: NavItem[] = [
     label: 'التقارير والطباعة',
     icon: IconReportAnalytics,
     href: '/reports',
+    // the server's rule for reports (ANY_VIEW): not offered to a supervisor, who has none of these
+    anyOf: [
+      PERMISSIONS.dashboardView,
+      PERMISSIONS.studentsView,
+      PERMISSIONS.attendanceView,
+      PERMISSIONS.feesView,
+      PERMISSIONS.examsView,
+      PERMISSIONS.academicView,
+      PERMISSIONS.staffView,
+    ],
   },
   {
     key: 'sections',

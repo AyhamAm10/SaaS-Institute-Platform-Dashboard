@@ -5,7 +5,7 @@ import { IconBell, IconMoon, IconSearch, IconSun } from '@tabler/icons-react';
 import { useSidebarMirror } from '../../sidebar/store/useSidebarMirror';
 import { useLayoutMirror } from '../store/useLayoutMirror';
 import { AppIconButton } from '../../button';
-import { useAuth } from '@/src/core/auth';
+import { needsOperationalContext, useAuth } from '@/src/core/auth';
 import { UserRole } from '@/src/core/api';
 import { HeaderContextSwitchers } from './HeaderContextSwitchers';
 import { HeaderAccountMenu } from './HeaderAccountMenu';
@@ -14,6 +14,8 @@ export function DashboardHeader() {
   const { user } = useAuth();
 
   const isSuperAdmin = user?.role === UserRole.SUPER_ADMIN || user?.role === 'SUPER_ADMIN';
+  // supervisors, guardians and students have no branch / year pickers and no student search
+  const hasContext = needsOperationalContext(user?.role);
 
   const isMobileOpen = useSidebarMirror('isMobileOpen');
   const toggleMobile = useSidebarMirror('toggleMobile');
@@ -53,12 +55,12 @@ export function DashboardHeader() {
               لوحة تحكم المشرف العام
             </Text>
           ) : (
-            <HeaderContextSwitchers />
+            hasContext && <HeaderContextSwitchers />
           )}
         </Group>
 
         {/* Center: search pill */}
-        <Box style={{ flex: 1, maxWidth: rem(440) }} visibleFrom="md">
+        <Box style={{ flex: 1, maxWidth: rem(440) }} visibleFrom="md" display={hasContext || isSuperAdmin ? undefined : "none"}>
           <TextInput
             placeholder="ابحث عن طالب، شعبة، مادة..."
             radius="xl"

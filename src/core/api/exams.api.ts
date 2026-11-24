@@ -19,6 +19,9 @@ export interface Exam {
   subject: { id: number; name: string };
   examType: { id: number; name: string } | null;
   _count: { results: number };
+  /** Held under supervision (the administration chooses the supervisors). */
+  needsSupervision: boolean;
+  supervisors: { id: number; fullName: string }[];
 }
 
 export interface ExamPayload {
@@ -29,6 +32,8 @@ export interface ExamPayload {
   examDate: string;
   maxMark: number;
   passMark: number;
+  /** Administration only: a teacher's request carrying it is refused (403). */
+  needsSupervision?: boolean;
 }
 
 export type UpdateExamPayload = Partial<Omit<ExamPayload, 'sectionId' | 'subjectId'>>;
@@ -136,7 +141,7 @@ export function useStudentResultsQuery(studentId: number) {
   });
 }
 
-function useExamsMutation<TVars, TData>(fn: (vars: TVars) => Promise<TData>) {
+export function useExamsMutation<TVars, TData>(fn: (vars: TVars) => Promise<TData>) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: fn,

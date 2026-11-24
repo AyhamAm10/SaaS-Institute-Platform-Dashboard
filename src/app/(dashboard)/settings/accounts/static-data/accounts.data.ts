@@ -82,7 +82,7 @@ export const ACCOUNT_TYPE_LABELS: Record<AccountType, string> = {
 export const ACCOUNT_TYPES: AccountType[] = ['staff', 'teachers', 'families', 'students'];
 
 export const STAFF_ROLE_OPTIONS: { value: StaffRole; label: string }[] = (
-  ['INSTITUTE_ADMIN', 'REGISTRAR', 'DATA_ENTRY', 'ACCOUNTANT'] as const
+  ['INSTITUTE_ADMIN', 'REGISTRAR', 'DATA_ENTRY', 'ACCOUNTANT', 'SUPERVISOR'] as const
 ).map((value) => ({ value, label: ROLE_LABELS[value] }));
 
 export const STATUS_OPTIONS = [

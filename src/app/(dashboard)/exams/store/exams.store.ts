@@ -28,6 +28,7 @@ export function createExamsStore(sectionId?: number): ExamsStore {
     sectionOptions: [],
     examTypeOptions: [],
     subjectOptions: [],
+    supervisorOptions: [],
 
     drawerOpened: false,
     editing: null,

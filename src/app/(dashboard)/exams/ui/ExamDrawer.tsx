@@ -6,9 +6,10 @@ import { AppButton, AppDatePicker, AppDrawer, AppInput, AppSelect } from '@/src/
 import { inputText } from '@/src/core/format';
 import { useExamsMirror } from '../store/exams.store';
 import { examsLabels as labels } from '../static-data/exams.data';
+import { ExamSupervisionFields } from './ExamSupervisionFields';
 
 /** Create / edit an exam. Section and subject are fixed once created. ZERO useState hooks. */
-export function ExamDrawer({ onSubmit }: { onSubmit: () => Promise<void> }) {
+export function ExamDrawer({ onSubmit, canSupervise = false }: { onSubmit: () => Promise<void>; canSupervise?: boolean }) {
   const opened = useExamsMirror('drawerOpened');
   const editing = useExamsMirror('editing');
   const form = useExamsMirror('form');
@@ -113,6 +114,7 @@ export function ExamDrawer({ onSubmit }: { onSubmit: () => Promise<void> }) {
               required
             />
           </SimpleGrid>
+          {canSupervise && <ExamSupervisionFields />}
         </Stack>
       </AppDrawer.Content>
 

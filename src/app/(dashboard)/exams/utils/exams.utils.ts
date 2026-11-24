@@ -17,6 +17,8 @@ export interface ExamForm {
   examDate: string;
   maxMark: string;
   passMark: string;
+  needsSupervision: boolean;
+  supervisorIds: string[];
 }
 
 export const EMPTY_EXAM_FORM: ExamForm = {
@@ -27,6 +29,8 @@ export const EMPTY_EXAM_FORM: ExamForm = {
   examDate: '',
   maxMark: '100',
   passMark: '50',
+  needsSupervision: false,
+  supervisorIds: [],
 };
 
 export function examFormFrom(exam: Exam): ExamForm {
@@ -38,6 +42,8 @@ export function examFormFrom(exam: Exam): ExamForm {
     examDate: exam.examDate.slice(0, 10),
     maxMark: String(Number(exam.maxMark)),
     passMark: String(Number(exam.passMark)),
+    needsSupervision: exam.needsSupervision,
+    supervisorIds: exam.supervisors.map((s) => String(s.id)),
   };
 }
 
@@ -55,8 +61,10 @@ export function validateExamForm(form: ExamForm, isCreate: boolean): Partial<Rec
   return errors;
 }
 
-export function toExamPayload(form: ExamForm): ExamPayload {
+/** `canSupervise`: the administration (a teacher's request carrying the flag is refused). */
+export function toExamPayload(form: ExamForm, canSupervise = false): ExamPayload {
   return {
+    ...(canSupervise && { needsSupervision: form.needsSupervision }),
     sectionId: Number(form.sectionId),
     subjectId: Number(form.subjectId),
     examTypeId: form.examTypeId ? Number(form.examTypeId) : null,
@@ -67,9 +75,10 @@ export function toExamPayload(form: ExamForm): ExamPayload {
   };
 }
 
-export function toUpdateExamPayload(form: ExamForm): UpdateExamPayload {
-  const payload = toExamPayload(form);
+export function toUpdateExamPayload(form: ExamForm, canSupervise = false): UpdateExamPayload {
+  const payload = toExamPayload(form, canSupervise);
   return {
+    ...(canSupervise && { needsSupervision: form.needsSupervision }),
     examTypeId: payload.examTypeId,
     title: payload.title,
     examDate: payload.examDate,

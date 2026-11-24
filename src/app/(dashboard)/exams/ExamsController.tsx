@@ -4,16 +4,19 @@ import { useCallback, useMemo, useState } from 'react';
 import { useStore } from 'zustand';
 import {
   getApiErrorMessage,
+  UserRole,
   useCreateExamMutation,
   useDeleteExamMutation,
+  useSetExamSupervisorsMutation,
   useUpdateExamMutation,
 } from '@/src/core/api';
 import { PERMISSIONS, useAuth } from '@/src/core/auth';
 import { createExamsStore, ExamsContext } from './store/exams.store';
 import { toExamPayload, toUpdateExamPayload, validateExamForm } from './utils/exams.utils';
+import { mustSaveSupervisors, supervisorIdsToSave } from './utils/exam-supervision.utils';
 import { examsLabels as labels } from './static-data/exams.data';
 import { ExamsView } from './ui/ExamsView';
-import { OptionsSync, OverviewSync, QuerySync, SubjectsSync } from './ExamsQuerySync';
+import { OptionsSync, OverviewSync, QuerySync, SubjectsSync, SupervisorsSync } from './ExamsQuerySync';
 
 /**
  * ExamsController
@@ -27,10 +30,13 @@ export function ExamsController({ sectionId }: { sectionId?: number } = {}) {
   const createMutation = useCreateExamMutation();
   const updateMutation = useUpdateExamMutation();
   const deleteMutation = useDeleteExamMutation();
-  const { can } = useAuth();
+  const { can, user } = useAuth();
+  const setSupervisorsMutation = useSetExamSupervisorsMutation();
   const canManage = can(PERMISSIONS.examsManage);
   const canEnterMarks = can(PERMISSIONS.marksEnter);
-  const access = useMemo(() => ({ canManage, canEnterMarks }), [canManage, canEnterMarks]);
+  // supervisors are chosen by the administration; a teacher manages exams but not supervision
+  const canSupervise = canManage && user?.role !== UserRole.TEACHER;
+  const access = useMemo(() => ({ canManage, canEnterMarks, canSupervise }), [canManage, canEnterMarks, canSupervise]);
 
   const handleSubmit = useCallback(async () => {
     const { form, editing, setFormErrors, setGeneralError, setIsSubmitting, closeDrawer } = store.getState();
@@ -39,19 +45,19 @@ export function ExamsController({ sectionId }: { sectionId?: number } = {}) {
     setGeneralError(null);
     setIsSubmitting(true);
     try {
-      if (editing)
-        await updateMutation.mutateAsync({
-          id: editing.id,
-          payload: toUpdateExamPayload(form),
-        });
-      else await createMutation.mutateAsync(toExamPayload(form));
+      const saved = editing
+        ? await updateMutation.mutateAsync({ id: editing.id, payload: toUpdateExamPayload(form, canSupervise) })
+        : await createMutation.mutateAsync(toExamPayload(form, canSupervise));
+      if (canSupervise && mustSaveSupervisors(form, editing)) {
+        await setSupervisorsMutation.mutateAsync({ id: saved.id, userIds: supervisorIdsToSave(form) });
+      }
       closeDrawer();
     } catch (err: unknown) {
       setGeneralError(getApiErrorMessage(err, labels.saveError));
     } finally {
       setIsSubmitting(false);
     }
-  }, [store, createMutation, updateMutation]);
+  }, [store, createMutation, updateMutation, setSupervisorsMutation, canSupervise]);
 
   const handleDelete = useCallback(async () => {
     const { deleteTarget, setDeleteError, setIsDeleting, closeDelete } = store.getState();
@@ -77,6 +83,7 @@ export function ExamsController({ sectionId }: { sectionId?: number } = {}) {
       <QuerySync store={store} />
       <OptionsSync store={store} />
       {drawerOpened && <SubjectsSync store={store} />}
+      {drawerOpened && canSupervise && <SupervisorsSync store={store} />}
       <ExamsView onSubmit={handleSubmit} onConfirmDelete={handleDelete} access={access} />
     </ExamsContext.Provider>
   );
